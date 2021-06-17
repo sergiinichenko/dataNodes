@@ -1,7 +1,7 @@
 from core.node_scene import Scene
 from core.node_node import  Node
 from core.node_socket import Socket
-from core.node_edge import Edge
+from core.node_edge import EDGE_BEZIER, Edge
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsScene, QGraphicsView, QVBoxLayout, QWidget
@@ -55,11 +55,13 @@ class NodeWindow(QWidget):
         text.setDefaultTextColor(QColor.fromRgbF(1., 1., 1.))
 
     def addNodes(self):
-        node1 = Node(self.scene, "First awesome node 1", inputs  = [1,1,1], outputs = [1])
-        node2 = Node(self.scene, "First awesome node 2", inputs  = [1,1,1], outputs = [1])
-        node3 = Node(self.scene, "First awesome node 3", inputs  = [1,1], outputs = [1])
+        node1 = Node(self.scene, "First awesome node 1", inputs  = [1,1,1], outputs = [2])
+        node2 = Node(self.scene, "First awesome node 2", inputs  = [1,1], outputs = [2, 3])
+        node3 = Node(self.scene, "First awesome node 3", inputs  = [1,1,1], outputs = [2])
         node1.setPos(-200, -150)
         node2.setPos(-200,  150)
         node3.setPos( 200,  0)
 
         edge1 = Edge(self.scene, node1.outputs[0], node3.inputs[0])
+        edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[1])
+        edge3 = Edge(self.scene, node2.outputs[0], node3.inputs[2])                

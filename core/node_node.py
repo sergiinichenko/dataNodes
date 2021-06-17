@@ -21,10 +21,13 @@ class Node:
         self.inputs  = []
         self.outputs = []
         for i, item in zip(range(len(inputs)), inputs):
-            self.inputs.append(Socket(node=self, index=i, position=LEFT_BOTTOM))
+            self.inputs.append(Socket(node=self, index=i, position=LEFT_BOTTOM, soket_type=item))
 
         for i, item in zip(range(len(outputs)), outputs):
-            self.outputs.append(Socket(node=self, index=i, position=RIGHT_TOP))        
+            self.outputs.append(Socket(node=self, index=i, position=RIGHT_TOP, soket_type=item))        
+
+    def __str__(self) -> str:
+        return "<Node %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
 
     @property
     def pos(self):
