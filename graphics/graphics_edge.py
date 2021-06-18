@@ -1,3 +1,4 @@
+from core.node_socket import LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_TOP, LEFT_TOP
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore    import *
@@ -26,7 +27,7 @@ class GraphicsEdge(QGraphicsPathItem):
         self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
-        self.updatePath()
+        self.setPath(self.calcPath())
 
         if self.edge.end_socket == None:
             painter.setPen(self._pen_drag)
@@ -35,7 +36,7 @@ class GraphicsEdge(QGraphicsPathItem):
         painter.setBrush(Qt.NoBrush)
         painter.drawPath(self.path())
 
-    def updatePath(self):
+    def calcPath(self):
         """ Handles drawing  """
         raise NotImplemented("This method has to be overwritten in a child class")
     
@@ -48,26 +49,40 @@ class GraphicsEdge(QGraphicsPathItem):
         else:
             return self.destination
 
-
+    def intersectsWith(self, p1, p2):
+        cutpath = QPainterPath(p1)
+        cutpath.lineTo(p2)
+        path = self.calcPath()
+        return cutpath.intersects(path)
 
 class GraphicsEdgeDirect(GraphicsEdge):
-    def updatePath(self):
+    def calcPath(self):
         fr = self.getSourcePos()
         to = self.getDestinationPos()
 
         path = QPainterPath(QPoint(fr.x(), fr.y()))
         path.lineTo(QPoint(to.x(), to.y()))
-        self.setPath(path)
+        return path
 
 class GraphicsEdgeBezier(GraphicsEdge):
-    def updatePath(self):
+    def calcPath(self):
         fr = self.getSourcePos()
         to = self.getDestinationPos()
-        
         dist = (to.x() - fr.x())*0.5
-        if fr.x() > to.x() : dist *= -1
+
+        cpx_fr = +100
+        cpx_to = -100
+        cpy_fr = 0
+        cpy_to = 0
+
+        spos = self.edge.start_socket.position
+        if spos in(LEFT_BOTTOM, LEFT_TOP):
+            cpx_fr *= -1
+            cpx_to *= -1
 
         path = QPainterPath(QPoint(fr.x(), fr.y()))
-        path.cubicTo(fr.x() + dist, fr.y(), to.x() - dist, to.y(), to.x(), to.y())
-        self.setPath(path)
+        path.cubicTo(fr.x() + cpx_fr, fr.y() + cpy_fr, 
+                     to.x() + cpx_to, to.y() + cpy_to, 
+                     to.x(), to.y())
+        return path
 

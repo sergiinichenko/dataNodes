@@ -1,1 +1,2 @@
 QTextEdit { color : red; background : transparent}
+QGraphicsView { selection-background-color: rgb(55,55,55)}

@@ -58,10 +58,12 @@ class NodeWindow(QWidget):
         node1 = Node(self.scene, "First awesome node 1", inputs  = [1,1,1], outputs = [2])
         node2 = Node(self.scene, "First awesome node 2", inputs  = [1,1], outputs = [2, 3])
         node3 = Node(self.scene, "First awesome node 3", inputs  = [1,1,1], outputs = [2])
+        node4 = Node(self.scene, "First awesome node 4", inputs  = [1,1,1], outputs = [2])
+
         node1.setPos(-200, -150)
         node2.setPos(-200,  150)
         node3.setPos( 200,  0)
+        node4.setPos( 500,  -50)
 
         edge1 = Edge(self.scene, node1.outputs[0], node3.inputs[0])
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[1])
-        edge3 = Edge(self.scene, node2.outputs[0], node3.inputs[2])                

@@ -1,7 +1,9 @@
+from core.node_serializer import Serializer
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
+from collections import OrderedDict
 
-class NodeWidget(QWidget):
+class NodeWidget(QWidget, Serializer):
     def __init__(self, parent=None):
         super().__init__(parent)
 
@@ -25,3 +27,15 @@ class NodeWidget(QWidget):
 
         stylesheet = file.readAll()
         QApplication.instance().setStyleSheet(str(stylesheet, encoding='utf-8',))
+
+
+
+    def serialize(self):
+        return OrderedDict([
+            ('id' , self.id),
+            ('content', "")
+        ])
+        
+    def deserialize(self, data, hashmap=[]):
+        print("Deserialization of the data", data)
+        return False

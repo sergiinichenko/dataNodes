@@ -1,17 +1,21 @@
 from graphics.graphics_socket import GraphicsSocket
+from core.node_serializer import Serializer
+from collections import OrderedDict
 
 LEFT_TOP     = 1
 LEFT_BOTTOM  = 2
 RIGHT_TOP    = 3
 RIGHT_BOTTOM = 4
 
-class Socket:
-    def __init__(self, node, index=0, position=LEFT_TOP, soket_type=1):
+class Socket(Serializer):
+    def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=1):
+        super().__init__()
 
         self.node   = node
         self.index  = index
         self.position = position
         self.socket_type = soket_type
+        self.inout  = inout
 
         self.grSocket = GraphicsSocket(self, self.socket_type)
 
@@ -30,3 +34,21 @@ class Socket:
     def setEdge(self, edge = None):
         self.edge = edge
 
+
+    def hasEdge(self):
+        return self.edge is not None
+
+
+    def serialize(self):
+        return OrderedDict([
+            ('id'          , self.id),
+            ('index'       , self.index),
+            ('position'    , self.position),
+            ('socket_type' , self.socket_type),
+            ('inout'       , self.inout),
+        ])
+
+
+    def deserialize(self, data, hashmap=[]):
+        print("Deserialization of the data", data)
+        return False

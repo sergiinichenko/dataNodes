@@ -1,6 +1,9 @@
+from graphics.graphics_cutline import GraphicsCutLine
+from core.node_node import SOCKET_INPUT, SOCKET_OUTPUT
 from core.node_edge import Edge
 from graphics.graphics_edge import GraphicsEdge
 from graphics.graphics_socket import GraphicsSocket
+from graphics.graphics_node import GraphicsNode
 from typing import FrozenSet
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -9,7 +12,9 @@ from PyQt5.QtGui import *
 MODE_NONE       = 1
 MODE_EDGE_DRAG  = 2
 
-DEBUG = True
+MODE_EDGE_CUT   = 3
+
+DEBUG = False
 
 class GraphicsView(QGraphicsView):
     def __init__(self, scene, parent = None):
@@ -33,6 +38,9 @@ class GraphicsView(QGraphicsView):
         self.zoomStep    = 1.0
         self.zoomRange   = [0.0, 40.0]
 
+        self.cutline     = GraphicsCutLine()
+        self.grScene.addItem(self.cutline)
+
     def initUI(self):
         # set high quality of the view
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
@@ -45,7 +53,7 @@ class GraphicsView(QGraphicsView):
         # sets the translation so that while zooming it will
         # zoom to the point where the mouse is
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
-
+        self.setDragMode(QGraphicsView.RubberBandDrag)
 
     # --------- Additional functions  ---------------
 
@@ -62,6 +70,15 @@ class GraphicsView(QGraphicsView):
         dist = (dist.x()**2 + dist.y()**2)**0.5
         return dist > self.drad_threshold
 
+    def edgeDragStart(self, item):
+        if DEBUG : print ("View:edgeDragStart ~ Start the dragging ")
+        if DEBUG : print ("View:edgeDragStart ~    assign the start socket to :", item.socket)
+        if DEBUG : print ("View:edgeDragStart ~    type of the socket :", item.socket.inout)
+        self.previousEdge = item.socket.edge
+        self.lastStartSocket = item.socket
+        self.dragEdge = Edge(self.grScene.scene, item.socket, None)
+        if DEBUG : print ("View:edgeDragStart ~    dragEdge :", self.dragEdge)
+
 
     def edgeDragEnd(self, item):
         """ Ends the drag mouse event between two sockets """
@@ -69,17 +86,47 @@ class GraphicsView(QGraphicsView):
         if DEBUG : print("End draging edge")
 
         if type(item) is GraphicsSocket:
-            if DEBUG : print(" ASSIGN End socket")
+            # cannot connect two sockets of the same time
+            if item.socket.inout == self.lastStartSocket.inout:
+                self.dragEdge.remove()
+                if DEBUG : print("View:edgeDragEnd ~ Cannot assign two sockets of the same type")
+                return
+            
+            """ remove the edge if the socket is attached to an input socket
+            and the socket already has an edge
+            """
+            if item.socket.inout == SOCKET_INPUT:
+                if item.socket.hasEdge():
+                    item.socket.edge.remove()
+                    if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the end socket")
+
+            """ remove the edge if the socket is attached to an input socket
+            and the socket already has an edge
+            """
+            if item.socket.inout == SOCKET_OUTPUT:
+                if item.socket.hasEdge():
+                    item.socket.edge.remove()
+                    if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the start socket")
+
+            """ remove the previous edge if there is one """
+            if self.previousEdge is not None: self.previousEdge.remove()
+
+
+            self.dragEdge.start_socket = self.lastStartSocket
+            self.dragEdge.end_socket = item.socket
+            self.dragEdge.start_socket.setEdge(self.dragEdge)
+            self.dragEdge.end_socket.setEdge(self.dragEdge)
+            self.dragEdge.grEdge.update()
+            if DEBUG : print("View:edgeDragEnd ~ Assign start and end sockets to the new adge ")
             return True
 
+        self.dragEdge.remove()
+        if DEBUG : print("View:edgeDragEnd ~ about to set socket to previous edge:", self.previousEdge)
+        if self.previousEdge is not None:
+            self.previousEdge.start_socket.edge = self.previousEdge
+        if DEBUG : print("View:edgeDragEnd ~ The socket was not assigned and is removed")
+
         return False
-
-    def edgeDragStart(self, item):
-        if DEBUG : print ("View:edgeDragStart ~ Start the dragging ")
-        if DEBUG : print ("View:edgeDragStart ~    assign the start socket to :", item.socket)
-        self.dragEdge = Edge(self.grScene.scene, item.socket, None)
-        if DEBUG : print ("View:edgeDragStart ~    dragEdge :", self.dragEdge)
-
 
 
 
@@ -131,12 +178,12 @@ class GraphicsView(QGraphicsView):
                                    event.modifiers())
         super().mouseReleaseEvent(releaseEvent)
         self.setDragMode(QGraphicsView.NoDrag)
+        self.setDragMode(QGraphicsView.RubberBandDrag)
 
 
     def leftMouseButtonPress(self, event):
         item = self.getItemAtClick(event)
         self.last_lmb_click_pos = self.mapToScene(event.pos())
-
 
         if type(item) is GraphicsSocket:
             print("Socket was clicked")
@@ -171,7 +218,6 @@ class GraphicsView(QGraphicsView):
 
 
     def rightMouseButtonPress(self, event):
-        super().mousePressEvent(event)
 
         item = self.getItemAtClick(event)
         if DEBUG : 
@@ -188,10 +234,42 @@ class GraphicsView(QGraphicsView):
                 print("  Edges : ")
                 for edge in self.grScene.scene.edges : print("      ", edge)
 
+        if item is None:
+
+            if event.modifiers() & Qt.ControlModifier:
+                self.mode  = MODE_EDGE_CUT
+                fake_event = QMouseEvent(QEvent.MouseButtonRelease, 
+                                    event.localPos(),event.screenPos(),
+                                    Qt.RightButton, Qt.NoButton, event.modifiers())
+                super().mouseReleaseEvent(fake_event)
+                QApplication.setOverrideCursor(Qt.CrossCursor)
+                return
+
+        super().mousePressEvent(event)
+
+
     def rightMouseButtonRelease(self, event):
+
+        if self.mode == MODE_EDGE_CUT:
+            self.cutInersectingEdges()
+            self.cutline.points = []
+            self.cutline.update()
+            QApplication.setOverrideCursor(Qt.ArrowCursor)
+            self.mode = MODE_NONE
+            return
+
         super().mouseReleaseEvent(event)
 
 
+    def cutInersectingEdges(self):
+
+        for ix in range(len(self.cutline.points) - 1):
+            p1 = self.cutline.points[ix]
+            p2 = self.cutline.points[ix + 1]
+
+            for edge in self.grScene.scene.edges:
+                if edge.grEdge.intersectsWith(p1, p2):
+                    edge.remove()
 
 
     def mouseMoveEvent(self, event):
@@ -201,9 +279,39 @@ class GraphicsView(QGraphicsView):
             self.dragEdge.grEdge.destination.setY(pos.y())
             self.dragEdge.grEdge.update()
         
+        if self.mode == MODE_EDGE_CUT:
+            pos = self.mapToScene(event.pos())
+            self.cutline.points.append(pos)
+            self.cutline.update()
+
         return super().mouseMoveEvent(event)
 
 
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Delete:
+            # Check if any items were selected in the scene
+            if len(self.grScene.selectedItems()) > 0:
+                # Delete the elements if items were selected
+                self.deleteSelectedItem()
+            else:
+                # otherwise run the delete event
+                super().keyPressEvent(event)
+
+        elif event.key() == Qt.Key_S and event.modifiers() & Qt.ControlModifier:
+            self.grScene.scene.saveToFile("graph.json")
+
+        elif event.key() == Qt.Key_O and event.modifiers() & Qt.ControlModifier:
+            self.grScene.scene.readFromFile("graph.json")
+
+        else:
+            super().keyPressEvent(event)
+
+    def deleteSelectedItem(self):
+        for item in self.grScene.selectedItems():
+            if isinstance(item, GraphicsEdge):
+                item.edge.remove()
+            elif isinstance(item, GraphicsNode):
+                item.node.remove()
 
 
     def wheelEvent(self, event):
