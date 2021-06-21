@@ -14,9 +14,11 @@ MODE_EDGE_DRAG  = 2
 
 MODE_EDGE_CUT   = 3
 
-DEBUG = False
+DEBUG = True
 
 class GraphicsView(QGraphicsView):
+    scenePosChanged = pyqtSignal(int, int)
+
     def __init__(self, scene, parent = None):
         super().__init__(parent)
 
@@ -126,7 +128,6 @@ class GraphicsView(QGraphicsView):
         if self.previousEdge is not None:
             self.previousEdge.start_socket.edge = self.previousEdge
         if DEBUG : print("View:edgeDragEnd ~ The socket was not assigned and is removed")
-
         return False
 
 
@@ -206,7 +207,6 @@ class GraphicsView(QGraphicsView):
 
         # Get the item above which the mouse was released
         item = self.getItemAtClick(event)
-        
         # check if the mode was EDGE_DRAG
         if self.mode == MODE_EDGE_DRAG:
 
@@ -215,10 +215,10 @@ class GraphicsView(QGraphicsView):
                 res = self.edgeDragEnd(item)
                 if res: return
 
-
+        """
         if self.dragMode() == QGraphicsView.RubberBandDrag:
             self.grScene.scene.history.storeHistory("selection changed")
-
+        """
         super().mouseReleaseEvent(event)
 
 
@@ -291,10 +291,16 @@ class GraphicsView(QGraphicsView):
             self.cutline.points.append(pos)
             self.cutline.update()
 
+        self.last_scene_mouse_position = self.mapToScene(event.pos())
+        self.scenePosChanged.emit(
+            int(self.last_scene_mouse_position.x()),
+            int(self.last_scene_mouse_position.y()))
+
         return super().mouseMoveEvent(event)
 
 
     def keyPressEvent(self, event):
+        """
         if event.key() == Qt.Key_Delete:
             # Check if any items were selected in the scene
             if len(self.grScene.selectedItems()) > 0:
@@ -325,8 +331,8 @@ class GraphicsView(QGraphicsView):
             print(self.grScene.scene.history.history_stack)
 
 
-        else:
-            super().keyPressEvent(event)
+        else:"""
+        super().keyPressEvent(event)
 
     def deleteSelectedItem(self):
         for item in self.grScene.selectedItems():

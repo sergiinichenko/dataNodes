@@ -51,9 +51,10 @@ class Socket(Serializer):
         ])
 
 
-    def deserialize(self, data, hashmap=[]):
+    def deserialize(self, data, hashmap=[], restore_id=True):
 
-        self.id = data['id']
+        if restore_id : self.id = data['id']
+        
         hashmap[data['id']] = self
 
         self.grSocket.setPos(data['x'], data['y'])

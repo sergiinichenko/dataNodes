@@ -5,7 +5,8 @@ from core.node_edge import Edge
 from core.node_socket import Socket
 import json
 from collections import OrderedDict
-from core.node_scene_history import SceneHistory
+from core.node_history import SceneHistory
+from core.node_clipboard import SceneClipboard
 
 class Scene(Serializer):
     def __init__(self):
@@ -18,7 +19,8 @@ class Scene(Serializer):
 
         self.initUI()
 
-        self.history = SceneHistory(self)
+        self.history   = SceneHistory(self)
+        self.clipboard = SceneClipboard(self)
 
     def initUI(self):
         # create the scene
@@ -67,16 +69,18 @@ class Scene(Serializer):
             ("edges"        , edges),
         ])
 
-    def deserialize(self, data, hashmap=[]):
+    def deserialize(self, data, hashmap=[], restore_id=True):
         self.clear()
         hashmap = {}
 
+        if restore_id: self.id = data['id']
+
         # create nodes from data
         for node_data in data["nodes"]:
-            Node(self).deserialize(node_data, hashmap)
+            Node(self).deserialize(node_data, hashmap, restore_id)
 
         for edge_data in data["edges"]:
-            Edge(self).deserialize(edge_data, hashmap)
+            Edge(self).deserialize(edge_data, hashmap, restore_id)
 
         # create adges from data
 

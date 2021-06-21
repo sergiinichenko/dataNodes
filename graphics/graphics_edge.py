@@ -29,6 +29,8 @@ class GraphicsEdge(QGraphicsPathItem):
         else:
             self.destination = QPoint(0.0, 0.0)
 
+
+
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         self.setPath(self.calcPath())
 
@@ -44,7 +46,10 @@ class GraphicsEdge(QGraphicsPathItem):
         raise NotImplemented("This method has to be overwritten in a child class")
     
     def getSourcePos(self):
-        return self.edge.start_socket.pos
+        if self.edge.start_socket is not None:
+            return self.edge.start_socket.pos
+        else:
+            return QPointF(0,0)
 
     def getDestinationPos(self):
         if self.edge.end_socket is not None:
@@ -78,7 +83,9 @@ class GraphicsEdgeBezier(GraphicsEdge):
         cpy_fr = 0
         cpy_to = 0
 
+        #if self.edge.start_socket is not None:
         spos = self.edge.start_socket.position
+
         if spos in(LEFT_BOTTOM, LEFT_TOP):
             cpx_fr *= -1
             cpx_to *= -1
@@ -87,5 +94,6 @@ class GraphicsEdgeBezier(GraphicsEdge):
         path.cubicTo(fr.x() + cpx_fr, fr.y() + cpy_fr, 
                      to.x() + cpx_to, to.y() + cpy_to, 
                      to.x(), to.y())
+
         return path
 

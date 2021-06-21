@@ -9,15 +9,13 @@ from graphics.graphics_scene import GraphicsScene
 from graphics.graphics_view import GraphicsView
 from PyQt5.QtCore import *
 
-class NodeWindow(QWidget):
+class NodeWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         self.initUI()
 
     def initUI(self):
-        # Define the location and size of the window
-        self.setGeometry(200, 100, 1000, 800)
 
         # Define the layout and set its margins to 0 on all sides
         self.layout = QVBoxLayout()
@@ -33,12 +31,6 @@ class NodeWindow(QWidget):
         # create the view
         self.view = GraphicsView(self.scene, self)
         self.layout.addWidget(self.view)
-
-
-        self.setWindowTitle("Node editor")
-        self.show()
-
-        # self.addDebugContent()
 
 
     def addDebugContent(self):
