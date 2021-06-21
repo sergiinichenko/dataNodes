@@ -16,12 +16,13 @@ class Node(Serializer):
         super().__init__()
 
         self.scene = scene
-        self.title = title
+        self._title = title
 
         self.socket_spacing = 24.0
 
         self.content = NodeWidget()
         self.grNode  = GraphicsNode(self)
+        self.title  = self._title
 
         self.scene.addNode(self)
         self.scene.grScene.addItem(self.grNode)
@@ -41,6 +42,15 @@ class Node(Serializer):
     @property
     def pos(self):
         return self.grNode.pos()
+
+    @property
+    def title(self): return self._title
+
+    @title.setter
+    def title(self, value):
+        self._title = value
+        self.grNode.title = self._title
+
 
     def setPos(self, x, y):
         self.grNode.setPos(x, y)
@@ -84,7 +94,34 @@ class Node(Serializer):
             ("content" , self.content.serialize()),
         ])
 
-        
+
     def deserialize(self, data, hashmap=[]):
         print("Deserialization of the data", data)
-        return False
+
+        self.id = data['id']
+        hashmap[data['id']] = self
+
+        self.title = data['title']
+        self.setPos(data['pos_x'], data['pos_y'])
+
+        self.inputs = []
+        for socket_data in data["inputs"]:
+            soket = Socket(node=self, 
+                           inout=socket_data['inout'], 
+                           index=socket_data['index'], 
+                           position=socket_data['position'], 
+                           soket_type=socket_data['socket_type'])
+            soket.deserialize(socket_data, hashmap)
+            self.inputs.append(soket)
+
+        self.outputs = []
+        for socket_data in data["outputs"]:
+            soket = Socket(node=self, 
+                           inout=socket_data['inout'], 
+                           index=socket_data['index'], 
+                           position=socket_data['position'], 
+                           soket_type=socket_data['socket_type'])
+            soket.deserialize(socket_data, hashmap)
+            self.outputs.append(soket)
+
+        return True

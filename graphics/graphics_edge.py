@@ -24,7 +24,10 @@ class GraphicsEdge(QGraphicsPathItem):
         self.setZValue(-2.0)
 
         self.setFlag(QGraphicsItem.ItemIsSelectable)
-        self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
+        if self.edge.start_socket is not None:
+            self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
+        else:
+            self.destination = QPoint(0.0, 0.0)
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         self.setPath(self.calcPath())

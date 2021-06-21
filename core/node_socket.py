@@ -46,9 +46,16 @@ class Socket(Serializer):
             ('position'    , self.position),
             ('socket_type' , self.socket_type),
             ('inout'       , self.inout),
+            ('x'           , self.grSocket.pos().x()),
+            ('y'           , self.grSocket.pos().y()),
         ])
 
 
     def deserialize(self, data, hashmap=[]):
         print("Deserialization of the data", data)
-        return False
+
+        self.id = data['id']
+        hashmap[data['id']] = self
+
+        self.grSocket.setPos(data['x'], data['y'])
+        return True

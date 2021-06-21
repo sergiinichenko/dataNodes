@@ -301,7 +301,7 @@ class GraphicsView(QGraphicsView):
             self.grScene.scene.saveToFile("graph.json")
 
         elif event.key() == Qt.Key_O and event.modifiers() & Qt.ControlModifier:
-            self.grScene.scene.readFromFile("graph.json")
+            self.grScene.scene.loadFromFile("graph.json")
 
         else:
             super().keyPressEvent(event)

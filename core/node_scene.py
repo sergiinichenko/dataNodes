@@ -1,5 +1,8 @@
 from graphics.graphics_scene import GraphicsScene
 from core.node_serializer import Serializer
+from core.node_node import Node
+from core.node_edge import Edge
+from core.node_socket import Socket
 import json
 from collections import OrderedDict
 
@@ -31,6 +34,9 @@ class Scene(Serializer):
     def removeEdge(self, edge):
         self.edges.remove(edge)
 
+    def clear(self):
+        while len(self.nodes) > 0:
+            self.nodes[0].remove()
 
 
     def saveToFile(self, filename):
@@ -60,4 +66,17 @@ class Scene(Serializer):
 
     def deserialize(self, data, hashmap=[]):
         print("Deserialization of the data", data)
-        return False
+        self.clear()
+        hashmap = {}
+
+        # create nodes from data
+        for node_data in data["nodes"]:
+            Node(self).deserialize(node_data, hashmap)
+
+        for edge_data in data["edges"]:
+            Edge(self).deserialize(edge_data, hashmap)
+
+        # create adges from data
+
+        
+        return True
