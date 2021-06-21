@@ -39,6 +39,19 @@ class GraphicsNode(QGraphicsItem):
 
         self.initUI()
 
+        self.wasMoved = False
+
+    def mouseMoveEvent(self, event):
+        super().mouseMoveEvent(event)
+        self.wasMoved = True
+
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        if self.wasMoved:
+            self.wasMoved = False
+            self.node.scene.history.storeHistory("nodes was moved")
+
+
     @property
     def title(self): return self._title
 

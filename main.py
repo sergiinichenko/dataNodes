@@ -7,3 +7,4 @@ if __name__ == '__main__':
     wnd = NodeWindow()
 
     sys.exit(app.exec_())
+4

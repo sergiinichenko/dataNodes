@@ -5,6 +5,7 @@ from core.node_edge import Edge
 from core.node_socket import Socket
 import json
 from collections import OrderedDict
+from core.node_scene_history import SceneHistory
 
 class Scene(Serializer):
     def __init__(self):
@@ -16,6 +17,8 @@ class Scene(Serializer):
         self.scene_height = 64000
 
         self.initUI()
+
+        self.history = SceneHistory(self)
 
     def initUI(self):
         # create the scene
@@ -65,7 +68,6 @@ class Scene(Serializer):
         ])
 
     def deserialize(self, data, hashmap=[]):
-        print("Deserialization of the data", data)
         self.clear()
         hashmap = {}
 

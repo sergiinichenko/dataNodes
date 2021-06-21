@@ -29,6 +29,7 @@ class GraphicsScene(QGraphicsScene):
     def setGrScene(self, width, height):
         self.setSceneRect(-width//2, -height//2, width, height)
 
+
     def drawBackground(self, painter, rect):
         super().drawBackground(painter, rect)
 

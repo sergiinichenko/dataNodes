@@ -3,6 +3,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from collections import OrderedDict
 
+DEBUG = False
+
 class NodeWidget(QWidget, Serializer):
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -21,7 +23,7 @@ class NodeWidget(QWidget, Serializer):
         self.layout.addWidget(QTextEdit("foo"))
 
     def loadStyleSheet(self, filename):
-        print("STYLE loading : ", filename)
+        if DEBUG : print("STYLE loading : ", filename)
         file = QFile(filename)
         file.open(QFile.ReadOnly | QFile.Text)
 

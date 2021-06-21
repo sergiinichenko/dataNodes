@@ -99,7 +99,6 @@ class Edge(Serializer):
         ])
 
     def deserialize(self, data, hashmap=[]):
-        print("Deserialization of the data", data)
 
         self.id = data['id']
         self.start_socket = hashmap[data['start']]

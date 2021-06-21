@@ -67,3 +67,5 @@ class NodeWindow(QWidget):
 
         edge1 = Edge(self.scene, node1.outputs[0], node3.inputs[0])
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[1])
+
+        self.scene.history.storeHistory("Initial state")

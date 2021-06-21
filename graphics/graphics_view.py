@@ -118,6 +118,7 @@ class GraphicsView(QGraphicsView):
             self.dragEdge.end_socket.setEdge(self.dragEdge)
             self.dragEdge.grEdge.update()
             if DEBUG : print("View:edgeDragEnd ~ Assign start and end sockets to the new adge ")
+            self.grScene.scene.history.storeHistory("created new edge")
             return True
 
         self.dragEdge.remove()
@@ -214,6 +215,10 @@ class GraphicsView(QGraphicsView):
                 res = self.edgeDragEnd(item)
                 if res: return
 
+
+        if self.dragMode() == QGraphicsView.RubberBandDrag:
+            self.grScene.scene.history.storeHistory("selection changed")
+
         super().mouseReleaseEvent(event)
 
 
@@ -271,6 +276,8 @@ class GraphicsView(QGraphicsView):
                 if edge.grEdge.intersectsWith(p1, p2):
                     edge.remove()
 
+        self.grScene.scene.history.storeHistory("cut edges")
+
 
     def mouseMoveEvent(self, event):
         if self.mode == MODE_EDGE_DRAG:
@@ -303,6 +310,21 @@ class GraphicsView(QGraphicsView):
         elif event.key() == Qt.Key_O and event.modifiers() & Qt.ControlModifier:
             self.grScene.scene.loadFromFile("graph.json")
 
+
+        # the undo Ctrl+Z key pressed
+        elif event.key() == Qt.Key_Z and (event.modifiers() & Qt.ControlModifier) and not (event.modifiers() & Qt.ShiftModifier):
+            self.grScene.scene.history.undo()
+        
+        # the redo Ctrl+Shift+Z key pressed
+        elif event.key() == Qt.Key_Z and (event.modifiers() & Qt.ControlModifier) and (event.modifiers() &  Qt.ShiftModifier):
+            self.grScene.scene.history.redo()
+
+        elif event.key() == Qt.Key_H:
+            print("HISTORY: len({0})".format(len(self.grScene.scene.history.history_stack)),
+            " --- current step:", self.grScene.scene.history.history_current_step)
+            print(self.grScene.scene.history.history_stack)
+
+
         else:
             super().keyPressEvent(event)
 
@@ -312,6 +334,7 @@ class GraphicsView(QGraphicsView):
                 item.edge.remove()
             elif isinstance(item, GraphicsNode):
                 item.node.remove()
+        self.grScene.scene.history.storeHistory("delete selected")
 
 
     def wheelEvent(self, event):
