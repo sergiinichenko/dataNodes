@@ -1,0 +1,239 @@
+{
+    "id": 140615862828720,
+    "scene_widht": 64000,
+    "scene_height": 64000,
+    "nodes": [
+        {
+            "id": 139882857286384,
+            "title": "First awesome node 1",
+            "pos_x": -361.0,
+            "pos_y": -253.0,
+            "inputs": [
+                {
+                    "id": 139882857299872,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 225.0
+                },
+                {
+                    "id": 139882826849776,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 201.0
+                },
+                {
+                    "id": 139882826852768,
+                    "index": 2,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 177.0
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139882826849728,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 180.0,
+                    "y": 39.0
+                }
+            ],
+            "content": {
+                "id": 139908724026096,
+                "content": ""
+            }
+        },
+        {
+            "id": 139882857299824,
+            "title": "First awesome node 2",
+            "pos_x": -296.0,
+            "pos_y": 108.0,
+            "inputs": [
+                {
+                    "id": 139882826853008,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 225.0
+                },
+                {
+                    "id": 139882826853152,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 201.0
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139882826852816,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 180.0,
+                    "y": 39.0
+                },
+                {
+                    "id": 139882826853344,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 3,
+                    "inout": 2,
+                    "x": 180.0,
+                    "y": 63.0
+                }
+            ],
+            "content": {
+                "id": 139908724112544,
+                "content": ""
+            }
+        },
+        {
+            "id": 139882826849680,
+            "title": "First awesome node 3",
+            "pos_x": 24.0,
+            "pos_y": -255.0,
+            "inputs": [
+                {
+                    "id": 139882826853488,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 225.0
+                },
+                {
+                    "id": 139882826853632,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 201.0
+                },
+                {
+                    "id": 139882826853680,
+                    "index": 2,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 177.0
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139882826853200,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 180.0,
+                    "y": 39.0
+                }
+            ],
+            "content": {
+                "id": 139908724195968,
+                "content": ""
+            }
+        },
+        {
+            "id": 139882826853056,
+            "title": "First awesome node 4",
+            "pos_x": 157.05000000000007,
+            "pos_y": 100.5,
+            "inputs": [
+                {
+                    "id": 139882826853968,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 225.0
+                },
+                {
+                    "id": 139882826854112,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 201.0
+                },
+                {
+                    "id": 139882826854160,
+                    "index": 2,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": 0.0,
+                    "y": 177.0
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139882826853824,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 180.0,
+                    "y": 39.0
+                }
+            ],
+            "content": {
+                "id": 139908724197408,
+                "content": ""
+            }
+        }
+    ],
+    "edges": [
+        {
+            "id": 139882826931600,
+            "edge_type": 2,
+            "start": 139882826853200,
+            "end": 139882826854160
+        },
+        {
+            "id": 139882826931648,
+            "edge_type": 2,
+            "start": 139882826853824,
+            "end": 139882826853680
+        },
+        {
+            "id": 139882826931696,
+            "edge_type": 2,
+            "start": 139882826853344,
+            "end": 139882826854112
+        },
+        {
+            "id": 139964362076016,
+            "edge_type": 2,
+            "start": 139882826853488,
+            "end": 139882826852816
+        },
+        {
+            "id": 139921195905088,
+            "edge_type": 2,
+            "start": 139882826849728,
+            "end": 139882826853632
+        }
+    ]
+}
