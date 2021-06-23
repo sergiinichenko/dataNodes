@@ -2,6 +2,7 @@ from datanodes.core.node_scene import Scene
 from datanodes.core.node_node import  Node
 from datanodes.core.node_socket import Socket
 from datanodes.core.node_edge import EDGE_BEZIER, Edge
+import os
 
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import QGraphicsItem, QGraphicsScene, QGraphicsView, QVBoxLayout, QWidget
@@ -12,6 +13,8 @@ from PyQt5.QtCore import *
 class NodeWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent)
+
+        self.filename = None
 
         self.initUI()
 
@@ -32,6 +35,15 @@ class NodeWidget(QWidget):
         self.view = GraphicsView(self.scene, self)
         self.layout.addWidget(self.view)
 
+    def isModified(self):
+        return self.scene.has_been_modified
+
+    def isFilenameSet(self):
+        return self.filename is not None
+
+    def getUserFriendlyFilename(self):
+        name = os.path.basename(self.filename) if self.isFilenameSet() else "New Node-tree"
+        return name + ("*" if self.isModified() else "")
 
     def addDebugContent(self):
         greenBrush = QBrush(Qt.green)

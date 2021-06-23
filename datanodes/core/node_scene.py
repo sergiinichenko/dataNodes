@@ -43,6 +43,13 @@ class Scene(Serializer):
     def addHasBeenModifiedListener(self, callback):
         self._has_been_modified_listeners.append(callback)
 
+    def isModified(self) -> bool:
+        """Is this `Scene` dirty aka `has been modified` ?
+
+        :return: ``True`` if `Scene` has been modified
+        :rtype: ``bool``
+        """
+        return self.has_been_modified
 
     def initUI(self):
         # create the scene
