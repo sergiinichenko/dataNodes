@@ -1,11 +1,11 @@
-from datanodes.core.node_scene import Scene
+from datanodes.core.node_scene import Scene, InvalidFile
 from datanodes.core.node_node import  Node
 from datanodes.core.node_socket import Socket
 from datanodes.core.node_edge import EDGE_BEZIER, Edge
 import os
 
 from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QGraphicsItem, QGraphicsScene, QGraphicsView, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsScene, QGraphicsView, QMessageBox, QVBoxLayout, QWidget
 from datanodes.graphics.graphics_scene import GraphicsScene
 from datanodes.graphics.graphics_view import GraphicsView
 from PyQt5.QtCore import *
@@ -73,3 +73,30 @@ class NodeWidget(QWidget):
         edge2 = Edge(self.scene, node2.outputs[0], node3.inputs[1])
 
         self.scene.history.storeHistory("Initial state", setModified=False)
+
+    def fileLoad(self, file):
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        try:
+            self.scene.loadFromFile(file)
+            self.filename = file
+            return True
+
+        except InvalidFile as e:
+            print(e)
+            QApplication.restoreOverrideCursor()
+            QMessageBox.warning(self, "Error loading {0}".format(file), str(e))
+            return False
+
+        finally:
+            QApplication.restoreOverrideCursor()
+        
+        return False
+
+    def fileSave(self, filename=None):
+        
+        if filename is not None:
+            self.filename = filename
+        QApplication.setOverrideCursor(Qt.WaitCursor)
+        self.scene.saveToFile(self.filename)
+        QApplication.restoreOverrideCursor()
+        return True

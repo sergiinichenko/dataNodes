@@ -29,9 +29,9 @@ class NodeWindow(QMainWindow):
         self.createStatusBar()
 
         self.nodeEditor = NodeWidget(self)
-        self.setCentralWidget(self.nodeEditor)
         self.nodeEditor.view.scenePosChanged.connect(self.onScenePosChanged)
         self.nodeEditor.scene.addHasBeenModifiedListener(self.setTitle)
+        self.setCentralWidget(self.nodeEditor)
 
         # Define the window properties
         self.setGeometry(200, 100, 1000, 800)
@@ -60,18 +60,16 @@ class NodeWindow(QMainWindow):
         self.actPaste     = QAction('&Paste',   self, shortcut='Ctrl+V', statusTip='Paste the Item(s)',  triggered=self.onEditPaste)
         self.actDel       = QAction('&Delete',  self, shortcut='Del',    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
 
+        """
         self.actClose     = QAction("Cl&ose", self, statusTip="Close the active window", triggered=self.mdiArea.closeActiveSubWindow)
         self.actCloseAll  = QAction("Close &All", self, statusTip="Close all the windows", triggered=self.mdiArea.closeAllSubWindows)
         self.actTile      = QAction("&Tile", self, statusTip="Tile the windows", triggered=self.mdiArea.tileSubWindows)
         self.actCascade   = QAction("&Cascade", self, statusTip="Cascade the windows", triggered=self.mdiArea.cascadeSubWindows)
         self.actNext      = QAction("Ne&xt", self, shortcut=QKeySequence.NextChild, statusTip="Move the focus to the next window", triggered=self.mdiArea.activateNextSubWindow)
         self.actPrevious  = QAction("Pre&vious", self, shortcut=QKeySequence.PreviousChild, statusTip="Move the focus to the previous window", triggered=self.mdiArea.activatePreviousSubWindow)
-
+        """
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
-
-        self.actAbout = QAction("&About", self, statusTip="Show the application's About box", triggered=self.about)
-
 
     def createMenus(self):
         # Initialize FILE menu
@@ -117,10 +115,7 @@ class NodeWindow(QMainWindow):
 
     def setTitle(self):
         title  = "DataNodes - "
-        title += self.getCurrentNodeEditorWidget().getUserFiendlyFilename()
-
-        if self.getCurrentNodeEditorWidget().isModified():
-            title += "*"
+        title += self.getCurrentNodeEditorWidget().getUserFriendlyFilename()
 
         self.setWindowTitle(title)
 
@@ -137,9 +132,9 @@ class NodeWindow(QMainWindow):
 
     def isModified(self):
         nodeeditor = self.getCurrentNodeEditorWidget()
-        return nodeeditor.scene.isModified() if nodeeditor else False
+        return nodeeditor.isModified() if nodeeditor else False
 
-    def getCurrentNodeEditorWidget(self):
+    def getCurrentNodeEditorWidget(self) -> NodeWidget:
         """get current :class:`~nodeeditor.node_editor_widget`
 
         :return: get current :class:`~nodeeditor.node_editor_widget`
@@ -173,7 +168,7 @@ class NodeWindow(QMainWindow):
     def onFileNew(self):
         if self.maybeSave():
             self.getCurrentNodeEditorWidget().scene.clear()
-            self.nodeEditor.filename = None
+            self.getCurrentNodeEditorWidget().filename = None
             self.setTitle()
 
     def onFileOpen(self):
@@ -183,26 +178,35 @@ class NodeWindow(QMainWindow):
             if file == '':
                 return
             if os.path.isfile(file):
-                self.getCurrentNodeEditorWidget().scene.loadFromFile(file)
-                self.nodeEditor.filename = file
+                self.getCurrentNodeEditorWidget().fileLoad(file)
                 self.setTitle()
 
+
     def onFileSave(self):
-        if self.nodeEditor.filename is None: return self.onFileSaveAs()
-        self.getCurrentNodeEditorWidget().scene.saveToFile(self.nodeEditor.filename)
-        self.statusBar().showMessage('Successfully saved as {0}'.format(self.nodeEditor.filename))
-        self.setTitle()
+        current_editor = self.getCurrentNodeEditorWidget()
+        if current_editor is None : return
+
+        if not current_editor.isFilenameSet(): return self.onFileSaveAs()
+        current_editor.fileSave()
+        self.statusBar().showMessage('Successfully saved as {0}'.format(current_editor.filename), 5000)
+        if hasattr(current_editor, 'setTitle') : current_editor.setTitle()
+        else : self.setTitle()
         return True
 
     def onFileSaveAs(self):
-        file, filter = QFileDialog.getSaveFileName(self, 'Save Node-Tree to File')
+        current_editor = self.getCurrentNodeEditorWidget()
+        if current_editor is None : return
 
-        if file == '':
-            return False
-        self.nodeEditor.filename = file
-        self.setTitle()
-        self.onFileSave()
+        file, filter = QFileDialog.getSaveFileName(self, 'Save Node-Tree to File')
+        if file == '' : return False
+
+        current_editor.fileSave(file)
+        self.statusBar().showMessage('Successfully saved as {0}'.format(current_editor.filename), 5000)
+        if hasattr(current_editor, 'setTitle') : current_editor.setTitle()
+        else : self.setTitle()
+
         return True
+
 
     def onEditUndo(self):
         self.getCurrentNodeEditorWidget().scene.history.undo()

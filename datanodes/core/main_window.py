@@ -89,8 +89,20 @@ class MainWindow(NodeWindow):
     def createToolBars(self):
         pass
 
+
     def updateMenus(self):
-        pass
+        active = self.activeMdiChild()
+        hasMdiChild = (active is not None)
+
+        self.actSave.setEnabled(hasMdiChild)
+        self.actSaveAs.setEnabled(hasMdiChild)
+        
+        self.actClose.setEnabled(hasMdiChild)
+        self.actCloseAll.setEnabled(hasMdiChild)
+        self.actTile.setEnabled(hasMdiChild)
+        self.actCascade.setEnabled(hasMdiChild)
+        self.actNext.setEnabled(hasMdiChild)
+        self.actPrevious.setEnabled(hasMdiChild)
 
 
     def updateWindowMenu(self):
@@ -166,11 +178,69 @@ class MainWindow(NodeWindow):
         subwnd = self.createMdiChild()
         subwnd.show()
 
+    def onFileOpen(self):
+        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open Node trees form file(s)')
+
+        try:
+            for fname in fnames:
+                if fname:
+                    existing = self.findMdiChild(fname)
+                    if existing:
+                        self.mdiArea.setActiveSubWindow(existing)
+                    else:
+                        # we create new subWindow for a file and open file
+                        nodeeditor = NodeSubWindow()
+                        if nodeeditor.fileLoad(fname):
+                            self.statusBar().showMessage("File {0} loaded".format(fname))
+                            nodeeditor.setTitle()
+                            subwnd = self.mdiArea.addSubWindow(nodeeditor)
+                            subwnd.show()
+                        else:
+                            nodeeditor.close()
+
+        except Exception as e : dumpExcepton(e)
+
+
+    """
+        def onFileSave(self, filename=None):
+            current_editor = self.getCurrentNodeEditorWidget()
+
+            if current_editor:
+                if not current_editor.isFilenameSet():
+                    return self.onFileSaveAs()
+                else:
+                    current_editor.fileSave()
+                    current_editor.setTitle()
+                    self.statusBar().showMessage("Successfully save as {0}".format(current_editor.filename), 5000)
+                    return True
+
+    def onFileSaveAs(self):
+        current_editor = self.activeMdiChild()
+
+        if current_editor:
+            fname, filter = QFileDialog.getSaveFileName(self, 'Save Node tree')
+
+            if fname == '' : return False
+
+            current_editor.fileSave(fname)
+            current_editor.setTitle()
+            self.statusBar().showMessage("Successfully save as {0}".format(fname), 5000)
+            return True
+    """
+
+
     def createMdiChild(self):
         nodeeditor = NodeSubWindow()
         subwnd = self.mdiArea.addSubWindow(nodeeditor)
 
         return subwnd
+
+    def findMdiChild(self, filename):
+        for window in self.mdiArea.subWindowList():
+            if window.widget().filename == filename:
+                return window
+        return None
+
 
     def closeEvent(self, event):
         self.mdiArea.closeAllSubWindows()
@@ -189,3 +259,7 @@ class MainWindow(NodeWindow):
         if activeSubWindow:
             return activeSubWindow.widget()
         return None
+
+
+    def getCurrentNodeEditorWidget(self):
+        return self.activeMdiChild()

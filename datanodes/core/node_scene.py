@@ -1,12 +1,17 @@
+from datanodes.core.utils import dumpExcepton
 from datanodes.graphics.graphics_scene import GraphicsScene
 from datanodes.core.node_serializer import Serializer
 from datanodes.core.node_node import Node
 from datanodes.core.node_edge import Edge
 from datanodes.core.node_socket import Socket
-import json
+import json, os
 from collections import OrderedDict
 from datanodes.core.node_history import SceneHistory
 from datanodes.core.node_clipboard import SceneClipboard
+
+
+class InvalidFile(Exception): pass
+
 
 class Scene(Serializer):
     def __init__(self):
@@ -91,11 +96,16 @@ class Scene(Serializer):
     def loadFromFile(self, filename):
         with open(filename, "r") as file:
             raw = file.read()
-            data = json.loads(raw, encoding="utf-8")
-            self.deserialize(data)
+            try:
+                data = json.loads(raw, encoding="utf-8")
+                self.deserialize(data)
+                self.has_been_modified = False
 
-            self.has_been_modified = False
-        print("Successful loading from a file:", filename)
+            except json.JSONDecodeError:
+                raise InvalidFile("{0} is not valid json file".format(os.path.basename(filename)))
+
+            except Exception as e : 
+                dumpExcepton(e)
 
     def serialize(self):
         nodes, edges = [], []
