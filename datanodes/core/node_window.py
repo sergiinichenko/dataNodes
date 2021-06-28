@@ -54,7 +54,7 @@ class NodeWindow(QMainWindow):
         self.actSaveAs    = QAction('Save &As', self, shortcut='Ctrl+Shift+S', statusTip='Save File as ...',  triggered=self.onFileSaveAs)
         self.actExit      = QAction('E&xit',    self, shortcut='Ctrl+Q', statusTip='Exit the application',    triggered=self.close)
         self.actUndo      = QAction('&Undo',    self, shortcut='Ctrl+Z', statusTip='Undo the last operation',  triggered=self.onEditUndo)
-        self.actRedo      = QAction('&Redu',    self, shortcut='Ctrl+Shift+Z', statusTip='Redu the last operation',  triggered=self.onEditRedo)
+        self.actRedo      = QAction('&Redu',    self, shortcut='Ctrl++Z', statusTip='Redu the last operation',  triggered=self.onEditRedo)
         self.actCopy      = QAction('&Copy',    self, shortcut='Ctrl+C', statusTip='Copy the Item(s)',   triggered=self.onEditCopy)
         self.actCut       = QAction('Cu&t',     self, shortcut='Ctrl+X', statusTip='Cut the Item(s)',    triggered=self.onEditCut)
         self.actPaste     = QAction('&Paste',   self, shortcut='Ctrl+V', statusTip='Paste the Item(s)',  triggered=self.onEditPaste)
@@ -74,27 +74,27 @@ class NodeWindow(QMainWindow):
     def createMenus(self):
         # Initialize FILE menu
         self.menubar = self.menuBar()
-        self.filemenu = self.menubar.addMenu('&File')
+        self.fileMenu = self.menubar.addMenu('&File')
         # add the New menu
-        self.filemenu.addAction(self.actNew)
-        self.filemenu.addSeparator()
-        self.filemenu.addAction(self.actOpen)
-        self.filemenu.addAction(self.actSave)
-        self.filemenu.addAction(self.actSaveAs)
-        self.filemenu.addSeparator()
-        self.filemenu.addAction(self.actExit)
+        self.fileMenu.addAction(self.actNew)
+        self.fileMenu.addSeparator()
+        self.fileMenu.addAction(self.actOpen)
+        self.fileMenu.addAction(self.actSave)
+        self.fileMenu.addAction(self.actSaveAs)
+        self.fileMenu.addSeparator()
+        self.fileMenu.addAction(self.actExit)
 
         # Initialize EDIT menu
-        self.editmenu = self.menubar.addMenu('&Edit')
+        self.editMenu = self.menubar.addMenu('&Edit')
         # add the New menu
-        self.editmenu.addAction(self.actUndo)
-        self.editmenu.addAction(self.actRedo)
-        self.editmenu.addSeparator()
-        self.editmenu.addAction(self.actCopy)
-        self.editmenu.addAction(self.actCut)
-        self.editmenu.addAction(self.actPaste)
-        self.editmenu.addSeparator()
-        self.editmenu.addAction(self.actDel)
+        self.editMenu.addAction(self.actUndo)
+        self.editMenu.addAction(self.actRedo)
+        self.editMenu.addSeparator()
+        self.editMenu.addAction(self.actCopy)
+        self.editMenu.addAction(self.actCut)
+        self.editMenu.addAction(self.actPaste)
+        self.editMenu.addSeparator()
+        self.editMenu.addAction(self.actDel)
 
     def createStatusBar(self):
         self.statusBar().showMessage('Ready ...')
@@ -166,9 +166,9 @@ class NodeWindow(QMainWindow):
 
 
     def onFileNew(self):
+        """Hande File New operation"""
         if self.maybeSave():
-            self.getCurrentNodeEditorWidget().scene.clear()
-            self.getCurrentNodeEditorWidget().filename = None
+            self.getCurrentNodeEditorWidget().fileNew()
             self.setTitle()
 
     def onFileOpen(self):
@@ -188,6 +188,7 @@ class NodeWindow(QMainWindow):
 
         if not current_editor.isFilenameSet(): return self.onFileSaveAs()
         current_editor.fileSave()
+
         self.statusBar().showMessage('Successfully saved as {0}'.format(current_editor.filename), 5000)
         if hasattr(current_editor, 'setTitle') : current_editor.setTitle()
         else : self.setTitle()
@@ -201,6 +202,7 @@ class NodeWindow(QMainWindow):
         if file == '' : return False
 
         current_editor.fileSave(file)
+
         self.statusBar().showMessage('Successfully saved as {0}'.format(current_editor.filename), 5000)
         if hasattr(current_editor, 'setTitle') : current_editor.setTitle()
         else : self.setTitle()

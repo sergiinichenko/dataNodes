@@ -27,19 +27,28 @@ class NodeWidget(QWidget):
 
         # create the scene
         self.scene = Scene()
-        # self.scene = self.scene.grScene
-
-        self.addNodes()
 
         # create the view
         self.view = GraphicsView(self.scene, self)
         self.layout.addWidget(self.view)
 
     def isModified(self):
-        return self.scene.has_been_modified
+        return self.scene.isModified()
 
     def isFilenameSet(self):
         return self.filename is not None
+
+    def hasSelectedItems(self):
+        return self.getSelectedItems() != []
+
+    def getSelectedItems(self):
+        return self.scene.selectedItems()
+
+    def canUndo(self):
+        return self.scene.history.canUndo()
+
+    def canRedo(self):
+        return self.scene.history.canRedo()
 
     def getUserFriendlyFilename(self):
         name = os.path.basename(self.filename) if self.isFilenameSet() else "New Node-tree"
@@ -74,11 +83,21 @@ class NodeWidget(QWidget):
 
         self.scene.history.storeHistory("Initial state", setModified=False)
 
+    def fileNew(self):
+        """Empty the scene (create new file)"""
+        self.scene.clear()
+        self.filename = None
+        self.scene.history.clear()
+        self.scene.history.storeInitialHistoryStamp()
+
+
     def fileLoad(self, file):
         QApplication.setOverrideCursor(Qt.WaitCursor)
         try:
             self.scene.loadFromFile(file)
             self.filename = file
+            self.scene.history.clear()
+            self.scene.history.storeInitialHistoryStamp()
             return True
 
         except InvalidFile as e:

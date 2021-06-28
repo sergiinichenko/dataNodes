@@ -8,6 +8,6 @@ from datanodes.core.utils import *
 import os, inspect
 if __name__ == '__main__':
     app = QApplication(sys.argv)
-    wnd = NodeWindow()
+    wnd = MainWindow()
    
     sys.exit(app.exec_())

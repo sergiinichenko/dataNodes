@@ -85,13 +85,13 @@ class MainWindow(NodeWindow):
         # add the New menu
         self.aboutMenu.addAction(self.actAbout)
 
+        self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
     def createToolBars(self):
         pass
 
-
     def updateMenus(self):
-        active = self.activeMdiChild()
+        active = self.getCurrentNodeEditorWidget()
         hasMdiChild = (active is not None)
 
         self.actSave.setEnabled(hasMdiChild)
@@ -103,7 +103,21 @@ class MainWindow(NodeWindow):
         self.actCascade.setEnabled(hasMdiChild)
         self.actNext.setEnabled(hasMdiChild)
         self.actPrevious.setEnabled(hasMdiChild)
+        self.updateEditMenu()
 
+
+    def updateEditMenu(self):
+        active = self.getCurrentNodeEditorWidget()
+        hasMdiChild = (active is not None)
+
+        self.actPaste.setEnabled(hasMdiChild)
+
+        self.actCut.setEnabled(hasMdiChild and active.hasSelectedItems())
+        self.actCopy.setEnabled(hasMdiChild and active.hasSelectedItems())
+        self.actDel.setEnabled(hasMdiChild and active.hasSelectedItems())
+
+        self.actUndo.setEnabled(hasMdiChild and active.canUndo())
+        self.actRedo.setEnabled(hasMdiChild and active.canRedo())
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
@@ -136,7 +150,7 @@ class MainWindow(NodeWindow):
 
             action = self.windowMenu.addAction(text)
             action.setCheckable(True)
-            action.setChecked(child is self.activeMdiChild())
+            action.setChecked(child is self.getCurrentNodeEditorWidget())
             action.triggered.connect(self.windowMapper.map)
             self.windowMapper.setMapping(action, window)
 
@@ -175,8 +189,12 @@ class MainWindow(NodeWindow):
 
 
     def onFileNew(self):
-        subwnd = self.createMdiChild()
-        subwnd.show()
+        try:
+            subwnd = self.createMdiChild()
+            subwnd.widget().fileNew()
+            subwnd.show()
+        except Exception as e: dumpExcepton(e)
+
 
     def onFileOpen(self):
         fnames, filter = QFileDialog.getOpenFileNames(self, 'Open Node trees form file(s)')
@@ -199,35 +217,7 @@ class MainWindow(NodeWindow):
                             nodeeditor.close()
 
         except Exception as e : dumpExcepton(e)
-
-
-    """
-        def onFileSave(self, filename=None):
-            current_editor = self.getCurrentNodeEditorWidget()
-
-            if current_editor:
-                if not current_editor.isFilenameSet():
-                    return self.onFileSaveAs()
-                else:
-                    current_editor.fileSave()
-                    current_editor.setTitle()
-                    self.statusBar().showMessage("Successfully save as {0}".format(current_editor.filename), 5000)
-                    return True
-
-    def onFileSaveAs(self):
-        current_editor = self.activeMdiChild()
-
-        if current_editor:
-            fname, filter = QFileDialog.getSaveFileName(self, 'Save Node tree')
-
-            if fname == '' : return False
-
-            current_editor.fileSave(fname)
-            current_editor.setTitle()
-            self.statusBar().showMessage("Successfully save as {0}".format(fname), 5000)
-            return True
-    """
-
+        
 
     def createMdiChild(self):
         nodeeditor = NodeSubWindow()
@@ -253,13 +243,8 @@ class MainWindow(NodeWindow):
             import sys
             sys.exit(0)
 
-
-    def activeMdiChild(self):
+    def getCurrentNodeEditorWidget(self):
         activeSubWindow = self.mdiArea.activeSubWindow()
         if activeSubWindow:
             return activeSubWindow.widget()
         return None
-
-
-    def getCurrentNodeEditorWidget(self):
-        return self.activeMdiChild()

@@ -30,6 +30,15 @@ class Scene(Serializer):
         self.history   = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
 
+    def initUI(self):
+        # create the scene
+        self.grScene = GraphicsScene(self)
+        self.grScene.setGrScene(self.scene_width, self.scene_height)
+
+
+    def isModified(self):
+        return self.has_been_modified
+
     @property
     def has_been_modified(self):
         return self._has_been_modified
@@ -56,10 +65,8 @@ class Scene(Serializer):
         """
         return self.has_been_modified
 
-    def initUI(self):
-        # create the scene
-        self.grScene = GraphicsScene(self)
-        self.grScene.setGrScene(self.scene_width, self.scene_height)
+    def selectedItems(self):
+        return self.grScene.selectedItems()
 
     def addNode(self, node):
         self.nodes.append(node)
