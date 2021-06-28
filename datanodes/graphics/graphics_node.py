@@ -58,7 +58,7 @@ class GraphicsNode(QGraphicsItem):
             
             return 
 
-        if self._lastSelectedState != self.isSelected() or self.node.scene._last_selected_items != self.scene.selectedItems():
+        if self._lastSelectedState != self.isSelected() or self.node.scene._last_selected_items != self.node.scene.selectedItems():
             self.node.scene.resetLastSelectedStates()
             self._lastSelectedState = self.isSelected()
             self.onSelected()

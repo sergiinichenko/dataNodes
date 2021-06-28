@@ -5,7 +5,7 @@ from collections import OrderedDict
 
 DEBUG = False
 
-class NodeWidget(QWidget, Serializer):
+class NodeContentWidget(QWidget, Serializer):
     def __init__(self, parent=None):
         super().__init__(parent)
 

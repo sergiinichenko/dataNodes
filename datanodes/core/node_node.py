@@ -1,6 +1,6 @@
 
 from datanodes.graphics.graphics_node import GraphicsNode
-from datanodes.core.node_content_widget import NodeWidget
+from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.core.node_socket import LEFT_BOTTOM, LEFT_TOP, RIGHT_BOTTOM, RIGHT_TOP, Socket
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
@@ -20,7 +20,7 @@ class Node(Serializer):
 
         self.socket_spacing = 24.0
 
-        self.content = NodeWidget()
+        self.content = NodeContentWidget()
         self.grNode  = GraphicsNode(self)
         self.title  = self._title
 

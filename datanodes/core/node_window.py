@@ -1,4 +1,3 @@
-
 from datanodes.core.node_widget import NodeWidget
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
