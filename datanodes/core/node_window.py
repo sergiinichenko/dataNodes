@@ -5,6 +5,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import os, json
 from datanodes.core.utils import *
+from datanodes.core.main_conf import *
+from datanodes.core.node_node import *
+
+DEBUG = False
 
 class NodeWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -48,26 +52,18 @@ class NodeWindow(QMainWindow):
 
 
     def createActions(self):
-        self.actNew       = QAction('&New',     self, shortcut='Ctrl+N', statusTip='Create new node tree', triggered=self.onFileNew)
-        self.actOpen      = QAction('&Open',    self, shortcut='Ctrl+O', statusTip='Open File',  triggered=self.onFileOpen)
-        self.actSave      = QAction('&Save',    self, shortcut='Ctrl+S', statusTip='Save File',  triggered=self.onFileSave)
-        self.actSaveAs    = QAction('Save &As', self, shortcut='Ctrl+Shift+S', statusTip='Save File as ...',  triggered=self.onFileSaveAs)
-        self.actExit      = QAction('E&xit',    self, shortcut='Ctrl+Q', statusTip='Exit the application',    triggered=self.close)
-        self.actUndo      = QAction('&Undo',    self, shortcut='Ctrl+Z', statusTip='Undo the last operation',  triggered=self.onEditUndo)
-        self.actRedo      = QAction('&Redu',    self, shortcut='Ctrl++Z', statusTip='Redu the last operation',  triggered=self.onEditRedo)
-        self.actCopy      = QAction('&Copy',    self, shortcut='Ctrl+C', statusTip='Copy the Item(s)',   triggered=self.onEditCopy)
-        self.actCut       = QAction('Cu&t',     self, shortcut='Ctrl+X', statusTip='Cut the Item(s)',    triggered=self.onEditCut)
-        self.actPaste     = QAction('&Paste',   self, shortcut='Ctrl+V', statusTip='Paste the Item(s)',  triggered=self.onEditPaste)
-        self.actDel       = QAction('&Delete',  self, shortcut='Del',    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
+        self.actNew       = QAction('&New',     self, shortcut=QKeySequence('Ctrl+N'), statusTip='Create new node tree', triggered=self.onFileNew)
+        self.actOpen      = QAction('&Open',    self, shortcut=QKeySequence('Ctrl+O'), statusTip='Open File',  triggered=self.onFileOpen)
+        self.actSave      = QAction('&Save',    self, shortcut=QKeySequence('Ctrl+S'), statusTip='Save File',  triggered=self.onFileSave)
+        self.actSaveAs    = QAction('Save &As', self, shortcut=QKeySequence('Ctrl+Shift+S'), statusTip='Save File as ...',  triggered=self.onFileSaveAs)
+        self.actExit      = QAction('E&xit',    self, shortcut=QKeySequence('Ctrl+Q'), statusTip='Exit the application',    triggered=self.close)
+        self.actUndo      = QAction('&Undo',    self, shortcut=QKeySequence('Ctrl+Z'), statusTip='Undo the last operation',  triggered=self.onEditUndo)
+        self.actRedo      = QAction('&Redu',    self, shortcut=QKeySequence('Ctrl+Shift+Z'), statusTip='Redu the last operation',  triggered=self.onEditRedo)
+        self.actCopy      = QAction('&Copy',    self, shortcut=QKeySequence('Ctrl+C'), statusTip='Copy the Item(s)',   triggered=self.onEditCopy)
+        self.actCut       = QAction('Cu&t',     self, shortcut=QKeySequence('Ctrl+X'), statusTip='Cut the Item(s)',    triggered=self.onEditCut)
+        self.actPaste     = QAction('&Paste',   self, shortcut=QKeySequence('Ctrl+V'), statusTip='Paste the Item(s)',  triggered=self.onEditPaste)
+        self.actDel       = QAction('&Delete',  self, shortcut=QKeySequence('Del'),    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
 
-        """
-        self.actClose     = QAction("Cl&ose", self, statusTip="Close the active window", triggered=self.mdiArea.closeActiveSubWindow)
-        self.actCloseAll  = QAction("Close &All", self, statusTip="Close all the windows", triggered=self.mdiArea.closeAllSubWindows)
-        self.actTile      = QAction("&Tile", self, statusTip="Tile the windows", triggered=self.mdiArea.tileSubWindows)
-        self.actCascade   = QAction("&Cascade", self, statusTip="Cascade the windows", triggered=self.mdiArea.cascadeSubWindows)
-        self.actNext      = QAction("Ne&xt", self, shortcut=QKeySequence.NextChild, statusTip="Move the focus to the next window", triggered=self.mdiArea.activateNextSubWindow)
-        self.actPrevious  = QAction("Pre&vious", self, shortcut=QKeySequence.PreviousChild, statusTip="Move the focus to the previous window", triggered=self.mdiArea.activatePreviousSubWindow)
-        """
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
 
@@ -211,38 +207,44 @@ class NodeWindow(QMainWindow):
 
 
     def onEditUndo(self):
-        self.getCurrentNodeEditorWidget().scene.history.undo()
+        if self.getCurrentNodeEditorWidget():
+            self.getCurrentNodeEditorWidget().scene.history.undo()
 
     def onEditRedo(self):
-        self.getCurrentNodeEditorWidget().scene.history.redo()
+        if self.getCurrentNodeEditorWidget():
+            self.getCurrentNodeEditorWidget().scene.history.redo()
 
     def onEditDelete(self):
-        self.getCurrentNodeEditorWidget().scene.grScene.views()[0].deleteSelectedItem()
+        if self.getCurrentNodeEditorWidget():
+            self.getCurrentNodeEditorWidget().scene.grScene.views()[0].deleteSelectedItem()
 
     def onEditCopy(self):
-        data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
-        str_data = json.dumps(data, indent=4)
-        QApplication.instance().clipboard().setText(str_data)
+        if self.getCurrentNodeEditorWidget():
+            data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
+            str_data = json.dumps(data, indent=4)
+            QApplication.instance().clipboard().setText(str_data)
 
     def onEditCut(self):
-        data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=True)
-        str_data = json.dumps(data, indent=4)
-        QApplication.instance().clipboard().setText(str_data)
+        if self.getCurrentNodeEditorWidget():
+            data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=True)
+            str_data = json.dumps(data, indent=4)
+            QApplication.instance().clipboard().setText(str_data)
 
     def onEditPaste(self):
-        raw_data = QApplication.instance().clipboard().text()
-        try:
-            data = json.loads(raw_data)
-        except ValueError as e:
-            print("Paste not valid json data: ", e)
-            return
+        if self.getCurrentNodeEditorWidget():
+            raw_data = QApplication.instance().clipboard().text()
+            try:
+                data = json.loads(raw_data)
+            except ValueError as e:
+                print("Paste not valid json data: ", e)
+                return
 
-        # Check if the data is correct
-        if 'nodes' not in data:
-            print('JSON does not contain any nodes')
-            return
+            # Check if the data is correct
+            if 'nodes' not in data:
+                print('JSON does not contain any nodes')
+                return
 
-        self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data)
+            self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data)
 
     def onEditDublicate(self):
         pass
@@ -254,8 +256,57 @@ class NodeSubWindow(NodeWidget):
         super().__init__()
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.scene.addHasBeenModifiedListener(self.setTitle)
+        self.scene.addDragEnterListener(self.onDragEnter)
+        self.scene.addDropListener(self.onDrop)
         
         self.setTitle()
 
+        self._close_event_listener = []
+
     def setTitle(self):
         self.setWindowTitle(self.getUserFriendlyFilename())
+
+    def addCloseEventListener(self, callback):
+        self._close_event_listener.append(callback)
+
+    def closeEvent(self, event):
+        for callback in self._close_event_listener : callback(self, event)
+        return super().closeEvent()
+
+
+    def onDragEnter(self, event):
+        print("On drag enter")
+        if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
+            event.acceptProposedAction()
+        else:
+            print(".... denied drag enter event")
+            event.setAccepted(False)
+
+
+    def onDrop(self, event):
+        if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
+            eventData   = event.mimeData().data(LISTBOX_MIMETYPE)
+            dataStream  = QDataStream(eventData, QIODevice.ReadOnly)
+            pixmap      = QPixmap()
+            dataStream  >> pixmap
+            op_code     = dataStream.readInt()
+            text        = dataStream.readQString()
+
+            mouse_position = event.pos()
+            scene_position = self.scene.grScene.views()[0].mapToScene(mouse_position)
+
+            if DEBUG: print("GOT DROP: [%d] '%s'" % (op_code, text), "mouse:", mouse_position, "scene:", scene_position)
+
+            try:
+                node = Node(self.scene, text, inputs  = [1,1,1], outputs = [2])
+                node.setPos(scene_position.x(), scene_position.y())
+                self.scene.addNode(node)
+                self.scene.history.storeHistory("Created node %s" % node.__class__.__name__)
+            except Exception as e: dumpException(e)
+
+            event.setDropAction(Qt.MoveAction)
+            event.accept()
+        else:
+            # print(" ... drop ignored, not requested format '%s'" % LISTBOX_MIMETYPE)
+            event.ignore()
+

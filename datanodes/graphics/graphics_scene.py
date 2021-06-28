@@ -4,6 +4,10 @@ from PyQt5.QtCore import *
 import math
 
 class GraphicsScene(QGraphicsScene):
+
+    itemSelected    = pyqtSignal()
+    itemsDeselected = pyqtSignal()
+
     def __init__(self, scene, parent=None):
         super().__init__(parent)
 
@@ -25,6 +29,9 @@ class GraphicsScene(QGraphicsScene):
 
         self.setBackgroundBrush(self._color_background)
 
+    # The drag enter event wont be allowed unless is overwritten (disabled)
+    def dragMoveEvent(self, event):
+        pass
 
     def setGrScene(self, width, height):
         self.setSceneRect(-width//2, -height//2, width, height)

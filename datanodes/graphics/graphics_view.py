@@ -44,6 +44,9 @@ class GraphicsView(QGraphicsView):
         self.cutline     = GraphicsCutLine()
         self.grScene.addItem(self.cutline)
 
+        self._drap_enter_listeners = []
+        self._drop_listeners = []
+
     def initUI(self):
         # set high quality of the view
         self.setRenderHints(QPainter.Antialiasing | QPainter.HighQualityAntialiasing | QPainter.TextAntialiasing | QPainter.SmoothPixmapTransform)
@@ -57,6 +60,23 @@ class GraphicsView(QGraphicsView):
         # zoom to the point where the mouse is
         self.setTransformationAnchor(QGraphicsView.AnchorUnderMouse)
         self.setDragMode(QGraphicsView.RubberBandDrag)
+        self.setAcceptDrops(True)
+
+
+    def dragEnterEvent(self, event):
+        for callback in self._drap_enter_listeners : callback(event)
+
+    def dropEvent(self, event):
+        for callback in self._drop_listeners : callback(event)
+
+    def addDragEnterListener(self, callback):
+        self._drap_enter_listeners.append(callback)
+
+    def addDropListener(self, callback):
+        self._drop_listeners.append(callback)
+
+
+
 
     # --------- Additional functions  ---------------
 
@@ -210,8 +230,22 @@ class GraphicsView(QGraphicsView):
                 res = self.edgeDragEnd(item)
                 if res: return
 
+
         if self.rubberBandDraggingRect:
+            self.rubberBandDraggingRect = False
             self.grScene.scene.history.storeHistory("selection changed")
+            current_selected_items = self.grScene.selectedItems()
+            if current_selected_items != self.grScene.scene._last_selected_items:
+                if current_selected_items == []:
+                    self.grScene.itemsDeselected.emit()
+                if current_selected_items == []:
+                    self.grScene.itemSelected.emit()
+                self.grScene.scene._last_selected_items = current_selected_items
+
+            return
+        
+        if item is None:
+            self.grScene.itemsDeselected.emit()
 
         super().mouseReleaseEvent(event)
 

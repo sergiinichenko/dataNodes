@@ -2,7 +2,7 @@ import traceback
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
-def dumpExcepton(e):
+def dumpException(e):
     print("EXCEPTION:", e)
     traceback.print_tb(e.__traceback__)
 

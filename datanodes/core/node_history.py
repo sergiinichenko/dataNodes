@@ -1,15 +1,18 @@
 
-from datanodes.core.utils import dumpExcepton
+from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_edge import GraphicsEdge
 
 
-DEBUG = False
+DEBUG = True
 
 class SceneHistory():
     def __init__(self, scene):
         self.scene = scene
 
         self.history_limit        = 32
+
+        self._hostory_modified_listeners = []
+
         self.clear()
 
     def clear(self):
@@ -30,20 +33,24 @@ class SceneHistory():
         if self.canUndo():
             self.history_current_step -= 1
             self.restoreHistory()
+            self.scene.has_been_modified = True
 
     def redo(self):
         if DEBUG : print("REDO")
         if self.canRedo():
             self.history_current_step += 1
             self.restoreHistory()
+            self.scene.has_been_modified = True
 
-
+    def addHistoryModifiedListener(self, callback):
+        self._hostory_modified_listeners.append(callback)
 
     def restoreHistory(self):
         if DEBUG : print("Restoring the history ... current step: @%d" % self.history_current_step, 
         "(%d)" % len(self.history_stack))
         self.restoreHistoryStamp(self.history_stack[self.history_current_step])
-    
+        
+        for callback in self._hostory_modified_listeners : callback()
 
 
     def storeHistory(self, desc, setModified=True):
@@ -69,6 +76,7 @@ class SceneHistory():
 
         if DEBUG : print("  --- setting step to:", self.history_current_step)
 
+        for callback in self._hostory_modified_listeners : callback()
 
     def restoreHistoryStamp(self, history_stamp):
         if DEBUG : print("RHS: ", history_stamp)
@@ -88,7 +96,7 @@ class SceneHistory():
                     if node.id == node_id:
                         node.grNode.setSelected(True)
                         break
-        except Exception as e : dumpExcepton(e)
+        except Exception as e : dumpException(e)
 
 
     def createHistoryStamp(self, desc):

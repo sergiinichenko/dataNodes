@@ -8,7 +8,25 @@ class GraphicsEdge(QGraphicsPathItem):
         super().__init__(parent)
 
         self.edge      = edge
+        self._lastSelectedState = False
 
+        self.initAssets()
+
+        self.initUI()
+        
+
+    def initUI(self):
+        self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setZValue(-2.0)
+
+        if self.edge.start_socket is not None:
+            self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
+        else:
+            self.destination = QPoint(0.0, 0.0)
+        self.source = QPointF(0,0)
+
+
+    def initAssets(self):
         self._widht    = 3.0
         self._color    = QColor("#001000")
         self._selected = QColor("#00ff00")
@@ -21,14 +39,17 @@ class GraphicsEdge(QGraphicsPathItem):
         self._pen_drag.setWidth(self._widht)
         self._pen_drag.setStyle(Qt.DashLine)
 
-        self.setZValue(-2.0)
 
-        self.setFlag(QGraphicsItem.ItemIsSelectable)
-        if self.edge.start_socket is not None:
-            self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
-        else:
-            self.destination = QPoint(0.0, 0.0)
+    def onSelected(self):
+        self.edge.scene.grScene.itemSelected.emit()
+        
 
+    def mouseReleaseEvent(self, event):
+        super().mouseReleaseEvent(event)
+        if self._lastSelectedState != self.isSelected():
+            self.edge.scene.resetLastSelectedStates()
+            self._lastSelectedState = self.isSelected()
+            self.onSelected()
 
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
@@ -49,7 +70,7 @@ class GraphicsEdge(QGraphicsPathItem):
         if self.edge.start_socket is not None:
             return self.edge.start_socket.pos
         else:
-            return QPointF(0,0)
+            return self.source
 
     def getDestinationPos(self):
         if self.edge.end_socket is not None:

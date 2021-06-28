@@ -1,0 +1,7 @@
+LISTBOX_MIMETYPE = "application/x-item"
+
+OP_MODE_INPUT = 1
+OP_MODE_CLEAN = 2
+OP_MODE_MATH  = 3
+OP_MODE_SETT  = 4
+OP_MODE_PLOT  = 5

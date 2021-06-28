@@ -1,4 +1,4 @@
-from datanodes.core.utils import dumpExcepton
+from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_scene import GraphicsScene
 from datanodes.core.node_serializer import Serializer
 from datanodes.core.node_node import Node
@@ -23,17 +23,40 @@ class Scene(Serializer):
         self.scene_height = 64000
 
         self._has_been_modified = False
+        
+        # initialize all listeners
+        self._last_selected_items = []
         self._has_been_modified_listeners = []
+        self._selected_listeners = []
+        self._deselected_listeners = []
 
         self.initUI()
 
         self.history   = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
+        self.grScene.itemSelected.connect(self.onItemSelected)
+        self.grScene.itemsDeselected.connect(self.onItemsDeselected)
 
     def initUI(self):
         # create the scene
         self.grScene = GraphicsScene(self)
         self.grScene.setGrScene(self.scene_width, self.scene_height)
+
+
+    def onItemSelected(self):
+        current_selected_items = self.selectedItems()
+        if current_selected_items != self._last_selected_items:
+            self._last_selected_items = current_selected_items
+            self.history.storeHistory("Selection changed")
+            for callback in self._selected_listeners: callback()
+
+
+    def onItemsDeselected(self):
+        self.resetLastSelectedStates()
+        if self._last_selected_items != []:
+            self._last_selected_items = []
+            self.history.storeHistory("Deselected everything")
+            for callback in self._deselected_listeners: callback()
 
 
     def isModified(self):
@@ -46,16 +69,31 @@ class Scene(Serializer):
     @has_been_modified.setter
     def has_been_modified(self, value):
         if not self._has_been_modified and value:
+
+            # set it now because it will be reading it soon
             self._has_been_modified = value
 
-            for callback in self._has_been_modified_listeners:
-                callback()
+            for callback in self._has_been_modified_listeners : callback()
 
         self._has_been_modified = value
 
 
+    # helper listener functions
     def addHasBeenModifiedListener(self, callback):
         self._has_been_modified_listeners.append(callback)
+
+    def addItemSelectedListener(self, callback):
+        self._selected_listeners.append(callback)
+
+    def addItemsDeselectedListener(self, callback):
+        self._deselected_listeners.append(callback)
+
+    def addDragEnterListener(self, callback):
+        self.grScene.views()[0].addDragEnterListener(callback)
+
+    def addDropListener(self, callback):
+        self.grScene.views()[0].addDropListener(callback)
+
 
     def isModified(self) -> bool:
         """Is this `Scene` dirty aka `has been modified` ?
@@ -67,6 +105,14 @@ class Scene(Serializer):
 
     def selectedItems(self):
         return self.grScene.selectedItems()
+
+    # custom flag to detect node or edge has been selected
+    def resetLastSelectedStates(self):
+        for node in self.nodes:
+            node.grNode._lastSelectedState = False
+        for edge in self.edges:
+            edge.grEdge._lastSelectedState = False
+
 
     def addNode(self, node):
         self.nodes.append(node)
@@ -112,7 +158,7 @@ class Scene(Serializer):
                 raise InvalidFile("{0} is not valid json file".format(os.path.basename(filename)))
 
             except Exception as e : 
-                dumpExcepton(e)
+                dumpException(e)
 
     def serialize(self):
         nodes, edges = [], []

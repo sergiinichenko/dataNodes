@@ -1,5 +1,6 @@
 from datanodes.core.node_window import NodeWindow, NodeSubWindow
 from datanodes.core.node_widget import NodeWidget
+from datanodes.core.node_listbox import NodeListBox
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -29,18 +30,17 @@ class MainWindow(NodeWindow):
             os.path.join(os.path.dirname(__file__), "../qss/nodestyle.qss")
         )
 
+        self.empty_icon = QIcon(".")
+
+        self.createNodesDock()
         self.createActions()
         self.createMenus()
         self.createToolBars()
         self.updateMenus()
         self.createStatusBar()
-
-        self.createNodesDock()
-
         self.readSettings()
 
         self.setWindowTitle("DataNodes Editor")
-
         self.show()
 
     def setActiveSubWindow(self, window):
@@ -84,8 +84,7 @@ class MainWindow(NodeWindow):
         self.aboutMenu = self.menubar.addMenu('&About')
         # add the New menu
         self.aboutMenu.addAction(self.actAbout)
-
-        self.editMenu.aboutToShow.connect(self.updateEditMenu)
+        #self.editMenu.aboutToShow.connect(self.updateEditMenu)
 
     def createToolBars(self):
         pass
@@ -107,17 +106,20 @@ class MainWindow(NodeWindow):
 
 
     def updateEditMenu(self):
-        active = self.getCurrentNodeEditorWidget()
-        hasMdiChild = (active is not None)
+        try:
+            active = self.getCurrentNodeEditorWidget()
+            hasMdiChild = (active is not None)
 
-        self.actPaste.setEnabled(hasMdiChild)
+            self.actPaste.setEnabled(hasMdiChild)
 
-        self.actCut.setEnabled(hasMdiChild and active.hasSelectedItems())
-        self.actCopy.setEnabled(hasMdiChild and active.hasSelectedItems())
-        self.actDel.setEnabled(hasMdiChild and active.hasSelectedItems())
+            self.actCut.setEnabled(hasMdiChild and active.hasSelectedItems())
+            self.actCopy.setEnabled(hasMdiChild and active.hasSelectedItems())
+            self.actDel.setEnabled(hasMdiChild and active.hasSelectedItems())
 
-        self.actUndo.setEnabled(hasMdiChild and active.canUndo())
-        self.actRedo.setEnabled(hasMdiChild and active.canRedo())
+            self.actUndo.setEnabled(hasMdiChild and active.canUndo())
+            self.actRedo.setEnabled(hasMdiChild and active.canRedo())
+        except Exception as e : dumpException(e)
+
 
     def updateWindowMenu(self):
         self.windowMenu.clear()
@@ -125,7 +127,8 @@ class MainWindow(NodeWindow):
         toolbar_nodes = self.windowMenu.addAction("Nodes Toolbar")
         toolbar_nodes.setCheckable(True)
         toolbar_nodes.triggered.connect(self.onWindowNodesToolbar)
-        #toolbar_nodes.setChecked(self.nodesDock.isVisible())
+        toolbar_nodes.setChecked(self.nodesDock.isVisible())
+        toolbar_nodes.setShortcut(QKeySequence('N'))
 
         self.windowMenu.addSeparator()
 
@@ -155,20 +158,20 @@ class MainWindow(NodeWindow):
             self.windowMapper.setMapping(action, window)
 
     def onWindowNodesToolbar(self):
-        pass
+        if self.nodesDock.isVisible():
+            self.nodesDock.hide()
+        else:
+            self.nodesDock.show()
+            
 
     def createNodesDock(self):
-        self.listWidget = QListWidget()
-        self.listWidget.addItem("Add")
-        self.listWidget.addItem("Substract")
-        self.listWidget.addItem("Multiply")
-        self.listWidget.addItem("Divide")
+        self.nodesListWidget = NodeListBox()
 
-        self.items = QDockWidget("Nodes")
-        self.items.setWidget(self.listWidget)
-        self.items.setFloating(False)
+        self.nodesDock = QDockWidget("Nodes")
+        self.nodesDock.setWidget(self.nodesListWidget)
+        self.nodesDock.setFloating(False)
         
-        self.addDockWidget(Qt.RightDockWidgetArea, self.items)
+        self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
 
     def readSettings(self):
         settings = QSettings(self.name_company, self.name_product)
@@ -193,7 +196,7 @@ class MainWindow(NodeWindow):
             subwnd = self.createMdiChild()
             subwnd.widget().fileNew()
             subwnd.show()
-        except Exception as e: dumpExcepton(e)
+        except Exception as e: dumpException(e)
 
 
     def onFileOpen(self):
@@ -211,19 +214,33 @@ class MainWindow(NodeWindow):
                         if nodeeditor.fileLoad(fname):
                             self.statusBar().showMessage("File {0} loaded".format(fname))
                             nodeeditor.setTitle()
-                            subwnd = self.mdiArea.addSubWindow(nodeeditor)
+                            subwnd = self.createMdiChild(nodeeditor)
                             subwnd.show()
                         else:
                             nodeeditor.close()
 
-        except Exception as e : dumpExcepton(e)
+        except Exception as e : dumpException(e)
         
 
-    def createMdiChild(self):
-        nodeeditor = NodeSubWindow()
-        subwnd = self.mdiArea.addSubWindow(nodeeditor)
-
+    def createMdiChild(self, childWidget = None):
+        nodeeditor = childWidget if childWidget is not None else NodeSubWindow()
+        subwnd     = self.mdiArea.addSubWindow(nodeeditor)
+        subwnd.setWindowIcon(self.empty_icon)
+        #nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)
+        #nodeeditor.scene.addItemsDeselectedListener(self.updateEditMenu)
+        nodeeditor.scene.history.addHistoryModifiedListener(self.updateEditMenu)
+        nodeeditor.addCloseEventListener(self.onSubWindowClose)
         return subwnd
+
+    def onSubWindowClose(self, widget, event):
+        existing = self.findMdiChild(widget.filename)
+        self.mdiArea.setActiveSubWindow(existing)
+
+        if self.maybeSave() : 
+            event.accept()
+        else:
+            event.ignore()
+
 
     def findMdiChild(self, filename):
         for window in self.mdiArea.subWindowList():
