@@ -1,3 +1,5 @@
+from datanodes.core.utils import dumpException
+from datanodes.core.node_settings import SOCKET_INPUT
 from datanodes.graphics.graphics_edge import *
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
@@ -24,6 +26,9 @@ class Edge(Serializer):
 
     def __str__(self) -> str:
         return "<Edge %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
+
+    def getOtherSocket(self, the_soket):
+        return self.start_socket if the_soket == self.end_socket else self.end_socket
 
     @property
     def start_socket(self): return self._start_socket
@@ -94,6 +99,8 @@ class Edge(Serializer):
         self.end_socket   = None
 
     def remove(self):
+        old_sockets = [self.start_socket, self.end_socket]
+
         if DEBUG : print("> Removing edge:", self)
         if DEBUG : print("  - removing edge from all sockets")
         self.removeFromSockets()
@@ -111,6 +118,15 @@ class Edge(Serializer):
         self = None
         if DEBUG : print("  - edge remove is done")
 
+
+        try:
+            # notify the nodes
+            for socket in old_sockets:
+                if socket and socket.node:
+                    socket.node.onEdgeConnectionChanged(self)
+                    if socket.inout == SOCKET_INPUT:
+                        socket.node.onInputChanged(self)
+        except Exception as e : dumpException(e)
 
     def serialize(self):
         return OrderedDict([

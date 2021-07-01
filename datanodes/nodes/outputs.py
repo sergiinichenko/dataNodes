@@ -2,19 +2,21 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 
-class ValueOutputGraphicsNode(GraphicsNode):
+class ValueOutputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 120.0
         self.height = 80.0
 
-class ValueOutputContent(NodeContentWidget):
+class ValueOutputContent(DataContent):
     def initUI(self):
+        super().initUI()
         self.layout = QVBoxLayout()
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
         self.edit = QLineEdit("1", self)
         self.edit.setAlignment(Qt.AlignCenter)
+        self.edit.setReadOnly(True)
         self.layout.addWidget(self.edit)
 
     def serialize(self):
@@ -43,3 +45,19 @@ class ValueOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueOutputContent(self)
         self.grNode  = ValueOutputGraphicsNode(self)
+
+
+    def evalImplementation(self):
+        input_node = self.getInput(0)
+        if not input_node:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            self.content.edit.setText("NaN")
+            return False
+        else:            
+            self.setDirty(False)
+            self.setInvalid(False)
+            self.e = ""
+            self.value = input_node.value
+            self.content.edit.setText(str(self.value))
+            return True

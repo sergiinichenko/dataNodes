@@ -1,6 +1,8 @@
 LISTBOX_MIMETYPE = "application/x-item"
 
 OP_MODE_INPUT = 1
+OP_MODE_FILEINPUT = 11
+
 OP_MODE_CLEAN = 2
 OP_MODE_MATH  = 3
 OP_MODE_SETT  = 4
@@ -33,3 +35,5 @@ def register_node(op_code):
 def getClassFromOpCode(op_code):
     if op_code not in DATA_NODES: raise OpCodeNotRegistered("OpCode '%d' is not registered" % op_code)
     return DATA_NODES[op_code]
+
+from datanodes.nodes import *

@@ -3,7 +3,7 @@ from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_edge import GraphicsEdge
 
 
-DEBUG = True
+DEBUG = False
 
 class SceneHistory():
     def __init__(self, scene):

@@ -279,7 +279,6 @@ class NodeSubWindow(NodeWidget):
             self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
             self.node_actions[node.op_code].setData(node.op_code)
 
-
     def initNodesContextMenu(self):
         context_menu = QMenu(self)
         keys = list(DATA_NODES.keys())
@@ -297,15 +296,11 @@ class NodeSubWindow(NodeWidget):
         for callback in self._close_event_listener : callback(self, event)
         return super().closeEvent(event)
 
-
     def onDragEnter(self, event):
-        print("On drag enter")
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
             event.acceptProposedAction()
         else:
-            print(".... denied drag enter event")
             event.setAccepted(False)
-
 
     def onDrop(self, event):
         if event.mimeData().hasFormat(LISTBOX_MIMETYPE):
@@ -341,7 +336,6 @@ class NodeSubWindow(NodeWidget):
             if type(item) == QGraphicsProxyWidget:
                 item = item.widget()
 
-            print(item)
             if hasattr(item, 'node') or hasattr(item, 'socket'):
                 self.handleNodeContextMenu(event)
 
@@ -359,7 +353,10 @@ class NodeSubWindow(NodeWidget):
     def handleNodeContextMenu(self, event):
         context_menu = QMenu(self)
         markDirtyAct     = context_menu.addAction("Mark Dirty")
+        markDirtyDescAct = context_menu.addAction("Mark Descendants Dirty")
+        unmarkDirtyAct   = context_menu.addAction("Unmark Dirty")
         markInvalidAct   = context_menu.addAction("Mark Invalid")
+        markInvalidDescAct = context_menu.addAction("Mark Descendants Invalid")
         unmarkInvalidAct = context_menu.addAction("Unmark Invalid")
         muteAct          = context_menu.addAction("Mute")
         unmuteAct        = context_menu.addAction("Unmute")
@@ -373,7 +370,19 @@ class NodeSubWindow(NodeWidget):
         if hasattr(item, 'node') : selected   = item.node
         if hasattr(item, 'socket') : selected = item.socket.node
 
-        #if selected and action == bezierAct: selected.edge_type = EDGE_BEZIER
+        if selected and action == markDirtyAct : selected.setDirty()
+        if selected and action == unmarkDirtyAct : selected.setDirty(False)
+        if selected and action == markDirtyDescAct : selected.setDescendentsDirty()
+        if selected and action == markInvalidAct : selected.setInvalid()
+        if selected and action == markInvalidDescAct : selected.setDescendentsInvalid()
+        if selected and action == unmarkInvalidAct : selected.setInvalid(False)
+        if selected and action == muteAct : selected.setMute()
+        if selected and action == unmuteAct : selected.setMute(False)
+        if selected and action == evalAct : selected.eval()
+
+        if selected and action == evalAct:
+            val = selected.eval()
+
 
     def handleEdgeContextMenu(self, event):
         context_menu = QMenu(self)

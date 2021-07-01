@@ -1,3 +1,4 @@
+from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_cutline import GraphicsCutLine
 from datanodes.core.node_node import SOCKET_INPUT, SOCKET_OUTPUT
 from datanodes.core.node_edge import Edge
@@ -95,14 +96,15 @@ class GraphicsView(QGraphicsView):
         return dist > self.drad_threshold
 
     def edgeDragStart(self, item):
-        if DEBUG : print ("View:edgeDragStart ~ Start the dragging ")
-        if DEBUG : print ("View:edgeDragStart ~    assign the start socket to :", item.socket)
-        if DEBUG : print ("View:edgeDragStart ~    type of the socket :", item.socket.inout)
+        try:
+            if DEBUG : print ("View:edgeDragStart ~ Start the dragging ")
+            if DEBUG : print ("View:edgeDragStart ~    assign the start socket to :", item.socket)
+            if DEBUG : print ("View:edgeDragStart ~    type of the socket :", item.socket.inout)
 
-        self.drag_start_socket = item.socket
-        self.drag_edge = Edge(self.grScene.scene, item.socket, None)
-        if DEBUG : print ("View:edgeDragStart ~    drag_edge :", self.drag_edge)
-
+            self.drag_start_socket = item.socket
+            self.drag_edge = Edge(self.grScene.scene, item.socket, None)
+            if DEBUG : print ("View:edgeDragStart ~    drag_edge :", self.drag_edge)
+        except Exception as e : dumpException(e)
 
     def edgeDragEnd(self, item):
         """ Ends the drag mouse event between two sockets """
@@ -110,38 +112,43 @@ class GraphicsView(QGraphicsView):
         self.drag_edge.remove()
         if DEBUG : print("End draging edge")
 
-        if type(item) is GraphicsSocket:
+        try:
+            if type(item) is GraphicsSocket:
 
-            # cannot connect the socket to itself
-            if item.socket == self.drag_start_socket:
-                if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
-                return
+                # cannot connect the socket to itself
+                if item.socket == self.drag_start_socket:
+                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
+                    return
 
-            # cannot connect two sockets of the same type
-            if item.socket.inout == self.drag_start_socket.inout:
-                if DEBUG : print("View:edgeDragEnd ~ Cannot assign two sockets of the same type")
-                return
+                # cannot connect two sockets of the same type
+                if item.socket.inout == self.drag_start_socket.inout:
+                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign two sockets of the same type")
+                    return
 
-            """ remove the edge if the socket is attached to an input socket
-            and the socket already has an edge """
-            if item.socket.inout == SOCKET_INPUT:
-                item.socket.clearEdges()
-                if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the end socket")
+                """ remove the edge if the socket is attached to an input socket
+                and the socket already has an edge """
+                if item.socket.inout == SOCKET_INPUT:
+                    item.socket.clearEdges()
+                    if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the end socket")
 
-            # cannot connect the socket to itself
-            if self.drag_start_socket.inout == SOCKET_INPUT and self.drag_start_socket.hasEdge():
-                self.drag_start_socket.clearEdges()
-                if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
-
-
-            """ remove the previous edge if there is one """
-            new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket)
-            if DEBUG : print("View:edgeDragEnd ~ Created the new adge ")
+                # cannot connect the socket to itself
+                if self.drag_start_socket.inout == SOCKET_INPUT and self.drag_start_socket.hasEdge():
+                    self.drag_start_socket.clearEdges()
+                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
 
 
+                """ remove the previous edge if there is one """
+                new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket)
+                if DEBUG : print("View:edgeDragEnd ~ Created the new adge ")
 
-            self.grScene.scene.history.storeHistory("created new edge")
-            return True
+                for socket in [self.drag_start_socket, item.socket]:
+                    socket.node.onEdgeConnectionChanged(new_edge)
+                    if socket.inout == SOCKET_INPUT : socket.node.onInputChanged(new_edge)
+                    
+
+                self.grScene.scene.history.storeHistory("created new edge")
+                return True 
+        except Exception as e : dumpException(e)
 
         if DEBUG : print("View:edgeDragEnd ~ The socket was not assigned and is removed")
         return False

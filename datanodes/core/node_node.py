@@ -1,4 +1,6 @@
 
+from datanodes.core.utils import dumpException
+from PyQt5.sip import dump
 from datanodes.graphics.graphics_node import GraphicsNode
 from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.core.node_socket import LEFT_BOTTOM, LEFT_TOP, RIGHT_BOTTOM, RIGHT_TOP, Socket
@@ -27,6 +29,12 @@ class Node(Serializer):
         # create sockets for input and outputs
         self.inputs  = []
         self.outputs = []
+
+        # node state flags
+        self._is_dirty   = False
+        self._is_invalid = False
+        self._is_mute    = False
+
         self.initSockets(inputs, outputs)
 
     def initInnerClasses(self):
@@ -82,6 +90,141 @@ class Node(Serializer):
         self.grNode.title = self._title
 
 
+    def onEdgeConnectionChanged(seld, new_edge):
+        pass
+    
+
+    def onInputChanged(self, new_edge):
+        self.setDirty()
+        self.setDescendentsDirty()
+
+
+    def isDirty(self):
+        return self._is_dirty
+
+    def setDirty(self, value=True):
+        self._is_dirty = value
+        if self._is_dirty:
+            self.onSetDirty()
+
+    def setChildrenDirty(self, value=True):
+        for child in self.getChildNodes():
+            child.setDirty(value)
+
+    def setDescendentsDirty(self, value=True):
+        for other_node in self.getChildNodes():
+            other_node.setDirty(value)
+            other_node.setChildrenDirty(value)
+
+    def onSetDirty(self):
+        pass
+
+    def isInvalid(self):
+        return self._is_invalid
+
+    def setInvalid(self, value=True):
+        self._is_invalid = value
+        if self._is_invalid:
+            self.onSetInvalid()
+
+    def onSetInvalid(self):
+        pass
+
+    def setChildrenInvalid(self, value=True):
+        for child in self.getChildNodes():
+            child.setInvalid(value)
+
+    def setDescendentsInvalid(self, value=True):
+        for other_node in self.getChildNodes():
+            other_node.setInvalid(value)
+            other_node.setChildrenInvalid(value)
+
+
+
+    def isMute(self):
+        return self._is_mute
+    
+    def setMute(self, value=True):
+        self._is_mute = value
+        if self._is_mute:
+            self.onSetMute()
+
+    def onSetMute(self):
+        pass
+
+
+    
+    # Traversing functions
+    def getChildNodes(self):
+        if self.outputs == [] : return []
+        child_nodes = []
+        for ix in range(len(self.outputs)):
+            for edge in self.outputs[ix].edges:
+                child_nodes.append( edge.getOtherSocket(self.outputs[ix]).node )
+
+        return child_nodes
+
+
+    def getInput(self, index=0):
+        try:
+            input_socket = self.inputs[index]
+            if len(input_socket.edges) == 0: return None
+            edge = input_socket.edges[0]
+            socket = edge.getOtherSocket(self.inputs[index])
+            return socket.node
+
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return None
+
+        except Exception as e: 
+            dumpException(e)
+            return None
+
+
+    def getInputs(self):
+        inputs = []
+        try:
+            input_sockets = self.inputs
+            if len(input_sockets) == 0: return None
+            for socket in input_sockets:
+                edge = socket.edges[0]
+                other_socket = edge.getOtherSocket(socket)
+                inputs.append(other_socket.node)
+            return inputs
+            
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return None
+
+        except Exception as e: 
+            dumpException(e)
+            return None
+
+
+    def getOutputs(self, index=0) :
+
+        outs = []
+        for edge in self.outputs[index].edges:
+            other_socket = edge.getOtherSocket(self.outputs[index])
+            outs.append(other_socket.node)
+        return outs
+
+
+
+
+
+    def eval(self):
+        self.setDirty(False)
+        self.setInvalid(False)
+        return 0
+
+    def evalChildren(self):
+        for node in self.getChildNodes():
+            node.eval()
+
+
+
     def setPos(self, x, y):
         self.grNode.setPos(x, y)
 
@@ -130,7 +273,6 @@ class Node(Serializer):
         if DEBUG : print("  - removing the node from the scene ")        
         self.scene.removeNode(self)
         if DEBUG : print("  - removing is done")        
-
 
     def serialize(self):
         inputs, outputs = [], []

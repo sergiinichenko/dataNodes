@@ -3,7 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 
 def dumpException(e):
-    print("EXCEPTION:", e)
+    print("{0} EXCEPTION: {1}".format(e.__class__.__name__, e))
     traceback.print_tb(e.__traceback__)
 
 def loadStyleSheet(filename):
