@@ -1,3 +1,4 @@
+from datanodes.core.node_settings import LEFT_CENTER
 from datanodes.core.node_socket import LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_TOP, LEFT_TOP
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
@@ -97,17 +98,17 @@ class GraphicsEdgeBezier(GraphicsEdge):
     def calcPath(self):
         fr = self.getSourcePos()
         to = self.getDestinationPos()
-        dist = (to.x() - fr.x())*0.5
+        dist = ((to.x() - fr.x())**2.0 + (to.y() - fr.y())**2)**0.5
 
-        cpx_fr = +100
-        cpx_to = -100
+        cpx_fr = +40 + dist*0.2
+        cpx_to = -40 - dist*0.2
         cpy_fr = 0
         cpy_to = 0
 
         #if self.edge.start_socket is not None:
         spos = self.edge.start_socket.position
 
-        if spos in(LEFT_BOTTOM, LEFT_TOP):
+        if spos in(LEFT_BOTTOM, LEFT_TOP, LEFT_CENTER):
             cpx_fr *= -1
             cpx_to *= -1
 

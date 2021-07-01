@@ -19,15 +19,23 @@ class NodeListBox(QListWidget):
 
 
     def addMyItems(self):
-        self.addMyItem('Input', 'icons/input.png', OP_MODE_INPUT)
+        keys = list(DATA_NODES.keys())
+        keys.sort()
+        for key in keys:
+            node = getClassFromOpCode(key)
+            self.addMyItem(node.op_title, node.icon, node.op_code)
+            
+        """
         self.addMyItem('Clean', 'icons/clean.png', OP_MODE_CLEAN)        
         self.addMyItem('Math',  'icons/math.png',  OP_MODE_MATH)
 
         self.addMyItem('Plot' , 'icons/plot.png',  OP_MODE_PLOT)
         self.addMyItem('Settings' , 'icons/settings.png', OP_MODE_SETT)
+        self.addMyItem('Output', 'icons/output.png', OP_MODE_VALOUTPUT)
+        """
 
     def addMyItem(self, name, icon=None, op_code=0):
-        item = QListWidgetItem(name, self)
+        item   = QListWidgetItem(name, self)
         pixmap = QPixmap(icon if icon is not None else '.')
         item.setIcon(QIcon(pixmap))
         item.setSizeHint(QSize(32, 32))
@@ -43,11 +51,10 @@ class NodeListBox(QListWidget):
         print("Start drag")
 
         try:
-            item = self.currentItem()
+            item    = self.currentItem()
             op_code = item.data(Qt.UserRole + 1)
 
-            pixmap = QPixmap(item.data(Qt.UserRole))
-
+            pixmap  = QPixmap(item.data(Qt.UserRole))
 
             itemData = QByteArray()
             dataStream = QDataStream(itemData, QIODevice.WriteOnly)

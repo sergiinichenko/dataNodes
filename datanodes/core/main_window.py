@@ -6,7 +6,10 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 import os, json, inspect
 from datanodes.core.utils import *
-
+from datanodes.nodes.datanode import *
+from datanodes.nodes.inputs import *
+from datanodes.nodes.math import *
+from datanodes.nodes.outputs import *
 
 class MainWindow(NodeWindow):
 

@@ -46,6 +46,7 @@ class GraphicsView(QGraphicsView):
 
         self._drap_enter_listeners = []
         self._drop_listeners = []
+        #self.setContextMenuPolicy(Qt.NoContextMenu)
 
     def initUI(self):
         # set high quality of the view
@@ -199,89 +200,63 @@ class GraphicsView(QGraphicsView):
 
 
     def leftMouseButtonPress(self, event):
+        # get item which we clicked on
         item = self.getItemAtClick(event)
+
+        # we store the position of last LMB click
         self.last_lmb_click_pos = self.mapToScene(event.pos())
 
+        # logic
+        if hasattr(item, "node") or isinstance(item, GraphicsEdge) or item is None:
+            if event.modifiers() & Qt.ShiftModifier:
+                event.ignore()
+                fakeEvent = QMouseEvent(QEvent.MouseButtonPress, event.localPos(), event.screenPos(),
+                                        Qt.LeftButton, event.buttons() | Qt.LeftButton,
+                                        event.modifiers() | Qt.ControlModifier)
+                super().mousePressEvent(fakeEvent)
+                return
+
+
         if type(item) is GraphicsSocket:
-            if DEBUG : print("Socket was clicked")
             if self.mode == MODE_NONE:
                 self.mode = MODE_EDGE_DRAG
                 self.edgeDragStart(item)
                 return
-        
-        if self.mode == MODE_EDGE_DRAG:
 
-            # make sure that mouse moved above the threshold value
+        if self.mode == MODE_EDGE_DRAG:
             res = self.edgeDragEnd(item)
             if res: return
 
-        super().mousePressEvent(event)
-
-
-    def leftMouseButtonRelease(self, event):
-
-        # Get the item above which the mouse was released
-        item = self.getItemAtClick(event)
-        # check if the mode was EDGE_DRAG
-        if self.mode == MODE_EDGE_DRAG:
-
-            # make sure that mouse moved above the threshold value
-            if self.clickClickDist(event):
-                res = self.edgeDragEnd(item)
-                if res: return
-
-
-        if self.rubberBandDraggingRect:
-            self.rubberBandDraggingRect = False
-            self.grScene.scene.history.storeHistory("selection changed")
-            current_selected_items = self.grScene.selectedItems()
-            if current_selected_items != self.grScene.scene._last_selected_items:
-                if current_selected_items == []:
-                    self.grScene.itemsDeselected.emit()
-                if current_selected_items == []:
-                    self.grScene.itemSelected.emit()
-                self.grScene.scene._last_selected_items = current_selected_items
-
-            return
-        
         if item is None:
-            self.grScene.itemsDeselected.emit()
-
-        super().mouseReleaseEvent(event)
-
-
-    def rightMouseButtonPress(self, event):
-
-        item = self.getItemAtClick(event)
-        if DEBUG : 
-            if type(item) is GraphicsSocket:
-                print("RMB DEBUG : ", item.socket, "has edge :", item.socket.edges)
-
-            if isinstance(item, GraphicsEdge):
-                print("RMB DEBUG : ", item.edge, "  sockets : ", item.edge.start_socket, "<-->", item.edge.end_socket)
-
-            if item is None:
-                print("Scene: ")
-                print("  Nodes : ")
-                for node in self.grScene.scene.nodes : print("      ", node)
-                print("  Edges : ")
-                for edge in self.grScene.scene.edges : print("      ", edge)
-
-        if item is None:
-
             if event.modifiers() & Qt.ControlModifier:
-                self.mode  = MODE_EDGE_CUT
-                fake_event = QMouseEvent(QEvent.MouseButtonRelease, 
-                                    event.localPos(),event.screenPos(),
-                                    Qt.RightButton, Qt.NoButton, event.modifiers())
-                super().mouseReleaseEvent(fake_event)
+                self.mode = MODE_EDGE_CUT
+                fakeEvent = QMouseEvent(QEvent.MouseButtonRelease, event.localPos(), event.screenPos(),
+                                        Qt.LeftButton, Qt.NoButton, event.modifiers())
+                super().mouseReleaseEvent(fakeEvent)
                 QApplication.setOverrideCursor(Qt.CrossCursor)
                 return
 
         super().mousePressEvent(event)
 
 
-    def rightMouseButtonRelease(self, event):
+    def leftMouseButtonRelease(self, event):
+        # get item which we release mouse button on
+        item = self.getItemAtClick(event)
+
+        # logic
+        if hasattr(item, "node") or isinstance(item, GraphicsEdge) or item is None:
+            if event.modifiers() & Qt.ShiftModifier:
+                event.ignore()
+                fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+                                        Qt.LeftButton, Qt.NoButton,
+                                        event.modifiers() | Qt.ControlModifier)
+                super().mouseReleaseEvent(fakeEvent)
+                return
+
+        if self.mode == MODE_EDGE_DRAG:
+            if self.clickClickDist(event):
+                res = self.edgeDragEnd(item)
+                if res: return
 
         if self.mode == MODE_EDGE_CUT:
             self.cutInersectingEdges()
@@ -291,6 +266,29 @@ class GraphicsView(QGraphicsView):
             self.mode = MODE_NONE
             return
 
+        super().mouseReleaseEvent(event)
+
+
+
+    def rightMouseButtonPress(self, event):
+        super().mousePressEvent(event)
+
+        item = self.getItemAtClick(event)
+
+        if DEBUG:
+            if isinstance(item, GraphicsEdge): print('RMB DEBUG:', item.edge, ' connecting sockets:',
+                                            item.edge.start_socket, '<-->', item.edge.end_socket)
+            if type(item) is GraphicsSocket: print('RMB DEBUG:', item.socket, 'has edge:', item.socket.edge)
+
+            if item is None:
+                print('SCENE:')
+                print('  Nodes:')
+                for node in self.grScene.scene.nodes: print('    ', node)
+                print('  Edges:')
+                for edge in self.grScene.scene.edges: print('    ', edge)
+
+
+    def rightMouseButtonRelease(self, event):
         super().mouseReleaseEvent(event)
 
 

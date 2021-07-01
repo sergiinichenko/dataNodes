@@ -1,25 +1,23 @@
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
+from datanodes.core.node_settings import *
 
-LEFT_TOP     = 1
-LEFT_BOTTOM  = 2
-RIGHT_TOP    = 3
-RIGHT_BOTTOM = 4
 
 class Socket(Serializer):
     def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=1):
         super().__init__()
 
-        self.node   = node
-        self.index  = index
-        self.position = position
+        self.node        = node
+        self.index       = index
+        self.position    = position
         self.socket_type = soket_type
-        self.inout  = inout
+        self.inout       = inout
 
-        self.grSocket = GraphicsSocket(self, self.socket_type)
+        self.grSocket    = GraphicsSocket(self, self.socket_type)
 
-        self.grSocket.setPos(*self.node.getSocketPos(self.index, self.position))
+        #self.grSocket.setPos(*self.node.getSocketPos(self.index, self.position))
+        self.setPos()
 
         self.edges = []
 
@@ -30,6 +28,9 @@ class Socket(Serializer):
     @property
     def pos(self):
         return self.node.grNode.pos() +  self.grSocket.pos()
+
+    def setPos(self):
+        self.grSocket.setPos(*self.node.getSocketPos(self.index, self.position, self.inout))
 
     def connectEdge(self, edge):
         self.edges.append(edge)
@@ -71,5 +72,5 @@ class Socket(Serializer):
         
         hashmap[data['id']] = self
 
-        self.grSocket.setPos(data['x'], data['y'])
+        #self.grSocket.setPos(data['x'], data['y'])
         return True

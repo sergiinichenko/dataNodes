@@ -10,7 +10,7 @@ class GraphicsSocket(QGraphicsItem):
 
         # geometry settings of the socket
         self.node = socket.node.grNode
-        self.radius = 6.0
+        self.radius = 7.0
         self.outline_width = 1.0
         self._colors = [
             QColor("#FFFF7700"),

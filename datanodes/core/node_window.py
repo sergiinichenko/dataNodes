@@ -1,3 +1,4 @@
+from datanodes.core.node_edge import EDGE_BEZIER, EDGE_DIRECT
 from datanodes.core.node_widget import NodeWidget
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
@@ -6,6 +7,7 @@ import os, json
 from datanodes.core.utils import *
 from datanodes.core.main_conf import *
 from datanodes.core.node_node import *
+from datanodes.nodes.datanode import *
 
 DEBUG = False
 
@@ -215,7 +217,7 @@ class NodeWindow(QMainWindow):
 
     def onEditDelete(self):
         if self.getCurrentNodeEditorWidget():
-            self.getCurrentNodeEditorWidget().scene.grScene.views()[0].deleteSelectedItem()
+            self.getCurrentNodeEditorWidget().scene.getView().deleteSelectedItem()
 
     def onEditCopy(self):
         if self.getCurrentNodeEditorWidget():
@@ -259,8 +261,31 @@ class NodeSubWindow(NodeWidget):
         self.scene.addDropListener(self.onDrop)
         
         self.setTitle()
+        self.initNewNodeActions()
 
+        self.scene.setNodeClassSelector(self.getNodeClassFromData)
         self._close_event_listener = []
+
+    def getNodeClassFromData(self, data):
+        if 'op_code' not in data : return Node
+        return getClassFromOpCode(data['op_code'])
+
+    def initNewNodeActions(self):
+        self.node_actions = {}
+        keys = list(DATA_NODES.keys())
+        keys.sort()
+        for key in keys : 
+            node = DATA_NODES[key]
+            self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
+            self.node_actions[node.op_code].setData(node.op_code)
+
+
+    def initNodesContextMenu(self):
+        context_menu = QMenu(self)
+        keys = list(DATA_NODES.keys())
+        keys.sort()
+        for key in keys : context_menu.addAction(self.node_actions[key])
+        return context_menu
 
     def setTitle(self):
         self.setWindowTitle(self.getUserFriendlyFilename())
@@ -270,7 +295,7 @@ class NodeSubWindow(NodeWidget):
 
     def closeEvent(self, event):
         for callback in self._close_event_listener : callback(self, event)
-        return super().closeEvent()
+        return super().closeEvent(event)
 
 
     def onDragEnter(self, event):
@@ -292,14 +317,14 @@ class NodeSubWindow(NodeWidget):
             text        = dataStream.readQString()
 
             mouse_position = event.pos()
-            scene_position = self.scene.grScene.views()[0].mapToScene(mouse_position)
+            scene_position = self.scene.getView().mapToScene(mouse_position)
 
             if DEBUG: print("GOT DROP: [%d] '%s'" % (op_code, text), "mouse:", mouse_position, "scene:", scene_position)
 
             try:
-                node = Node(self.scene, text, inputs  = [1,1,1], outputs = [2])
+                #node = DataNode(self.scene, op_code, text, inputs  = [1,1], outputs = [2])
+                node = getClassFromOpCode(op_code)(self.scene)
                 node.setPos(scene_position.x(), scene_position.y())
-                self.scene.addNode(node)
                 self.scene.history.storeHistory("Created node %s" % node.__class__.__name__)
             except Exception as e: dumpException(e)
 
@@ -308,4 +333,79 @@ class NodeSubWindow(NodeWidget):
         else:
             # print(" ... drop ignored, not requested format '%s'" % LISTBOX_MIMETYPE)
             event.ignore()
+    
+    def contextMenuEvent(self, event):
+        try:
+            item = self.scene.getItemAtPos(event.pos())
 
+            if type(item) == QGraphicsProxyWidget:
+                item = item.widget()
+
+            print(item)
+            if hasattr(item, 'node') or hasattr(item, 'socket'):
+                self.handleNodeContextMenu(event)
+
+            elif hasattr(item, 'edge'):
+                self.handleEdgeContextMenu(event)
+
+            else:
+                self.handleNewNodeContextMenu(event)
+                
+            return super().contextMenuEvent(event)
+        except Exception as e : 
+            dumpException(e)
+
+
+    def handleNodeContextMenu(self, event):
+        context_menu = QMenu(self)
+        markDirtyAct     = context_menu.addAction("Mark Dirty")
+        markInvalidAct   = context_menu.addAction("Mark Invalid")
+        unmarkInvalidAct = context_menu.addAction("Unmark Invalid")
+        muteAct          = context_menu.addAction("Mute")
+        unmuteAct        = context_menu.addAction("Unmute")
+        evalAct          = context_menu.addAction("Eval")
+
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        
+        selected = None
+        item = self.scene.getItemAtPos(event.pos())
+        if type(item) == QGraphicsProxyWidget : item = item.widget()
+        if hasattr(item, 'node') : selected   = item.node
+        if hasattr(item, 'socket') : selected = item.socket.node
+
+        #if selected and action == bezierAct: selected.edge_type = EDGE_BEZIER
+
+    def handleEdgeContextMenu(self, event):
+        context_menu = QMenu(self)
+        bezierAct = context_menu.addAction("Bezier Edge")
+        directAct = context_menu.addAction("Direct Edge")
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        
+        selected = None
+        item = self.scene.getItemAtPos(event.pos())
+        if hasattr(item, 'edge') : selected = item.edge
+
+        if selected and action == bezierAct: selected.edge_type = EDGE_BEZIER
+        if selected and action == directAct: selected.edge_type = EDGE_DIRECT
+
+    def handleNewNodeContextMenu(self, event):
+        context_menu = self.initNodesContextMenu()
+        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+
+        if action is not None:
+            new_data_node = getClassFromOpCode(action.data())(self.scene)
+            scene_pos = self.scene.getView().mapToScene(event.pos())
+            
+            new_data_node.setPos(scene_pos.x(), scene_pos.y())
+
+            """
+            if self.scene.getView().mode == MODE_EDGE_DRAG:
+                # if we were dragging an edge...
+                target_socket = self.determine_target_socket_of_node(self.scene.getView().dragging.drag_start_socket.is_output, new_calc_node)
+                if target_socket is not None:
+                    self.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
+                    self.finish_new_node_state(new_calc_node)
+
+            else:
+                self.scene.history.storeHistory("Created %s" % new_calc_node.__class__.__name__)
+            """

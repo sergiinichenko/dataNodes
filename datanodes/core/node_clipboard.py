@@ -5,7 +5,7 @@ from datanodes.graphics.graphics_edge import GraphicsEdge
 from datanodes.core.node_node import  Node
 from datanodes.core.node_edge import  Edge
 
-DEBUG = False
+DEBUG = True
 
 class SceneClipboard():
     def __init__(self, scene):
@@ -51,7 +51,7 @@ class SceneClipboard():
 
         # If cut the items then delete them from the main scene
         if delete : 
-            self.scene.grScene.view()[0].deleteSelectedItem()
+            self.scene.getView().deleteSelectedItem()
             
             # store the history
             self.scene.history.storeHistory('Cut out elements')
@@ -62,18 +62,29 @@ class SceneClipboard():
         hashmap = {}
 
         # calculate the mouse pointer - scene postion
-        view = self.scene.grScene.views()[0]
+        view = self.scene.getView()
         mouse_pos = view.last_scene_mouse_position
 
         # calculate selected objects bounding box and its center
-        minx, maxx, miny, maxy = 0,0,0,0
+        minx, maxx, miny, maxy = 10000000,-10000000, 10000000,-10000000
         x = 0.0
         y = 0.0
-        size = len(data['nodes'])
-        if size > 0:
-            for node in data['nodes']:
-                x += node['pos_x'] / size
-                y += node['pos_x'] / size   
+        for node_data in data['nodes']:
+            x, y = node_data['pos_x'], node_data['pos_y']
+            if x < minx: minx = x
+            if x > maxx: maxx = x
+            if y < miny: miny = y
+            if y > maxy: maxy = y
+
+        # add width and height of a node
+        maxx -= 180
+        maxy += 100
+
+        relbboxcenterx = (minx + maxx) / 2 - minx
+        relbboxcentery = (miny + maxy) / 2 - miny
+
+        # calculate the offset of the newly creating nodes
+        mousex, mousey = mouse_pos.x(), mouse_pos.y()
 
         # calculate the offset of the newly created nodes
         offset_x = mouse_pos.x() - x
@@ -81,12 +92,15 @@ class SceneClipboard():
 
         # Create each node
         for node_data in data['nodes']:
-            new_node = Node(self.scene)
+            new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
             new_node.deserialize(node_data, hashmap, restore_id=False)
 
             # shift the new nodes position
             pos = new_node.pos
-            new_node.setPos(pos.x() + offset_x, pos.y() + offset_y)
+            posx, posy = new_node.pos.x(), new_node.pos.y()
+            newx, newy = mousex + posx - minx, mousey + posy - miny
+
+            new_node.setPos(newx, newy)
 
         # Create each edge
         if 'edges' in data:

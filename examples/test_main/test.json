@@ -1,289 +1,283 @@
 {
-    "id": 140347079584112,
+    "id": 140716304430704,
     "scene_widht": 64000,
     "scene_height": 64000,
     "nodes": [
         {
-            "id": 140347079597648,
-            "title": "First awesome node 1",
-            "pos_x": -327.75,
-            "pos_y": -282.65,
+            "id": 140716033875248,
+            "title": "Math",
+            "pos_x": 2.463137996219274,
+            "pos_y": -262.58601134215496,
             "inputs": [
                 {
-                    "id": 140347079597744,
+                    "id": 140716033875296,
                     "index": 0,
                     "position": 2,
                     "socket_type": 1,
                     "inout": 1,
-                    "x": 0.0,
-                    "y": 225.0
+                    "x": -1.0,
+                    "y": 48.0
                 },
                 {
-                    "id": 140347049147648,
+                    "id": 140716033938336,
                     "index": 1,
                     "position": 2,
                     "socket_type": 1,
                     "inout": 1,
-                    "x": 0.0,
-                    "y": 201.0
-                },
-                {
-                    "id": 140347049154736,
-                    "index": 2,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 177.0
+                    "x": -1.0,
+                    "y": 72.0
                 }
             ],
             "outputs": [
                 {
-                    "id": 140347049147600,
+                    "id": 140716033938240,
                     "index": 0,
-                    "position": 3,
+                    "position": 5,
                     "socket_type": 2,
                     "inout": 2,
-                    "x": 180.0,
-                    "y": 39.0
+                    "x": 181.0,
+                    "y": 60.0
                 }
             ],
             "content": {
-                "id": 139808391235040,
-                "content": ""
-            }
+                "id": 140716034051232,
+                "content": "",
+                "sel_ind": 2
+            },
+            "op_code": 3,
+            "op_title": "Math"
         },
         {
-            "id": 140347079597696,
-            "title": "First awesome node 2",
-            "pos_x": -377.0,
-            "pos_y": 61.90000000000002,
-            "inputs": [
-                {
-                    "id": 140347049154976,
-                    "index": 0,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 225.0
-                },
-                {
-                    "id": 140347049155120,
-                    "index": 1,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 201.0
-                }
-            ],
+            "id": 140716033938288,
+            "title": "Value input",
+            "pos_x": -207.0,
+            "pos_y": -282.0,
+            "inputs": [],
             "outputs": [
                 {
-                    "id": 140347049154784,
+                    "id": 140716033938384,
                     "index": 0,
-                    "position": 3,
+                    "position": 5,
                     "socket_type": 2,
                     "inout": 2,
-                    "x": 180.0,
-                    "y": 39.0
-                },
-                {
-                    "id": 140347049155312,
-                    "index": 1,
-                    "position": 3,
-                    "socket_type": 3,
-                    "inout": 2,
-                    "x": 180.0,
-                    "y": 63.0
+                    "x": 121.0,
+                    "y": 50.0
                 }
             ],
             "content": {
-                "id": 139808391236624,
-                "content": ""
-            }
+                "id": 140716033565312,
+                "content": "",
+                "value": "1"
+            },
+            "op_code": 6,
+            "op_title": "Value input"
         },
         {
-            "id": 140347049147552,
-            "title": "First awesome node 3",
-            "pos_x": -6.5499999999999545,
-            "pos_y": -293.54999999999995,
-            "inputs": [
-                {
-                    "id": 140347049155456,
-                    "index": 0,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 225.0
-                },
-                {
-                    "id": 140347049155600,
-                    "index": 1,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 201.0
-                },
-                {
-                    "id": 140347049155648,
-                    "index": 2,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 177.0
-                }
-            ],
+            "id": 140716033972592,
+            "title": "Value input",
+            "pos_x": -228.0,
+            "pos_y": -165.0,
+            "inputs": [],
             "outputs": [
                 {
-                    "id": 140347049155168,
+                    "id": 140716033972784,
                     "index": 0,
-                    "position": 3,
+                    "position": 5,
                     "socket_type": 2,
                     "inout": 2,
-                    "x": 180.0,
-                    "y": 39.0
+                    "x": 121.0,
+                    "y": 50.0
                 }
             ],
             "content": {
-                "id": 139808379625968,
-                "content": ""
-            }
+                "id": 140716033566464,
+                "content": "",
+                "value": "1"
+            },
+            "op_code": 6,
+            "op_title": "Value input"
         },
         {
-            "id": 140347049155024,
-            "title": "First awesome node 4",
-            "pos_x": 157.07475000000005,
-            "pos_y": 76.56562499999995,
+            "id": 140716033973552,
+            "title": "Value output",
+            "pos_x": 490.0,
+            "pos_y": -211.0,
             "inputs": [
                 {
-                    "id": 140347049155936,
+                    "id": 140716033973600,
                     "index": 0,
                     "position": 2,
                     "socket_type": 1,
                     "inout": 1,
-                    "x": 0.0,
-                    "y": 225.0
-                },
-                {
-                    "id": 140347049156080,
-                    "index": 1,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 201.0
-                },
-                {
-                    "id": 140347049156128,
-                    "index": 2,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 177.0
+                    "x": -1.0,
+                    "y": 50.0
                 }
             ],
-            "outputs": [
-                {
-                    "id": 140347049155792,
-                    "index": 0,
-                    "position": 3,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 180.0,
-                    "y": 39.0
-                }
-            ],
+            "outputs": [],
             "content": {
-                "id": 139808379627408,
-                "content": ""
-            }
+                "id": 140716033567616,
+                "content": "",
+                "value": "1"
+            },
+            "op_code": 7,
+            "op_title": "Value output"
         },
         {
-            "id": 140472626453424,
-            "title": "First awesome node 4",
-            "pos_x": 406.1,
-            "pos_y": -262.7591250000001,
+            "id": 140716033456400,
+            "title": "Math",
+            "pos_x": 5.484999999999985,
+            "pos_y": -141.8625,
             "inputs": [
                 {
-                    "id": 140472626453616,
+                    "id": 140716033456784,
                     "index": 0,
                     "position": 2,
                     "socket_type": 1,
                     "inout": 1,
-                    "x": 0.0,
-                    "y": 225.0
+                    "x": -1.0,
+                    "y": 48.0
                 },
                 {
-                    "id": 140472626453712,
+                    "id": 140716033456880,
                     "index": 1,
                     "position": 2,
                     "socket_type": 1,
                     "inout": 1,
-                    "x": 0.0,
-                    "y": 201.0
-                },
-                {
-                    "id": 140472626453856,
-                    "index": 2,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": 0.0,
-                    "y": 177.0
+                    "x": -1.0,
+                    "y": 72.0
                 }
             ],
             "outputs": [
                 {
-                    "id": 140472626453952,
+                    "id": 140716033457024,
                     "index": 0,
-                    "position": 3,
+                    "position": 5,
                     "socket_type": 2,
                     "inout": 2,
-                    "x": 180.0,
-                    "y": 39.0
+                    "x": 181.0,
+                    "y": 60.0
                 }
             ],
             "content": {
-                "id": 139808379628848,
-                "content": ""
-            }
+                "id": 140716033609792,
+                "content": "",
+                "sel_ind": 2
+            },
+            "op_code": 3,
+            "op_title": "Math"
+        },
+        {
+            "id": 140716033454624,
+            "title": "Math",
+            "pos_x": 251.0,
+            "pos_y": -225.0,
+            "inputs": [
+                {
+                    "id": 140716033455008,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 48.0
+                },
+                {
+                    "id": 140716033602512,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 72.0
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140716033455296,
+                    "index": 0,
+                    "position": 5,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 181.0,
+                    "y": 60.0
+                }
+            ],
+            "content": {
+                "id": 140716033612384,
+                "content": "",
+                "sel_ind": 0
+            },
+            "op_code": 3,
+            "op_title": "Math"
+        },
+        {
+            "id": 140716033602704,
+            "title": "Value input",
+            "pos_x": -230.0,
+            "pos_y": -69.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140716033602992,
+                    "index": 0,
+                    "position": 5,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 121.0,
+                    "y": 50.0
+                }
+            ],
+            "content": {
+                "id": 140715836346720,
+                "content": "",
+                "value": "1"
+            },
+            "op_code": 6,
+            "op_title": "Value input"
         }
     ],
     "edges": [
         {
-            "id": 140472626453472,
+            "id": 140716033971440,
             "edge_type": 2,
-            "start": 140347049155792,
-            "end": 140472626453616
+            "start": 140716033938384,
+            "end": 140716033875296
         },
         {
-            "id": 140472626454096,
+            "id": 140716033875200,
             "edge_type": 2,
-            "start": 140347049155168,
-            "end": 140472626453856
+            "start": 140716033972784,
+            "end": 140716033938336
         },
         {
-            "id": 140444656615088,
+            "id": 140716033454480,
             "edge_type": 2,
-            "start": 140347049154784,
-            "end": 140347049156128
+            "start": 140716033972784,
+            "end": 140716033456784
         },
         {
-            "id": 140444656452512,
+            "id": 140716033602608,
             "edge_type": 2,
-            "start": 140347049155312,
-            "end": 140347049155456
+            "start": 140716033938240,
+            "end": 140716033455008
         },
         {
-            "id": 140444656615040,
+            "id": 140716033602464,
             "edge_type": 2,
-            "start": 140347049147600,
-            "end": 140347049155648
+            "start": 140716033457024,
+            "end": 140716033602512
+        },
+        {
+            "id": 140716033602368,
+            "edge_type": 2,
+            "start": 140716033455296,
+            "end": 140716033973600
+        },
+        {
+            "id": 140716033602800,
+            "edge_type": 2,
+            "start": 140716033602992,
+            "end": 140716033456880
         }
     ]
 }

@@ -6,7 +6,8 @@ from collections import OrderedDict
 DEBUG = False
 
 class NodeContentWidget(QWidget, Serializer):
-    def __init__(self, parent=None):
+    def __init__(self, node, parent=None):
+        self.node = node
         super().__init__(parent)
 
         self.initUI()
@@ -26,5 +27,5 @@ class NodeContentWidget(QWidget, Serializer):
         ])
         
     def deserialize(self, data, hashmap=[]):
-        #print("Deserialization of the data", data)
-        return False
+        print("Deserialization of the data", data)
+        return True

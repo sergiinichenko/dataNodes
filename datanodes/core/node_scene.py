@@ -30,6 +30,9 @@ class Scene(Serializer):
         self._selected_listeners = []
         self._deselected_listeners = []
 
+        # Store the callback for retrieving the needed Node class
+        self.node_class_selector = None
+
         self.initUI()
 
         self.history   = SceneHistory(self)
@@ -89,10 +92,10 @@ class Scene(Serializer):
         self._deselected_listeners.append(callback)
 
     def addDragEnterListener(self, callback):
-        self.grScene.views()[0].addDragEnterListener(callback)
+        self.getView().addDragEnterListener(callback)
 
     def addDropListener(self, callback):
-        self.grScene.views()[0].addDropListener(callback)
+        self.getView().addDropListener(callback)
 
 
     def isModified(self) -> bool:
@@ -105,6 +108,12 @@ class Scene(Serializer):
 
     def selectedItems(self):
         return self.grScene.selectedItems()
+
+    def getView(self):
+        return self.grScene.views()[0]
+
+    def getItemAtPos(self, pos):
+        return self.getView().itemAt(pos)
 
     # custom flag to detect node or edge has been selected
     def resetLastSelectedStates(self):
@@ -160,6 +169,16 @@ class Scene(Serializer):
             except Exception as e : 
                 dumpException(e)
 
+    def setNodeClassSelector(self, class_selecting_function):
+        #
+        self.node_class_selector = class_selecting_function
+
+    def getNodeClassFromData(self, data):
+        if self.node_class_selector is None:
+            return Node
+        else:
+            return self.node_class_selector(data)
+
     def serialize(self):
         nodes, edges = [], []
         for node in self.nodes: nodes.append(node.serialize())
@@ -181,12 +200,12 @@ class Scene(Serializer):
 
         # create nodes from data
         for node_data in data["nodes"]:
-            Node(self).deserialize(node_data, hashmap, restore_id)
+            #Node(self).deserialize(node_data, hashmap, restore_id)
+            self.getNodeClassFromData(node_data)(self).deserialize(node_data, hashmap, restore_id)
 
         for edge_data in data["edges"]:
             Edge(self).deserialize(edge_data, hashmap, restore_id)
 
         # create adges from data
-
         
         return True
