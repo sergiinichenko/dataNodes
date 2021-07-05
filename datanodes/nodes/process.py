@@ -18,15 +18,22 @@ class SeparateDFContent(NodeContentWidget):
 
     def serialize(self):
         res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
         return res
 
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            return True & res
-        except Exception as e : dumpException(e)
-        return res
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.resize(data['content-widht'], data['content-height'])
+        except Exception as e: 
+            dumpException(e)
+        return True & res
 
 
 @register_node(OP_MODE_PROCESS)
@@ -51,7 +58,7 @@ class SeparateDFNode(DataNode):
 
     def generateSockets(self, data, names=None):
         self.clearOutputs()        
-        outputs = [ 1 for l in range(data.shape[1])]
+        outputs = [SOCKET_DATA_TEXT for l in range(data.shape[1])]
         self.createOutputs(outputs, names)
         self.grNode.height = data.shape[1] * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.update()
@@ -81,10 +88,12 @@ class SeparateDFNode(DataNode):
 
             if self.type == "df":
                 print(self.value, self.value.columns)
-                self.generateSockets(self.value, list(self.value.columns))
+                if len(self.outputs) != self.value.shape[1]:
+                    self.generateSockets(self.value, list(self.value.columns))
 
                 for i, socket in zip(range(len(self.outputs)), self.outputs):
                     socket.value = self.value.iloc[:,i]
+                    socket.type  = "float"
             else:
                 print("FALSE: ", self.value)
             return True

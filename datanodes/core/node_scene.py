@@ -183,11 +183,14 @@ class Scene(Serializer):
         nodes, edges = [], []
         for node in self.nodes: nodes.append(node.serialize())
         for edge in self.edges: edges.append(edge.serialize())
-
+        center = self.getView().mapToScene(self.getView().viewport().rect().center())
         return OrderedDict([
             ('id' , self.id),
             ('scene_widht'  , self.scene_width),
             ('scene_height' , self.scene_height),
+            ('view_x'       , center.x()),
+            ('view_y'       , center.y()),
+            ('view_scale'   , self.getView().zoom),
             ('nodes'        , nodes),
             ("edges"        , edges),
         ])
@@ -197,6 +200,14 @@ class Scene(Serializer):
         hashmap = {}
 
         if restore_id: self.id = data['id']
+
+        self.getView().centerOn(data['view_x'], data['view_y'])
+        #self.getView().translate(data['view_x'], data['view_y'])
+        scale = data['view_scale'] / self.getView().zoom
+
+        self.getView().scale(scale, scale)
+        self.getView().zoom = data['view_scale']
+
 
         # create nodes from data
         for node_data in data["nodes"]:

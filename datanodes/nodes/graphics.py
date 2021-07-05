@@ -60,8 +60,6 @@ class GraphicsOutputNode(DataNode):
         if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
-            self.content.textOut.clear()
-            self.content.textOut.insertPlainText("NaN")
             return False
         else:            
             self.setDirty(False)
@@ -69,11 +67,10 @@ class GraphicsOutputNode(DataNode):
             self.e = ""
             self.value = input_edge.value
             self.type  = input_edge.type
-            self.content.textOut.clear()
             if self.type == "df":
-                self.content.textOut.insertPlainText(self.value.to_string())
+                pass
             else:
-                self.content.textOut.insertPlainText(str(self.value))
+                pass
             return True
 
 

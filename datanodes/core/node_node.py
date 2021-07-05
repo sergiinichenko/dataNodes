@@ -139,7 +139,7 @@ class Node(Serializer):
             other_node.setChildrenDirty(value)
 
     def onSetDirty(self):
-        pass
+        self.grNode.update()
 
     def isInvalid(self):
         return self._is_invalid
@@ -150,7 +150,7 @@ class Node(Serializer):
             self.onSetInvalid()
 
     def onSetInvalid(self):
-        pass
+        self.grNode.update()
 
     def setChildrenInvalid(self, value=True):
         for child in self.getChildNodes():
@@ -329,7 +329,8 @@ class Node(Serializer):
                            inout=socket_data['inout'], 
                            index=socket_data['index'], 
                            position=socket_data['position'], 
-                           soket_type=socket_data['socket_type'])
+                           soket_type=socket_data['socket_type'],
+                           label = socket_data['label'] if 'label' in socket_data else None)
             soket.deserialize(socket_data, hashmap, restore_id)
             self.inputs.append(soket)
 
@@ -339,7 +340,8 @@ class Node(Serializer):
                            inout=socket_data['inout'], 
                            index=socket_data['index'], 
                            position=socket_data['position'], 
-                           soket_type=socket_data['socket_type'])
+                           soket_type=socket_data['socket_type'],
+                           label = socket_data['label'] if 'label' in socket_data else None) 
             soket.deserialize(socket_data, hashmap, restore_id)
             self.outputs.append(soket)
         

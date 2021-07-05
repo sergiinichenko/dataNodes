@@ -6,7 +6,7 @@ from datanodes.core.node_settings import *
 
 
 class Socket(Serializer):
-    def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=1, label=None):
+    def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=SOCKET_DATA_NUMERIC, label=None):
         super().__init__()
 
         self.node        = node
@@ -82,6 +82,7 @@ class Socket(Serializer):
             ('inout'       , self.inout),
             ('x'           , self.grSocket.pos().x()),
             ('y'           , self.grSocket.pos().y()),
+            ('label'       , self.grSocket.label) 
         ])
 
 

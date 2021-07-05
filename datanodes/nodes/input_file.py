@@ -6,7 +6,7 @@ from datanodes.nodes.datanode import *
 class FileInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
+        self.width  = 180.0
         self.height = 120.0
 
 class FileInputContent(DataContent):
@@ -28,14 +28,15 @@ class FileInputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
-        res['value'] = self.edit.text()
+        res['file'] = self.node.file
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['value']
-            self.edit.setText(value)
+            self.node.file = data['file']
+            self.edit.setText(os.path.basename(self.node.file))
+            self.node.readDFFile(self.node.file)
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -46,12 +47,13 @@ class FileInputNode(DataNode):
     op_code = OP_MODE_FILEINPUT
     op_title = "Input file"
 
-
-    def __init__(self, scene, inputs=[], outputs=[2]):
+    def __init__(self, scene, inputs=[], outputs=[SOCKET_DATA_NUMERIC]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
         #self.value = None
         self.separator = ","
+        self.file = ""
+        self.setDirty()
+        self.can_read = True
 
 
     def initInnerClasses(self):
@@ -69,20 +71,27 @@ class FileInputNode(DataNode):
         if file == '':
             return
         if os.path.isfile(file):
-            #self.value = pd.read_csv(file, sep=self.separator)
-            self.outputs[0].value = pd.read_csv(file, sep=self.separator)
-            self.outputs[0].type  = 'df'
+            self.file = file
+            self.content.edit.setText(os.path.basename(self.file))
+            self.readDFFile(self.file)
         else:
             self.outputs[0].value = "NaN"
             self.outputs[0].type  = 'none'
+            self.can_read = False
+
+
+    def readDFFile(self, file):
+        try:
+            self.outputs[0].value = pd.read_csv(file, sep=self.separator)
+            self.outputs[0].type  = 'df'
+            self.can_read = True
+        except Exception as e : 
+            dumpException(e)
+            self.outputs[0].value = "NaN"
+            self.outputs[0].type  = 'none'
+            self.can_read = False
 
 
     def evalImplementation(self):
-        try:
-            return True
-
-        except Exception as e: 
-            dumpException (e)
-            self.e = e
-            
-            return False
+        if self.can_read : return True
+        else: return False

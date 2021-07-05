@@ -1,3 +1,4 @@
+from datanodes.core.node_settings import SOCKET_OUTPUT, SOCKET_INPUT
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -41,10 +42,15 @@ class GraphicsSocket(QGraphicsItem):
 
         painter.drawEllipse(-self.radius, -self.radius, 2*self.radius, 2*self.radius)
 
-        if self.label:
+        if self.label and self.socket.inout == SOCKET_OUTPUT:
             painter.setPen(self._pen_white)
-            rect = QRect( - self.radius - 105, -10, 100, 24)
+            rect = QRect( - self.radius - 110, -10, 100, 24)
             painter.drawText(rect, Qt.AlignRight, self.label)
+
+        if self.label and self.socket.inout == SOCKET_INPUT:
+            painter.setPen(self._pen_white)
+            rect = QRect( + self.radius + 10, -10, 100, 24)
+            painter.drawText(rect, Qt.AlignLeft, self.label)
 
     def boundingRect(self):
         return QRectF(- self.radius - self.outline_width, 
