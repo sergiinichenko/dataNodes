@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import *
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
@@ -5,7 +6,7 @@ from datanodes.core.node_settings import *
 
 
 class Socket(Serializer):
-    def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=1):
+    def __init__(self, node, inout, index=0, position=LEFT_TOP, soket_type=1, label=None):
         super().__init__()
 
         self.node        = node
@@ -14,16 +15,34 @@ class Socket(Serializer):
         self.socket_type = soket_type
         self.inout       = inout
 
-        self.grSocket    = GraphicsSocket(self, self.socket_type)
+        self.grSocket    = GraphicsSocket(self, self.socket_type, label)
 
         #self.grSocket.setPos(*self.node.getSocketPos(self.index, self.position))
         self.setPos()
 
         self.edges = []
 
+        self._value = ""
+        self._type  = ""
+
     def __str__(self) -> str:
         return "<Socket %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
 
+    @property
+    def value(self):
+        return self._value
+
+    @property
+    def type(self):
+        return self._type
+
+    @value.setter
+    def value(self, new_value):
+        self._value = new_value
+
+    @type.setter
+    def type(self, new_type):
+        self._type = new_type
 
     @property
     def pos(self):

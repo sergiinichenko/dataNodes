@@ -61,52 +61,52 @@ class MathNode(DataNode):
         self.content.changed.connect(self.reEvaluate)
 
     def evalImplementation(self):
-        input_nodes = self.getInputs()
-        if not input_nodes:
+        input_edges = self.getInputs()
+        if not input_edges:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             return False
         else:      
-            if len(input_nodes) == 2:      
+            if len(input_edges) == 2:      
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
-                if self.content.operation == "Add"      : self.value = self.add(input_nodes)
-                if self.content.operation == "Substract": self.value = self.substract(input_nodes)
-                if self.content.operation == "Multiply" : self.value = self.multiply(input_nodes)
-                if self.content.operation == "Divide"   : self.value = self.devide(input_nodes)
-                if self.content.operation == "Power"    : self.value = self.power(input_nodes)
-                self.type = "float"
+                if self.content.operation == "Add"      : self.outputs[0].value = self.add(input_edges)
+                if self.content.operation == "Substract": self.outputs[0].value = self.substract(input_edges)
+                if self.content.operation == "Multiply" : self.outputs[0].value = self.multiply(input_edges)
+                if self.content.operation == "Divide"   : self.outputs[0].value = self.devide(input_edges)
+                if self.content.operation == "Power"    : self.outputs[0].value = self.power(input_edges)
+                self.outputs[0].type = "float"
                 return True
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not all input nodes are connected"
-                self.value = 0
-                self.type = "float"
+                self.outputs[0].value = 0
+                self.outputs[0].type = "float"
                 return False
 
-    def add(self, input_nodes):
+    def add(self, input_edges):
         val = 0
-        for node in input_nodes: val += node.value
+        for node in input_edges: val += node.value
         return val
 
-    def substract(self, input_nodes):
-        val = input_nodes[0].value
-        for node in input_nodes[1:]: val -= node.value
+    def substract(self, input_edges):
+        val = input_edges[0].value
+        for node in input_edges[1:]: val -= node.value
         return val
 
-    def multiply(self, input_nodes):
-        val = input_nodes[0].value
-        for node in input_nodes[1:]: val *= node.value
+    def multiply(self, input_edges):
+        val = input_edges[0].value
+        for node in input_edges[1:]: val *= node.value
         return val
 
-    def devide(self, input_nodes):
-        val = input_nodes[0].value
-        for node in input_nodes[1:]: val /= node.value
+    def devide(self, input_edges):
+        val = input_edges[0].value
+        for node in input_edges[1:]: val /= node.value
         return val
 
-    def power(self, input_nodes):
-        val = input_nodes[0].value
-        for node in input_nodes[1:]: val = pow(val, node.value)
+    def power(self, input_edges):
+        val = input_edges[0].value
+        for node in input_edges[1:]: val = pow(val, node.value)
         return val

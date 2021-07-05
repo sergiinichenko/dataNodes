@@ -50,7 +50,7 @@ class FileInputNode(DataNode):
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs, outputs)
         self.eval()
-        self.value = None
+        #self.value = None
         self.separator = ","
 
 
@@ -69,11 +69,12 @@ class FileInputNode(DataNode):
         if file == '':
             return
         if os.path.isfile(file):
-            self.value = pd.read_csv(file, sep=self.separator)
-            self.type  = 'df'
+            #self.value = pd.read_csv(file, sep=self.separator)
+            self.outputs[0].value = pd.read_csv(file, sep=self.separator)
+            self.outputs[0].type  = 'df'
         else:
-            self.value = "NaN"
-            self.type  = 'none'
+            self.outputs[0].value = "NaN"
+            self.outputs[0].type  = 'none'
 
 
     def evalImplementation(self):

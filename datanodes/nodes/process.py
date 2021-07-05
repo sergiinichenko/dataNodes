@@ -18,15 +18,12 @@ class SeparateDFContent(NodeContentWidget):
 
     def serialize(self):
         res = super().serialize()
-        res['sel_ind'] = self.cb.currentIndex()
         return res
 
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['sel_ind']
-            self.cb.setCurrentIndex(value)
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -44,7 +41,7 @@ class SeparateDFNode(DataNode):
     def initSettings(self):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
-        self.output_socket_position = RIGHT_CENTER
+        self.output_socket_position = RIGHT_TOP
 
 
     def initInnerClasses(self):
@@ -52,24 +49,43 @@ class SeparateDFNode(DataNode):
         self.grNode  = SeparateDFGraphicsNode(self)
 
 
+    def generateSockets(self, data, names=None):
+        self.clearOutputs()        
+        outputs = [ 1 for l in range(data.shape[1])]
+        self.createOutputs(outputs, names)
+        self.grNode.height = data.shape[1] * self.socket_spacing + 2.0 * self.socket_spacing
+        self.grNode.update()
+
+        self.border_radius = 10.0
+        self.padding       = 10.0
+        self.title_height = 24.0
+        self._hpadding     = 5.0
+        self._vpadding     = 5.0
+
+        x, y = self.grNode.width - 2.0 * self.grNode.padding, data.shape[1] * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
+        self.content.resize(x, y)
+
+
     def evalImplementation(self):
-        input_node = self.getInput(0)
-        if not input_node:
+        input_edge = self.getInput(0)
+        if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
-            self.content.textOut.clear()
-            self.content.textOut.insertPlainText("NaN")
             return False
         else:            
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
-            self.value = input_node.value
-            self.type  = input_node.type
-            self.content.textOut.clear()
+            self.value = input_edge.value
+            self.type  = input_edge.type
+
             if self.type == "df":
-                self.content.textOut.insertPlainText(self.value.to_string())
+                print(self.value, self.value.columns)
+                self.generateSockets(self.value, list(self.value.columns))
+
+                for i, socket in zip(range(len(self.outputs)), self.outputs):
+                    socket.value = self.value.iloc[:,i]
             else:
-                self.content.textOut.insertPlainText(str(self.value))
+                print("FALSE: ", self.value)
             return True
 

@@ -58,7 +58,7 @@ class DataNode(Node):
     def __init__(self, scene, inputs=[1,1], outputs=[2,2]):
         super().__init__(scene, self.__class__.op_title, inputs, outputs)
 
-        self.value = None
+        #self.value = None
         self.e     = None
         self.type  = "float"
         self.recalculate = False
@@ -85,7 +85,8 @@ class DataNode(Node):
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:
-            return self.value
+            #return self.value
+            return True
 
         try:
             if self.evalImplementation():
@@ -94,13 +95,14 @@ class DataNode(Node):
                 self.setDescendentsInvalid(False)
                 self.setDescendentsDirty()
                 self.evalChildren()
-                return self.value
+                #return self.value
+                return True
             else: 
                 self.setInvalid(True)
                 self.setDescendentsInvalid(True)
                 self.setDescendentsDirty(False)
                 self.grNode.setToolTip(str(self.e))
-                return 0
+                return False
 
         except Exception as e : 
             self.setInvalid()

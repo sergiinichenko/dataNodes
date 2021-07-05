@@ -1,5 +1,5 @@
 from datanodes.core.utils import dumpException
-from datanodes.core.node_settings import SOCKET_INPUT
+from datanodes.core.node_settings import SOCKET_INPUT, SOCKET_OUTPUT
 from datanodes.graphics.graphics_edge import *
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
@@ -83,6 +83,21 @@ class Edge(Serializer):
         else:
             self.grEdge = GraphicsEdgeBezier(self)
         self.scene.grScene.addItem(self.grEdge)
+
+    @property
+    def value(self):
+        if self.start_socket.inout == SOCKET_OUTPUT:
+            return self.start_socket.value
+        else:
+            return self.end_socket.value
+
+    @property
+    def type(self):
+        if self.start_socket.inout == SOCKET_OUTPUT:
+            return self.start_socket.type
+        else:
+            return self.end_socket.type
+
 
     def updatePos(self):
         self.grEdge.setSource()

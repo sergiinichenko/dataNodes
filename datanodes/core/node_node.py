@@ -61,17 +61,39 @@ class Node(Serializer):
             # clear the sockets
             if hasattr(self, "inputs") and hasattr(self, "outputs"):
                 # remove grSockets from the scene
-                for socket in (self.inputs + self.outputs):
-                    self.scene.grScene.removeItem(socket.grSocket)
-                self.inputs  = []
-                self.outputs = []
+                self.clearInputs()
+                self.clearOutputs()
 
         # create new sockets
+        self.createInputs(inputs)
+        self.createOutputs(outputs)
+
+
+    def clearOutputs(self):
+        for socket in self.outputs:
+            if socket.hasEdge():
+                socket.clearEdges()
+            self.scene.grScene.removeItem(socket.grSocket)
+        self.outputs = []
+
+    def clearInputs(self):
+        for socket in self.inputs:
+            if socket.hasEdge():
+                socket.clearEdges()
+            self.scene.grScene.removeItem(socket.grSocket)
+        self.inputs = []
+
+    def createInputs(self, inputs, names=None):
         for i, item in zip(range(len(inputs)), inputs):
             self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=i, position=self.input_socket_position, soket_type=item))
 
+
+    def createOutputs(self, outputs, names=None):
         for i, item in zip(range(len(outputs)), outputs):
-            self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=i, position=self.output_socket_position, soket_type=item))        
+            if names:
+                self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=i, position=self.output_socket_position, soket_type=item, label=names[i]))        
+            else:
+                self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=i, position=self.output_socket_position, soket_type=item))        
 
 
     def __str__(self) -> str:
@@ -169,9 +191,12 @@ class Node(Serializer):
         try:
             input_socket = self.inputs[index]
             if len(input_socket.edges) == 0: return None
+            return input_socket.edges[0]
+            """
             edge = input_socket.edges[0]
             socket = edge.getOtherSocket(self.inputs[index])
-            return socket.node
+            return socket
+            """
 
         except IndexError:
             print("EXC: Trying to get input but nothing is attached")
@@ -190,7 +215,7 @@ class Node(Serializer):
             for socket in input_sockets:
                 edge = socket.edges[0]
                 other_socket = edge.getOtherSocket(socket)
-                inputs.append(other_socket.node)
+                inputs.append(other_socket)
             return inputs
             
         except IndexError:

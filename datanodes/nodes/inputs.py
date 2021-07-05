@@ -55,7 +55,7 @@ class ValueInputNode(DataNode):
         try:
             u_value = self.content.edit.text()
             s_value = float(u_value)
-            self.value = s_value      
+            self.outputs[0].value = s_value      
             return True
 
         except Exception as e: 

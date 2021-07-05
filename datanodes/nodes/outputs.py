@@ -48,8 +48,8 @@ class ValueOutputNode(DataNode):
 
 
     def evalImplementation(self):
-        input_node = self.getInput(0)
-        if not input_node:
+        input_edge = self.getInput(0)
+        if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             self.content.edit.setText("NaN")
@@ -58,8 +58,13 @@ class ValueOutputNode(DataNode):
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
-            self.value = input_node.value
-            self.content.edit.setText(str(self.value))
+            self.value = input_edge.value
+            if self.value < 1000.0:
+                self.content.edit.setText("{0:.3f}".format(self.value))
+            elif self.value > 1000.0 and self.value < 100000.0:
+                self.content.edit.setText("{0:.2f}".format(self.value))
+            else:
+                self.content.edit.setText("{0:.1f}".format(self.value))
             return True
 
 
@@ -117,8 +122,8 @@ class TableOutputNode(DataNode):
 
 
     def evalImplementation(self):
-        input_node = self.getInput(0)
-        if not input_node:
+        input_edge = self.getInput(0)
+        if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             self.content.edit.setText("NaN")
@@ -127,9 +132,9 @@ class TableOutputNode(DataNode):
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
-            self.value = input_node.value
-            self.type  = input_node.type
-            if input_node.type == "df":
+            self.value = input_edge.value
+            self.type  = input_edge.type
+            if input_edge.type == "df":
                 self.table.setRowCount(self.value.shape[0])
                 self.table.setColumnCount(self.value.shape[1])
                 #self.table.
@@ -193,8 +198,8 @@ class TextOutputNode(DataNode):
 
 
     def evalImplementation(self):
-        input_node = self.getInput(0)
-        if not input_node:
+        input_edge = self.getInput(0)
+        if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             self.content.textOut.clear()
@@ -204,8 +209,8 @@ class TextOutputNode(DataNode):
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
-            self.value = input_node.value
-            self.type  = input_node.type
+            self.value = input_edge.value
+            self.type  = input_edge.type
             self.content.textOut.clear()
             if self.type == "df":
                 self.content.textOut.insertPlainText(self.value.to_string())
