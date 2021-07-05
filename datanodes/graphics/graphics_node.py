@@ -13,6 +13,7 @@ class GraphicsNode(QGraphicsItem):
         # init the flags
         self._wasMoved = False
         self._lastSelectedState = False
+        self.is_selected = False
 
         self.initSizes()
         self.initAssets()

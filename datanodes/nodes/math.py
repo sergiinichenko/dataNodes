@@ -76,12 +76,14 @@ class MathNode(DataNode):
                 if self.content.operation == "Multiply" : self.value = self.multiply(input_nodes)
                 if self.content.operation == "Divide"   : self.value = self.devide(input_nodes)
                 if self.content.operation == "Power"    : self.value = self.power(input_nodes)
+                self.type = "float"
                 return True
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not all input nodes are connected"
                 self.value = 0
+                self.type = "float"
                 return False
 
     def add(self, input_nodes):

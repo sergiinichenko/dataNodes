@@ -24,15 +24,6 @@ class NodeListBox(QListWidget):
         for key in keys:
             node = getClassFromOpCode(key)
             self.addMyItem(node.op_title, node.icon, node.op_code)
-            
-        """
-        self.addMyItem('Clean', 'icons/clean.png', OP_MODE_CLEAN)        
-        self.addMyItem('Math',  'icons/math.png',  OP_MODE_MATH)
-
-        self.addMyItem('Plot' , 'icons/plot.png',  OP_MODE_PLOT)
-        self.addMyItem('Settings' , 'icons/settings.png', OP_MODE_SETT)
-        self.addMyItem('Output', 'icons/output.png', OP_MODE_VALOUTPUT)
-        """
 
     def addMyItem(self, name, icon=None, op_code=0):
         item   = QListWidgetItem(name, self)

@@ -9,7 +9,6 @@ class NodeContentWidget(QWidget, Serializer):
     def __init__(self, node, parent=None):
         self.node = node
         super().__init__(parent)
-
         self.initUI()
 
 

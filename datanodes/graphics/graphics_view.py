@@ -12,6 +12,7 @@ from PyQt5.QtGui import *
 
 MODE_NONE       = 1
 MODE_EDGE_DRAG  = 2
+MODE_DRAG_RESIZE = 3
 
 MODE_EDGE_CUT   = 3
 

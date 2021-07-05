@@ -44,13 +44,14 @@ class FileInputContent(DataContent):
 class FileInputNode(DataNode):
     icon = "icons/valinput.png"
     op_code = OP_MODE_FILEINPUT
-    op_title = "File input"
+    op_title = "Input file"
 
 
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs, outputs)
         self.eval()
-        self.value = "File name"
+        self.value = None
+        self.separator = ","
 
 
     def initInnerClasses(self):
@@ -59,32 +60,24 @@ class FileInputNode(DataNode):
         self.content.edit.textChanged.connect(self.onInputChanged)
         self.content.edit.textChanged.connect(self.onInputChanged)
         self.content.openFile.clicked.connect(self.openInputFile)
+        self.content.openFile.clicked.connect(self.onInputChanged)
+
 
     def openInputFile(self):
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open Node trees form file(s)')
+        file, filter = QFileDialog.getOpenFileName(self.scene.getView(), 'Open Node-Tree from File')
 
-        try:
-            for fname in fnames:
-                if fname:
-                    # read the file logic here
-                    with open(fname, "r") as file:
-                        raw = file.read()
-                        try:
-                            data = json.loads(raw, encoding="utf-8")
-                            self.deserialize(data)
-                            self.has_been_modified = False
+        if file == '':
+            return
+        if os.path.isfile(file):
+            self.value = pd.read_csv(file, sep=self.separator)
+            self.type  = 'df'
+        else:
+            self.value = "NaN"
+            self.type  = 'none'
 
-                        except json.JSONDecodeError:
-                            raise InvalidFile("{0} is not valid json file".format(os.path.basename(filename)))
-
-                        except Exception as e : 
-                            dumpException(e)
 
     def evalImplementation(self):
         try:
-            u_value = self.content.edit.text()
-            s_value = float(u_value)
-            self.value = s_value      
             return True
 
         except Exception as e: 

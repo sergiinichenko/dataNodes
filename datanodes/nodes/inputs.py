@@ -38,7 +38,7 @@ class ValueInputContent(DataContent):
 class ValueInputNode(DataNode):
     icon = "icons/valinput.png"
     op_code = OP_MODE_VALINPUT
-    op_title = "Value input"
+    op_title = "Input value"
 
 
     def __init__(self, scene, inputs=[], outputs=[2]):
