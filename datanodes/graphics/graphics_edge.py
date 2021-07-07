@@ -10,14 +10,15 @@ class GraphicsEdge(QGraphicsPathItem):
 
         self.edge      = edge
         self._lastSelectedState = False
+        self.hovered = False
 
         self.initAssets()
-
         self.initUI()
         
 
     def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
+        self.setAcceptHoverEvents(True)
         self.setZValue(-2.0)
 
         if self.edge.start_socket is not None:
@@ -28,18 +29,20 @@ class GraphicsEdge(QGraphicsPathItem):
 
 
     def initAssets(self):
-        self._widht    = 3.0
+        self._widht    = 4.0
         self._color    = QColor("#001000")
+        self._color_hov= QColor("#FF37A6FF")
         self._selected = QColor("#00ff00")
 
         self._pen      = QPen(self._color)
         self._pen_sel  = QPen(self._selected)
         self._pen_drag = QPen(self._color)
+        self._pen_hov  = QPen(self._color_hov)
         self._pen.setWidth(self._widht)
         self._pen_sel.setWidth(self._widht)
         self._pen_drag.setWidth(self._widht)
         self._pen_drag.setStyle(Qt.DashLine)
-
+        self._pen_hov.setWidthF(self._widht + 2)
 
     def onSelected(self):
         self.edge.scene.grScene.itemSelected.emit()
@@ -52,9 +55,28 @@ class GraphicsEdge(QGraphicsPathItem):
             self._lastSelectedState = self.isSelected()
             self.onSelected()
 
+    def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = True
+        self.update()
+
+    def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = False
+        self.update()
+
+
+    def boundingRect(self):
+        return self.shape().boundingRect()
+
+    def shape(self):
+        return self.calcPath()
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         self.setPath(self.calcPath())
+
+        painter.setBrush(Qt.NoBrush)
+        if self.hovered and self.edge.end_socket is not None:
+            painter.setPen(self._pen_hov)
+            painter.drawPath(self.path())
 
         if self.edge.end_socket == None:
             painter.setPen(self._pen_drag)
@@ -105,12 +127,13 @@ class GraphicsEdgeBezier(GraphicsEdge):
         cpy_fr = 0
         cpy_to = 0
 
-        #if self.edge.start_socket is not None:
-        spos = self.edge.start_socket.position
+        #if self.edge.start_socket is not None
+        if self.edge.start_socket is not None:
+            spos = self.edge.start_socket.position
 
-        if spos in(LEFT_BOTTOM, LEFT_TOP, LEFT_CENTER):
-            cpx_fr *= -1
-            cpx_to *= -1
+            if spos in(LEFT_BOTTOM, LEFT_TOP, LEFT_CENTER):
+                cpx_fr *= -1
+                cpx_to *= -1
 
         path = QPainterPath(QPoint(fr.x(), fr.y()))
         path.cubicTo(fr.x() + cpx_fr, fr.y() + cpy_fr, 

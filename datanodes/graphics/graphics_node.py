@@ -14,6 +14,7 @@ class GraphicsNode(QGraphicsItem):
         self._wasMoved = False
         self._lastSelectedState = False
         self.is_selected = False
+        self.hovered = False
 
         self.initSizes()
         self.initAssets()
@@ -45,14 +46,20 @@ class GraphicsNode(QGraphicsItem):
 
     def initAssets(self):
         # General graphical settings
+        self._widht = 1.0
         self._title_color = Qt.white
         self._title_font  = QFont("Ubuntu", 10)
         self._pen_default  = QPen(QColor("#7F000000"))
+        self._pen_default.setWidthF(self._widht)
         self._pen_selected = QPen(QColor("#FFFFA637"))
+        self._pen_selected.setWidthF(self._widht)
 
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
 
+        self._color_hov= QColor("#FF37A6FF")
+        self._pen_hov  = QPen(self._color_hov)
+        self._pen_hov.setWidthF(self._widht + 2)
 
 
     def onSelected(self):
@@ -120,6 +127,14 @@ class GraphicsNode(QGraphicsItem):
                                  self.width - 2 * self.padding, self.height - 2 * self.padding - self.title_height)
         self.grContent.setWidget(self.content)
 
+    def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = True
+        self.update()
+
+    def hoverLeaveEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
+        self.hovered = False
+        self.update()
+
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         
@@ -153,5 +168,12 @@ class GraphicsNode(QGraphicsItem):
                 self.width, self.height, 
                 self.border_radius, self.border_radius)
         painter.setPen(self._pen_default if not self.isSelected() else self._pen_selected)
+
         painter.setBrush(Qt.NoBrush)
-        painter.drawPath(path_outline.simplified())
+        if self.hovered:
+            painter.setPen(self._pen_hov)
+            painter.drawPath(path_outline.simplified())
+            painter.setPen(self._pen_default)
+            painter.drawPath(path_outline.simplified())
+        else:
+            painter.drawPath(path_outline.simplified())
