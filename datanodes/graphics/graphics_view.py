@@ -16,7 +16,7 @@ MODE_DRAG_RESIZE = 3
 
 MODE_EDGE_CUT   = 3
 
-DEBUG = False
+DEBUG = True
 
 class GraphicsView(QGraphicsView):
     scenePosChanged = pyqtSignal(int, int)
@@ -251,28 +251,33 @@ class GraphicsView(QGraphicsView):
         # get item which we release mouse button on
         item = self.getItemAtClick(event)
 
-        # logic
-        if hasattr(item, "node") or isinstance(item, GraphicsEdge) or item is None:
-            if event.modifiers() & Qt.ShiftModifier:
-                event.ignore()
-                fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
-                                        Qt.LeftButton, Qt.NoButton,
-                                        event.modifiers() | Qt.ControlModifier)
-                super().mouseReleaseEvent(fakeEvent)
+        try:
+            # logic
+            if hasattr(item, "node") or isinstance(item, GraphicsEdge) or item is None:
+                if event.modifiers() & Qt.ShiftModifier:
+                    event.ignore()
+                    fakeEvent = QMouseEvent(event.type(), event.localPos(), event.screenPos(),
+                                            Qt.LeftButton, Qt.NoButton,
+                                            event.modifiers() | Qt.ControlModifier)
+                    super().mouseReleaseEvent(fakeEvent)
+                    return
+
+            if self.mode == MODE_EDGE_DRAG:
+                if self.clickClickDist(event):
+                    res = self.edgeDragEnd(item)
+                    if res: return
+
+            if self.mode == MODE_EDGE_CUT:
+                try:
+                    self.cutInersectingEdges()
+                    self.cutline.points = []
+                    self.cutline.update()
+                    QApplication.setOverrideCursor(Qt.ArrowCursor)
+                except Exception as e : dumpException(e)
+                self.mode = MODE_NONE
                 return
 
-        if self.mode == MODE_EDGE_DRAG:
-            if self.clickClickDist(event):
-                res = self.edgeDragEnd(item)
-                if res: return
-
-        if self.mode == MODE_EDGE_CUT:
-            self.cutInersectingEdges()
-            self.cutline.points = []
-            self.cutline.update()
-            QApplication.setOverrideCursor(Qt.ArrowCursor)
-            self.mode = MODE_NONE
-            return
+        except Exception as e: dumpException(e)
 
         super().mouseReleaseEvent(event)
 
@@ -301,26 +306,30 @@ class GraphicsView(QGraphicsView):
 
 
     def cutInersectingEdges(self):
-
         for ix in range(len(self.cutline.points) - 1):
             p1 = self.cutline.points[ix]
             p2 = self.cutline.points[ix + 1]
 
             for edge in self.grScene.scene.edges:
+                if DEBUG : print("CUTTING: between points" + str(p1.x()) + str(p1.y()) +  " " + str(p2.x()) + str(p2.y()) + "  the edge is ", edge, "   grEdge is ", edge.grEdge)
                 if edge.grEdge.intersectsWith(p1, p2):
                     edge.remove()
+        if DEBUG : print("CUTTING: done")
 
         self.grScene.scene.history.storeHistory("cut edges")
+        if DEBUG : print("CUTTING: added history stamp")
 
 
     def mouseMoveEvent(self, event):
         if self.mode == MODE_EDGE_DRAG:
+            if DEBUG : print("MOUS_MV: EDGE DRAG MODE")
             pos = self.mapToScene(event.pos())
             self.drag_edge.grEdge.destination.setX(pos.x())
             self.drag_edge.grEdge.destination.setY(pos.y())
             self.drag_edge.grEdge.update()
         
         if self.mode == MODE_EDGE_CUT:
+            if DEBUG : print("MOUS_MV: EDGE CUT MODE")
             pos = self.mapToScene(event.pos())
             self.cutline.points.append(pos)
             self.cutline.update()
@@ -334,39 +343,8 @@ class GraphicsView(QGraphicsView):
 
 
     def keyPressEvent(self, event):
-        """
-        if event.key() == Qt.Key_Delete:
-            # Check if any items were selected in the scene
-            if len(self.grScene.selectedItems()) > 0:
-                # Delete the elements if items were selected
-                self.deleteSelectedItem()
-            else:
-                # otherwise run the delete event
-                super().keyPressEvent(event)
-
-        elif event.key() == Qt.Key_S and event.modifiers() & Qt.ControlModifier:
-            self.grScene.scene.saveToFile("graph.json")
-
-        elif event.key() == Qt.Key_O and event.modifiers() & Qt.ControlModifier:
-            self.grScene.scene.loadFromFile("graph.json")
-
-
-        # the undo Ctrl+Z key pressed
-        elif event.key() == Qt.Key_Z and (event.modifiers() & Qt.ControlModifier) and not (event.modifiers() & Qt.ShiftModifier):
-            self.grScene.scene.history.undo()
-        
-        # the redo Ctrl+Shift+Z key pressed
-        elif event.key() == Qt.Key_Z and (event.modifiers() & Qt.ControlModifier) and (event.modifiers() &  Qt.ShiftModifier):
-            self.grScene.scene.history.redo()
-
-        elif event.key() == Qt.Key_H:
-            print("HISTORY: len({0})".format(len(self.grScene.scene.history.history_stack)),
-            " --- current step:", self.grScene.scene.history.history_current_step)
-            print(self.grScene.scene.history.history_stack)
-
-
-        else:"""
         super().keyPressEvent(event)
+
 
     def deleteSelectedItem(self):
         for item in self.grScene.selectedItems():

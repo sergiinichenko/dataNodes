@@ -3,7 +3,7 @@ from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_edge import GraphicsEdge
 
 
-DEBUG = False
+DEBUG = True
 
 class SceneHistory():
     def __init__(self, scene):
@@ -77,6 +77,7 @@ class SceneHistory():
         if DEBUG : print("  --- setting step to:", self.history_current_step)
 
         for callback in self._hostory_modified_listeners : callback()
+        if DEBUG : print("SHS: ", "done running the callbacks")
 
     def restoreHistoryStamp(self, history_stamp):
         if DEBUG : print("RHS: ", history_stamp)

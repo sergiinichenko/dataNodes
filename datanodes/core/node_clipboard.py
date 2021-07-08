@@ -23,7 +23,7 @@ class SceneClipboard():
                     sel_sockets[socket.id] = socket
             
             elif isinstance(item, GraphicsEdge):
-                sel_edges.append(item.edges)
+                sel_edges.append(item.edge)
 
         # remove all the edges which are not connected to a node
         # in our list 

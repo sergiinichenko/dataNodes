@@ -9,11 +9,11 @@ from collections import OrderedDict
 from datanodes.core.node_settings import *
 
 
-DEBUG = False
+DEBUG = True
 
 class Node(Serializer):
     def __init__(self, scene, title="Empty node", 
-                 inputs=[], outputs=[]):
+                 inputs=[], outputs=[], innames=None, outnames=None):
         super().__init__()
         self._title = title
         self.scene  = scene
@@ -35,7 +35,7 @@ class Node(Serializer):
         self._is_invalid = False
         self._is_mute    = False
 
-        self.initSockets(inputs, outputs)
+        self.initSockets(inputs, outputs, innames=innames, outnames=outnames)
 
     def initInnerClasses(self):
         self.content = NodeContentWidget(self)
@@ -54,7 +54,7 @@ class Node(Serializer):
             RIGHT_TOP:    1,
         }
 
-    def initSockets(self, inputs, outputs, reset=True):
+    def initSockets(self, inputs, outputs, reset=True, innames=None, outnames=None):
         self.in_count  = len(inputs)
         self.out_count = len(outputs)
         if reset:
@@ -65,8 +65,8 @@ class Node(Serializer):
                 self.clearOutputs()
 
         # create new sockets
-        self.createInputs(inputs)
-        self.createOutputs(outputs)
+        self.createInputs(inputs, innames)
+        self.createOutputs(outputs, outnames)
 
 
     def clearOutputs(self):
@@ -85,7 +85,10 @@ class Node(Serializer):
 
     def createInputs(self, inputs, names=None):
         for i, item in zip(range(len(inputs)), inputs):
-            self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=i, position=self.input_socket_position, soket_type=item))
+            if names:
+                self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=i, position=self.input_socket_position, soket_type=item, label=names[i]))        
+            else:
+                self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=i, position=self.input_socket_position, soket_type=item))
 
 
     def createOutputs(self, outputs, names=None):

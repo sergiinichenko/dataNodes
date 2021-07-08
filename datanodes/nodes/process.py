@@ -58,9 +58,13 @@ class SeparateDFNode(DataNode):
 
     def generateSockets(self, data, names=None):
         self.clearOutputs()        
-        outputs = [SOCKET_DATA_TEXT for l in range(data.shape[1])]
-        self.createOutputs(outputs, names)
-        self.grNode.height = data.shape[1] * self.socket_spacing + 2.0 * self.socket_spacing
+        outputs = [SOCKET_DATA_TEXT for l in range(data.shape[1]+1)]
+        dnames = ['DATA']
+        if names is not None: dnames.extend(names)
+        print(outputs)
+        print(dnames)
+        self.createOutputs(outputs, dnames)
+        self.grNode.height = (data.shape[1]+1) * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.update()
 
         self.border_radius = 10.0
@@ -69,31 +73,41 @@ class SeparateDFNode(DataNode):
         self._hpadding     = 5.0
         self._vpadding     = 5.0
 
-        x, y = self.grNode.width - 2.0 * self.grNode.padding, data.shape[1] * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
+        x, y = self.grNode.width - 2.0 * self.grNode.padding, (data.shape[1]+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
         self.content.resize(x, y)
 
 
     def evalImplementation(self):
         input_edge = self.getInput(0)
+
         if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             return False
-        else:            
+
+        else:
             self.setDirty(False)
             self.setInvalid(False)
-            self.e = ""
+            if DEBUG : print("PRCNODE_SEP: reset dirty and invalid")
+            self.e     = ""
             self.value = input_edge.value
             self.type  = input_edge.type
+            if DEBUG : print("PRCNODE_SEP: get input value and type")
 
             if self.type == "df":
-                print(self.value, self.value.columns)
-                if len(self.outputs) != self.value.shape[1]:
-                    self.generateSockets(self.value, list(self.value.columns))
+                if DEBUG : print("PRCNODE_SEP: input is df")
 
-                for i, socket in zip(range(len(self.outputs)), self.outputs):
+                if len(self.outputs) != (self.value.shape[1]+1):
+                    if DEBUG : print("PRCNODE_SEP: generate new sockets")
+                    self.generateSockets(self.value, list(self.value.columns))
+                    if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
+
+                self.outputs[0].value = self.value
+                self.outputs[0].type  = "df"
+                for i, socket in zip(range(len(self.outputs[1:])), self.outputs[1:]):
                     socket.value = self.value.iloc[:,i]
-                    socket.type  = "float"
+                    socket.type  = "df"
+                    if DEBUG : print("PRCNODE_SEP: sockets have been filled with data and types")
             else:
                 print("FALSE: ", self.value)
             return True

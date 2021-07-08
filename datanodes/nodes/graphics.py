@@ -29,13 +29,21 @@ class GraphicsOutputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
-        #res['value'] = self.textOut.toPlainText()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            #value = data['value']
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.resize(data['content-widht'], data['content-height'])
+            except Exception as e: 
+                dumpException(e)
             return True & res
         except Exception as e : dumpException(e)
         return res

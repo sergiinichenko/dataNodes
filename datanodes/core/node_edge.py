@@ -4,7 +4,7 @@ from datanodes.graphics.graphics_edge import *
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
 
-DEBUG = False
+DEBUG = True
 
 EDGE_DIRECT = 1
 EDGE_BEZIER = 2
@@ -127,8 +127,10 @@ class Edge(Serializer):
         self.grEdge = None
 
         if DEBUG : print("  - removing the edge")
-        try: self.scene.removeEdge(self)
-        except Exception as e: pass
+        try: 
+            self.scene.removeEdge(self)
+        except Exception as e: 
+            pass
 
         self = None
         if DEBUG : print("  - edge remove is done")

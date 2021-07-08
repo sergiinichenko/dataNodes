@@ -63,9 +63,9 @@ class GraphicsEdge(QGraphicsPathItem):
         self.hovered = False
         self.update()
 
-
     def boundingRect(self):
-        return self.shape().boundingRect()
+        return super().boundingRect()
+
 
     def shape(self):
         return self.calcPath()

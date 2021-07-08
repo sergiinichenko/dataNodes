@@ -9,7 +9,7 @@ from datanodes.core.main_conf import *
 from datanodes.core.node_node import *
 from datanodes.nodes.datanode import *
 
-DEBUG = False
+DEBUG = True
 
 class NodeWindow(QMainWindow):
     def __init__(self, parent=None):

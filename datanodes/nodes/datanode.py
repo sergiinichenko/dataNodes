@@ -11,6 +11,8 @@ import os
 import pandas as pd
 import numpy as np
 
+DEBUG = True
+
 class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
         super().initSizes()
@@ -37,10 +39,8 @@ class DataGraphicsNode(GraphicsNode):
 
     def itemChange(self, change, value):
         if self.isSelected() and not self.is_selected:
-            print("Item selected")
             self.is_selected = True
         else:
-            print("Item deselected")
             self.is_selected = False
         return super().itemChange(change, value)
 
@@ -55,8 +55,8 @@ class DataNode(Node):
     op_title = "Base node"
     icon     = ""
 
-    def __init__(self, scene, inputs=[1,1], outputs=[2,2]):
-        super().__init__(scene, self.__class__.op_title, inputs, outputs)
+    def __init__(self, scene, inputs=[1,1], outputs=[2,2], innames=None, outnames=None):
+        super().__init__(scene, self.__class__.op_title, inputs, outputs, innames, outnames)
 
         #self.value = None
         self.e     = None
@@ -115,8 +115,11 @@ class DataNode(Node):
         self.eval()
 
     def onInputChanged(self, new_edge):
+        if DEBUG : print("DATANODE : oninputChanged")
         self.setDirty()
+        if DEBUG : print("DATANODE : to run the eval")
         self.eval()
+        if DEBUG : print("DATANODE : the eval is done")
 
 
     def serialize(self):

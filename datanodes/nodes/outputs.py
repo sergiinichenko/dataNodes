@@ -59,12 +59,16 @@ class ValueOutputNode(DataNode):
             self.setInvalid(False)
             self.e = ""
             self.value = input_edge.value
-            if self.value < 1000.0:
-                self.content.edit.setText("{0:.3f}".format(self.value))
-            elif self.value > 1000.0 and self.value < 100000.0:
-                self.content.edit.setText("{0:.2f}".format(self.value))
+            self.type  = input_edge.type
+            if self.type == "float" or self.type == "int":
+                if self.value < 1000.0:
+                    self.content.edit.setText("{0:.3f}".format(self.value))
+                elif self.value > 1000.0 and self.value < 100000.0:
+                    self.content.edit.setText("{0:.2f}".format(self.value))
+                else:
+                    self.content.edit.setText("{0:.1f}".format(self.value))
             else:
-                self.content.edit.setText("{0:.1f}".format(self.value))
+                self.content.edit.setText("NaN")
             return True
 
 
@@ -210,22 +214,36 @@ class TextOutputNode(DataNode):
     def evalImplementation(self):
         input_edge = self.getInput(0)
         if not input_edge:
+            if DEBUG : print("OUTNODE_TXT: no input edge")
             self.setInvalid()
+            if DEBUG : print("OUTNODE_TXT: set invalid")
             self.e = "Does not have and intry Node"
             self.content.textOut.clear()
             self.content.textOut.insertPlainText("NaN")
+            if DEBUG : print("OUTNODE_TXT: clear the content")
             return False
         else:            
+            if DEBUG : print("OUTNODE_TXT: process the input edge data")
             self.setDirty(False)
             self.setInvalid(False)
+            if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
             self.e = ""
             self.value = input_edge.value
             self.type  = input_edge.type
             self.content.textOut.clear()
+            if DEBUG : print("OUTNODE_TXT: get the value and type and clear the content")
             if self.type == "df":
+                if DEBUG : print("OUTNODE_TXT: DF input datatype")
                 self.content.textOut.insertPlainText(self.value.to_string())
+                if DEBUG : print("OUTNODE_TXT: DF content was set")
             else:
-                self.content.textOut.insertPlainText(str(self.value))
+                if DEBUG : print("OUTNODE_TXT: other format of the input")
+                try:
+                    self.content.textOut.insertPlainText(str(self.value))
+                except Exception as e : 
+                    dumpException(e)
+                    self.content.textOut.insertPlainText("NaN")
+                    return False
             return True
 
 
