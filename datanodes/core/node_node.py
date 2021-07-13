@@ -9,9 +9,16 @@ from collections import OrderedDict
 from datanodes.core.node_settings import *
 
 
-DEBUG = True
+DEBUG = False
 
 class Node(Serializer):
+    """
+    Class representing `Node` in the `Scene`.
+    """
+    GraphicsNode_class = GraphicsNode
+    NodeContent_class = NodeContentWidget
+    Socket_class = Socket
+
     def __init__(self, scene, title="Empty node", 
                  inputs=[], outputs=[], innames=None, outnames=None):
         super().__init__()
@@ -22,6 +29,10 @@ class Node(Serializer):
         self.initSettings()
 
         self.title  = self._title
+
+        # just to be sure, init these variables
+        #self.content = None
+        #self.grNode  = None
 
         self.scene.addNode(self)
         self.scene.grScene.addItem(self.grNode)
@@ -36,10 +47,25 @@ class Node(Serializer):
         self._is_mute    = False
 
         self.initSockets(inputs, outputs, innames=innames, outnames=outnames)
+        self.onCreate()
+
+    def onCreate(self):
+        pass
 
     def initInnerClasses(self):
-        self.content = NodeContentWidget(self)
-        self.grNode  = GraphicsNode(self)
+        """Sets up graphics Node (PyQt) and Content Widget"""
+        node_content_class = self.getNodeContentClass()
+        graphics_node_class = self.getGraphicsNodeClass()
+        if node_content_class is not None: self.content = node_content_class(self)
+        if graphics_node_class is not None: self.grNode = graphics_node_class(self)
+
+    def getNodeContentClass(self):
+        """Returns class representing nodeeditor content"""
+        return self.__class__.NodeContent_class
+
+    def getGraphicsNodeClass(self):
+        return self.__class__.GraphicsNode_class
+
 
     def initSettings(self):
         self.socket_spacing = 24.0
@@ -71,14 +97,14 @@ class Node(Serializer):
 
     def clearOutputs(self):
         for socket in self.outputs:
-            if socket.hasEdge():
+            if socket.hasEdges():
                 socket.clearEdges()
             self.scene.grScene.removeItem(socket.grSocket)
         self.outputs = []
 
     def clearInputs(self):
         for socket in self.inputs:
-            if socket.hasEdge():
+            if socket.hasEdges():
                 socket.clearEdges()
             self.scene.grScene.removeItem(socket.grSocket)
         self.inputs = []
@@ -98,6 +124,30 @@ class Node(Serializer):
             else:
                 self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=i, position=self.output_socket_position, soket_type=item))        
 
+    def appendInput(self, input, name=None):
+        if name:
+            self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=len(self.inputs), position=self.input_socket_position, soket_type=input, label=name))        
+        else:
+            self.inputs.append(Socket(node=self, inout=SOCKET_INPUT, index=len(self.inputs), position=self.input_socket_position, soket_type=input))
+
+
+    def appendOutput(self, output, name=None):
+        if name:
+            self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=len(self.outputs), position=self.output_socket_position, soket_type=output, label=name))        
+        else:
+            self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=len(self.outputs), position=self.output_socket_position, soket_type=output))        
+
+    def freeSockets(self):
+        return sum([not input.hasEdges() for input in self.inputs])
+
+
+    def removeFreeInputs(self):
+        for input in self.inputs:
+            if not input.hasEdges(): 
+                input.grSocket.hide()
+                self.scene.grScene.removeItem(input.grSocket)
+        self.inputs = [input for input in self.inputs if input.hasEdges()]
+        self.scene.grScene.update()
 
     def __str__(self) -> str:
         return "<Node %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
@@ -165,7 +215,6 @@ class Node(Serializer):
             other_node.setChildrenInvalid(value)
 
 
-
     def isMute(self):
         return self._is_mute
     
@@ -176,6 +225,15 @@ class Node(Serializer):
 
     def onSetMute(self):
         pass
+
+
+
+    def hasEdge(self, edge: 'Edge'):
+        """Returns ``True`` if edge is connected to any :class:`~nodeeditor.node_socket.Socket` of this `Node`"""
+        for socket in (self.inputs + self.outputs):
+            if socket.hasEdge(edge):
+                return True
+        return False
 
 
     
@@ -216,9 +274,10 @@ class Node(Serializer):
             input_sockets = self.inputs
             if len(input_sockets) == 0: return None
             for socket in input_sockets:
-                edge = socket.edges[0]
-                other_socket = edge.getOtherSocket(socket)
-                inputs.append(other_socket)
+                if socket.hasEdges():
+                    edge = socket.edges[0]
+                    other_socket = edge.getOtherSocket(socket)
+                    inputs.append(other_socket)
             return inputs
             
         except IndexError:
@@ -288,11 +347,27 @@ class Node(Serializer):
 
         return x, y
 
+
+
+
+    def getSocketScenePosition(self, socket:'Socket') -> '(x, y)':
+        """
+        Get absolute Socket position in the Scene
+
+        :param socket: `Socket` which position we want to know
+        :return: (x, y) Socket's scene position
+        """
+        nodepos   = self.grNode.pos()
+        socketpos = self.getSocketPos(socket.index, socket.position, socket.inout)
+
+        return socket.pos.x(), socket.pos.y() #(nodepos.x() + socketpos[0], nodepos.y() + socketpos[1])
+
+
     def remove(self):
         if DEBUG : print("> Removing the node", self)
         if DEBUG : print("  -- removing all edges from sockets")
         for socket in (self.inputs + self.outputs):
-            if socket.hasEdge():
+            if socket.hasEdges():
                 if DEBUG : print("    - removing edge:", socket.edges, " from socket:", socket)
                 socket.clearEdges()
         if DEBUG : print("  - removing the grNode ")        

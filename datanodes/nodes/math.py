@@ -7,14 +7,14 @@ class MathGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 180.0
-        self.height = 100.0
+        self.height = 160.0
 
 class MathContent(DataContent):
 
     def initUI(self):
         super().initUI()
         self.operation = "Add"
-        layout = QHBoxLayout()
+        self.layout = QVBoxLayout()
         self.cb = QComboBox()
         self.cb.addItem("Add")
         self.cb.addItem("Substract")
@@ -22,8 +22,11 @@ class MathContent(DataContent):
         self.cb.addItem("Divide")
         self.cb.addItem("Power")
 
-        layout.addWidget(self.cb)
-        self.setLayout(layout)
+        self.label = QLineEdit("res", self)
+        self.label.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label)
+        self.layout.addWidget(self.cb)
+        self.setLayout(self.layout)
         self.setWindowTitle("Math node")
         self.cb.currentIndexChanged.connect(self.selectionchange)
 
@@ -59,6 +62,11 @@ class MathNode(DataNode):
         self.content = MathContent(self)
         self.grNode  = MathGraphicsNode(self)
         self.content.changed.connect(self.reEvaluate)
+        self.content.label.returnPressed.connect(self.onReturnPressed)
+
+    def onReturnPressed(self):
+        self.recalculate = True
+        self.eval()
 
     def evalImplementation(self):
         input_edges = self.getInputs()
@@ -71,35 +79,46 @@ class MathNode(DataNode):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
-                if self.content.operation == "Add"      : self.outputs[0].value = self.add(input_edges)
-                if self.content.operation == "Substract": self.outputs[0].value = self.substract(input_edges)
-                if self.content.operation == "Multiply" : self.outputs[0].value = self.multiply(input_edges)
-                if self.content.operation == "Divide"   : self.outputs[0].value = self.devide(input_edges)
-                if self.content.operation == "Power"    : self.outputs[0].value = self.power(input_edges)
-                self.outputs[0].type = "float"
+                if self.content.operation == "Add"      : self.outputs[0].value = pd.Series(data=self.add(input_edges), name = self.content.label.text())
+                if self.content.operation == "Substract": self.outputs[0].value = pd.Series(data=self.substract(input_edges), name = self.content.label.text())
+                if self.content.operation == "Multiply" : self.outputs[0].value = pd.Series(data=self.multiply(input_edges), name = self.content.label.text())
+                if self.content.operation == "Divide"   : self.outputs[0].value = pd.Series(data=self.devide(input_edges), name = self.content.label.text())
+                if self.content.operation == "Power"    : self.outputs[0].value = pd.Series(data=self.power(input_edges), name = self.content.label.text())
+                self.outputs[0].type = "df"
                 return True
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not all input nodes are connected"
-                self.outputs[0].value = 0
-                self.outputs[0].type = "float"
+                self.outputs[0].value = pd.Series(data=[0.0], name = self.content.label.text())
+                self.outputs[0].type = "df"
                 return False
 
+    def drop_nan(self, input):
+
+        if isinstance(input.value, pd.DataFrame):
+            return input.value.replace(np.nan, 0)
+        if isinstance(input.value, pd.Series):
+            return input.value.replace(np.nan, 0)
+        if isinstance(input.value, (np.ndarray, np.generic)):
+            val = input.value[np.isnan(input.value)] = 0.0
+            return val 
+        return input.value
+
     def add(self, input_edges):
-        return input_edges[0].value + input_edges[1].value
+        return self.drop_nan(input_edges[0]) + self.drop_nan(input_edges[1])
 
     def substract(self, input_edges):
-        return input_edges[0].value - input_edges[1].value
+        return self.drop_nan(input_edges[0]) - self.drop_nan(input_edges[1])
 
     def multiply(self, input_edges):
-        return input_edges[0].value * input_edges[1].value
+        return self.drop_nan(input_edges[0]) * self.drop_nan(input_edges[1])
 
     def devide(self, input_edges):
-        return input_edges[0].value / input_edges[1].value
+        return self.drop_nan(input_edges[0]) / self.drop_nan(input_edges[1])
 
     def power(self, input_edges):
-        return pow(input_edges[0].value, input_edges[1].value)
+        return pow(self.drop_nan(input_edges[0]), self.drop_nan(input_edges[1]))
 
 
 
@@ -120,24 +139,42 @@ class ExpressionContent(DataContent):
 
     def initUI(self):
         super().initUI()
-        self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(20,0,0,0)
-        self.setLayout(self.layout)
+        self.mainlayout = QVBoxLayout()
+        self.mainlayout.setContentsMargins(20,0,0,0)
+
+        self.hlayout = QHBoxLayout()
+        self.vlayout = QHBoxLayout()
+        self.mainlayout.addLayout(self.hlayout)
+        self.mainlayout.addLayout(self.vlayout)
+
+        self.label_name = QLabel("result", self)        
+        self.label_name.setAlignment(Qt.AlignRight)
+
+        self.label = QLineEdit("res", self)
+        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setFixedWidth(60)
+        self.hlayout.addWidget(self.label_name)
+        self.hlayout.addWidget(self.label)
+
+
         self.edit = QLineEdit("2+2", self)
         self.edit.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.edit)
+        self.vlayout.addWidget(self.edit)
 
+        self.setLayout(self.mainlayout)
 
     def serialize(self):
         res = super().serialize()
         res['value'] = self.edit.text()
+        res['label'] = self.label.text()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             value = data['value']
-            self.edit.setText(value)
+            self.label.setText(data['label'])
+            self.edit.setText( data['value'])
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -157,16 +194,26 @@ class ExpressionNode(DataNode):
         self.outputs[0].value = 4
         self.outputs[0].type  = "float"
 
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_CENTER
+        self.output_socket_position = RIGHT_TOP
+
     def initInnerClasses(self):
         self.content = ExpressionContent(self)
         self.grNode  = ExpressionGraphicsNode(self)
-        self.content.edit.textChanged.connect(self.onInputChanged)
+        self.content.edit.returnPressed.connect(self.onReturnPressed)
+        self.content.label.returnPressed.connect(self.onReturnPressed)
+
+    def onReturnPressed(self):
+        self.recalculate = True
+        self.eval()
 
     def evalImplementation(self):
         input_a = self.getInput(0)
         input_b = self.getInput(1)
         input_c = self.getInput(2)
-        
+
         try:
             self.setDirty(False)
             self.setInvalid(False)
@@ -175,31 +222,39 @@ class ExpressionNode(DataNode):
             b = 0
             c = 0
             if input_a:
-                a = input_a.value
+                a = input_a.value.replace(np.nan, 0)
                 if input_a.type == "float":
                     a   = float(a)
                 else:
                     a = np.array(a)
 
             if input_b:
-                b = input_b.value
+                b = input_b.value.replace(np.nan, 0)
                 if input_b.type == "float":
                     b   = float(b)
                 else:
                     b = np.array(b)
 
             if input_c:
-                c = input_c.value
+                c = input_c.value.replace(np.nan, 0)
                 if input_c.type == "float":
                     c   = float(c)
                 else:
                     c = np.array(c)
 
-            res = eval(self.content.edit.text(), {"a":a, "b":b, "c":c})
+            if not input_a and not input_b and not input_c:
+                self.outputs[0].value = pd.Series( data = [0.0], name = self.content.label.text())
+                self.outputs[0].type  = "float"
+                return True
+            
+            expression = self.content.edit.text()
+            expression = expression.replace('exp', '2.71828182845904523536028747**')
+            res = eval(expression, {"a":a, "b":b, "c":c})
 
-            self.outputs[0].value = res
+            self.outputs[0].value = pd.Series( data = res, name = self.content.label.text())
             self.outputs[0].type  = "float"
             return True
         except Exception as e : 
+            self.e = e
             dumpException(e)
             return False

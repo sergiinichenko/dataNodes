@@ -13,6 +13,8 @@ class GraphicsScene(QGraphicsScene):
 
         self.scene = scene
 
+        self.setItemIndexMethod(QGraphicsScene.NoIndex)
+
         # graphics settings
         self.gridSize = 20
         self.gridSquares = 5

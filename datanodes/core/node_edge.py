@@ -4,12 +4,18 @@ from datanodes.graphics.graphics_edge import *
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
 
-DEBUG = True
+DEBUG = False
 
 EDGE_DIRECT = 1
 EDGE_BEZIER = 2
 
 class Edge(Serializer):
+    """
+    Class for representing Edge in DataNodes.
+    """
+
+    edge_validators = []        #: class variable containing list of registered edge validators
+
     def __init__(self, scene, start_socket=None, end_socket=None, edge_type=EDGE_BEZIER):
         super().__init__()
 
@@ -74,15 +80,56 @@ class Edge(Serializer):
             self.scene.grScene.removeItem(self.grEdge)
 
         self._edge_type = value
-        if self._edge_type == EDGE_DIRECT:
-            self.grEdge = GraphicsEdgeDirect(self)
-        
-        elif self._edge_type == EDGE_BEZIER:
-            self.grEdge = GraphicsEdgeBezier(self)
-        
-        else:
-            self.grEdge = GraphicsEdgeBezier(self)
+        self.grEdge = self.createEdgeClassInstance(self.edge_type)
         self.scene.grScene.addItem(self.grEdge)
+
+
+    @classmethod
+    def getEdgeValidators(cls):
+        """Return the list of Edge Validator Callbacks"""
+        return cls.edge_validators
+
+    @classmethod
+    def registerEdgeValidator(cls, validator_callback: 'function'):
+        """Register Edge Validator Callback
+
+        :param validator_callback: A function handle to validate Edge
+        :type validator_callback: `function`
+        """
+        cls.edge_validators.append(validator_callback)
+
+    @classmethod
+    def validateEdge(cls, start_socket: 'Socket', end_socket: 'Socket') -> bool:
+        """Validate Edge agains all registered `Edge Validator Callbacks`
+
+        :param start_socket: Starting :class:`~nodeeditor.node_socket.Socket` of Edge to check
+        :type start_socket: :class:`~nodeeditor.node_socket.Socket`
+        :param end_socket: Target/End :class:`~nodeeditor.node_socket.Socket` of Edge to check
+        :type end_socket: :class:`~nodeeditor.node_socket.Socket`
+        :return: ``True`` if the Edge is valid or ``False`` if not
+        :rtype: ``bool``
+        """
+        for validator in cls.getEdgeValidators():
+            if not validator(start_socket, end_socket):
+                return False
+        return True
+
+
+
+
+
+    def determiteEdgeClass(self, edge_type:int):
+        if edge_type == EDGE_DIRECT:
+            return GraphicsEdgeDirect
+        else:
+            return GraphicsEdgeBezier
+
+
+    def createEdgeClassInstance(self, edge_type:int):
+        edgeClass = self.determiteEdgeClass(edge_type)
+        edge = edgeClass(self)
+        return edge
+
 
     @property
     def value(self):
@@ -100,7 +147,18 @@ class Edge(Serializer):
 
 
     def updatePos(self):
-        self.grEdge.setSource()
+        source_pos = self.start_socket.pos
+        source_pos = source_pos + self.start_socket.node.grNode.pos()
+        self.grEdge.setSource(source_pos.x(), source_pos.y())
+        if self.end_socket is not None:
+            end_pos = self.end_socket.pos
+            end_pos = end_pos + self.end_socket.node.grNode.pos()
+            self.grEdge.setDestination(end_pos.x(), end_pos.y())
+        else:
+            self.grEdge.setDestination(source_pos.x(), source_pos.y())
+        self.grEdge.update()
+
+
 
     def removeFromSockets(self):
         """
@@ -113,37 +171,62 @@ class Edge(Serializer):
         self.start_socket = None
         self.end_socket   = None
 
-    def remove(self):
+    def remove(self, silent_for_socket:'Socket'=None, silent=False):
+        """
+        Safely remove this Edge.
+
+        Removes `Graphics Edge` from the ``QGraphicsScene`` and it's reference to all GC to clean it up.
+        Notifies nodes previously connected :class:`~nodeeditor.node_node.Node` (s) about this event.
+
+        Triggers Nodes':
+
+        - :py:meth:`~nodeeditor.node_node.Node.onEdgeConnectionChanged`
+        - :py:meth:`~nodeeditor.node_node.Node.onInputChanged`
+
+        :param silent_for_socket: :class:`~nodeeditor.node_socket.Socket` of a :class:`~nodeeditor.node_node.Node` which
+            won't be notified, when this ``Edge`` is going to be removed
+        :type silent_for_socket: :class:`~nodeeditor.node_socket.Socket`
+        :param silent: ``True`` if no events should be triggered during removing
+        :type silent: ``bool``
+        """
         old_sockets = [self.start_socket, self.end_socket]
 
-        if DEBUG : print("> Removing edge:", self)
-        if DEBUG : print("  - removing edge from all sockets")
-        self.removeFromSockets()
+        # ugly hack, since I noticed that even when you remove grEdge from scene,
+        # sometimes it stays there! How dare you Qt!
+        if DEBUG: print(" - hide grEdge")
+        self.grEdge.hide()
 
-        if DEBUG : print("  - removing edge from scene")
+        if DEBUG: print(" - remove grEdge", self.grEdge)
         self.scene.grScene.removeItem(self.grEdge)
+        if DEBUG: print("   grEdge:", self.grEdge)
 
-        if DEBUG : print("  - grNode to None")
-        self.grEdge = None
+        self.scene.grScene.update()
 
-        if DEBUG : print("  - removing the edge")
-        try: 
+        if DEBUG: print("# Removing Edge", self)
+        if DEBUG: print(" - remove edge from all sockets")
+        self.removeFromSockets()
+        if DEBUG: print(" - remove edge from scene")
+        try:
             self.scene.removeEdge(self)
-        except Exception as e: 
+        except ValueError:
             pass
-
-        self = None
-        if DEBUG : print("  - edge remove is done")
-
+        if DEBUG: print(" - everything is done.")
 
         try:
-            # notify the nodes
+            # notify nodes from old sockets
             for socket in old_sockets:
                 if socket and socket.node:
+                    if silent:
+                        continue
+                    if silent_for_socket is not None and socket == silent_for_socket:
+                        # if we requested silence for Socket and it's this one, skip notifications
+                        continue
+
+                    # notify Socket's Node
                     socket.node.onEdgeConnectionChanged(self)
-                    if socket.inout == SOCKET_INPUT:
-                        socket.node.onInputChanged(self)
-        except Exception as e : dumpException(e)
+                    if socket.is_input: socket.node.onInputChanged(socket)
+
+        except Exception as e: dumpException(e)
 
     def serialize(self):
         return OrderedDict([
@@ -162,3 +245,13 @@ class Edge(Serializer):
         self.edge_type    = data['edge_type']
 
         return True
+
+
+# Example: using validators for Edge
+# You can register edge validators wherever you want, even here...
+# However if you do use overridden Edge, you should call registerEdgeValidator on that overridden class
+#
+from datanodes.core.node_edge_validators import *
+Edge.registerEdgeValidator(edge_validator_debug)
+Edge.registerEdgeValidator(edge_cannot_connect_two_outputs_or_two_inputs)
+Edge.registerEdgeValidator(edge_cannot_connect_input_and_output_of_same_node)

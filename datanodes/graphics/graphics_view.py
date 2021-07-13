@@ -2,6 +2,10 @@ from datanodes.core.utils import dumpException
 from datanodes.graphics.graphics_cutline import GraphicsCutLine
 from datanodes.core.node_node import SOCKET_INPUT, SOCKET_OUTPUT
 from datanodes.core.node_edge import Edge
+from datanodes.core.node_edge_dragging import EdgeDragging
+from datanodes.core.node_edge_rerouting import EdgeRerouting
+from datanodes.core.node_edge_snapping import EdgeSnapping
+from datanodes.core.node_edge_intersect import EdgeIntersect
 from datanodes.graphics.graphics_edge import GraphicsEdge
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.graphics.graphics_node import GraphicsNode
@@ -10,13 +14,21 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-MODE_NONE       = 1
-MODE_EDGE_DRAG  = 2
+MODE_NONE        = 1
+MODE_EDGE_DRAG   = 2
 MODE_DRAG_RESIZE = 3
+MODE_EDGE_REROUT = 4
+MODE_EDGE_CUT    = 5
+MODE_NODE_DRAG   = 6
 
-MODE_EDGE_CUT   = 3
+STATE_STRING = ['', 'Noop', 'Edge Drag', 'Edge Cut', 'Edge Rerouting', 'Node Drag']
 
-DEBUG = True
+#: Socket snapping distance
+EDGE_SNAPPING_RADIUS = 15
+#: Enable socket snapping feature
+EDGE_SNAPPING = True
+
+DEBUG = False
 
 class GraphicsView(QGraphicsView):
     scenePosChanged = pyqtSignal(int, int)
@@ -30,10 +42,21 @@ class GraphicsView(QGraphicsView):
 
         self.setScene(self.grScene)
 
-        self.mode = MODE_NONE
+        self.mode        = MODE_NONE
         self.rubberBandDraggingRect = False
 
         self.drad_threshold = 10.0
+
+        # Edge draging, rerouting and snapping instance
+        self.dragging  = EdgeDragging(self)
+        self.rerouting = EdgeRerouting(self)
+        self.snapping  = EdgeSnapping(self, EDGE_SNAPPING_RADIUS)
+        self.edgeIntersect = EdgeIntersect(self)
+
+        # The cutline instancing
+        self.cutline     = GraphicsCutLine()
+        self.grScene.addItem(self.cutline)
+
 
         # general view settings
         # the zoom settings
@@ -43,8 +66,6 @@ class GraphicsView(QGraphicsView):
         self.zoomStep    = 1.0
         self.zoomRange   = [0.0, 40.0]
 
-        self.cutline     = GraphicsCutLine()
-        self.grScene.addItem(self.cutline)
 
         self._drap_enter_listeners = []
         self._drop_listeners = []
@@ -66,6 +87,10 @@ class GraphicsView(QGraphicsView):
         self.setAcceptDrops(True)
 
 
+    def isStappingEnabled(self, event: 'QInputEvent' = None) -> bool:
+        """ Return ''True'' is the snapping is currently enabled"""
+        return EDGE_SNAPPING and (event.modifiers() & Qt.ControlModifier) if event else True
+
     def dragEnterEvent(self, event):
         for callback in self._drap_enter_listeners : callback(event)
 
@@ -79,6 +104,9 @@ class GraphicsView(QGraphicsView):
         self._drop_listeners.append(callback)
 
 
+    def resetMode(self):
+        """Helper function to re-set the grView state machine to default value"""
+        self.mode = MODE_NONE
 
 
     # --------- Additional functions  ---------------
@@ -96,63 +124,28 @@ class GraphicsView(QGraphicsView):
         dist = (dist.x()**2 + dist.y()**2)**0.5
         return dist > self.drad_threshold
 
-    def edgeDragStart(self, item):
-        try:
-            if DEBUG : print ("View:edgeDragStart ~ Start the dragging ")
-            if DEBUG : print ("View:edgeDragStart ~    assign the start socket to :", item.socket)
-            if DEBUG : print ("View:edgeDragStart ~    type of the socket :", item.socket.inout)
 
-            self.drag_start_socket = item.socket
-            self.drag_edge = Edge(self.grScene.scene, item.socket, None)
-            if DEBUG : print ("View:edgeDragStart ~    drag_edge :", self.drag_edge)
-        except Exception as e : dumpException(e)
+    def cutInersectingEdges(self):
+        for ix in range(len(self.cutline.points) - 1):
+            p1 = self.cutline.points[ix]
+            p2 = self.cutline.points[ix + 1]
 
-    def edgeDragEnd(self, item):
-        """ Ends the drag mouse event between two sockets """
-        self.mode = MODE_NONE
-        self.drag_edge.remove()
-        if DEBUG : print("End draging edge")
+            for edge in self.grScene.scene.edges:
+                if DEBUG : print("CUTTING: between points" + str(p1.x()) + str(p1.y()) +  " " + str(p2.x()) + str(p2.y()) + "  the edge is ", edge, "   grEdge is ", edge.grEdge)
+                if edge.grEdge.intersectsWith(p1, p2):
+                    edge.remove()
+        if DEBUG : print("CUTTING: done")
 
-        try:
-            if type(item) is GraphicsSocket:
+        self.grScene.scene.history.storeHistory("cut edges")
+        if DEBUG : print("CUTTING: added history stamp")
 
-                # cannot connect the socket to itself
-                if item.socket == self.drag_start_socket:
-                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
-                    return
-
-                # cannot connect two sockets of the same type
-                if item.socket.inout == self.drag_start_socket.inout:
-                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign two sockets of the same type")
-                    return
-
-                """ remove the edge if the socket is attached to an input socket
-                and the socket already has an edge """
-                if item.socket.inout == SOCKET_INPUT:
-                    item.socket.clearEdges()
-                    if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the end socket")
-
-                # cannot connect the socket to itself
-                if self.drag_start_socket.inout == SOCKET_INPUT and self.drag_start_socket.hasEdge():
-                    self.drag_start_socket.clearEdges()
-                    if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
-
-
-                """ remove the previous edge if there is one """
-                new_edge = Edge(self.grScene.scene, self.drag_start_socket, item.socket)
-                if DEBUG : print("View:edgeDragEnd ~ Created the new adge ")
-
-                for socket in [self.drag_start_socket, item.socket]:
-                    socket.node.onEdgeConnectionChanged(new_edge)
-                    if socket.inout == SOCKET_INPUT : socket.node.onInputChanged(new_edge)
-                    
-
-                self.grScene.scene.history.storeHistory("created new edge")
-                return True 
-        except Exception as e : dumpException(e)
-
-        if DEBUG : print("View:edgeDragEnd ~ The socket was not assigned and is removed")
-        return False
+    def setSocketHighlights(self, scenepos: QPointF, highlighted: bool = True, radius: float = 50):
+        """Set/disable socket highlights in Scene area defined by `scenepos` and `radius`"""
+        scanrect = QRectF(scenepos.x() - radius, scenepos.y() - radius, radius * 2, radius * 2)
+        items = self.grScene.items(scanrect)
+        items = list(filter(lambda x: isinstance(x, GraphicsSocket), items))
+        for grSocket in items: grSocket.isHighlighted = highlighted
+        return items
 
 
 
@@ -224,15 +217,33 @@ class GraphicsView(QGraphicsView):
                 super().mousePressEvent(fakeEvent)
                 return
 
+        if hasattr(item, "node"):
+            if self.mode == MODE_NONE:
+                self.mode = MODE_NODE_DRAG
+                self.edgeIntersect.enterState(item.node)
 
-        if type(item) is GraphicsSocket:
+
+        # if the socket is within the snapping distance
+        if self.isStappingEnabled(event):
+            item = self.snapping.getSnappedSocketItem(event)
+
+
+        if isinstance(item, GraphicsSocket):
+            if self.mode == MODE_NONE and event.modifiers() & Qt.ControlModifier:
+                socket = item.socket
+                if socket.hasEdges():
+                    self.mode = MODE_EDGE_REROUT
+                    self.rerouting.startRerouting(socket)
+                    return
+
             if self.mode == MODE_NONE:
                 self.mode = MODE_EDGE_DRAG
-                self.edgeDragStart(item)
+                self.dragging.edgeDragStart(item)
                 return
 
+
         if self.mode == MODE_EDGE_DRAG:
-            res = self.edgeDragEnd(item)
+            res = self.dragging.edgeDragEnd(item)
             if res: return
 
         if item is None:
@@ -262,10 +273,29 @@ class GraphicsView(QGraphicsView):
                     super().mouseReleaseEvent(fakeEvent)
                     return
 
+
             if self.mode == MODE_EDGE_DRAG:
                 if self.clickClickDist(event):
-                    res = self.edgeDragEnd(item)
+                    
+                    # defines if the snapping is enabled and returs the closest
+                    # socket item
+                    if self.isStappingEnabled(event):
+                        item = self.snapping.getSnappedSocketItem(event)
+
+                    res = self.dragging.edgeDragEnd(item)
                     if res: return
+
+
+            if self.mode == MODE_EDGE_REROUT:
+                # defines if the snapping is enabled and returs the closest
+                # socket item
+                if self.isStappingEnabled(event):
+                    item = self.snapping.getSnappedSocketItem(event)
+
+                self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
+                self.mode = MODE_NONE
+                return
+
 
             if self.mode == MODE_EDGE_CUT:
                 try:
@@ -276,6 +306,13 @@ class GraphicsView(QGraphicsView):
                 except Exception as e : dumpException(e)
                 self.mode = MODE_NONE
                 return
+            
+
+            if self.mode == MODE_NODE_DRAG:
+                scenepos = self.mapToScene(event.pos())
+                self.edgeIntersect.leaveState(scenepos.x(), scenepos.y())
+                self.mode = MODE_NONE
+                self.update()
 
         except Exception as e: dumpException(e)
 
@@ -305,34 +342,37 @@ class GraphicsView(QGraphicsView):
         super().mouseReleaseEvent(event)
 
 
-    def cutInersectingEdges(self):
-        for ix in range(len(self.cutline.points) - 1):
-            p1 = self.cutline.points[ix]
-            p2 = self.cutline.points[ix + 1]
-
-            for edge in self.grScene.scene.edges:
-                if DEBUG : print("CUTTING: between points" + str(p1.x()) + str(p1.y()) +  " " + str(p2.x()) + str(p2.y()) + "  the edge is ", edge, "   grEdge is ", edge.grEdge)
-                if edge.grEdge.intersectsWith(p1, p2):
-                    edge.remove()
-        if DEBUG : print("CUTTING: done")
-
-        self.grScene.scene.history.storeHistory("cut edges")
-        if DEBUG : print("CUTTING: added history stamp")
-
-
     def mouseMoveEvent(self, event):
-        if self.mode == MODE_EDGE_DRAG:
-            if DEBUG : print("MOUS_MV: EDGE DRAG MODE")
-            pos = self.mapToScene(event.pos())
-            self.drag_edge.grEdge.destination.setX(pos.x())
-            self.drag_edge.grEdge.destination.setY(pos.y())
-            self.drag_edge.grEdge.update()
-        
-        if self.mode == MODE_EDGE_CUT:
-            if DEBUG : print("MOUS_MV: EDGE CUT MODE")
-            pos = self.mapToScene(event.pos())
-            self.cutline.points.append(pos)
-            self.cutline.update()
+        pos = self.mapToScene(event.pos())
+        try:
+            modified = self.setSocketHighlights(pos, highlighted=False, radius=EDGE_SNAPPING_RADIUS+50)
+
+            # defines if the snapping is enabled and returs the closest
+            # socket item
+            if self.isStappingEnabled(event):
+               _, pos = self.snapping.getSnappedSocketPosition(pos)
+
+            if modified:
+                self.update()
+
+            if self.mode == MODE_EDGE_DRAG:
+                if DEBUG : print("MOUS_MV: EDGE DRAG MODE")
+                self.dragging.updateDestination(pos.x(), pos.y())
+
+            if self.mode == MODE_NODE_DRAG:
+                self.edgeIntersect.update(pos.x(), pos.y())
+
+            if self.mode == MODE_EDGE_REROUT:
+                self.rerouting.updateScenePos(pos.x(), pos.y())
+
+
+            if self.mode == MODE_EDGE_CUT:
+                if DEBUG : print("MOUS_MV: EDGE CUT MODE")
+                self.cutline.points.append(pos)
+                self.cutline.update()
+
+        except Exception as e: 
+            dumpException(e)
 
         self.last_scene_mouse_position = self.mapToScene(event.pos())
         self.scenePosChanged.emit(

@@ -6,6 +6,15 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 
 
+class MplCanvas(FigureCanvas):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        fig = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = fig.add_subplot(111)
+        super(MplCanvas, self).__init__(fig)
+
+
+
 class GraphicsOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
@@ -25,7 +34,6 @@ class GraphicsOutputContent(DataContent):
         self.axis = self.graph.add_subplot(111)
         self.canvas = FigureCanvas(self.graph)
         self.layout.addWidget(self.canvas)
-
 
     def serialize(self):
         res = super().serialize()
@@ -75,8 +83,14 @@ class GraphicsOutputNode(DataNode):
             self.e = ""
             self.value = input_edge.value
             self.type  = input_edge.type
-            if self.type == "df":
-                pass
+            if isinstance(self.value, pd.DataFrame):
+                self.content.axis.clear()
+                x = self.value.iloc[:,0]
+                for name in self.value.columns[1:]:
+                    self.content.axis.plot(x, self.value[name], label=name)
+                self.content.axis.legend(loc = 1)
+                self.content.update()
+                self.content.canvas.draw()
             else:
                 pass
             return True

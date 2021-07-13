@@ -10,9 +10,25 @@ class GraphicsSocket(QGraphicsItem):
         self.socket = socket
 
         # geometry settings of the socket
-        self.node = socket.node.grNode
         self.radius = 7.0
         self.outline_width = 1.0
+
+        self.initAssets()
+        
+        if label: self._label  = str(label)
+        else:     self._label  = None
+
+        self.isHighlighted = False
+
+    @property
+    def label(self):
+        return self._label
+
+    @label.setter
+    def label(self, new_label):
+        self._label = new_label
+
+    def initAssets(self):
         self._colors = [
             QColor("#FFFF7700"),
             QColor("#FF52e220"),
@@ -23,6 +39,7 @@ class GraphicsSocket(QGraphicsItem):
         ]
         self._color_background = self._colors[self.socket_type]
         self._color_outline    = QColor("#FF000000")
+        self._color_highlight = QColor("#FF37A6FF")
 
         self._pen   = QPen(self._color_outline)
         self._pen.setWidthF(self.outline_width)
@@ -30,15 +47,16 @@ class GraphicsSocket(QGraphicsItem):
         self._pen_white = QPen(Qt.white)
         self._pen_white.setWidthF(self.outline_width)
 
+        self._pen_highlight = QPen(self._color_highlight)
+        self._pen_highlight.setWidthF(2.0)
+        
         self._brush = QBrush(self._color_background)
-        if label: self.label  = str(label)
-        else:     self.label  = None
 
     def paint(self, painter, QStyleOptionGraphicsItem, widget = None):
 
         # pain the circle
         painter.setBrush(self._brush)
-        painter.setPen(self._pen)
+        painter.setPen(self._pen if not self.isHighlighted else self._pen_highlight)
 
         painter.drawEllipse(-self.radius, -self.radius, 2*self.radius, 2*self.radius)
 

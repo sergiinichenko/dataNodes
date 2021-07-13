@@ -142,7 +142,6 @@ class TableOutputNode(DataNode):
                 self.table.setRowCount(self.value.shape[0])
                 self.table.setColumnCount(self.value.shape[1])
                 #self.table.
-                print(self.value)                
             return True
 
 

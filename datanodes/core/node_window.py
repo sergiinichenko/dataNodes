@@ -9,7 +9,7 @@ from datanodes.core.main_conf import *
 from datanodes.core.node_node import *
 from datanodes.nodes.datanode import *
 
-DEBUG = True
+DEBUG = False
 
 class NodeWindow(QMainWindow):
     def __init__(self, parent=None):
@@ -63,8 +63,9 @@ class NodeWindow(QMainWindow):
         self.actCopy      = QAction('&Copy',    self, shortcut=QKeySequence('Ctrl+C'), statusTip='Copy the Item(s)',   triggered=self.onEditCopy)
         self.actCut       = QAction('Cu&t',     self, shortcut=QKeySequence('Ctrl+X'), statusTip='Cut the Item(s)',    triggered=self.onEditCut)
         self.actPaste     = QAction('&Paste',   self, shortcut=QKeySequence('Ctrl+V'), statusTip='Paste the Item(s)',  triggered=self.onEditPaste)
-        self.actDel       = QAction('&Delete',  self, shortcut=QKeySequence('Del'),    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
-
+        self.actDublicate = QAction('Du&blicate',   self, shortcut=QKeySequence('Ctrl+D'), statusTip='Dublicate the Item(s)',  triggered=self.onEditDublicate)
+        self.actDel       = QAction('&Delete',  self, shortcut=QKeySequence(Qt.Key_Delete),    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
+        self.actDelX      = QAction('Del&X',    self, shortcut=QKeySequence(Qt.Key_X),      statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
 
@@ -90,6 +91,7 @@ class NodeWindow(QMainWindow):
         self.editMenu.addAction(self.actCopy)
         self.editMenu.addAction(self.actCut)
         self.editMenu.addAction(self.actPaste)
+        self.editMenu.addAction(self.actDublicate)
         self.editMenu.addSeparator()
         self.editMenu.addAction(self.actDel)
 
@@ -231,7 +233,7 @@ class NodeWindow(QMainWindow):
             str_data = json.dumps(data, indent=4)
             QApplication.instance().clipboard().setText(str_data)
 
-    def onEditPaste(self):
+    def onEditPaste(self, setSelected=False):
         if self.getCurrentNodeEditorWidget():
             raw_data = QApplication.instance().clipboard().text()
             try:
@@ -245,12 +247,12 @@ class NodeWindow(QMainWindow):
                 print('JSON does not contain any nodes')
                 return
 
-            self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data)
+            self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data, setSelected)
 
     def onEditDublicate(self):
-        pass
-
-
+        self.onEditCopy()
+        self.getCurrentNodeEditorWidget().scene.deselectAll()
+        self.onEditPaste(setSelected=True)
 
 class NodeSubWindow(NodeWidget):
     def __init__(self):

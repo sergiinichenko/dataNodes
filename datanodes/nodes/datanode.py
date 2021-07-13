@@ -11,7 +11,7 @@ import os
 import pandas as pd
 import numpy as np
 
-DEBUG = True
+DEBUG = False
 
 class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
@@ -36,6 +36,15 @@ class DataGraphicsNode(GraphicsNode):
             self.icons,
             QRectF(offset, 0.0, 24.0, 24.0)
             )
+        
+        if self.node.isMute():
+            path_mute = QPainterPath()
+            path_mute.setFillRule(Qt.WindingFill)
+            path_mute.addRoundedRect(0,0,self.width, self.height,
+                    self.border_radius, self.border_radius)
+            painter.setPen(Qt.NoPen)
+            painter.setBrush(QBrush(QColor(117, 90, 88, 128)))
+            painter.drawPath(path_mute.simplified())
 
     def itemChange(self, change, value):
         if self.isSelected() and not self.is_selected:
@@ -65,7 +74,6 @@ class DataNode(Node):
         # Mark all nodes dirty by default before it is connected to anything
         self.setDirty()
 
-
     def initInnerClasses(self):
         self.content = DataContent(self)
         self.grNode  = DataGraphicsNode(self)
@@ -89,13 +97,27 @@ class DataNode(Node):
             return True
 
         try:
+            if self.isMute():
+                if len(self.getInputs()) > 0:
+                    value = self.getInput(0).value
+                    type  = self.getInput(0).type
+                else:
+                    value = 0.0
+                    type  = "float"
+                
+                if len(self.getOutputs()) > 0:
+                    for output in self.getOutput():
+                        output.value = value
+                        output.type  = inputtype
+                return True
+
+
             if self.evalImplementation():
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.setDescendentsInvalid(False)
                 self.setDescendentsDirty()
                 self.evalChildren()
-                #return self.value
                 return True
             else: 
                 self.setInvalid(True)
@@ -130,12 +152,7 @@ class DataNode(Node):
 
     def deserialize(self, data, hashmap=[], restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)
-        print("Deserialized base data node {0}".format(self.__class__.__name__,), "res: ", res)
-
-
-
-
-
+        return True
 
 
 class ResizebleDataNode(DataGraphicsNode):

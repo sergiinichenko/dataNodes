@@ -5,7 +5,7 @@ from datanodes.graphics.graphics_edge import GraphicsEdge
 from datanodes.core.node_node import  Node
 from datanodes.core.node_edge import  Edge
 
-DEBUG = True
+DEBUG = False
 
 class SceneClipboard():
     def __init__(self, scene):
@@ -58,7 +58,7 @@ class SceneClipboard():
 
         return data
 
-    def deserializeFromClipboard(self, data):
+    def deserializeFromClipboard(self, data, setSelected=False):
         hashmap = {}
 
         # calculate the mouse pointer - scene postion
@@ -94,19 +94,20 @@ class SceneClipboard():
         for node_data in data['nodes']:
             new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
             new_node.deserialize(node_data, hashmap, restore_id=False)
-
             # shift the new nodes position
             pos = new_node.pos
             posx, posy = new_node.pos.x(), new_node.pos.y()
             newx, newy = mousex + posx - minx, mousey + posy - miny
 
             new_node.setPos(newx, newy)
+            new_node.grNode.setSelected(setSelected)
 
         # Create each edge
         if 'edges' in data:
             for edge_data in data['edges']:
                 new_edge = Edge(self.scene)
                 new_edge.deserialize(edge_data, hashmap, restore_id=False)
+                new_edge.grEdge.setSelected(setSelected)
 
         
         # Store History

@@ -24,6 +24,7 @@ class Socket(Serializer):
 
         self._value = ""
         self._type  = ""
+        self._label = label
 
     def __str__(self) -> str:
         return "<Socket %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
@@ -36,6 +37,10 @@ class Socket(Serializer):
     def type(self):
         return self._type
 
+    @property
+    def label(self):
+        return self._label
+
     @value.setter
     def value(self, new_value):
         self._value = new_value
@@ -44,9 +49,22 @@ class Socket(Serializer):
     def type(self, new_type):
         self._type = new_type
 
+    @label.setter
+    def label(self, new_label):
+        self._label = new_label
+        self.grSocket.label = new_label
+
     @property
     def pos(self):
         return self.node.grNode.pos() +  self.grSocket.pos()
+
+    @property
+    def is_input(self):
+        return self.inout == SOCKET_INPUT
+
+    @property
+    def is_output(self):
+        return self.inout == SOCKET_OUTPUT
 
     def setPos(self):
         self.grSocket.setPos(*self.node.getSocketPos(self.index, self.position, self.inout))
@@ -55,21 +73,23 @@ class Socket(Serializer):
         self.edges.append(edge)
 
     def disconnectEdge(self, edge):
-        if self.hasEdgeIn(edge):
+        if self.hasEdge(edge):
             self.edges.remove(edge)
         else:
             print("!W:", "Socket::disconnectEdge", "Edge is not in the list")
 
-    def clearEdges(self):
-        if self.hasEdge():
-            for edge in self.edges:
-                edge.remove()
-            self.edges = []
+    def clearEdges(self, silent=True):
+        while self.edges:
+            edge = self.edges.pop(0)
+            if silent:
+                edge.remove(silent_for_socket=self)
+            else:
+                edge.remove()       # just remove all with notifications
 
-    def hasEdgeIn(self, edge):
+    def hasEdge(self, edge):
         return edge in self.edges
 
-    def hasEdge(self):
+    def hasEdges(self):
         return len(self.edges) > 0
 
 

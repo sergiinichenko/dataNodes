@@ -22,9 +22,9 @@ class GraphicsEdge(QGraphicsPathItem):
         self.setZValue(-2.0)
 
         if self.edge.start_socket is not None:
-            self.destination = QPoint(self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y())
+            self.destination = [self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y()]
         else:
-            self.destination = QPoint(0.0, 0.0)
+            self.destination = [0.0, 0.0]
         self.source = QPointF(0,0)
 
 
@@ -91,15 +91,36 @@ class GraphicsEdge(QGraphicsPathItem):
     
     def getSourcePos(self):
         if self.edge.start_socket is not None:
-            return self.edge.start_socket.pos
+            return [self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y()]
         else:
             return self.source
 
     def getDestinationPos(self):
         if self.edge.end_socket is not None:
-            return self.edge.end_socket.pos
+            return [self.edge.end_socket.pos.x(), self.edge.end_socket.pos.y()]
         else:
             return self.destination
+
+    def setSource(self, x:float, y:float):
+        """ Set source point
+
+        :param x: x position
+        :type x: ``float``
+        :param y: y position
+        :type y: ``float``
+        """
+        self.source = [x, y]
+
+    def setDestination(self, x:float, y:float):
+        """ Set destination point
+
+        :param x: x position
+        :type x: ``float``
+        :param y: y position
+        :type y: ``float``
+        """
+        self.destination = [x, y]
+
 
     def intersectsWith(self, p1, p2):
         cutpath = QPainterPath(p1)
@@ -112,15 +133,15 @@ class GraphicsEdgeDirect(GraphicsEdge):
         fr = self.getSourcePos()
         to = self.getDestinationPos()
 
-        path = QPainterPath(QPoint(fr.x(), fr.y()))
-        path.lineTo(QPoint(to.x(), to.y()))
+        path = QPainterPath(QPoint(fr[0], fr[1]))
+        path.lineTo(QPoint(to[0], to[1]))
         return path
 
 class GraphicsEdgeBezier(GraphicsEdge):
     def calcPath(self):
         fr = self.getSourcePos()
         to = self.getDestinationPos()
-        dist = ((to.x() - fr.x())**2.0 + (to.y() - fr.y())**2)**0.5
+        dist = ((to[0] - fr[0])**2.0 + (to[1] - fr[1])**2)**0.5
 
         cpx_fr = +40 + dist*0.2
         cpx_to = -40 - dist*0.2
@@ -135,10 +156,10 @@ class GraphicsEdgeBezier(GraphicsEdge):
                 cpx_fr *= -1
                 cpx_to *= -1
 
-        path = QPainterPath(QPoint(fr.x(), fr.y()))
-        path.cubicTo(fr.x() + cpx_fr, fr.y() + cpy_fr, 
-                     to.x() + cpx_to, to.y() + cpy_to, 
-                     to.x(), to.y())
+        path = QPainterPath(QPoint(fr[0], fr[1]))
+        path.cubicTo(fr[0] + cpx_fr, fr[1] + cpy_fr, 
+                     to[0] + cpx_to, to[1] + cpy_to, 
+                     to[0], to[1])
 
         return path
 

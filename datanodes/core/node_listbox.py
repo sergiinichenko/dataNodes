@@ -21,6 +21,7 @@ class NodeListBox(QListWidget):
     def addMyItems(self):
         keys = list(DATA_NODES.keys())
         keys.sort()
+        
         for key in keys:
             node = getClassFromOpCode(key)
             self.addMyItem(node.op_title, node.icon, node.op_code)
@@ -39,7 +40,6 @@ class NodeListBox(QListWidget):
 
 
     def startDrag(self, *args, **kvargs):
-        print("Start drag")
 
         try:
             item    = self.currentItem()

@@ -25,7 +25,7 @@ class Scene(Serializer):
         self._has_been_modified = False
         
         # initialize all listeners
-        self._last_selected_items = []
+        self._last_selected_items = None
         self._has_been_modified_listeners = []
         self._selected_listeners = []
         self._deselected_listeners = []
@@ -56,8 +56,8 @@ class Scene(Serializer):
 
     def onItemsDeselected(self):
         self.resetLastSelectedStates()
-        if self._last_selected_items != []:
-            self._last_selected_items = []
+        if self._last_selected_items is not None:
+            self._last_selected_items = None
             self.history.storeHistory("Deselected everything")
             for callback in self._deselected_listeners: callback()
 
@@ -108,6 +108,18 @@ class Scene(Serializer):
 
     def selectedItems(self):
         return self.grScene.selectedItems()
+
+    def setSelectionAll(self, selected = True):
+        for node in self.nodes:
+            node.grNode.setSelected(selected)
+        for edge in self.edges:
+            edge.grEdge.setSelected(selected)
+
+    def selectAll(self):
+        self.setSelectionAll(True)
+
+    def deselectAll(self):
+        self.setSelectionAll(False)
 
     def getView(self):
         return self.grScene.views()[0]
@@ -168,6 +180,10 @@ class Scene(Serializer):
 
             except Exception as e : 
                 dumpException(e)
+
+    def getEdgeClass(self):
+        """ Returns the class representing the edge"""
+        return Edge
 
     def setNodeClassSelector(self, class_selecting_function):
         #
