@@ -79,18 +79,20 @@ class MathNode(DataNode):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
-                if self.content.operation == "Add"      : self.outputs[0].value = pd.Series(data=self.add(input_edges), name = self.content.label.text())
-                if self.content.operation == "Substract": self.outputs[0].value = pd.Series(data=self.substract(input_edges), name = self.content.label.text())
-                if self.content.operation == "Multiply" : self.outputs[0].value = pd.Series(data=self.multiply(input_edges), name = self.content.label.text())
-                if self.content.operation == "Divide"   : self.outputs[0].value = pd.Series(data=self.devide(input_edges), name = self.content.label.text())
-                if self.content.operation == "Power"    : self.outputs[0].value = pd.Series(data=self.power(input_edges), name = self.content.label.text())
+                name = self.content.label.text()
+                if self.content.operation == "Add"      : self.outputs[0].value = {name : self.add(input_edges)}
+                if self.content.operation == "Substract": self.outputs[0].value = {name : self.substract(input_edges)}
+                if self.content.operation == "Multiply" : self.outputs[0].value = {name : self.multiply(input_edges)}
+                if self.content.operation == "Divide"   : self.outputs[0].value = {name : self.devide(input_edges)}
+                if self.content.operation == "Power"    : self.outputs[0].value = {name : self.power(input_edges)}
                 self.outputs[0].type = "df"
                 return True
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not all input nodes are connected"
-                self.outputs[0].value = pd.Series(data=[0.0], name = self.content.label.text())
+                name = self.content.label.text()
+                self.outputs[0].value = {name : 0.0}
                 self.outputs[0].type = "df"
                 return False
 
@@ -101,6 +103,9 @@ class MathNode(DataNode):
         if isinstance(input.value, pd.Series):
             return input.value.replace(np.nan, 0)
         if isinstance(input.value, (np.ndarray, np.generic)):
+            val = input.value[np.isnan(input.value)] = 0.0
+            return val 
+        if isinstance(input.value, dict):
             val = input.value[np.isnan(input.value)] = 0.0
             return val 
         return input.value
@@ -218,32 +223,33 @@ class ExpressionNode(DataNode):
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
+            name = self.content.label.text()
             a = 0
             b = 0
             c = 0
             if input_a:
-                a = input_a.value.replace(np.nan, 0)
+                a = input_a.value[np.isnan(input_a.value)] = 0.0
                 if input_a.type == "float":
                     a   = float(a)
                 else:
                     a = np.array(a)
 
             if input_b:
-                b = input_b.value.replace(np.nan, 0)
+                b = input_b.value[np.isnan(input_b.value)] = 0.0
                 if input_b.type == "float":
                     b   = float(b)
                 else:
                     b = np.array(b)
 
             if input_c:
-                c = input_c.value.replace(np.nan, 0)
+                c = input_c.value[np.isnan(input_c.value)] = 0.0
                 if input_c.type == "float":
                     c   = float(c)
                 else:
                     c = np.array(c)
 
             if not input_a and not input_b and not input_c:
-                self.outputs[0].value = pd.Series( data = [0.0], name = self.content.label.text())
+                self.outputs[0].value = {name : [0.0]}
                 self.outputs[0].type  = "float"
                 return True
             
@@ -251,7 +257,7 @@ class ExpressionNode(DataNode):
             expression = expression.replace('exp', '2.71828182845904523536028747**')
             res = eval(expression, {"a":a, "b":b, "c":c})
 
-            self.outputs[0].value = pd.Series( data = res, name = self.content.label.text())
+            self.outputs[0].value = {name : res}
             self.outputs[0].type  = "float"
             return True
         except Exception as e : 

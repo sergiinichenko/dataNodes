@@ -83,11 +83,12 @@ class GraphicsOutputNode(DataNode):
             self.e = ""
             self.value = input_edge.value
             self.type  = input_edge.type
-            if isinstance(self.value, pd.DataFrame):
+            if isinstance(self.value, dict):
                 self.content.axis.clear()
-                x = self.value.iloc[:,0]
-                for name in self.value.columns[1:]:
-                    self.content.axis.plot(x, self.value[name], label=name)
+                x = self.value['x']
+                for name in self.value:
+                    if name != 'x':
+                        self.content.axis.plot(x, self.value[name], label=name)
                 self.content.axis.legend(loc = 1)
                 self.content.update()
                 self.content.canvas.draw()

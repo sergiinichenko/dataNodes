@@ -82,7 +82,7 @@ class FileInputNode(DataNode):
 
     def readDFFile(self, file):
         try:
-            self.outputs[0].value = pd.read_csv(file, sep=self.separator)
+            self.outputs[0].value = pd.read_csv(file, sep=self.separator).to_dict('list')
             self.outputs[0].type  = 'df'
             self.can_read = True
         except Exception as e : 

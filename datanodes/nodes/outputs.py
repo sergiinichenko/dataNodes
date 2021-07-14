@@ -1,3 +1,5 @@
+from pandas.core.algorithms import isin
+from pandas.core.frame import DataFrame
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
@@ -231,9 +233,13 @@ class TextOutputNode(DataNode):
             self.type  = input_edge.type
             self.content.textOut.clear()
             if DEBUG : print("OUTNODE_TXT: get the value and type and clear the content")
-            if self.type == "df":
+            if isinstance(self.value, dict):
                 if DEBUG : print("OUTNODE_TXT: DF input datatype")
-                self.content.textOut.insertPlainText(self.value.to_string())
+                self.content.textOut.insertPlainText(str(self.value))
+                if DEBUG : print("OUTNODE_TXT: DF content was set")
+            elif isinstance(self.value, pd.DataFrame):
+                if DEBUG : print("OUTNODE_TXT: DF input datatype")
+                self.content.textOut.insertPlainText(self.value.to_markdown())
                 if DEBUG : print("OUTNODE_TXT: DF content was set")
             else:
                 if DEBUG : print("OUTNODE_TXT: other format of the input")

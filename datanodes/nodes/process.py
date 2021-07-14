@@ -58,11 +58,11 @@ class SeparateDFNode(DataNode):
 
     def generateSockets(self, data, names=None):
         self.clearOutputs()        
-        outputs = [SOCKET_DATA_TEXT for l in range(data.shape[1]+1)]
+        outputs = [SOCKET_DATA_TEXT for l in range(len(data)+1)]
         dnames = ['DATA']
         if names is not None: dnames.extend(names)
         self.createOutputs(outputs, dnames)
-        self.grNode.height = (data.shape[1]+1) * self.socket_spacing + 2.0 * self.socket_spacing
+        self.grNode.height = (len(data)+1) * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.update()
 
         self.border_radius = 10.0
@@ -71,7 +71,7 @@ class SeparateDFNode(DataNode):
         self._hpadding     = 5.0
         self._vpadding     = 5.0
 
-        x, y = self.grNode.width - 2.0 * self.grNode.padding, (data.shape[1]+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
+        x, y = self.grNode.width - 2.0 * self.grNode.padding, (len(data)+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
         self.content.resize(x, y)
 
 
@@ -92,18 +92,18 @@ class SeparateDFNode(DataNode):
             self.type  = input_edge.type
             if DEBUG : print("PRCNODE_SEP: get input value and type")
 
-            if self.type == "df":
+            if isinstance(self.value, dict):
                 if DEBUG : print("PRCNODE_SEP: input is df")
 
-                if len(self.outputs) != (self.value.shape[1]+1):
+                if len(self.outputs) != (len(self.value)+1):
                     if DEBUG : print("PRCNODE_SEP: generate new sockets")
-                    self.generateSockets(self.value, list(self.value.columns))
+                    self.generateSockets(self.value, list(self.value.keys()))
                     if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
 
                 self.outputs[0].value = self.value
                 self.outputs[0].type  = "df"
-                for i, socket in zip(range(len(self.outputs[1:])), self.outputs[1:]):
-                    socket.value = self.value.iloc[:,i]
+                for name, socket in zip(self.value, self.outputs[1:]):
+                    socket.value = {name : self.value[name]}
                     socket.type  = "df"
                     if DEBUG : print("PRCNODE_SEP: sockets have been filled with data and types")
             else:
@@ -221,6 +221,8 @@ class CombineNode(DataNode):
                 other_socket = edge.getOtherSocket(socket)
                 if isinstance(other_socket.value, pd.Series):                
                     socket.label = other_socket.value.name
+                if isinstance(other_socket.value, dict):                
+                    socket.label = list(other_socket.value.keys())[0]
 
     def evalImplementation(self):
         input_edges = self.getInputs()
@@ -236,9 +238,13 @@ class CombineNode(DataNode):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
-                self.value = pd.DataFrame()
+                self.value = OrderedDict()
                 for input in input_edges:
                     try:
+                        if isinstance(input.value, dict):
+                            for name in input.value:
+                                self.value[name] = input.value[name]
+
                         if isinstance(input.value, pd.Series):
                             self.value[input.value.name] = pd.Series(input.value.values)
 
@@ -290,9 +296,9 @@ class CleanContent(NodeContentWidget):
         self.removeSTR.toggle()
         self.removeSTR.stateChanged.connect(self.recalculate)
 
-        self.layout.addWidget(self.dropINF)
         self.layout.addWidget(self.dropSTR)
         self.layout.addWidget(self.removeSTR)
+        self.layout.addWidget(self.dropINF)
         self.layout.addWidget(self.dropNAN)
 
         self.setLayout(self.layout)
@@ -346,7 +352,10 @@ class CleanNode(DataNode):
             return float(x)
         except:
             return np.nan
-    
+
+    def onlyNumerics(self, seq):
+        seq_type= type(seq)
+        return seq_type().join(filter(seq_type.isdigit, seq))
 
     def evalImplementation(self):
         input_edge = self.getInput(0)
@@ -365,7 +374,26 @@ class CleanNode(DataNode):
             self.type  = input_edge.type
             if DEBUG : print("PRCNODE_SEP: get input value and type")
 
-            if isinstance(self.value, pd.DataFrame) or self.type == "df":
+            if isinstance(self.value, dict):
+                if self.content.dropSTR.isChecked():
+                    for name in self.value:
+                        self.value[name] = np.array(list(map(self.toFloat, self.value[name])))
+
+                if self.content.removeSTR.isChecked():
+                    for name in self.value:
+                        self.value[name] = np.array(list(map(self.onlyNumerics, self.value[name])))
+                        self.value[name] = np.array(list(map(self.toFloat, self.value[name])))
+
+                if self.content.dropINF.isChecked():
+                    for name in self.value:
+                        self.value[name][self.value[name] == np.inf or self.value[name] == -np.inf] = np.nan
+
+                if self.content.dropNAN.isChecked():
+                    for name in self.value:
+                        self.value.dropna(inplace = True)
+
+
+            if isinstance(self.value, pd.DataFrame):
                 if self.content.dropINF.isChecked():
                     self.value.replace([np.inf, -np.inf], np.nan, inplace=True)
 
@@ -380,6 +408,7 @@ class CleanNode(DataNode):
 
                 if self.content.dropNAN.isChecked():
                     self.value.dropna(inplace = True)
+
 
                 self.outputs[0].value = self.value
                 self.outputs[0].type  = "df"

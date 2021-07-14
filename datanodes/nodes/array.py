@@ -98,7 +98,7 @@ class StepRangeNode(DataNode):
             step  = float(self.content.step.text())
             stop  = float(self.content.stop.text())
 
-            self.outputs[0].value = pd.Series( data = np.arange(start, stop+step, step), name = self.content.name.text())
+            self.outputs[0].value = { name : np.arange(start, stop+step, step) }
             return True
         except Exception as e : 
             self.e = e
@@ -208,7 +208,7 @@ class NumRangeNode(DataNode):
 
             step = (stop - start) / num
 
-            self.outputs[0].value = pd.Series( data = np.arange(start, stop+step, step), name = name)
+            self.outputs[0].value =  { name : np.arange(start, stop+step, step) }
             return True
         except Exception as e : 
             self.e = e
@@ -306,7 +306,7 @@ class FilledArrayNode(DataNode):
             shape = int(self.content.number.text())
             value = float(self.content.value.text())
 
-            self.outputs[0].value = pd.Series( data = np.full(shape, value), name = name)
+            self.outputs[0].value =  { name : np.full(shape, value) }
             return True
         except Exception as e : 
             self.e = e
