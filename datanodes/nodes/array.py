@@ -2,6 +2,7 @@
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+from datanodes.core.utils import *
 
 class StepRangeGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -98,7 +99,7 @@ class StepRangeNode(DataNode):
             step  = float(self.content.step.text())
             stop  = float(self.content.stop.text())
 
-            self.outputs[0].value = { name : np.arange(start, stop+step, step) }
+            self.getOutput(0).value = { name : np.arange(start, stop+step, step) }
             return True
         except Exception as e : 
             self.e = e
@@ -180,35 +181,96 @@ class NumRangeNode(DataNode):
     op_code = OP_MODE_NUMPARR
     op_title = "Array Number"
 
-    def __init__(self, scene, inputs=[], outputs=[2]):
+    def __init__(self, scene, inputs=[1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
         self.eval()
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_BOTTOM
+        self.output_socket_position = RIGHT_TOP
+        self.socket_spacing = 30.0
+        self.socket_bottom_margin = 26.0
+
 
     def initInnerClasses(self):
         self.content = NumRangeContent(self)
         self.grNode  = NumRangeGraphicsNode(self)
-        self.content.name.textChanged.connect(self.onReturnPressed)
-        self.content.start.textChanged.connect(self.onReturnPressed)
-        self.content.number.textChanged.connect(self.onReturnPressed)
-        self.content.stop.textChanged.connect(self.onReturnPressed)
+        self.content.name.textChanged.connect(self.onContentChanged)
+        self.content.start.textChanged.connect(self.onContentChanged)
+        self.content.number.textChanged.connect(self.onContentChanged)
+        self.content.stop.textChanged.connect(self.onContentChanged)
+        self.content.changed.connect(self.onContentChanged)
 
-    def onReturnPressed(self):
+    def onContentChanged(self):
         self.recalculate = True
         self.eval()
 
+    def checkTheInputs(self):
+        if self.getInput(0) is not None:
+            self.content.start.setReadOnly(True)
+        else:
+            self.content.start.setReadOnly(False)
+
+        if self.getInput(1) is not None:
+            self.content.number.setReadOnly(True)
+        else:
+            self.content.number.setReadOnly(False)
+
+        if self.getInput(2) is not None:
+            self.content.stop.setReadOnly(True)
+        else:
+            self.content.stop.setReadOnly(False)
+
     def evalImplementation(self):
         try:
+            self.checkTheInputs()
             self.setDirty(False)
             self.setInvalid(False)
             self.e = ""
             name  = self.content.name.text()
-            start = float(self.content.start.text())
-            num   = float(self.content.number.text())
-            stop  = float(self.content.stop.text())
+            if self.getInput(2) is not None:
+                val = self.getInput(2).value
+                start = float(self.content.start.text())
+                if isinstance(val, dict):
+                    start = list(val.values())[0]
+                if isinstance(val, float):
+                    start = val
+                if isinstance(val, (list, np.ndarray)):
+                    start = val[0]
+                self.content.start.setText("{:.2f}".format(start))
+            else:
+                start = float(self.content.start.text())
 
-            step = (stop - start) / num
+            if self.getInput(1) is not None:
+                val = self.getInput(1).value
+                num = int(self.content.number.text())
+                if isinstance(val, dict):
+                    num = lenOfDictValue(val)
+                if isinstance(val, float):
+                    num = int(val)
+                if isinstance(val, int):
+                    num = val
+                if isinstance(val, (list, np.ndarray)):
+                    num = len(val)
+                self.content.number.setText(str(int(num)))
+            else:
+                num = int(self.content.number.text())
 
-            self.outputs[0].value =  { name : np.arange(start, stop+step, step) }
+            if self.getInput(0) is not None:
+                val = self.getInput(0).value
+                stop = float(self.content.stop.text())
+                if isinstance(val, dict):
+                    stop = list(val.values())[0]
+                if isinstance(val, float):
+                    stop = val
+                if isinstance(val, (list, np.ndarray)):
+                    stop = val[0]
+                self.content.stop.setText("{:.2f}".format(stop))
+            else:
+                stop = float(self.content.stop.text())
+
+            self.getOutput(0).value =  { name : np.linspace(start, stop, num) }
             return True
         except Exception as e : 
             self.e = e
@@ -306,7 +368,7 @@ class FilledArrayNode(DataNode):
             shape = int(self.content.number.text())
             value = float(self.content.value.text())
 
-            self.outputs[0].value =  { name : np.full(shape, value) }
+            self.getOutput(0).value =  { name : np.full(shape, value) }
             return True
         except Exception as e : 
             self.e = e

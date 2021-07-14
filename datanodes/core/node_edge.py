@@ -130,7 +130,7 @@ class Edge(Serializer):
         edge = edgeClass(self)
         return edge
 
-
+    """
     @property
     def value(self):
         if self.start_socket.inout == SOCKET_OUTPUT:
@@ -138,12 +138,20 @@ class Edge(Serializer):
         else:
             return self.end_socket.value
 
+    @value.setter
+    def value(self, new_value):
+        if self.start_socket.inout == SOCKET_OUTPUT:
+            self.start_socket.value = new_value
+        else:
+            self.end_socket.value = new_value
+
     @property
     def type(self):
         if self.start_socket.inout == SOCKET_OUTPUT:
             return self.start_socket.type
         else:
             return self.end_socket.type
+    """
 
 
     def updatePos(self):

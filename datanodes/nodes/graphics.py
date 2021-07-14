@@ -85,12 +85,14 @@ class GraphicsOutputNode(DataNode):
             self.type  = input_edge.type
             if isinstance(self.value, dict):
                 self.content.axis.clear()
-                x = self.value['x']
+                x_name = list(self.value.keys())[0]
+                x_val  = self.value[x_name]
+
                 for name in self.value:
-                    if name != 'x':
-                        self.content.axis.plot(x, self.value[name], label=name)
+                    if name != x_name:
+                        self.content.axis.plot(x_val, self.value[name], label=name)
                 self.content.axis.legend(loc = 1)
-                self.content.update()
+                self.content.axis.set_xlabel(x_name)
                 self.content.canvas.draw()
             else:
                 pass

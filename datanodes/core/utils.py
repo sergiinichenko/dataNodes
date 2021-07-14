@@ -23,3 +23,10 @@ def loadStyleSheets(*args):
         stylesheet = file.readAll()
         res += "\n" + str(stylesheet, encoding='utf-8')
     QApplication.instance().setStyleSheet(res)
+
+
+def lenOfDictValue(obj):
+    length = 0
+    for name in obj:
+        length += len(obj[name])
+    return length

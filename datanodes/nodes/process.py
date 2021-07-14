@@ -2,6 +2,7 @@
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+import re
 
 class SeparateDFGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -95,14 +96,14 @@ class SeparateDFNode(DataNode):
             if isinstance(self.value, dict):
                 if DEBUG : print("PRCNODE_SEP: input is df")
 
-                if len(self.outputs) != (len(self.value)+1):
+                if len(self.getOutputs()) != (len(self.value)+1):
                     if DEBUG : print("PRCNODE_SEP: generate new sockets")
                     self.generateSockets(self.value, list(self.value.keys()))
                     if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
 
-                self.outputs[0].value = self.value
-                self.outputs[0].type  = "df"
-                for name, socket in zip(self.value, self.outputs[1:]):
+                self.getOutput(0).value = self.value
+                self.getOutput(0).type  = "df"
+                for name, socket in zip(self.value, self.getOutputs()[1:]):
                     socket.value = {name : self.value[name]}
                     socket.type  = "df"
                     if DEBUG : print("PRCNODE_SEP: sockets have been filled with data and types")
@@ -166,13 +167,9 @@ class CombineNode(DataNode):
         self.content = CombineContent(self)
         self.grNode  = CombineGraphicsNode(self)
 
-    def freeInputSockets(self):
-        
-        self.inputs
-
     def appendNewSocket(self):
         self.appendInput(input=1)
-        size = len(self.inputs)
+        size = len(self.getInputs())
         current_size = size * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.height = current_size
         self.grNode.update()
@@ -221,8 +218,10 @@ class CombineNode(DataNode):
                 other_socket = edge.getOtherSocket(socket)
                 if isinstance(other_socket.value, pd.Series):                
                     socket.label = other_socket.value.name
-                if isinstance(other_socket.value, dict):                
-                    socket.label = list(other_socket.value.keys())[0]
+                if isinstance(other_socket.value, dict):
+                    if other_socket.value is not None and len(other_socket.value) > 0:
+                        socket.label = list(other_socket.value.keys())[0]
+                    
 
     def evalImplementation(self):
         input_edges = self.getInputs()
@@ -238,12 +237,12 @@ class CombineNode(DataNode):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
-                self.value = OrderedDict()
+                self.value = {}
                 for input in input_edges:
                     try:
                         if isinstance(input.value, dict):
                             for name in input.value:
-                                self.value[name] = input.value[name]
+                                self.value[name] = input.value[name].copy()
 
                         if isinstance(input.value, pd.Series):
                             self.value[input.value.name] = pd.Series(input.value.values)
@@ -255,16 +254,18 @@ class CombineNode(DataNode):
                         self.e = e
                         dumpException(e)
                         
-                self.outputs[0].value = self.value
-                self.outputs[0].type = "df"
+                self.getOutput(0).value = self.value
+                self.getOutput(0).type = "df"
                 return True
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not enough input data"
-                self.outputs[0].value = 0
-                self.outputs[0].type = "float"
+                self.getOutput(0).value = 0
+                self.getOutput(0).type = "float"
                 return False
+
+
 
 
 
@@ -354,24 +355,22 @@ class CleanNode(DataNode):
             return np.nan
 
     def onlyNumerics(self, seq):
-        seq_type= type(seq)
-        return seq_type().join(filter(seq_type.isdigit, seq))
+        return re.sub("[^\d\.]", "", seq)
 
     def evalImplementation(self):
-        input_edge = self.getInput(0)
+        input_socket = self.getInput(0)
 
-        if not input_edge:
+        if not input_socket:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             return False
         else:
-            print("Eveluation of the CLEAN node")
             self.setDirty(False)
             self.setInvalid(False)
             if DEBUG : print("PRCNODE_SEP: reset dirty and invalid")
             self.e     = ""
-            self.value = input_edge.value
-            self.type  = input_edge.type
+            self.value = input_socket.value
+            self.type  = input_socket.type
             if DEBUG : print("PRCNODE_SEP: get input value and type")
 
             if isinstance(self.value, dict):
@@ -381,7 +380,7 @@ class CleanNode(DataNode):
 
                 if self.content.removeSTR.isChecked():
                     for name in self.value:
-                        self.value[name] = np.array(list(map(self.onlyNumerics, self.value[name])))
+                        self.value[name] = np.array(list(map(self.onlyNumerics, self.value[name].astype('str'))))
                         self.value[name] = np.array(list(map(self.toFloat, self.value[name])))
 
                 if self.content.dropINF.isChecked():
@@ -393,7 +392,7 @@ class CleanNode(DataNode):
                         self.value.dropna(inplace = True)
 
 
-            if isinstance(self.value, pd.DataFrame):
+            elif isinstance(self.value, pd.DataFrame):
                 if self.content.dropINF.isChecked():
                     self.value.replace([np.inf, -np.inf], np.nan, inplace=True)
 
@@ -409,10 +408,10 @@ class CleanNode(DataNode):
                 if self.content.dropNAN.isChecked():
                     self.value.dropna(inplace = True)
 
-
-                self.outputs[0].value = self.value
-                self.outputs[0].type  = "df"
             else:
                 print("FALSE: ", self.value)
+
+            self.getOutput(0).value = self.value
+            self.getOutput(0).type  = "df"
             return True
 

@@ -70,7 +70,6 @@ class DataNode(Node):
         #self.value = None
         self.e     = None
         self.type  = "float"
-        self.recalculate = False
         # Mark all nodes dirty by default before it is connected to anything
         self.setDirty()
 
@@ -83,6 +82,7 @@ class DataNode(Node):
     def initSettings(self):
         super().initSettings()
         self.socket_spacing = 24.0
+        self.socket_padding = 20.0
         self.input_socket_position  = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
@@ -95,24 +95,29 @@ class DataNode(Node):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:
             #return self.value
             return True
-
         try:
             if self.isMute():
                 if len(self.getInputs()) > 0:
-                    value = self.getInput(0).value
+                    val_label = list(self.getInput(0).value.keys())[0]
+                    value = self.getInput(0).value[val_label]
                     type  = self.getInput(0).type
                 else:
                     value = 0.0
                     type  = "float"
+                    val_label = "result"
                 
+                if self.content.label: label = self.content.label.text()
+                else:                  label = val_label
+
                 if len(self.getOutputs()) > 0:
-                    for output in self.getOutput():
-                        output.value = value
-                        output.type  = inputtype
+                    for output in self.getOutputs():
+                        output.value = {label : value}
+                        output.type  = type
+                self.setDescendentsDirty()
+                self.evalChildren()
                 return True
 
-
-            if self.evalImplementation():
+            elif self.evalImplementation():
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.setDescendentsInvalid(False)

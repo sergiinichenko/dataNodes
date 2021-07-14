@@ -22,7 +22,7 @@ class Socket(Serializer):
 
         self.edges = []
 
-        self._value = ""
+        self._value = None
         self._type  = ""
         self._label = label
 
@@ -31,23 +31,31 @@ class Socket(Serializer):
 
     @property
     def value(self):
-        return self._value
+        if self.inout == SOCKET_OUTPUT:
+            return self._value
+        else:
+            if len(self.edges) > 0:
+                return self.edges[0].getOtherSocket(self).value
+            return {}
+
+    @value.setter
+    def value(self, new_value):
+        if self.inout == SOCKET_OUTPUT:
+            self._value = new_value
+        else:
+            self.edges[0].getOtherSocket(self).value = new_value
 
     @property
     def type(self):
         return self._type
 
-    @property
-    def label(self):
-        return self._label
-
-    @value.setter
-    def value(self, new_value):
-        self._value = new_value
-
     @type.setter
     def type(self, new_type):
         self._type = new_type
+
+    @property
+    def label(self):
+        return self._label
 
     @label.setter
     def label(self, new_label):

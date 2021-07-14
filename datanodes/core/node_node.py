@@ -40,6 +40,7 @@ class Node(Serializer):
         # create sockets for input and outputs
         self.inputs  = []
         self.outputs = []
+        self.recalculate = False
 
         # node state flags
         self._is_dirty   = False
@@ -69,6 +70,8 @@ class Node(Serializer):
 
     def initSettings(self):
         self.socket_spacing = 24.0
+        self.socket_top_margin = self.grNode.title_height + self.grNode._vpadding + self.grNode.border_radius
+        self.socket_bottom_margin = self.grNode.border_radius + self.grNode._vpadding
         self.input_socket_position  = LEFT_BOTTOM
         self.output_socket_position = RIGHT_TOP
         self.socket_offsets = {
@@ -222,6 +225,9 @@ class Node(Serializer):
         self._is_mute = value
         if self._is_mute:
             self.onSetMute()
+        self.setDirty()
+        self.eval()
+        self.evalChildren()
 
     def onSetMute(self):
         pass
@@ -250,14 +256,10 @@ class Node(Serializer):
 
     def getInput(self, index=0):
         try:
-            input_socket = self.inputs[index]
-            if len(input_socket.edges) == 0: return None
-            return input_socket.edges[0]
-            """
-            edge = input_socket.edges[0]
-            socket = edge.getOtherSocket(self.inputs[index])
-            return socket
-            """
+            if self.inputs[index].hasEdges():
+                return self.inputs[index]
+            else:
+                return None
 
         except IndexError:
             print("EXC: Trying to get input but nothing is attached")
@@ -271,14 +273,8 @@ class Node(Serializer):
     def getInputs(self):
         inputs = []
         try:
-            input_sockets = self.inputs
-            if len(input_sockets) == 0: return None
-            for socket in input_sockets:
-                if socket.hasEdges():
-                    edge = socket.edges[0]
-                    other_socket = edge.getOtherSocket(socket)
-                    inputs.append(other_socket)
-            return inputs
+            if len(self.inputs) == 0: return None
+            return self.inputs
             
         except IndexError:
             print("EXC: Trying to get input but nothing is attached")
@@ -289,15 +285,31 @@ class Node(Serializer):
             return None
 
 
-    def getOutputs(self, index=0) :
+    def getOutput(self, index=0):
+        try:
+            return self.outputs[index]
 
-        outs = []
-        for edge in self.outputs[index].edges:
-            other_socket = edge.getOtherSocket(self.outputs[index])
-            outs.append(other_socket.node)
-        return outs
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return None
+
+        except Exception as e: 
+            dumpException(e)
+            return None
 
 
+    def getOutputs(self):
+        try:
+            if len(self.outputs) == 0: return None
+            return self.outputs
+            
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return None
+
+        except Exception as e: 
+            dumpException(e)
+            return None
 
 
 
@@ -323,7 +335,7 @@ class Node(Serializer):
     
         if position in (LEFT_BOTTOM, RIGHT_BOTTOM):
             # start from bottom
-            y = self.grNode.height - self.grNode.border_radius - self.grNode._vpadding - index * self.socket_spacing
+            y = self.grNode.height - self.socket_bottom_margin - index * self.socket_spacing
         elif position in (LEFT_CENTER, RIGHT_CENTER):
             num_sockets = count
             node_height = self.grNode.height
@@ -340,7 +352,7 @@ class Node(Serializer):
 
         elif position in (LEFT_TOP, RIGHT_TOP):
             # start from top
-            y = self.grNode.title_height + self.grNode._vpadding + self.grNode.border_radius + index * self.socket_spacing
+            y = self.socket_top_margin + index * self.socket_spacing
         else:
             # this should never happen
             y = 0
