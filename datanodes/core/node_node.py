@@ -312,6 +312,41 @@ class Node(Serializer):
             return None
 
 
+    def getOutputNodes(self, index: int=0):
+        """
+        Get **all** `Nodes` connected to the Output specified by `index`
+
+        :param index: Order number of the `Output Socket`
+        :type index: ``int``
+        :return: all :class:`~nodeeditor.node_node.Node` instances which are connected to the
+            specified `Output` or ``[]`` if there is no connection or the index is out of range
+        :rtype: List[:class:`~nodeeditor.node_node.Node`]
+        """
+        outs = []
+        for edge in self.outputs[index].edges:
+            other_socket = edge.getOtherSocket(self.outputs[index])
+            outs.append(other_socket.node)
+        return outs
+
+    def getInputNodes(self, index: int=0):
+        """
+        Get the **first**  `Node` connected to the  Input specified by `index`
+
+        :param index: Order number of the `Input Socket`
+        :type index: ``int``
+        :return: :class:`~nodeeditor.node_node.Node` which is connected to the specified `Input` or ``None`` if
+            there is no connection or the index is out of range
+        :rtype: :class:`~nodeeditor.node_node.Node` or ``None``
+        """
+        try:
+            input_socket = self.inputs[index]
+            if len(input_socket.edges) == 0: return None
+            connecting_edge = input_socket.edges[0]
+            other_socket = connecting_edge.getOtherSocket(self.inputs[index])
+            return other_socket.node
+        except Exception as e:
+            dumpException(e)
+            return None
 
     def eval(self):
         self.setDirty(False)

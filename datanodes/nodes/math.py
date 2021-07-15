@@ -2,6 +2,8 @@
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+import numpy as np
+from math import *
 
 class MathGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -136,25 +138,24 @@ class MathNode(DataNode):
 
 
 
-class ExpressionGraphicsNode(DataGraphicsNode):
+class ExpressionGraphicsNode(ResizableInputGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 250.0
-        self.height = 120.0
+        self.min_height = 100.0
+        self.width  = 260.0
+        self.height = 100.0
 
-class ExpressionContent(DataContent):
-
+class ExpressionContent(ResizableInputContent):
     def initUI(self):
-        super().initUI()
         self.mainlayout = QVBoxLayout()
-        self.mainlayout.setContentsMargins(20,0,0,0)
+        self.mainlayout.setContentsMargins(40,0,0,0)
 
         self.hlayout = QHBoxLayout()
         self.vlayout = QHBoxLayout()
         self.mainlayout.addLayout(self.hlayout)
         self.mainlayout.addLayout(self.vlayout)
 
-        self.label_name = QLabel("result", self)        
+        self.label_name = QLabel("", self)        
         self.label_name.setAlignment(Qt.AlignRight)
 
         self.label = QLineEdit("res", self)
@@ -167,6 +168,7 @@ class ExpressionContent(DataContent):
         self.edit = QLineEdit("2+2", self)
         self.edit.setAlignment(Qt.AlignCenter)
         self.vlayout.addWidget(self.edit)
+        self.mainlayout.addStretch()
 
         self.setLayout(self.mainlayout)
 
@@ -179,23 +181,20 @@ class ExpressionContent(DataContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['value']
             self.label.setText(data['label'])
             self.edit.setText( data['value'])
             return True & res
         except Exception as e : dumpException(e)
         return res
 
-
 @register_node(OP_MODE_EXPRESSION)
-class ExpressionNode(DataNode):
+class ExpressionNode(ResizableInputNode):
     icon = "icons/math.png"
     op_code = OP_MODE_EXPRESSION
     op_title = "Expression"
 
-    def __init__(self, scene, inputs=[1,1,1], outputs=[2], innames=["a", "b", "c"]):
-        super().__init__(scene, inputs, outputs, innames)
-        self.x = None
+    def __init__(self, scene, inputs=[1], outputs=[2]):
+        super().__init__(scene, inputs, outputs)
         self.setDirty(False)
         self.setDescendentsDirty(False)
         self.getOutput(0).value = 4
@@ -203,57 +202,63 @@ class ExpressionNode(DataNode):
 
     def initSettings(self):
         super().initSettings()
-        self.input_socket_position  = LEFT_CENTER
         self.output_socket_position = RIGHT_TOP
 
     def initInnerClasses(self):
         self.content = ExpressionContent(self)
         self.grNode  = ExpressionGraphicsNode(self)
-        self.content.edit.returnPressed.connect(self.onReturnPressed)
-        self.content.label.returnPressed.connect(self.onReturnPressed)
-
-    def onReturnPressed(self):
-        self.recalculate = True
+        self.content.edit.returnPressed.connect(self.recalculate)
+        self.content.label.returnPressed.connect(self.recalculate)
+        self.content.changed.connect(self.recalculate)
+    
+    def recalculate(self):
+        self.setDirty()
         self.eval()
 
     def evalImplementation(self):
-        input_a = self.getInput(0)
-        input_b = self.getInput(1)
-        input_c = self.getInput(2)
-
-        try:
-            self.setDirty(False)
-            self.setInvalid(False)
-            self.e = ""
-            label = self.content.label.text()
-            a = 0
-            b = 0
-            c = 0
-            if input_a:
-                name = list(input_a.value.keys())[0]
-                a = np.nan_to_num(input_a.value[name])
-
-            if input_b:
-                name = list(input_b.value.keys())[0]
-                b = np.nan_to_num(input_b.value[name])
-
-            if input_c:
-                name = list(input_c.value.keys())[0]
-                c = np.nan_to_num(input_c.value[name])
-
-            if not input_a and not input_b and not input_c:
-                self.getOutput(0).value = {name : [0.0]}
-                self.getOutput(0).type  = "float"
-                return True
-            
-            expression = self.content.edit.text()
-            expression = expression.replace('exp', '2.71828182845904523536028747**')
-            res = eval(expression, {"a":a, "b":b, "c":c})
-
-            self.getOutput(0).value = {label : res}
-            self.getOutput(0).type  = "float"
-            return True
-        except Exception as e : 
-            self.e = e
-            dumpException(e)
+        inputs = self.getInputs()
+        if not inputs:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
             return False
+        else:
+            self.sortSockets()
+            self.getSocketsNames()
+            self.generateNewSocket()
+            try:
+                label = self.content.label.text()
+                expression = self.content.edit.text()
+                methods = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 
+                           'cos' : np.cos, 'sin': np.sin, 'abs':np.abs,
+                           'max' : np.max, 'min': np.min, 'sum':np.sum}
+
+                code = compile(expression, "<string>", "eval")
+
+                if len(inputs) > 0:      
+                    self.setDirty(False)
+                    self.setInvalid(False)
+                    self.e = ""
+                    self.value = {}
+                    self.filtered = {}
+                    for input in inputs[:-1]:
+                        for name in input.value:
+                            self.filtered[name] = np.nan_to_num(input.value[name])
+
+                    res = eval(code, self.filtered, methods)
+                    self.getOutput(0).value = {label : res}
+                    self.getOutput(0).type  = "df"
+                    return True
+
+                else:
+                    res = eval(code, methods)
+                    self.getOutput(0).value = {label : res}
+                    self.getOutput(0).type  = "float"
+                    return True
+            
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                self.getOutput(0).value = {label : 0.0}
+                self.getOutput(0).type = "float"
+                return False

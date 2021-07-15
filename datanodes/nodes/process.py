@@ -117,18 +117,14 @@ class SeparateDFNode(DataNode):
 
 
 
-class CombineGraphicsNode(DataGraphicsNode):
+class CombineGraphicsNode(ResizableInputGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
-        self.height = 160.0
+        self.height = 100.0
+        self.min_height = 100.0
 
-class CombineContent(NodeContentWidget):
-    def initUI(self):
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        self.setWindowTitle("Data XY")
-
+class CombineContent(ResizableInputContent):
     def serialize(self):
         res = super().serialize()
         res['width'] = self.node.grNode.width
@@ -150,7 +146,7 @@ class CombineContent(NodeContentWidget):
 
 
 @register_node(OP_MODE_DATA_COMBXY)
-class CombineNode(DataNode):
+class CombineNode(ResizableInputNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_COMBXY
     op_title = "Data Combine"
@@ -161,67 +157,11 @@ class CombineNode(DataNode):
     def initSettings(self):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
-        self.output_socket_position = RIGHT_CENTER
+        self.output_socket_position = RIGHT_TOP
 
     def initInnerClasses(self):
         self.content = CombineContent(self)
         self.grNode  = CombineGraphicsNode(self)
-
-    def appendNewSocket(self):
-        self.appendInput(input=1)
-        size = len(self.getInputs())
-        current_size = size * self.socket_spacing + 2.0 * self.socket_spacing
-        self.grNode.height = current_size
-        self.grNode.update()
-
-        self.border_radius = 10.0
-        self.padding       = 10.0
-        self.title_height = 24.0
-        self._hpadding     = 5.0
-        self._vpadding     = 5.0
-
-        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
-        x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
-        self.content.resize(x, y)
-
-    def sortSockets(self):
-        sockets_full = []
-        sockets_empty = []
-        for socket in self.inputs:
-            if socket.hasEdges():
-                sockets_full.append(socket)
-            else:
-                sockets_empty.append(socket)
-
-        for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
-            socket.index = i
-            socket.setPos()
-
-        self.inputs = sockets_full + sockets_empty
-        self.removeFreeInputs()
-        self.appendNewSocket()
-
-    def generateNewSocket(self):
-        if self.freeSockets() < 0:
-            self.appendNewSocket()
-
-        if self.freeSockets() > 1:
-            self.removeFreeInputs()
-            self.appendNewSocket()
-
-    def getSocketsNames(self):
-        input_sockets = self.inputs
-        if len(input_sockets) == 0: return None
-        for socket in input_sockets:
-            if socket.hasEdges():
-                edge = socket.edges[0]
-                other_socket = edge.getOtherSocket(socket)
-                if isinstance(other_socket.value, pd.Series):                
-                    socket.label = other_socket.value.name
-                if isinstance(other_socket.value, dict):
-                    if other_socket.value is not None and len(other_socket.value) > 0:
-                        socket.label = list(other_socket.value.keys())[0]
-                    
 
     def evalImplementation(self):
         input_edges = self.getInputs()
@@ -242,7 +182,10 @@ class CombineNode(DataNode):
                     try:
                         if isinstance(input.value, dict):
                             for name in input.value:
-                                self.value[name] = input.value[name].copy()
+                                try:
+                                    self.value[name] = input.value[name].copy()
+                                except:
+                                    self.value[name] = input.value[name]
 
                         if isinstance(input.value, pd.Series):
                             self.value[input.value.name] = pd.Series(input.value.values)

@@ -2,8 +2,8 @@
     "id": 139854066741056,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 796.1538461538461,
-    "view_y": -134.46153846153845,
+    "view_x": 793.3333333333334,
+    "view_y": -135.0,
     "view_scale": 12.0,
     "nodes": [
         {
@@ -25,7 +25,7 @@
                 }
             ],
             "content": {
-                "id": 139884227577312,
+                "id": 140511920399840,
                 "content": "",
                 "file": "/home/nichenko_s/Work/Projects/SwissNuclear/2020-2021/ATHESC/Data/Water_Chemistry/water_chemistry.csv"
             },
@@ -82,7 +82,7 @@
                 }
             ],
             "content": {
-                "id": 139884073780704,
+                "id": 140511789668096,
                 "content": "",
                 "name": "the x asis",
                 "start": "0",
@@ -111,7 +111,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 139883729535472,
+                "id": 140511343305488,
                 "content": "",
                 "width": 853.1666666666665,
                 "height": 720.5,
@@ -151,7 +151,7 @@
                 }
             ],
             "content": {
-                "id": 139883641895232,
+                "id": 140511342733920,
                 "content": "",
                 "dropNAN": false,
                 "dropINF": false,
@@ -228,7 +228,7 @@
                     "label": "Fe_fw"
                 },
                 {
-                    "id": 139883641707920,
+                    "id": 140511342543440,
                     "index": 6,
                     "position": 1,
                     "socket_type": 1,
@@ -251,7 +251,7 @@
                 }
             ],
             "content": {
-                "id": 139883641782480,
+                "id": 140511342621168,
                 "content": "",
                 "width": 160.0,
                 "height": 216.0,
@@ -298,7 +298,7 @@
                     "label": "res"
                 },
                 {
-                    "id": 139883640859616,
+                    "id": 140511341698016,
                     "index": 3,
                     "position": 1,
                     "socket_type": 1,
@@ -321,7 +321,7 @@
                 }
             ],
             "content": {
-                "id": 139883641784640,
+                "id": 140511342623328,
                 "content": "",
                 "width": 160.0,
                 "height": 144.0,
@@ -691,7 +691,7 @@
                 }
             ],
             "content": {
-                "id": 139883641999424,
+                "id": 140511342842208,
                 "content": "",
                 "width": 160.0,
                 "height": 864.0,
@@ -751,7 +751,7 @@
                 }
             ],
             "content": {
-                "id": 139883641534496,
+                "id": 140511342377280,
                 "content": "",
                 "value": "a +250",
                 "label": "res"

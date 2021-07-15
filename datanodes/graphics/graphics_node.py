@@ -38,11 +38,12 @@ class GraphicsNode(QGraphicsItem):
     def initSizes(self):
         self.width  = 180.0
         self.height = 240.0
+        self.min_height = 0.0
         self.border_radius = 10.0
-        self.padding       = 10.0
+        self.padding       = 5.0
         self.title_height = 24.0
-        self._hpadding     = 5.0
-        self._vpadding     = 5.0
+        self._hpadding     = 3.0
+        self._vpadding     = 3.0
 
     def initAssets(self):
         # General graphical settings
@@ -56,6 +57,8 @@ class GraphicsNode(QGraphicsItem):
 
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
+        self._brush_dirty = QBrush(QColor("#FFA4AC7B"))
+        self._brush_invalid = QBrush(QColor("#FF9A5B5B"))
 
         self._color_hov= QColor("#FF37A6FF")
         self._pen_hov  = QPen(self._color_hov)
@@ -135,19 +138,21 @@ class GraphicsNode(QGraphicsItem):
         self.hovered = False
         self.update()
 
-
-    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
-        
-        # paint the title
+    def paintTitle(self, painter, brush, pen=Qt.NoPen):
         path_title = QPainterPath()
         path_title.setFillRule(Qt.WindingFill)
         path_title.addRoundedRect(0,0,self.width, self.title_height,
                 self.border_radius, self.border_radius)
         path_title.addRect(0, self.title_height - self.border_radius, self.border_radius, self.border_radius)
         path_title.addRect(self.width - self.border_radius, self.title_height - self.border_radius, self.border_radius, self.border_radius)
-        painter.setPen(Qt.NoPen)
-        painter.setBrush(self._brush_title)
+        painter.setPen(pen)
+        painter.setBrush(brush)
         painter.drawPath(path_title.simplified())
+
+    def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
+        
+        # paint the title
+        self.paintTitle(painter, self._brush_title)
 
         # paint the content
         path_content = QPainterPath()

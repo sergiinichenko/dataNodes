@@ -28,8 +28,15 @@ class DataGraphicsNode(GraphicsNode):
     def paint(self, painter, QStyleOptionGraphicsItem, widget=None):
         super().paint(painter, QStyleOptionGraphicsItem, widget)
         offset = 24.0
-        if self.node.isDirty()   : offset =  0.0
-        if self.node.isInvalid() : offset = 48.0
+        brush =  self._brush_title
+        if self.node.isDirty()   : 
+            offset =  0.0
+            brush = self._brush_dirty
+        if self.node.isInvalid() : 
+            offset = 48.0
+            brush  = self._brush_invalid
+
+        self.paintTitle(painter, brush)
 
         painter.drawImage(
             QRectF(-10.0, -10.0, 24.0, 24.0),
@@ -58,7 +65,6 @@ class DataContent(NodeContentWidget):
     def initUI(self):
         pass
 
-
 class DataNode(Node):
     op_code  = 0
     op_title = "Base node"
@@ -83,6 +89,7 @@ class DataNode(Node):
         super().initSettings()
         self.socket_spacing = 24.0
         self.socket_padding = 20.0
+        self.socket_top_margin = 40.0
         self.input_socket_position  = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
@@ -106,7 +113,7 @@ class DataNode(Node):
                     type  = "float"
                     val_label = "result"
                 
-                if self.content.label: label = self.content.label.text()
+                if hasattr(self.content, 'label'): label = self.content.label.text()
                 else:                  label = val_label
 
                 if len(self.getOutputs()) > 0:
@@ -158,6 +165,8 @@ class DataNode(Node):
     def deserialize(self, data, hashmap=[], restore_id=True):
         res = super().deserialize(data, hashmap, restore_id)
         return True
+
+
 
 
 class ResizebleDataNode(DataGraphicsNode):
@@ -216,3 +225,117 @@ class ResizebleDataNode(DataGraphicsNode):
                 QRectF(0.0, 0.0, drag_size, drag_size)
                 )
 
+
+
+
+class ResizableInputGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 160.0
+        self.height = 160.0
+        self.min_height = 160.0
+
+class ResizableInputContent(DataContent):
+    def serialize(self):
+        res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.resize(data['content-widht'], data['content-height'])
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+class ResizableInputNode(DataNode):
+    icon = "icons/math.png"
+    op_code = 0
+    op_title = ""
+
+    def __init__(self, scene, inputs=[1], outputs=[1]):
+        super().__init__(scene, inputs, outputs)
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+        self.socket_bottom_margin = 20.0
+
+    def initInnerClasses(self):
+        self.content = ResizableInputContent(self)
+        self.grNode  = ResizableInputGraphicsNode(self)
+        self.content.changed.connect(self.updateSockets)
+
+    def appendNewSocket(self):
+        self.appendInput(input=1)
+        size = len(self.getInputs())
+        current_size = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
+
+        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
+
+        if current_size > self.grNode.min_height:
+            self.grNode.height = current_size
+            self.grNode.update()
+
+            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
+            self.content.resize(x, y)
+
+    def sortSockets(self):
+        sockets_full = []
+        sockets_empty = []
+        for socket in self.inputs:
+            if socket.hasEdges():
+                sockets_full.append(socket)
+            else:
+                sockets_empty.append(socket)
+
+        for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
+            socket.index = i
+            socket.setPos()
+
+        self.inputs = sockets_full + sockets_empty
+        self.removeFreeInputs()
+        self.appendNewSocket()
+
+    def generateNewSocket(self):
+        if self.freeSockets() < 0:
+            self.appendNewSocket()
+
+        if self.freeSockets() > 1:
+            self.removeFreeInputs()
+            self.appendNewSocket()
+
+    def getSocketsNames(self):
+        if len(self.inputs) == 0: 
+            return None
+
+        for socket in self.inputs:
+            if socket.hasEdges():
+                edge = socket.edges[0]
+                other_socket = edge.getOtherSocket(socket)
+                if isinstance(other_socket.value, pd.Series):                
+                    socket.label = other_socket.value.name
+                if isinstance(other_socket.value, dict):
+                    if other_socket.value is not None and len(other_socket.value) > 0:
+                        if len(other_socket.value) == 1:
+                            socket.label = list(other_socket.value.keys())[0]
+                        else:
+                            socket.label = str(list(other_socket.value.keys())[0]) + "..."
+                    
+    def updateSockets(self):
+        self.sortSockets()
+        self.getSocketsNames()
+        self.generateNewSocket()
+        self.setDirty()
+        self.eval()
+
+    def evalImplementation(self):
+        pass

@@ -1,7 +1,7 @@
 from PyQt5.QtWidgets import QGraphicsView
 from datanodes.core.node_socket import Socket
 
-DEBUG_REROUTING = True
+DEBUG_REROUTING = False
 
 class EdgeRerouting:
     def __init__(self, grView:'QGraphicsView'):

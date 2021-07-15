@@ -8,28 +8,48 @@ class ValueInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 120.0
-        self.height = 80.0
+        self.height = 90.0
 
 class ValueInputContent(DataContent):
     def initUI(self):
         super().initUI()
-        self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0,0,0,0)
-        self.setLayout(self.layout)
-        self.edit = QLineEdit("1", self)
-        self.edit.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.edit)
+  
+        self.mainlayout = QVBoxLayout()
+        self.mainlayout.setContentsMargins(0,0,0,0)
+
+        self.hlayout = QHBoxLayout()
+        self.vlayout = QHBoxLayout()
+        self.mainlayout.addLayout(self.hlayout)
+        self.mainlayout.addLayout(self.vlayout)
+
+        self.label_name = QLabel("", self)        
+        self.label_name.setAlignment(Qt.AlignRight)
+
+        self.label = QLineEdit("x", self)
+        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setFixedWidth(60)
+        self.hlayout.addWidget(self.label_name)
+        self.hlayout.addWidget(self.label)
+
+
+        self.value = QLineEdit("1.0", self)
+        self.value.setAlignment(Qt.AlignCenter)
+        self.vlayout.addWidget(self.value)
+
+        self.setLayout(self.mainlayout)
+
 
     def serialize(self):
         res = super().serialize()
-        res['value'] = self.edit.text()
+        res['value'] = self.value.text()
+        res['label'] = self.label.text()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['value']
-            self.edit.setText(value)
+            self.value.setText(data['value'])
+            self.label.setText(data['label'])
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -40,23 +60,26 @@ class ValueInputNode(DataNode):
     op_code = OP_MODE_VALINPUT
     op_title = "Input value"
 
-
     def __init__(self, scene, inputs=[], outputs=[2]):
-        super().__init__(scene, inputs, outputs)
+        super().__init__(scene, inputs=inputs, outputs=outputs)
         self.eval()
 
+    def initSettings(self):
+        super().initSettings()
+        self.output_socket_position = RIGHT_TOP
 
     def initInnerClasses(self):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
-        self.content.edit.textChanged.connect(self.onInputChanged)
+        self.content.value.textChanged.connect(self.onInputChanged)
+        self.content.label.textChanged.connect(self.onInputChanged)
     
     def evalImplementation(self):
         try:
-            u_value = self.content.edit.text()
+            u_value = self.content.value.text()
             s_value = float(u_value)
-            #self.getOutput(0).value = s_value
-            self.getOutput(0).value = s_value
+            label   = self.content.label.text()
+            self.getOutput(0).value = {label : s_value}
             self.getOutput(0).type  = "float"
             return True
 

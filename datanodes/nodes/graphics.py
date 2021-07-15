@@ -78,26 +78,31 @@ class GraphicsOutputNode(DataNode):
             self.e = "Does not have and intry Node"
             return False
         else:            
-            self.setDirty(False)
-            self.setInvalid(False)
-            self.e = ""
-            self.value = input_edge.value
-            self.type  = input_edge.type
-            if isinstance(self.value, dict):
-                self.content.axis.clear()
-                x_name = list(self.value.keys())[0]
-                x_val  = self.value[x_name]
+            try:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = input_edge.value
+                self.type  = input_edge.type
+                if isinstance(self.value, dict):
+                    self.content.axis.clear()
+                    x_name = list(self.value.keys())[0]
+                    x_val  = self.value[x_name]
 
-                for name in self.value:
-                    if name != x_name:
-                        self.content.axis.plot(x_val, self.value[name], label=name)
-                self.content.axis.legend(loc = 1)
-                self.content.axis.set_xlabel(x_name)
-                self.content.canvas.draw()
-            else:
-                pass
-            return True
-
+                    for name in self.value:
+                        if name != x_name:
+                            self.content.axis.plot(x_val, self.value[name], label=name)
+                    self.content.axis.legend(loc = 1)
+                    self.content.axis.set_xlabel(x_name)
+                    self.content.canvas.draw()
+                else:
+                    pass
+                return True
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                return False
 
 
 

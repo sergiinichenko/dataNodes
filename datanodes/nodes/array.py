@@ -115,8 +115,8 @@ class StepRangeNode(DataNode):
 class NumRangeGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
-        self.height = 160.0
+        self.width  = 145.0
+        self.height = 150.0
 
 class NumRangeContent(DataContent):
 
@@ -190,7 +190,7 @@ class NumRangeNode(DataNode):
         self.input_socket_position  = LEFT_BOTTOM
         self.output_socket_position = RIGHT_TOP
         self.socket_spacing = 30.0
-        self.socket_bottom_margin = 26.0
+        self.socket_bottom_margin = 22.0
 
 
     def initInnerClasses(self):
