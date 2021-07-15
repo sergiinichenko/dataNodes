@@ -218,34 +218,58 @@ class CleanGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 200.0
-        self.height = 200.0
+        self.height = 240.0
 
-class CleanContent(NodeContentWidget):
+class CleanContent(DataContent):
     def initUI(self):
-        self.layout = QVBoxLayout()
+        self.mainlayout = QGridLayout()
+        self.mainlayout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.mainlayout)
 
-        self.dropNAN = QCheckBox('Drop NAN', self)
-        self.dropNAN.toggle()
-        self.dropNAN.stateChanged.connect(self.recalculate)
-
-        self.dropINF = QCheckBox('Drop INF', self)
-        self.dropINF.toggle()
-        self.dropINF.stateChanged.connect(self.recalculate)
-
-        self.dropSTR = QCheckBox('Drop Strings', self)
+        self.dropSTR = QCheckBox('String to NAN', self)
         self.dropSTR.toggle()
         self.dropSTR.stateChanged.connect(self.recalculate)
+        self.mainlayout.addWidget(self.dropSTR, 0, 0, 1, 2)
 
         self.removeSTR = QCheckBox('Remove sub-strings', self)
         self.removeSTR.toggle()
         self.removeSTR.stateChanged.connect(self.recalculate)
+        self.mainlayout.addWidget(self.removeSTR, 1, 0, 1, 2)
 
-        self.layout.addWidget(self.dropSTR)
-        self.layout.addWidget(self.removeSTR)
-        self.layout.addWidget(self.dropINF)
-        self.layout.addWidget(self.dropNAN)
+        self.strToNum = QCheckBox('String to ', self)
+        self.strToNum.toggle()
+        self.strToNum.stateChanged.connect(self.recalculate)
+        self.strToNumValue = QLineEdit("0.0", self)
+        self.strToNumValue.setAlignment(Qt.AlignCenter)
+        self.mainlayout.addWidget(self.strToNum, 2, 0)
+        self.mainlayout.addWidget(self.strToNumValue, 2, 1)
 
-        self.setLayout(self.layout)
+        self.infToNum = QCheckBox('INF to ', self)
+        self.infToNum.toggle()
+        self.infToNum.stateChanged.connect(self.recalculate)
+        self.infToNumValue = QLineEdit("0.0", self)
+        self.infToNumValue.setAlignment(Qt.AlignCenter)
+        self.mainlayout.addWidget(self.infToNum, 3, 0)
+        self.mainlayout.addWidget(self.infToNumValue, 3, 1)
+
+        self.dropINF = QCheckBox('INF to NAN', self)
+        self.dropINF.toggle()
+        self.dropINF.stateChanged.connect(self.recalculate)
+        self.mainlayout.addWidget(self.dropINF, 4, 0, 1, 2)
+
+        self.nanToNum = QCheckBox('NAN to ', self)
+        self.nanToNum.toggle()
+        self.nanToNum.stateChanged.connect(self.recalculate)
+        self.nanToNumValue = QLineEdit("0.0", self)
+        self.nanToNumValue.setAlignment(Qt.AlignCenter)
+        self.mainlayout.addWidget(self.nanToNum, 5, 0)
+        self.mainlayout.addWidget(self.nanToNumValue, 5, 1)
+
+        self.dropNAN = QCheckBox('Drop NAN', self)
+        self.dropNAN.toggle()
+        self.dropNAN.stateChanged.connect(self.recalculate)
+        self.mainlayout.addWidget(self.dropNAN, 6, 0, 1, 2)
+
         self.setWindowTitle("Data Clean")
     
     def recalculate(self):
@@ -254,18 +278,30 @@ class CleanContent(NodeContentWidget):
 
     def serialize(self):
         res = super().serialize()
-        res['dropNAN'] = self.dropNAN.isChecked()
-        res['dropINF'] = self.dropINF.isChecked()
-        res['dropSTR'] = self.dropSTR.isChecked()
-        res['removeSTR'] = self.removeSTR.isChecked()
+        res['dropSTR']        = self.dropSTR.isChecked()
+        res['removeSTR']      = self.removeSTR.isChecked()
+        res['strToNum']       = self.strToNum.isChecked()
+        res['strToNumValue']  = self.strToNumValue.text()
+        res['infToNum']       = self.infToNum.isChecked()
+        res['infToNumValue']  = self.infToNumValue.text()
+        res['dropINF']        = self.dropINF.isChecked()
+        res['nanToNum']       = self.nanToNum.isChecked()
+        res['nanToNumValue']  = self.nanToNumValue.text()
+        res['dropNAN']        = self.dropNAN.isChecked()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            self.dropINF.setChecked(data['dropINF'])
             self.dropSTR.setChecked(data['dropSTR'])
             self.removeSTR.setChecked(data['removeSTR'])
+            self.strToNum.setChecked(data['strToNum'])
+            self.strToNumValue.setText(data['strToNumValue'])
+            self.infToNum.setChecked(data['infToNum'])
+            self.infToNumValue.setText(data['infToNumValue'])
+            self.dropINF.setChecked(data['dropINF'])
+            self.nanToNum.setChecked(data['nanToNum'])
+            self.nanToNumValue.setText(data['nanToNumValue'])
             self.dropNAN.setChecked(data['dropNAN'])
             return True & res
         except Exception as e: 
@@ -290,12 +326,23 @@ class CleanNode(DataNode):
     def initInnerClasses(self):
         self.content = CleanContent(self)
         self.grNode  = CleanGraphicsNode(self)
+        self.content.nanToNumValue.returnPressed.connect(self.recalculate)
+        self.content.strToNumValue.returnPressed.connect(self.recalculate)
+        self.content.infToNumValue.returnPressed.connect(self.recalculate)
+        self.content.changed.connect(self.recalculate)
+
+    def recalculate(self):
+        self.setDirty()
+        self.eval()
 
     def toFloat(self, x):
         try:
             return float(x)
         except:
             return np.nan
+
+    def isString(self, x):
+        return self.toFloat(x) is np.nan
 
     def onlyNumerics(self, seq):
         return re.sub("[^\d\.]", "", seq)
@@ -315,46 +362,91 @@ class CleanNode(DataNode):
             self.value = input_socket.value
             self.type  = input_socket.type
             if DEBUG : print("PRCNODE_SEP: get input value and type")
+            self.filtered = {}
 
-            if isinstance(self.value, dict):
-                if self.content.dropSTR.isChecked():
-                    for name in self.value:
-                        self.value[name] = np.array(list(map(self.toFloat, self.value[name])))
+            try:
+                self.e = ""
+                if isinstance(self.value, dict):
+                    self.filtered = self.value.copy()
 
-                if self.content.removeSTR.isChecked():
-                    for name in self.value:
-                        self.value[name] = np.array(list(map(self.onlyNumerics, self.value[name].astype('str'))))
-                        self.value[name] = np.array(list(map(self.toFloat, self.value[name])))
+                    if self.content.dropSTR.isChecked():
+                        for name in self.filtered:
+                            self.filtered[name] = np.array(list(map(self.toFloat, self.filtered[name])))
 
-                if self.content.dropINF.isChecked():
-                    for name in self.value:
-                        self.value[name][self.value[name] == np.inf or self.value[name] == -np.inf] = np.nan
+                    if self.content.removeSTR.isChecked():
+                        for name in self.filtered:
+                            self.filtered[name] = np.array(list(map(self.onlyNumerics, self.filtered[name].astype('str'))))
+                            self.filtered[name] = np.array(list(map(self.toFloat, self.filtered[name])))
 
-                if self.content.dropNAN.isChecked():
-                    for name in self.value:
-                        self.value.dropna(inplace = True)
+                    if self.content.strToNum.isChecked():
+                        val = float(self.content.strToNumValue.text())
+                        for name in self.filtered:
+                            sel = np.isnan(np.array(list(map(self.isString, self.filtered[name]))))
+                            self.filtered[name][sel] = val
+                            self.filtered[name] = np.array(list(map(self.toFloat, self.filtered[name])))
+
+                    if self.content.infToNum.isChecked():
+                        val = float(self.content.infToNumValue.text())
+                        for name in self.filtered:
+                            self.filtered[name][np.isinf(self.filtered[name])] = val
+
+                    if self.content.dropINF.isChecked():
+                        for name in self.filtered:
+                            self.filtered[name][np.isinf(self.filtered[name])] = np.nan
+
+                    if self.content.nanToNum.isChecked():
+                        val = float(self.content.nanToNumValue.text())
+                        for name in self.filtered:
+                            self.filtered[name][np.isnan(self.filtered[name])] = val
+
+                    if self.content.dropNAN.isChecked():
+                        nansel = None
+                        for name in self.filtered:
+                            if nansel is None:
+                                nansel = np.isnan(self.filtered[name])
+                            else:
+                                sel = np.isnan(self.filtered[name])
+                                nansel = np.logical_and(nansel, sel)
+                        for name in self.filtered:
+                            self.filtered[name] = self.filtered[name][nansel]
 
 
-            elif isinstance(self.value, pd.DataFrame):
-                if self.content.dropINF.isChecked():
-                    self.value.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-                if self.content.dropSTR.isChecked():
-                    self.value = self.value.applymap(self.toFloat)
 
-                if self.content.removeSTR.isChecked():
-                    self.value = self.value.applymap(str)
-                    for name in self.value.columns:
-                        self.value[name].str.replace(r'\D', '')
-                    self.value = self.value.applymap(self.toFloat)
+                elif isinstance(self.value, pd.DataFrame):
+                    self.filtered = self.value.copy()
 
-                if self.content.dropNAN.isChecked():
-                    self.value.dropna(inplace = True)
+                    if self.content.dropINF.isChecked():
+                        self.filtered.replace([np.inf, -np.inf], np.nan, inplace=True)
 
-            else:
-                print("FALSE: ", self.value)
+                    if self.content.dropSTR.isChecked():
+                        self.filtered = self.filtered.applymap(self.toFloat)
 
-            self.getOutput(0).value = self.value
-            self.getOutput(0).type  = "df"
-            return True
+                    if self.content.removeSTR.isChecked():
+                        self.filtered = self.filtered.applymap(str)
+                        for name in self.filtered.columns:
+                            self.filtered[name].str.replace(r'\D', '')
+                        self.filtered = self.filtered.applymap(self.toFloat)
 
+                    if self.content.dropNAN.isChecked():
+                        self.filtered.dropna(inplace = True)
+
+                else:
+                    self.setDirty(False)
+                    self.setInvalid(False)
+                    self.e = "Not suotable format of the input data"
+                    self.getOutput(0).value = {0.0}
+                    self.getOutput(0).type = "float"
+                    return False
+
+                self.getOutput(0).value = self.filtered
+                self.getOutput(0).type  = "df"
+                return True
+
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                self.getOutput(0).value = {0.0}
+                self.getOutput(0).type = "float"
+                return False
