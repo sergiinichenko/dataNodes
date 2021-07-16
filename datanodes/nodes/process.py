@@ -342,7 +342,11 @@ class CleanNode(DataNode):
             return np.nan
 
     def isString(self, x):
-        return self.toFloat(x) is np.nan
+        try:
+            float(x)
+            return False
+        except:
+            return True
 
     def onlyNumerics(self, seq):
         return re.sub("[^\d\.]", "", seq)
@@ -381,7 +385,10 @@ class CleanNode(DataNode):
                     if self.content.strToNum.isChecked():
                         val = float(self.content.strToNumValue.text())
                         for name in self.filtered:
-                            sel = np.isnan(np.array(list(map(self.isString, self.filtered[name]))))
+                            sel = np.array(list(map(self.isString, self.filtered[name])))
+                            print()
+                            print(sel)
+                            print(val)
                             self.filtered[name][sel] = val
                             self.filtered[name] = np.array(list(map(self.toFloat, self.filtered[name])))
 

@@ -2,9 +2,9 @@
     "id": 139997531401808,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 827.9999999999997,
-    "view_y": -394.2857142857141,
-    "view_scale": 13.0,
+    "view_x": 656.25,
+    "view_y": -512.5,
+    "view_scale": 16.0,
     "nodes": [
         {
             "id": 139997531515296,
@@ -25,9 +25,9 @@
                 }
             ],
             "content": {
-                "id": 139761755770448,
+                "id": 1971084072136,
                 "content": "",
-                "file": "/home/nichenko_s/Work/Projects/SwissNuclear/2020-2021/ATHESC/Data/Sensitivity/RWC31a_Fe_05.csv"
+                "file": "C:/Users/nichenko_s/Documents/Work/Development/nodeeditor/water_chemistry.csv"
             },
             "op_code": 11,
             "op_title": "Input file"
@@ -51,7 +51,7 @@
             ],
             "outputs": [
                 {
-                    "id": 140197799988816,
+                    "id": 2397349484024,
                     "index": 0,
                     "position": 4,
                     "socket_type": 2,
@@ -61,273 +61,343 @@
                     "label": "DATA"
                 },
                 {
-                    "id": 140197684181216,
+                    "id": 2397349485144,
                     "index": 1,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 64.0,
-                    "label": "cF"
+                    "label": "Start"
                 },
                 {
-                    "id": 140197684179248,
+                    "id": 2397356213640,
                     "index": 2,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 88.0,
-                    "label": "pH"
+                    "label": "End"
                 },
                 {
-                    "id": 140197684182464,
+                    "id": 2397349149216,
                     "index": 3,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 112.0,
-                    "label": "pe"
+                    "label": "Fuel-\r\nCycle"
                 },
                 {
-                    "id": 140197684179680,
+                    "id": 2397349150392,
                     "index": 4,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 136.0,
-                    "label": "Hematite"
+                    "label": "Sample\r\nPoint"
                 },
                 {
-                    "id": 140197683987552,
+                    "id": 2397349148376,
                     "index": 5,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 160.0,
-                    "label": "ZnMnFeFerrite"
+                    "label": "Power"
                 },
                 {
-                    "id": 140197683987792,
+                    "id": 2397349605328,
                     "index": 6,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 184.0,
-                    "label": "Co3O4"
+                    "label": "Power.1"
                 },
                 {
-                    "id": 140197683989376,
+                    "id": 2397349604432,
                     "index": 7,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 208.0,
-                    "label": "MnSiO3"
+                    "label": "Temp. Recirc"
                 },
                 {
-                    "id": 140197683989472,
+                    "id": 2397349603592,
                     "index": 8,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 232.0,
-                    "label": "ZnO(s)"
+                    "label": "FW flow"
                 },
                 {
-                    "id": 140197683987600,
+                    "id": 2397349603088,
                     "index": 9,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 256.0,
-                    "label": "Zn2SiO4(s)"
+                    "label": "Recirc flow"
                 },
                 {
-                    "id": 140197683987216,
+                    "id": 2397349604096,
                     "index": 10,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 280.0,
-                    "label": "SiO2"
+                    "label": "RWCU A flow"
                 },
                 {
-                    "id": 140197683989184,
+                    "id": 2397349604936,
                     "index": 11,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 304.0,
-                    "label": "Mn2O3"
+                    "label": "RWCU B flow"
                 },
                 {
-                    "id": 140197683989328,
+                    "id": 2397356417656,
                     "index": 12,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 328.0,
-                    "label": "Zn(OH)2(s)"
+                    "label": "Cond\r\n\"CIS\""
                 },
                 {
-                    "id": 140197683987840,
+                    "id": 2397356417768,
                     "index": 13,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 352.0,
-                    "label": "FeChromite"
+                    "label": "Cond.\r\nRecirc"
                 },
                 {
-                    "id": 140197683989568,
+                    "id": 2397356417544,
                     "index": 14,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 376.0,
-                    "label": "Mn3O4"
+                    "label": "Cond.\r\nRWCU Inlet"
                 },
                 {
-                    "id": 140197683989664,
+                    "id": 2397356417320,
                     "index": 15,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 400.0,
-                    "label": "B"
+                    "label": "Cond.\r\nRWCU A"
                 },
                 {
-                    "id": 140197683989760,
+                    "id": 2397356420008,
                     "index": 16,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 424.0,
-                    "label": "Co"
+                    "label": "Cond.\r\nRWCU B"
                 },
                 {
-                    "id": 140197683989856,
+                    "id": 2397356417264,
                     "index": 17,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 448.0,
-                    "label": "Cr"
+                    "label": "H2-feedrate FW"
                 },
                 {
-                    "id": 140197683989952,
+                    "id": 2397349040872,
                     "index": 18,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 472.0,
-                    "label": "Cu"
+                    "label": "O_rw"
                 },
                 {
-                    "id": 140197683990048,
+                    "id": 2397349041712,
                     "index": 19,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 496.0,
-                    "label": "Fe"
+                    "label": "Fe_rw"
                 },
                 {
-                    "id": 140197683990144,
+                    "id": 2397349042272,
                     "index": 20,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 520.0,
-                    "label": "Mn"
+                    "label": "Cr_rw"
                 },
                 {
-                    "id": 140197683990240,
+                    "id": 2397349043224,
                     "index": 21,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 544.0,
-                    "label": "Na"
+                    "label": "Cu_rw"
                 },
                 {
-                    "id": 140197683990336,
+                    "id": 2397356408616,
                     "index": 22,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 568.0,
-                    "label": "Ni"
+                    "label": "Mn_rw"
                 },
                 {
-                    "id": 140197800678928,
+                    "id": 2397356407384,
                     "index": 23,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 592.0,
-                    "label": "Pt"
+                    "label": "Co_rw"
                 },
                 {
-                    "id": 140197800679552,
+                    "id": 2397356357728,
                     "index": 24,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 616.0,
-                    "label": "Si"
+                    "label": "Ni_rw"
                 },
                 {
-                    "id": 140197800678688,
+                    "id": 2397356357672,
                     "index": 25,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 640.0,
-                    "label": "Zn"
+                    "label": "Zn_rw"
                 },
                 {
-                    "id": 140197688068080,
+                    "id": 2397356357616,
                     "index": 26,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
                     "x": 161.0,
                     "y": 664.0,
-                    "label": "log(fH2)"
+                    "label": "SiO2_rw"
+                },
+                {
+                    "id": 2397356357560,
+                    "index": 27,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 688.0,
+                    "label": "H3B03_rw"
+                },
+                {
+                    "id": 2397356357504,
+                    "index": 28,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 712.0,
+                    "label": "Pt_rw"
+                },
+                {
+                    "id": 2397356357448,
+                    "index": 29,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 736.0,
+                    "label": "Na_rw"
+                },
+                {
+                    "id": 2397356357392,
+                    "index": 30,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 760.0,
+                    "label": "Fe_fw"
+                },
+                {
+                    "id": 2397356357336,
+                    "index": 31,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 784.0,
+                    "label": "Co_fw"
+                },
+                {
+                    "id": 2397356356944,
+                    "index": 32,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 808.0,
+                    "label": "Zn_fw"
+                },
+                {
+                    "id": 2397356357280,
+                    "index": 33,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 832.0,
+                    "label": "Mn_fw"
                 }
             ],
             "content": {
-                "id": 139761755705696,
+                "id": 1971146365976,
                 "content": "",
                 "width": 160.0,
-                "height": 696.0,
-                "content-widht": 140,
-                "content-height": 652
+                "height": 864.0,
+                "content-widht": 150,
+                "content-height": 830
             },
             "op_code": 40,
             "op_title": "Data Separate"
@@ -335,8 +405,8 @@
         {
             "id": 139945269683872,
             "title": "Data Clean",
-            "pos_x": 250.5236211566562,
-            "pos_y": -740.7629384151144,
+            "pos_x": 240.40798681154877,
+            "pos_y": -822.6995766104853,
             "inputs": [
                 {
                     "id": 139945269683680,
@@ -345,7 +415,7 @@
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
-                    "y": 108.0,
+                    "y": 128.0,
                     "label": null
                 }
             ],
@@ -357,17 +427,23 @@
                     "socket_type": 1,
                     "inout": 2,
                     "x": 201.0,
-                    "y": 108.0,
+                    "y": 128.0,
                     "label": null
                 }
             ],
             "content": {
-                "id": 139761734687184,
+                "id": 1971146521624,
                 "content": "",
-                "dropNAN": false,
-                "dropINF": false,
                 "dropSTR": false,
-                "removeSTR": true
+                "removeSTR": false,
+                "strToNum": true,
+                "strToNumValue": "20",
+                "infToNum": false,
+                "infToNumValue": "0.0",
+                "dropINF": false,
+                "nanToNum": false,
+                "nanToNumValue": "0",
+                "dropNAN": false
             },
             "op_code": 42,
             "op_title": "Data Clean"
@@ -391,7 +467,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 139761754371552,
+                "id": 1971174295304,
                 "content": "",
                 "width": 1041.088192668372,
                 "height": 836.3119056987342,
@@ -408,113 +484,63 @@
             "pos_y": -738.462082770726,
             "inputs": [
                 {
-                    "id": 139761606425136,
+                    "id": 2397348629360,
                     "index": 0,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 40.0,
-                    "label": "SiO2"
+                    "label": "O_rw"
                 },
                 {
-                    "id": 139761605713296,
+                    "id": 2397356420792,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "MnSiO3"
+                    "label": "Fe_rw"
                 },
                 {
-                    "id": 139761606019584,
+                    "id": 2397349189112,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 88.0,
-                    "label": "Zn2SiO4(s)"
+                    "label": "Mn_rw"
                 },
                 {
-                    "id": 139761731383984,
+                    "id": 2397348724128,
                     "index": 3,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 112.0,
-                    "label": "Mn2O3"
+                    "label": "Co_rw"
                 },
                 {
-                    "id": 139761606496560,
+                    "id": 2397349750040,
                     "index": 4,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 136.0,
-                    "label": "Zn(OH)2(s)"
+                    "label": "Ni_rw"
                 },
                 {
-                    "id": 139761606019632,
+                    "id": 1971063601584,
                     "index": 5,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 160.0,
-                    "label": "FeChromite"
-                },
-                {
-                    "id": 139761731098608,
-                    "index": 6,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 184.0,
-                    "label": "ZnMnFeFerrite"
-                },
-                {
-                    "id": 139761731386192,
-                    "index": 7,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 208.0,
-                    "label": "Hematite"
-                },
-                {
-                    "id": 139761755285824,
-                    "index": 8,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 232.0,
-                    "label": "Co3O4"
-                },
-                {
-                    "id": 139761755285104,
-                    "index": 9,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 256.0,
-                    "label": "Mn3O4"
-                },
-                {
-                    "id": 139761731413952,
-                    "index": 10,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 280.0,
                     "label": null
                 }
             ],
@@ -531,12 +557,12 @@
                 }
             ],
             "content": {
-                "id": 139761606050288,
+                "id": 1971174296456,
                 "content": "",
                 "width": 160.0,
-                "height": 300.0,
+                "height": 180.0,
                 "content-widht": 150,
-                "content-height": 266
+                "content-height": 146
             },
             "op_code": 41,
             "op_title": "Data Combine"
@@ -565,10 +591,10 @@
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "SiO2..."
+                    "label": "O_rw..."
                 },
                 {
-                    "id": 139761731804848,
+                    "id": 1971175720272,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
@@ -591,7 +617,7 @@
                 }
             ],
             "content": {
-                "id": 139761755707136,
+                "id": 1971175183128,
                 "content": "",
                 "width": 160.0,
                 "height": 108.0,
@@ -651,11 +677,11 @@
                 }
             ],
             "content": {
-                "id": 139761735955936,
+                "id": 1971175184568,
                 "content": "",
                 "name": "res",
                 "start": "0",
-                "number": "601",
+                "number": "591",
                 "stop": "1"
             },
             "op_code": 71,
@@ -676,48 +702,6 @@
             "end": 139945269683680
         },
         {
-            "id": 139761605712432,
-            "edge_type": 2,
-            "start": 140197683987216,
-            "end": 139761606425136
-        },
-        {
-            "id": 139761605713008,
-            "edge_type": 2,
-            "start": 140197683989376,
-            "end": 139761605713296
-        },
-        {
-            "id": 139761606018192,
-            "edge_type": 2,
-            "start": 140197683987600,
-            "end": 139761606019584
-        },
-        {
-            "id": 139761731383648,
-            "edge_type": 2,
-            "start": 140197683989184,
-            "end": 139761731383984
-        },
-        {
-            "id": 139761605382928,
-            "edge_type": 2,
-            "start": 140197683989328,
-            "end": 139761606496560
-        },
-        {
-            "id": 139761605713776,
-            "edge_type": 2,
-            "start": 140197683987840,
-            "end": 139761606019632
-        },
-        {
-            "id": 139761605582272,
-            "edge_type": 2,
-            "start": 140197683987840,
-            "end": 139761606018672
-        },
-        {
             "id": 139761606019920,
             "edge_type": 2,
             "start": 139761607119488,
@@ -736,28 +720,40 @@
             "end": 139761607279088
         },
         {
-            "id": 139761731385184,
+            "id": 2397356420680,
             "edge_type": 2,
-            "start": 140197683987552,
-            "end": 139761731098608
+            "start": 2397349040872,
+            "end": 2397348629360
         },
         {
-            "id": 139761755285776,
+            "id": 2397356214648,
             "edge_type": 2,
-            "start": 140197684179680,
-            "end": 139761731386192
+            "start": 2397349041712,
+            "end": 2397356420792
         },
         {
-            "id": 139761731414288,
+            "id": 2397349357664,
             "edge_type": 2,
-            "start": 140197683987792,
-            "end": 139761755285824
+            "start": 2397356408616,
+            "end": 2397349189112
         },
         {
-            "id": 139761731947536,
+            "id": 2397349566000,
             "edge_type": 2,
-            "start": 140197683989568,
-            "end": 139761755285104
+            "start": 2397356407384,
+            "end": 139761606018672
+        },
+        {
+            "id": 2397349566112,
+            "edge_type": 2,
+            "start": 2397356407384,
+            "end": 2397348724128
+        },
+        {
+            "id": 2397349011128,
+            "edge_type": 2,
+            "start": 2397356357728,
+            "end": 2397349750040
         }
     ]
 }
