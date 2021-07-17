@@ -97,6 +97,9 @@ class DataNode(Node):
     def evalImplementation(self):
         return 123
 
+    def recalculateNode(self):
+        self.setDirty()
+        self.eval()
 
     def eval(self):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:

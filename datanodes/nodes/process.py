@@ -3,15 +3,16 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import re
-
+import copy
 class SeparateDFGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
         self.height = 200.0
 
-class SeparateDFContent(NodeContentWidget):
+class SeparateDFContent(DataContent):
     def initUI(self):
+        super().initUI()
         self.operation = "To Float"
         layout = QHBoxLayout()
         self.setLayout(layout)
@@ -19,9 +20,9 @@ class SeparateDFContent(NodeContentWidget):
 
     def serialize(self):
         res = super().serialize()
-        res['width'] = self.node.grNode.width
-        res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
+        res['width']          = self.node.grNode.width
+        res['height']         = self.node.grNode.height
+        res['content-widht']  = self.size().width()
         res['content-height'] = self.size().height()
         return res
 
@@ -55,7 +56,7 @@ class SeparateDFNode(DataNode):
     def initInnerClasses(self):
         self.content = SeparateDFContent(self)
         self.grNode  = SeparateDFGraphicsNode(self)
-
+        self.content.changed.connect(self.recalculateNode)
 
     def generateSockets(self, data, names=None):
         self.clearOutputs()        
@@ -76,6 +77,14 @@ class SeparateDFNode(DataNode):
         self.content.resize(x, y)
 
 
+    def setSocketsNames(self):
+        if len(self.value) == 0: 
+            return None
+
+        for socket, name in zip(self.getOutputs(), self.value):
+            socket.label = name
+
+
     def evalImplementation(self):
         input_edge = self.getInput(0)
 
@@ -92,7 +101,6 @@ class SeparateDFNode(DataNode):
             self.value = input_edge.value
             self.type  = input_edge.type
             if DEBUG : print("PRCNODE_SEP: get input value and type")
-
             if isinstance(self.value, dict):
                 if DEBUG : print("PRCNODE_SEP: input is df")
 
@@ -101,6 +109,7 @@ class SeparateDFNode(DataNode):
                     self.generateSockets(self.value, list(self.value.keys()))
                     if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
 
+                self.setSocketsNames()
                 self.getOutput(0).value = self.value
                 self.getOutput(0).type  = "df"
                 for name, socket in zip(self.value, self.getOutputs()[1:]):
@@ -127,7 +136,6 @@ class CombineGraphicsNode(ResizableInputGraphicsNode):
 class CombineContent(ResizableInputContent):
     def serialize(self):
         res = super().serialize()
-        res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
         res['content-widht'] = self.size().width()
         res['content-height'] = self.size().height()
@@ -137,7 +145,6 @@ class CombineContent(ResizableInputContent):
         res = super().deserialize(data, hashmap)
         try:
             self.node.grNode.height = data['height']
-            self.node.grNode.width  = data['width']
             self.resize(data['content-widht'], data['content-height'])
             return True & res
         except Exception as e: 
@@ -213,6 +220,164 @@ class CombineNode(ResizableInputNode):
 
 
 
+class RenameGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 200.0
+        self.height = 100.0
+        self.min_height = 100.0
+
+class RenameContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.labels_in = {}
+        self.labels_out = {}
+        self.mainlayout = QGridLayout()
+        self.mainlayout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.mainlayout)
+
+    def appendPair(self, namein, nameout, onchangemethod=None):
+        i = len(self.labels_in)
+        self.labels_in[namein]  = QLabel(namein, self)
+        self.labels_out[namein] = QLineEdit(nameout, self)
+        self.labels_in[namein].setAlignment(Qt.AlignRight)
+        self.labels_out[namein].setAlignment(Qt.AlignLeft)
+        self.mainlayout.addWidget(self.labels_in[namein], i, 0)
+        self.mainlayout.addWidget(self.labels_out[namein], i, 1)
+        self.labels_out[namein].textChanged.connect(self.node.recalculateNode)
+
+    def resize(self, x, y):
+        super().resize(x, y)
+        self.setFixedSize(x, y)
+
+    def clearContent(self):
+        while self.mainlayout.count():
+            child = self.mainlayout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+        self.labels_in.clear()
+        self.labels_out.clear()
+        """
+        self.mainlayout.setParent(None)
+        self.mainlayout = QGridLayout()
+        self.mainlayout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.mainlayout)
+        """
+
+    def removePair(self, key):
+        self.mainlayout.removeWidget(self.labels_in[key])
+        self.mainlayout.removeWidget(self.labels_out[key])
+        self.labels_in.deleteLater()
+        self.labels_out.deleteLater()
+        self.labels_in  = None
+        self.labels_out = None
+
+    def serialize(self):
+        res = super().serialize()
+        res['map']            = self.node.map
+        res['width']          = self.node.grNode.width
+        res['height']         = self.node.grNode.height
+        res['content-widht']  = self.size().width()
+        res['content-height'] = self.size().height()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.node.map           = data['map']
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.resize(data['content-widht'], data['content-height'])
+            for name in self.node.map:
+                self.appendPair(name, self.node.map[name])
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+
+@register_node(OP_MODE_DATA_RENAME)
+class RenameNode(DataNode):
+    icon = "icons/math.png"
+    op_code = OP_MODE_DATA_RENAME
+    op_title = "Data Rename"
+
+    def __init__(self, scene, inputs=[1], outputs=[1]):
+        super().__init__(scene, inputs=inputs, outputs=outputs)
+        self.value = {}
+        self.map   = {}
+        self.out   = {}
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+
+    def initInnerClasses(self):
+        self.content = RenameContent(self)
+        self.grNode  = RenameGraphicsNode(self)
+        self.content.changed.connect(self.recalculateNode)
+
+    def resize(self):
+        if not self.getInput(0):
+            current_size = self.grNode.min_height + 1
+        else:
+            size = len(self.getInput(0).value)
+            current_size = size * 30.0 + self.socket_bottom_margin + self.socket_top_margin
+
+        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
+
+        if current_size >= self.grNode.min_height:
+            self.grNode.height = current_size
+            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
+            self.content.resize(x, y)
+            self.grNode.update()
+        
+    def evalImplementation(self):
+        input_edge = self.getInput(0)
+        if not input_edge:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            self.content.clearContent()
+            self.resize()
+            return False
+        else:
+            try:
+                self.value = self.getInput(0).value
+                self.out   = {}
+
+                for name in self.value:
+                    if name not in self.map:
+                        self.map[name] = name
+                        self.content.appendPair(name, name)
+                        self.resize()
+                
+                for name in self.map:
+                    if name not in self.content.labels_in:
+                        self.content.appendPair(name, name)
+                    self.map[name] = self.content.labels_out[name].text()
+
+                for name in self.map:
+                    self.out[self.map[name]] = self.value[name]
+                    
+                self.getOutput(0).value = self.out
+                self.getOutput(0).type = "df"
+                return True
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                self.getOutput(0).value = {}
+                self.getOutput(0).type = "float"
+                return False
+
+
+
+
+
+
+
+
 
 class CleanGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -222,6 +387,7 @@ class CleanGraphicsNode(DataGraphicsNode):
 
 class CleanContent(DataContent):
     def initUI(self):
+        super().initUI()
         self.mainlayout = QGridLayout()
         self.mainlayout.setContentsMargins(0,0,0,0)
         self.setLayout(self.mainlayout)
@@ -371,7 +537,7 @@ class CleanNode(DataNode):
             try:
                 self.e = ""
                 if isinstance(self.value, dict):
-                    self.filtered = self.value.copy()
+                    self.filtered = copy.deepcopy(self.value)
 
                     if self.content.dropSTR.isChecked():
                         for name in self.filtered:
@@ -386,9 +552,6 @@ class CleanNode(DataNode):
                         val = float(self.content.strToNumValue.text())
                         for name in self.filtered:
                             sel = np.array(list(map(self.isString, self.filtered[name])))
-                            print()
-                            print(sel)
-                            print(val)
                             self.filtered[name][sel] = val
                             self.filtered[name] = np.array(list(map(self.toFloat, self.filtered[name])))
 
@@ -421,7 +584,7 @@ class CleanNode(DataNode):
 
 
                 elif isinstance(self.value, pd.DataFrame):
-                    self.filtered = self.value.copy()
+                    self.filtered = copy.deepcopy(self.value)
 
                     if self.content.dropINF.isChecked():
                         self.filtered.replace([np.inf, -np.inf], np.nan, inplace=True)
