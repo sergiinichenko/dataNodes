@@ -84,7 +84,7 @@ class Socket(Serializer):
         if self.hasEdge(edge):
             self.edges.remove(edge)
         else:
-            print("!W:", "Socket::disconnectEdge", "Edge is not in the list")
+            pass
 
     def clearEdges(self, silent=True):
         while self.edges:

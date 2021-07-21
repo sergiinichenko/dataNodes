@@ -58,7 +58,7 @@ class ValueInputContent(DataContent):
 class ValueInputNode(DataNode):
     icon = "icons/valinput.png"
     op_code = OP_MODE_VALINPUT
-    op_title = "Input value"
+    op_title = "Value"
 
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
@@ -71,8 +71,8 @@ class ValueInputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
-        self.content.value.textChanged.connect(self.onInputChanged)
-        self.content.label.textChanged.connect(self.onInputChanged)
+        self.content.value.returnPressed.connect(self.onInputChanged)
+        self.content.label.returnPressed.connect(self.onInputChanged)
     
     def evalImplementation(self):
         try:
@@ -86,5 +86,5 @@ class ValueInputNode(DataNode):
         except Exception as e: 
             dumpException (e)
             self.e = e
-            
+            self.setInvalid()
             return False

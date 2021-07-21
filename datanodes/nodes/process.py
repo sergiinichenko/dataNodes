@@ -4,13 +4,13 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import re
 import copy
-class SeparateDFGraphicsNode(DataGraphicsNode):
+class SeparateGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
         self.height = 200.0
 
-class SeparateDFContent(DataContent):
+class SeparateContent(DataContent):
     def initUI(self):
         super().initUI()
         self.operation = "To Float"
@@ -26,7 +26,6 @@ class SeparateDFContent(DataContent):
         res['content-height'] = self.size().height()
         return res
 
-
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
@@ -39,10 +38,10 @@ class SeparateDFContent(DataContent):
 
 
 @register_node(OP_MODE_DATA_SEP)
-class SeparateDFNode(DataNode):
+class SeparateNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_SEP
-    op_title = "Data Separate"
+    op_title = "Separate"
 
     def __init__(self, scene, inputs=[1], outputs=[1]):
         super().__init__(scene, inputs, outputs)
@@ -54,14 +53,13 @@ class SeparateDFNode(DataNode):
 
 
     def initInnerClasses(self):
-        self.content = SeparateDFContent(self)
-        self.grNode  = SeparateDFGraphicsNode(self)
-        self.content.changed.connect(self.recalculateNode)
+        self.content = SeparateContent(self)
+        self.grNode  = SeparateGraphicsNode(self)
 
     def generateSockets(self, data, names=None):
         self.clearOutputs()        
         outputs = [SOCKET_DATA_TEXT for l in range(len(data)+1)]
-        dnames = ['DATA']
+        dnames  = ['DATA']
         if names is not None: dnames.extend(names)
         self.createOutputs(outputs, dnames)
         self.grNode.height = (len(data)+1) * self.socket_spacing + 2.0 * self.socket_spacing
@@ -81,7 +79,9 @@ class SeparateDFNode(DataNode):
         if len(self.value) == 0: 
             return None
 
-        for socket, name in zip(self.getOutputs(), self.value):
+        dnames  = ['DATA']
+        dnames.extend(self.value)
+        for socket, name in zip(self.getOutputs(), dnames):
             socket.label = name
 
 
@@ -91,6 +91,7 @@ class SeparateDFNode(DataNode):
         if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
+            self.clearOutputs()        
             return False
 
         else:
@@ -104,12 +105,13 @@ class SeparateDFNode(DataNode):
             if isinstance(self.value, dict):
                 if DEBUG : print("PRCNODE_SEP: input is df")
 
-                if len(self.getOutputs()) != (len(self.value)+1):
+                if len(self.outputs) != (len(self.value)+1):
                     if DEBUG : print("PRCNODE_SEP: generate new sockets")
                     self.generateSockets(self.value, list(self.value.keys()))
                     if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
+                else:
+                    self.setSocketsNames()
 
-                self.setSocketsNames()
                 self.getOutput(0).value = self.value
                 self.getOutput(0).type  = "df"
                 for name, socket in zip(self.value, self.getOutputs()[1:]):
@@ -156,7 +158,7 @@ class CombineContent(ResizableInputContent):
 class CombineNode(ResizableInputNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_COMBXY
-    op_title = "Data Combine"
+    op_title = "Combine"
 
     def __init__(self, scene, inputs=[1], outputs=[1]):
         super().__init__(scene, inputs, outputs)
@@ -300,7 +302,7 @@ class RenameContent(DataContent):
 class RenameNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_RENAME
-    op_title = "Data Rename"
+    op_title = "Rename"
 
     def __init__(self, scene, inputs=[1], outputs=[1]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
@@ -479,7 +481,7 @@ class CleanContent(DataContent):
 class CleanNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_CLEAN
-    op_title = "Data Clean"
+    op_title = "Clean"
 
     def __init__(self, scene, inputs=[1], outputs=[1]):
         super().__init__(scene, inputs, outputs)

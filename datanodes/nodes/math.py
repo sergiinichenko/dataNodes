@@ -4,30 +4,53 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import numpy as np
 from math import *
+import copy
 
 class MathGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 180.0
-        self.height = 160.0
+        self.width  = 160.0
+        self.height = 90.0
+        self.setZValue(5)
 
 class MathContent(DataContent):
 
     def initUI(self):
         super().initUI()
         self.operation = "Add"
-        self.layout = QVBoxLayout()
+
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
+        self.label_name = QLabel("", self)        
+        self.label_name.setAlignment(Qt.AlignRight)
+        self.label = QLineEdit("res", self)
+        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setFixedWidth(60)
+        self.layout.addWidget(self.label_name, 0, 0)
+        self.layout.addWidget(self.label, 0, 1)
+
         self.cb = QComboBox()
         self.cb.addItem("Add")
         self.cb.addItem("Substract")
         self.cb.addItem("Multiply")
         self.cb.addItem("Divide")
         self.cb.addItem("Power")
+        self.cb.insertSeparator(5)
+        self.cb.addItem("Distance")
+        self.cb.addItem("Sum")
+        self.cb.addItem("Absolute")
+        self.cb.addItem("Normalize")
+        self.cb.insertSeparator(10)
+        self.cb.addItem("Cut up")
+        self.cb.addItem("Cut down")
+        self.cb.insertSeparator(13)
+        self.cb.addItem("Differentiate")
+        self.cb.addItem("Integrate")
 
-        self.label = QLineEdit("res", self)
-        self.label.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label)
-        self.layout.addWidget(self.cb)
+        self.layout.addWidget(self.cb, 1, 0, 1, 2)
         self.setLayout(self.layout)
         self.setWindowTitle("Math node")
         self.cb.currentIndexChanged.connect(self.selectionchange)
@@ -39,13 +62,14 @@ class MathContent(DataContent):
     def serialize(self):
         res = super().serialize()
         res['sel_ind'] = self.cb.currentIndex()
+        res['label']   = self.label.text()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['sel_ind']
-            self.cb.setCurrentIndex(value)
+            self.cb.setCurrentIndex(data['sel_ind'])
+            self.label.setText(data['label'])
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -63,71 +87,155 @@ class MathNode(DataNode):
     def initInnerClasses(self):
         self.content = MathContent(self)
         self.grNode  = MathGraphicsNode(self)
-        self.content.changed.connect(self.reEvaluate)
-        self.content.label.returnPressed.connect(self.onReturnPressed)
-
-    def onReturnPressed(self):
-        self.recalculate = True
-        self.eval()
+        self.content.changed.connect(self.recalculateNode)
+        self.content.label.textChanged.connect(self.recalculateNode)
 
     def evalImplementation(self):
-        input_edges = self.getInputs()
-        if not input_edges:
+        input_values = self.getInputs()
+        if not input_values:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             return False
         else:      
-            if len(input_edges) == 2:      
-                self.setDirty(False)
-                self.setInvalid(False)
-                self.e = ""
-                name = self.content.label.text()
-                values = [input_edges[0].copy(), input_edges[1].copy()]
-                if self.content.operation == "Add"      : self.getOutput(0).value = {name : self.add(values)}
-                if self.content.operation == "Substract": self.getOutput(0).value = {name : self.substract(values)}
-                if self.content.operation == "Multiply" : self.getOutput(0).value = {name : self.multiply(values)}
-                if self.content.operation == "Divide"   : self.getOutput(0).value = {name : self.devide(values)}
-                if self.content.operation == "Power"    : self.getOutput(0).value = {name : self.power(values)}
-                self.getOutput(0).type = "df"
-                return True
+            if len(input_values) == 2:      
+                try:
+                    self.setDirty(False)
+                    self.setInvalid(False)
+                    self.e = ""
+                    label  = self.content.label.text()
+                    values = [copy.deepcopy(input_values[0].value), 
+                            copy.deepcopy(input_values[1].value)]
+                    res = {}
+                    if self.content.operation == "Add"           : res = self.add(values)
+                    if self.content.operation == "Substract"     : res = self.substract(values)
+                    if self.content.operation == "Multiply"      : res = self.multiply(values)
+                    if self.content.operation == "Divide"        : res = self.devide(values)
+                    if self.content.operation == "Power"         : res = self.power(values)
+                    if self.content.operation == "Distance"      : res = self.distance(values)
+                    if self.content.operation == "Sum"           : res = self.sum(values)
+                    if self.content.operation == "Absolute"      : res = self.absolute(values)
+                    if self.content.operation == "Normalize"     : res = self.normilize(values)
+                    if self.content.operation == "Cut up"        : res = self.cutUp(values)
+                    if self.content.operation == "Cut down"      : res = self.cutDown(values)
+                    if self.content.operation == "Differentiate" : res = self.differentiate(values)
+                    if self.content.operation == "Integrate"     : res = self.integrate(values)
+
+                    if len(res) > 1:
+                        self.getOutput(0).value = res
+                    else:
+                        self.getOutput(0).value = {label : res[list(res.keys())[0]]}
+                    self.getOutput(0).type  = "df"
+                    return True
+                except Exception as e:
+                    self.setInvalid()
+                    self.e = e
+                    self.getOutput(0).value = {"x" : 0.0}
+                    self.getOutput(0).type = "df"
+                    return False
             else:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = "Not all input nodes are connected"
-                name = self.content.label.text()
-                self.getOutput(0).value = {name : 0.0}
+                self.getOutput(0).value = {"x" : 0.0}
                 self.getOutput(0).type = "df"
                 return False
 
-    def drop_nan(self, input):
-        if isinstance(input.value, pd.DataFrame):
-            return input.value.replace(np.nan, 0)
-        if isinstance(input.value, pd.Series):
-            return input.value.replace(np.nan, 0)
-        if isinstance(input.value, (np.ndarray, np.generic)):
-            val = input.value[np.isnan(input.value)] = 0.0
-            return val 
-        if isinstance(input.value, dict):
-            name = list(input.value.keys())[0]
-            input.value[name] = np.nan_to_num(input.value[name])
-            return input.value[name]
-        if isinstance(input.value, float) or isinstance(input.value, int):
-            return input.value
+    def drop_nan(self, input_value):
+        
+        if isinstance(input_value, pd.DataFrame):
+            return input_value.replace(np.nan, 0)
 
-    def add(self, input_edges):
-        return self.drop_nan(input_edges[0]) + self.drop_nan(input_edges[1])
+        if isinstance(input_value, pd.Series):
+            return input_value.replace(np.nan, 0)
 
-    def substract(self, input_edges):
-        return self.drop_nan(input_edges[0]) - self.drop_nan(input_edges[1])
+        if isinstance(input_value, (np.ndarray, np.generic)):
+            input_value[np.isnan(input_value)] = 0.0
+            return input_value
 
-    def multiply(self, input_edges):
-        return self.drop_nan(input_edges[0]) * self.drop_nan(input_edges[1])
+        if isinstance(input_value, dict):
+            for name in input_value:
+                name = list(input_value.keys())[0]
+                input_value[name] = np.nan_to_num(input_value[name])
+            return input_value
 
-    def devide(self, input_edges):
-        return self.drop_nan(input_edges[0]) / self.drop_nan(input_edges[1])
+        if isinstance(input_value, float) or isinstance(input_value, int):
+            return input_value
 
-    def power(self, input_edges):
-        return pow(self.drop_nan(input_edges[0]), self.drop_nan(input_edges[1]))
+    def add(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = self.drop_nan(input_values[0][i]) + self.drop_nan(input_values[1][j])
+        return res
+
+    def substract(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = self.drop_nan(input_values[0][i]) - self.drop_nan(input_values[1][j])
+        return res
+
+    def multiply(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = self.drop_nan(input_values[0][i]) * self.drop_nan(input_values[1][j])
+        return res
+
+    def devide(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = self.drop_nan(input_values[0][i]) / self.drop_nan(input_values[1][j])
+        return res
+
+    def power(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = np.power(self.drop_nan(input_values[0][i]), self.drop_nan(input_values[1][j]))
+        return res
+
+    def distance(self, input_values):
+        pass
+
+    def sum(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = np.sum(self.drop_nan(input_values[0][i])) + np.sum(self.drop_nan(input_values[1][j]))
+        return res
+
+    def absolute(self, input_values):
+        res = {}
+        for i in input_values[0]:
+            res[i] = np.abs(self.drop_nan(input_values[0][i]))
+        for j in input_values[1]:
+            res[j] = np.abs(self.drop_nan(input_values[1][j]))
+        return res
+
+    def normilize(self, input_values):
+        res = {}
+        for i in input_values[0]:
+            res[i] = self.drop_nan(input_values[0][i]) / np.sum(self.drop_nan(input_values[0][i]))
+        for j in input_values[1]:
+            res[j] = self.drop_nan(input_values[1][j]) / np.sum(self.drop_nan(input_values[1][j]))
+        return res
+
+
+    def cutUp(self, input_values):
+        pass
+
+    def cutDown(self, input_values):
+        pass
+
+
+    def differentiate(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = np.gradient(self.drop_nan(input_values[1][j]), self.drop_nan(input_values[0][i]))
+        return res
+
+    def integrate(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            res[i] = np.trapz(y=self.drop_nan(input_values[1][j]), x=self.drop_nan(input_values[0][i]))
+        return res
+
 
 
 
@@ -147,6 +255,7 @@ class ExpressionGraphicsNode(ResizableInputGraphicsNode):
 
 class ExpressionContent(ResizableInputContent):
     def initUI(self):
+        super().initUI()
         self.mainlayout = QVBoxLayout()
         self.mainlayout.setContentsMargins(40,0,0,0)
 
@@ -207,13 +316,9 @@ class ExpressionNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = ExpressionContent(self)
         self.grNode  = ExpressionGraphicsNode(self)
-        self.content.edit.returnPressed.connect(self.recalculate)
-        self.content.label.returnPressed.connect(self.recalculate)
-        self.content.changed.connect(self.recalculate)
-    
-    def recalculate(self):
-        self.setDirty()
-        self.eval()
+        self.content.edit.returnPressed.connect(self.recalculateNode)
+        self.content.label.returnPressed.connect(self.recalculateNode)
+        self.content.changed.connect(self.updateSockets)
 
     def evalImplementation(self):
         inputs = self.getInputs()
@@ -222,9 +327,6 @@ class ExpressionNode(ResizableInputNode):
             self.e = "Does not have and intry Node"
             return False
         else:
-            self.sortSockets()
-            self.getSocketsNames()
-            self.generateNewSocket()
             try:
                 label = self.content.label.text()
                 expression = self.content.edit.text()

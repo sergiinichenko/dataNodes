@@ -67,7 +67,7 @@ class EdgeIntersect:
 
         # The new edges will have the same edge_type as the intersected edge
         edge_type = edge.edge_type
-        edge.remove()
+        edge.remove(silent=True)
         self.grView.grScene.scene.history.storeHistory('Delete existing edge', setModified=True)
 
         new_node_socket_in = node.inputs[0]
@@ -76,7 +76,7 @@ class EdgeIntersect:
         Edge(self.grScene.scene, new_node_socket_out, socket_end, edge_type=edge_type)
 
         self.grView.grScene.scene.history.storeHistory('Created new edges by dropping node', setModified=True)
-
+        node.update()
 
     def hotZoneRect(self, node: 'Node') -> 'QRectF':
         """

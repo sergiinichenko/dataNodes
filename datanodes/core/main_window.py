@@ -176,6 +176,7 @@ class MainWindow(NodeWindow):
         self.nodesDock = QDockWidget("Nodes")
         self.nodesDock.setWidget(self.nodesListWidget)
         self.nodesDock.setFloating(False)
+        self.nodesDock.hide()
         
         self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
 

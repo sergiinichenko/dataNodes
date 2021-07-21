@@ -61,7 +61,7 @@ class GraphicsOutputContent(DataContent):
 class GraphicsOutputNode(DataNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_GRAPHOUTPUT
-    op_title = "Output plot"
+    op_title = "Plot"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)

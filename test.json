@@ -2,9 +2,9 @@
     "id": 140550685954400,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 550.2399302021231,
-    "view_y": 72.12447288061657,
-    "view_scale": 15.0,
+    "view_x": 1066.8166666666664,
+    "view_y": 141.06666666666663,
+    "view_scale": 13.0,
     "nodes": [
         {
             "id": 140550146360896,
@@ -25,12 +25,12 @@
                 }
             ],
             "content": {
-                "id": 139924874757744,
+                "id": 140346645456640,
                 "content": "",
                 "file": "/home/nichenko_s/Development/datanodes/water_chemistry.csv"
             },
-            "op_code": 11,
-            "op_title": "Input file"
+            "op_code": 101,
+            "op_title": "File"
         },
         {
             "id": 140550686025952,
@@ -392,15 +392,15 @@
                 }
             ],
             "content": {
-                "id": 139924810762416,
+                "id": 140346582215120,
                 "content": "",
                 "width": 160.0,
                 "height": 864.0,
                 "content-widht": 150,
                 "content-height": 830
             },
-            "op_code": 40,
-            "op_title": "Data Separate"
+            "op_code": 400,
+            "op_title": "Separate"
         },
         {
             "id": 140550146294208,
@@ -489,7 +489,7 @@
                     "label": "Pt_rw"
                 },
                 {
-                    "id": 139924400295360,
+                    "id": 140346069115136,
                     "index": 8,
                     "position": 1,
                     "socket_type": 1,
@@ -512,15 +512,15 @@
                 }
             ],
             "content": {
-                "id": 139924401012944,
+                "id": 140346176737776,
                 "content": "",
                 "width": 160.0,
                 "height": 252.0,
                 "content-widht": 150,
                 "content-height": 218
             },
-            "op_code": 41,
-            "op_title": "Data Combine"
+            "op_code": 401,
+            "op_title": "Combine"
         },
         {
             "id": 140550145574608,
@@ -552,7 +552,7 @@
                 }
             ],
             "content": {
-                "id": 139924401015248,
+                "id": 140346176740080,
                 "content": "",
                 "dropSTR": false,
                 "removeSTR": false,
@@ -565,8 +565,8 @@
                 "nanToNumValue": "0.0",
                 "dropNAN": false
             },
-            "op_code": 42,
-            "op_title": "Data Clean"
+            "op_code": 402,
+            "op_title": "Clean"
         },
         {
             "id": 140550145573792,
@@ -587,15 +587,15 @@
             ],
             "outputs": [],
             "content": {
-                "id": 139924400878784,
+                "id": 140346070107616,
                 "content": "",
                 "width": 645.1724999999999,
                 "height": 532.76,
                 "content-widht": 635,
                 "content-height": 498
             },
-            "op_code": 23,
-            "op_title": "Output plot"
+            "op_code": 203,
+            "op_title": "Plot"
         },
         {
             "id": 140550143909072,
@@ -634,7 +634,7 @@
                     "label": "res"
                 },
                 {
-                    "id": 139924291768576,
+                    "id": 140346069618800,
                     "index": 3,
                     "position": 1,
                     "socket_type": 1,
@@ -657,15 +657,15 @@
                 }
             ],
             "content": {
-                "id": 139924400385040,
+                "id": 140346069638448,
                 "content": "",
                 "width": 160.0,
                 "height": 132.0,
                 "content-widht": 150,
                 "content-height": 98
             },
-            "op_code": 41,
-            "op_title": "Data Combine"
+            "op_code": 401,
+            "op_title": "Combine"
         },
         {
             "id": 140550143909120,
@@ -717,15 +717,15 @@
                 }
             ],
             "content": {
-                "id": 139924400194176,
+                "id": 140346069451680,
                 "content": "",
                 "name": "x",
                 "start": "0",
                 "number": "591",
                 "stop": "1"
             },
-            "op_code": 71,
-            "op_title": "Array Number"
+            "op_code": 111,
+            "op_title": "By Size"
         },
         {
             "id": 139718845857744,
@@ -767,7 +767,7 @@
                 }
             ],
             "content": {
-                "id": 139924400197200,
+                "id": 140346069454704,
                 "content": "",
                 "width": 260.0,
                 "height": 100.0,
@@ -776,7 +776,7 @@
                 "value": "x**0.5+y+z+b*2",
                 "label": "res"
             },
-            "op_code": 31,
+            "op_code": 301,
             "op_title": "Expression"
         },
         {
@@ -796,7 +796,7 @@
                     "label": "x"
                 },
                 {
-                    "id": 139924398882288,
+                    "id": 140346068154256,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
@@ -819,15 +819,15 @@
                 }
             ],
             "content": {
-                "id": 139924400268624,
+                "id": 140346069489696,
                 "content": "",
                 "width": 160.0,
                 "height": 100.0,
                 "content-widht": 150,
                 "content-height": 66
             },
-            "op_code": 41,
-            "op_title": "Data Combine"
+            "op_code": 401,
+            "op_title": "Combine"
         },
         {
             "id": 139924398701152,
@@ -859,7 +859,7 @@
                 }
             ],
             "content": {
-                "id": 139924400267328,
+                "id": 140346069490992,
                 "content": "",
                 "map": {
                     "O_rw": "x",
@@ -876,8 +876,8 @@
                 "content-widht": 190,
                 "content-height": 259
             },
-            "op_code": 43,
-            "op_title": "Data Rename"
+            "op_code": 403,
+            "op_title": "Rename"
         }
     ],
     "edges": [

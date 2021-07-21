@@ -11,7 +11,6 @@ class StepRangeGraphicsNode(DataGraphicsNode):
         self.height = 160.0
 
 class StepRangeContent(DataContent):
-
     def initUI(self):
         super().initUI()
         self.layout = QGridLayout()
@@ -34,7 +33,7 @@ class StepRangeContent(DataContent):
 
         self.step = QLineEdit("0.1", self)
         self.step.setAlignment(Qt.AlignCenter)
-        self.label_step = QLabel("Start", self)        
+        self.label_step = QLabel("Step", self)        
         self.label_step.setAlignment(Qt.AlignRight)
         self.layout.addWidget(self.label_step, 2, 0)
         self.layout.addWidget(self.step, 2, 1)
@@ -71,7 +70,7 @@ class StepRangeContent(DataContent):
 class StepRangeNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_STEPARR
-    op_title = "Array Step"
+    op_title = "Vector (by step)"
 
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs, outputs)
@@ -116,7 +115,7 @@ class NumRangeGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 145.0
-        self.height = 150.0
+        self.height = 140.0
 
 class NumRangeContent(DataContent):
 
@@ -124,6 +123,7 @@ class NumRangeContent(DataContent):
         super().initUI()
         self.layout = QGridLayout()
         self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
         self.name = QLineEdit("res", self)
@@ -179,7 +179,7 @@ class NumRangeContent(DataContent):
 class NumRangeNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_NUMPARR
-    op_title = "Array Number"
+    op_title = "Vector (by size)"
 
     def __init__(self, scene, inputs=[1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
@@ -229,43 +229,21 @@ class NumRangeNode(DataNode):
             self.setInvalid(False)
             self.e = ""
             name  = self.content.name.text()
+
             if self.getInput(2) is not None:
-                val = self.getInput(2).value
-                start = float(self.content.start.text())
-                if isinstance(val, dict):
-                    start = list(val.values())[0]
-                if isinstance(val, float):
-                    start = val
-                if isinstance(val, (list, np.ndarray)):
-                    start = val[0]
+                start = self.getInputVaue(self.getInput(2).value, float(self.content.start.text()))
                 self.content.start.setText("{:.2f}".format(start))
             else:
                 start = float(self.content.start.text())
 
             if self.getInput(1) is not None:
-                val = self.getInput(1).value
-                num = int(self.content.number.text())
-                if isinstance(val, dict):
-                    num = lenOfDictValue(val)
-                if isinstance(val, float):
-                    num = int(val)
-                if isinstance(val, int):
-                    num = val
-                if isinstance(val, (list, np.ndarray)):
-                    num = len(val)
-                self.content.number.setText(str(int(num)))
+                num = int(self.getInputLength(self.getInput(1).value, int(self.content.number.text())))
+                self.content.number.setText(str(num))
             else:
                 num = int(self.content.number.text())
 
             if self.getInput(0) is not None:
-                val = self.getInput(0).value
-                stop = float(self.content.stop.text())
-                if isinstance(val, dict):
-                    stop = list(val.values())[0]
-                if isinstance(val, float):
-                    stop = val
-                if isinstance(val, (list, np.ndarray)):
-                    stop = val[0]
+                stop = self.getInputVaue(self.getInput(0).value, float(self.content.stop.text()))
                 self.content.stop.setText("{:.2f}".format(stop))
             else:
                 stop = float(self.content.stop.text())
@@ -281,14 +259,11 @@ class NumRangeNode(DataNode):
 
 
 
-
-
-
 class FilledArrayGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
-        self.height = 160.0
+        self.width  = 145.0
+        self.height = 120.0
 
 class FilledArrayContent(DataContent):
 
@@ -342,11 +317,18 @@ class FilledArrayContent(DataContent):
 class FilledArrayNode(DataNode):
     icon = "icons/math.png"
     op_code = OP_MODE_FILLPARR
-    op_title = "Array Filled"
+    op_title = "Vector Filled"
 
-    def __init__(self, scene, inputs=[], outputs=[2]):
+    def __init__(self, scene, inputs=[1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
         self.eval()
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_BOTTOM
+        self.output_socket_position = RIGHT_TOP
+        self.socket_spacing = 30.0
+        self.socket_bottom_margin = 22.0
 
     def initInnerClasses(self):
         self.content = FilledArrayContent(self)
@@ -365,12 +347,171 @@ class FilledArrayNode(DataNode):
             self.setInvalid(False)
             self.e = ""
             name  = self.content.name.text()
-            shape = int(self.content.number.text())
-            value = float(self.content.value.text())
 
-            self.getOutput(0).value =  { name : np.full(shape, value) }
+            if self.getInput(1) is not None:
+                num = self.getInputLength(self.getInput(1).value, int(self.content.number.text()))
+                self.content.number.setText(str(num))
+            else:
+                num = int(self.content.number.text())
+
+            if self.getInput(0) is not None:
+                val = self.getInputVaue(self.getInput(0).value, float(self.content.value.text()))
+                self.content.value.setText("{:.2f}".format(val))
+            else:
+                val = float(self.content.value.text())
+
+            self.getOutput(0).value =  { name : np.full(num, val) }
             return True
         except Exception as e : 
             self.e = e
             dumpException(e)
             return False                        
+
+
+
+
+
+
+
+
+
+class Mesh2DGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 145.0
+        self.height = 140.0
+
+class Mesh2DContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
+        self.label_sizex = QLabel("Size x", self)        
+        self.label_sizex.setAlignment(Qt.AlignRight)
+        self.sizex = QLineEdit("10.0", self)
+        self.sizex.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_sizex, 0, 0)
+        self.layout.addWidget(self.sizex, 0, 1)
+
+        self.label_sizey = QLabel("Size y", self)        
+        self.label_sizey.setAlignment(Qt.AlignRight)
+        self.sizey = QLineEdit("10.0", self)
+        self.sizey.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_sizey, 1, 0)
+        self.layout.addWidget(self.sizey, 1, 1)
+
+        self.label_numx = QLabel("Num x", self)        
+        self.label_numx.setAlignment(Qt.AlignRight)
+        self.numx = QLineEdit("10", self)
+        self.numx.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_numx, 2, 0)
+        self.layout.addWidget(self.numx, 2, 1)
+
+        self.label_numy = QLabel("Num y", self)        
+        self.label_numy.setAlignment(Qt.AlignRight)
+        self.numy = QLineEdit("10", self)
+        self.numy.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_numy, 3, 0)
+        self.layout.addWidget(self.numy, 3, 1)
+
+
+    def serialize(self):
+        res = super().serialize()
+        res['sizex']  = self.sizex.text()
+        res['sizey']  = self.sizey.text()
+        res['numx']   = self.numx.text()
+        res['numy']   = self.numy.text()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.sizex.setText(res['sizex'])
+            self.sizey.setText(res['sizey'])
+            self.numx.setText(res['numx'] )
+            self.numy.setText(res['numy'] )
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+@register_node(OP_MODE_MESH2D)
+class Mesh2DNode(DataNode):
+    icon = "icons/math.png"
+    op_code = OP_MODE_MESH2D
+    op_title = "Mesh 2D"
+
+    def __init__(self, scene, inputs=[1,1,1,1], outputs=[2]):
+        super().__init__(scene, inputs, outputs)
+        self.eval()
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_BOTTOM
+        self.output_socket_position = RIGHT_TOP
+        self.socket_spacing = 30.0
+        self.socket_bottom_margin = 22.0
+
+
+    def initInnerClasses(self):
+        self.content = Mesh2DContent(self)
+        self.grNode  = Mesh2DGraphicsNode(self)
+        self.content.sizex.textChanged.connect(self.recalculateNode)
+        self.content.sizey.textChanged.connect(self.recalculateNode)
+        self.content.numx.textChanged.connect(self.recalculateNode)
+        self.content.numy.textChanged.connect(self.recalculateNode)
+
+    def checkTheInputs(self):
+        if self.getInput(0) is not None:
+            self.content.sizex.setReadOnly(True)
+        else:
+            self.content.sizex.setReadOnly(False)
+
+        if self.getInput(1) is not None:
+            self.content.sizey.setReadOnly(True)
+        else:
+            self.content.sizey.setReadOnly(False)
+
+        if self.getInput(2) is not None:
+            self.content.numx.setReadOnly(True)
+        else:
+            self.content.numx.setReadOnly(False)
+
+        if self.getInput(3) is not None:
+            self.content.numy.setReadOnly(True)
+        else:
+            self.content.numy.setReadOnly(False)
+
+
+    def evalImplementation(self):
+        try:
+            self.checkTheInputs()
+            name  = self.content.name.text()
+            name
+            if self.getInput(2) is not None:
+                start = self.getInputVaue(self.getInput(2).value, float(self.content.start.text()))
+                self.content.start.setText("{:.2f}".format(start))
+            else:
+                start = float(self.content.start.text())
+
+            if self.getInput(1) is not None:
+                num = int(self.getInputVaue(self.getInput(1).value, int(self.content.number.text())))
+                self.content.number.setText(str(num))
+            else:
+                num = int(self.content.number.text())
+
+            if self.getInput(0) is not None:
+                stop = self.getInputVaue(self.getInput(0).value, self.content.stop.text())
+                self.content.stop.setText("{:.2f}".format(stop))
+            else:
+                stop = float(self.content.stop.text())
+
+            self.getOutput(0).value =  { name : np.linspace(start, stop, num) }
+            return True
+        except Exception as e : 
+            self.e = e
+            dumpException(e)
+            return False            

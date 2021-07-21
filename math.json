@@ -1,0 +1,1387 @@
+{
+    "id": 139656084826048,
+    "scene_widht": 64000,
+    "scene_height": 64000,
+    "view_x": 1112.1176470588234,
+    "view_y": 731.9411764705882,
+    "view_scale": 16.0,
+    "nodes": [
+        {
+            "id": 139655761187216,
+            "title": "Math",
+            "pos_x": -99.81244533248082,
+            "pos_y": -113.31998337595908,
+            "inputs": [
+                {
+                    "id": 139655761187552,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 41.0,
+                    "label": null
+                },
+                {
+                    "id": 139655761203984,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 65.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655761203888,
+                    "index": 0,
+                    "position": 5,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 53.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158649939568,
+                "content": "",
+                "sel_ind": 0,
+                "label": "res"
+            },
+            "op_code": 300,
+            "op_title": "Math"
+        },
+        {
+            "id": 139655761205568,
+            "title": "Text",
+            "pos_x": 143.57850000000002,
+            "pos_y": -88.93637500000006,
+            "inputs": [
+                {
+                    "id": 139655761205376,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 108.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140158638856944,
+                "content": "",
+                "value": "{'x': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ]), 'y': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ]), 'z': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ])}",
+                "width": 420.5268749999999,
+                "height": 238.021875,
+                "content-widht": 410,
+                "content-height": 204
+            },
+            "op_code": 202,
+            "op_title": "Text"
+        },
+        {
+            "id": 139655761152512,
+            "title": "By Size",
+            "pos_x": -565.0,
+            "pos_y": -200.0,
+            "inputs": [
+                {
+                    "id": 139655761306864,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 139655761306672,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139655761306816,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655761307008,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158638858096,
+                "content": "",
+                "name": "x",
+                "start": "0",
+                "number": "10",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 139655692988864,
+            "title": "By Size",
+            "pos_x": -562.0,
+            "pos_y": -42.0,
+            "inputs": [
+                {
+                    "id": 139655692989056,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 139655692989488,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139655692989584,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655692989680,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073879424,
+                "content": "",
+                "name": "y",
+                "start": "0",
+                "number": "10",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 139655692990880,
+            "title": "By Size",
+            "pos_x": -559.0,
+            "pos_y": 113.0,
+            "inputs": [
+                {
+                    "id": 139655692991072,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 139655692991504,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139655692991600,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655692991696,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073907088,
+                "content": "",
+                "name": "z",
+                "start": "0",
+                "number": "10",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 139655761309408,
+            "title": "Combine",
+            "pos_x": -341.8456249999999,
+            "pos_y": -7.85287499999999,
+            "inputs": [
+                {
+                    "id": 139655761309120,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 139655761309456,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "y"
+                },
+                {
+                    "id": 139655761308928,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "z"
+                },
+                {
+                    "id": 140158072832736,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655761309072,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073942944,
+                "content": "",
+                "width": 160.0,
+                "height": 132.0,
+                "content-widht": 150,
+                "content-height": 98
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 139655692988576,
+            "title": "Combine",
+            "pos_x": -339.1551249999999,
+            "pos_y": -153.608375,
+            "inputs": [
+                {
+                    "id": 139655692992416,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 139655692991792,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "y"
+                },
+                {
+                    "id": 139655692992032,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "z"
+                },
+                {
+                    "id": 140158072832592,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655692992272,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073944528,
+                "content": "",
+                "width": 160.0,
+                "height": 132.0,
+                "content-widht": 150,
+                "content-height": 98
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 139655761307872,
+            "title": "Expression",
+            "pos_x": -195.0,
+            "pos_y": -349.0,
+            "inputs": [
+                {
+                    "id": 139655761307584,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 139655629431136,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "g"
+                },
+                {
+                    "id": 140202032479056,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "t"
+                },
+                {
+                    "id": 140202032479152,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655692990784,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073995328,
+                "content": "",
+                "width": 260.0,
+                "height": 132.0,
+                "content-widht": 250,
+                "content-height": 98,
+                "value": "sum(x*g*t)/sum(x*g)",
+                "label": "res"
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 139655692989776,
+            "title": "Text",
+            "pos_x": 261.89662500000003,
+            "pos_y": -463.19287499999996,
+            "inputs": [
+                {
+                    "id": 139655692990592,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 108.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140158073997776,
+                "content": "",
+                "value": "{'res': 0.7894736842105263}",
+                "width": 200.0,
+                "height": 200.0,
+                "content-widht": 190,
+                "content-height": 166
+            },
+            "op_code": 202,
+            "op_title": "Text"
+        },
+        {
+            "id": 139655629432288,
+            "title": "By Size",
+            "pos_x": -562.05,
+            "pos_y": -512.3500000000001,
+            "inputs": [
+                {
+                    "id": 139655629432528,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 139655629432912,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139655629433008,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655629433056,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073998928,
+                "content": "",
+                "name": "g",
+                "start": "0",
+                "number": "10",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 139655629431664,
+            "title": "By Size",
+            "pos_x": -564.0,
+            "pos_y": -354.29999999999995,
+            "inputs": [
+                {
+                    "id": 139655629431328,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 139655629433488,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139655629433584,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139655629433680,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073506400,
+                "content": "",
+                "name": "t",
+                "start": "0",
+                "number": "10",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 140627392461792,
+            "title": "Vector (by size)",
+            "pos_x": -433.2875816993464,
+            "pos_y": 338.53594771241853,
+            "inputs": [
+                {
+                    "id": 140627392461840,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 140627392462128,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 140627392461744,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140627392461984,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073534064,
+                "content": "",
+                "name": "x",
+                "start": "0",
+                "number": "1000",
+                "stop": "1"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 140627634909488,
+            "title": "Expression",
+            "pos_x": -244.03921568627462,
+            "pos_y": 406.0653594771244,
+            "inputs": [
+                {
+                    "id": 140627392461168,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140627390726352,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140627392461024,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073569920,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "content-widht": 250,
+                "content-height": 66,
+                "value": "exp(x**2.0)",
+                "label": "y"
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140627390727264,
+            "title": "Math",
+            "pos_x": 776.5119597568738,
+            "pos_y": 152.0845025338098,
+            "inputs": [
+                {
+                    "id": 140627390726928,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 41.0,
+                    "label": null
+                },
+                {
+                    "id": 140627390727408,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 65.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140627390727072,
+                    "index": 0,
+                    "position": 5,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 53.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073572080,
+                "content": "",
+                "sel_ind": 14,
+                "label": "diff"
+            },
+            "op_code": 300,
+            "op_title": "Math"
+        },
+        {
+            "id": 140627390729904,
+            "title": "Plot",
+            "pos_x": 1211.7655053768272,
+            "pos_y": 399.2997593140991,
+            "inputs": [
+                {
+                    "id": 140627390728320,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140158073598736,
+                "content": "",
+                "width": 468.1159420289855,
+                "height": 422.70531400966183,
+                "content-widht": 458,
+                "content-height": 388
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        },
+        {
+            "id": 140605502970128,
+            "title": "Math",
+            "pos_x": 598.1444271470403,
+            "pos_y": 397.22100632985484,
+            "inputs": [
+                {
+                    "id": 140605502820800,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 41.0,
+                    "label": null
+                },
+                {
+                    "id": 140605502823488,
+                    "index": 1,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 65.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140605503940688,
+                    "index": 0,
+                    "position": 5,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 53.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158072990304,
+                "content": "",
+                "sel_ind": 15,
+                "label": "int"
+            },
+            "op_code": 300,
+            "op_title": "Math"
+        },
+        {
+            "id": 140505984664384,
+            "title": "Combine",
+            "pos_x": 991.5157378740973,
+            "pos_y": 231.45117389060886,
+            "inputs": [
+                {
+                    "id": 140701565016720,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140702134359472,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "y"
+                },
+                {
+                    "id": 140702134362016,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "diff"
+                },
+                {
+                    "id": 139842551484768,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": "int"
+                },
+                {
+                    "id": 140158071659680,
+                    "index": 4,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 136.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140505984664240,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073098880,
+                "content": "",
+                "width": 160.0,
+                "height": 156.0,
+                "content-widht": 150,
+                "content-height": 122
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140505979033536,
+            "title": "Combine",
+            "pos_x": 58.50000000000006,
+            "pos_y": 353.8098039215688,
+            "inputs": [
+                {
+                    "id": 140505979032768,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140506097989280,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "y"
+                },
+                {
+                    "id": 140157959552160,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140505979033344,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073100608,
+                "content": "",
+                "width": 160.0,
+                "height": 108.0,
+                "content-widht": 150,
+                "content-height": 74
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140505978072128,
+            "title": "Separate",
+            "pos_x": 380.8480392156861,
+            "pos_y": 213.4852941176471,
+            "inputs": [
+                {
+                    "id": 140505978072032,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140684905388496,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140684905388736,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140684905388832,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "y"
+                }
+            ],
+            "content": {
+                "id": 140158073102048,
+                "content": "",
+                "width": 160.0,
+                "height": 120.0,
+                "content-widht": 150,
+                "content-height": 86
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 139843117651712,
+            "title": "Vector Filled",
+            "pos_x": 807.516339869281,
+            "pos_y": 373.202614379085,
+            "inputs": [
+                {
+                    "id": 139843117651616,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 98.0,
+                    "label": null
+                },
+                {
+                    "id": 139843117652576,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 68.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139843117652480,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140158073136464,
+                "content": "",
+                "name": "int",
+                "number": "1000",
+                "value": "1.46"
+            },
+            "op_code": 112,
+            "op_title": "Vector Filled"
+        },
+        {
+            "id": 140158073271344,
+            "title": "Separate",
+            "pos_x": 452.9323529411764,
+            "pos_y": 715.0235294117647,
+            "inputs": [
+                {
+                    "id": 140158073270576,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140158073272448,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140157958728720,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140157958727232,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "y"
+                }
+            ],
+            "content": {
+                "id": 140158072867712,
+                "content": "",
+                "width": 160.0,
+                "height": 120.0,
+                "content-widht": 150,
+                "content-height": 86
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 140158073272544,
+            "title": "Plot",
+            "pos_x": 742.6024296675192,
+            "pos_y": 551.109718670077,
+            "inputs": [
+                {
+                    "id": 140158073336160,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140158073230816,
+                "content": "",
+                "width": 435.36176470588225,
+                "height": 376.23823529411766,
+                "content-widht": 425,
+                "content-height": 342
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        }
+    ],
+    "edges": [
+        {
+            "id": 139655761309648,
+            "edge_type": 2,
+            "start": 139655761307008,
+            "end": 139655761309120
+        },
+        {
+            "id": 139655761309504,
+            "edge_type": 2,
+            "start": 139655692989680,
+            "end": 139655761309456
+        },
+        {
+            "id": 139655761307632,
+            "edge_type": 2,
+            "start": 139655692991696,
+            "end": 139655761308928
+        },
+        {
+            "id": 139655761307440,
+            "edge_type": 2,
+            "start": 139655761309072,
+            "end": 139655761187552
+        },
+        {
+            "id": 139655761309360,
+            "edge_type": 2,
+            "start": 139655761203888,
+            "end": 139655761205376
+        },
+        {
+            "id": 139655761307968,
+            "edge_type": 2,
+            "start": 139655761307008,
+            "end": 139655692992416
+        },
+        {
+            "id": 139655692992080,
+            "edge_type": 2,
+            "start": 139655692989680,
+            "end": 139655692991792
+        },
+        {
+            "id": 139655692992128,
+            "edge_type": 2,
+            "start": 139655692991696,
+            "end": 139655692992032
+        },
+        {
+            "id": 139655692989968,
+            "edge_type": 2,
+            "start": 139655692992272,
+            "end": 139655761203984
+        },
+        {
+            "id": 139655692990736,
+            "edge_type": 2,
+            "start": 139655761307008,
+            "end": 139655761307584
+        },
+        {
+            "id": 139655692988528,
+            "edge_type": 2,
+            "start": 139655692990784,
+            "end": 139655692990592
+        },
+        {
+            "id": 139655629433872,
+            "edge_type": 2,
+            "start": 139655629433056,
+            "end": 139655629431136
+        },
+        {
+            "id": 140202032478864,
+            "edge_type": 2,
+            "start": 139655629433680,
+            "end": 140202032479056
+        },
+        {
+            "id": 140627392460880,
+            "edge_type": 2,
+            "start": 140627392461984,
+            "end": 140627392461168
+        },
+        {
+            "id": 140505980608080,
+            "edge_type": 2,
+            "start": 140627392461984,
+            "end": 140505979032768
+        },
+        {
+            "id": 140505979088128,
+            "edge_type": 2,
+            "start": 140627392461024,
+            "end": 140506097989280
+        },
+        {
+            "id": 140684905388448,
+            "edge_type": 2,
+            "start": 140505979033344,
+            "end": 140505978072032
+        },
+        {
+            "id": 140684905388928,
+            "edge_type": 2,
+            "start": 140684905388832,
+            "end": 140627390727408
+        },
+        {
+            "id": 140684905389024,
+            "edge_type": 2,
+            "start": 140684905388736,
+            "end": 140627390726928
+        },
+        {
+            "id": 140684905388976,
+            "edge_type": 2,
+            "start": 140684905388736,
+            "end": 140605502820800
+        },
+        {
+            "id": 140684905389312,
+            "edge_type": 2,
+            "start": 140684905388832,
+            "end": 140605502823488
+        },
+        {
+            "id": 140702134358800,
+            "edge_type": 2,
+            "start": 140684905388736,
+            "end": 140701565016720
+        },
+        {
+            "id": 140702134360336,
+            "edge_type": 2,
+            "start": 140684905388832,
+            "end": 140702134359472
+        },
+        {
+            "id": 140701567672960,
+            "edge_type": 2,
+            "start": 140627390727072,
+            "end": 140702134362016
+        },
+        {
+            "id": 139842548568512,
+            "edge_type": 2,
+            "start": 139843117652480,
+            "end": 139842551484768
+        },
+        {
+            "id": 140158073338320,
+            "edge_type": 2,
+            "start": 140605503940688,
+            "end": 139843117651616
+        },
+        {
+            "id": 140158073714432,
+            "edge_type": 2,
+            "start": 140684905388736,
+            "end": 139843117652576
+        },
+        {
+            "id": 140158073272640,
+            "edge_type": 2,
+            "start": 140505979033344,
+            "end": 140158073270576
+        },
+        {
+            "id": 140158072256736,
+            "edge_type": 2,
+            "start": 140158073272448,
+            "end": 140158073336160
+        },
+        {
+            "id": 140158002425472,
+            "edge_type": 2,
+            "start": 140505984664240,
+            "end": 140627390728320
+        }
+    ]
+}

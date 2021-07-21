@@ -130,6 +130,7 @@ class DataNode(Node):
             elif self.evalImplementation():
                 self.setDirty(False)
                 self.setInvalid(False)
+                self.e = ""
                 self.setDescendentsInvalid(False)
                 self.setDescendentsDirty()
                 self.evalChildren()
@@ -151,12 +152,68 @@ class DataNode(Node):
         self.setDirty()
         self.eval()
 
-    def onInputChanged(self, new_edge):
+    def onInputChanged(self, new_edge=None):
         if DEBUG : print("DATANODE : oninputChanged")
         self.setDirty()
         if DEBUG : print("DATANODE : to run the eval")
         self.eval()
         if DEBUG : print("DATANODE : the eval is done")
+        self.content.changed.emit()
+
+    def getInputVaue(self, value, default=0):
+        num = default
+        if isinstance(value, dict):
+            num = self.dictFirstValue(value)
+        if isinstance(value, float):
+            num = value
+        if isinstance(value, int):
+            num = value
+        if isinstance(value, (list, np.ndarray)):
+            num = value
+        return num
+
+    def getInputLength(self, value, default=0):
+        num = default
+        if isinstance(value, dict):
+            num = self.lenOrValOfDict(value)
+        if isinstance(value, float):
+            num = 1
+        if isinstance(value, int):
+            num = 1
+        if isinstance(value, (list, np.ndarray)):
+            num = len(value)
+        return num
+
+    def dictFirstValue(self, obj, default=0):
+        if len(obj) == 0:
+            return 0
+        res = 0
+        if len(obj) == 1:
+            for name in obj:
+                if isinstance(obj[name], (list, np.ndarray)):
+                    res = obj[name][0]
+                if isinstance(obj[name], float) or isinstance(obj[name], int):
+                    res = obj[name]
+            return res
+        return default
+
+
+    def lenOrValOfDict(self, obj):
+        if len(obj) == 0:
+            return 0
+        res = 0
+        if len(obj) == 1:
+            for name in obj:
+                if isinstance(obj[name], (list, np.ndarray)):
+                    res = len(obj[name])
+                if isinstance(obj[name], float) or isinstance(obj[name], int):
+                    res = 1
+            return res
+
+        res = 0
+        for name in obj:
+            res += len(obj[name])
+        return res
 
 
     def serialize(self):
@@ -342,3 +399,10 @@ class ResizableInputNode(DataNode):
 
     def evalImplementation(self):
         pass
+
+    def update(self):
+        super().update()
+        self.updateSockets()
+
+
+

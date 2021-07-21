@@ -39,7 +39,7 @@ class ValueOutputContent(DataContent):
 class ValueOutputNode(DataNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_VALOUTPUT
-    op_title = "Output value"
+    op_title = "Value"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
@@ -117,7 +117,7 @@ class TableOutputContent(DataContent):
 class TableOutputNode(DataNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_TABLEOUTPUT
-    op_title = "Output table"
+    op_title = "Table"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
@@ -202,7 +202,7 @@ class TextOutputContent(DataContent):
 class TextOutputNode(DataNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_TEXTOUTPUT
-    op_title = "Output text"
+    op_title = "Text"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)

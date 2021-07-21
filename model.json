@@ -1,0 +1,303 @@
+{
+    "id": 140225781634432,
+    "scene_widht": 64000,
+    "scene_height": 64000,
+    "view_x": 90.58823529411765,
+    "view_y": -89.41176470588236,
+    "view_scale": 17.0,
+    "nodes": [
+        {
+            "id": 140225457353200,
+            "title": "Array Number",
+            "pos_x": -259.99782608695665,
+            "pos_y": -217.22487922705312,
+            "inputs": [
+                {
+                    "id": 140225457353392,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 140225457353824,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 140225457353920,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140225457354016,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140380994837808,
+                "content": "",
+                "name": "x",
+                "start": "0",
+                "number": "25",
+                "stop": "8.00"
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 140225457269632,
+            "title": "Data Combine",
+            "pos_x": 170.89347826086959,
+            "pos_y": -209.054347826087,
+            "inputs": [
+                {
+                    "id": 140225457269536,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 139976955855872,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "y"
+                },
+                {
+                    "id": 140380437999872,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140225457269824,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140380983875616,
+                "content": "",
+                "width": 160.0,
+                "height": 108.0,
+                "content-widht": 150,
+                "content-height": 74
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140225457270016,
+            "title": "Output plot",
+            "pos_x": 377.1320128215665,
+            "pos_y": -318.7457466918715,
+            "inputs": [
+                {
+                    "id": 140225457269680,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140380983877056,
+                "content": "",
+                "width": 585.3620448754831,
+                "height": 459.7764444809731,
+                "content-widht": 574,
+                "content-height": 424
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        },
+        {
+            "id": 139732197929552,
+            "title": "Expression",
+            "pos_x": -87.77777777777781,
+            "pos_y": -88.88888888888891,
+            "inputs": [
+                {
+                    "id": 139732197929600,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140085138270960,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139732197929696,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140380438857040,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "content-widht": 250,
+                "content-height": 66,
+                "value": "x + exp(x) - x**4",
+                "label": "y"
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140442660701664,
+            "title": "Input value",
+            "pos_x": -447.7777777777777,
+            "pos_y": -222.22222222222223,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140442660701856,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 121.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140380438859200,
+                "content": "",
+                "value": "25",
+                "label": "x"
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 140442661185088,
+            "title": "Input value",
+            "pos_x": -447.45098039215696,
+            "pos_y": -108.16993464052287,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140442660781744,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 121.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140380438447296,
+                "content": "",
+                "value": "8.8",
+                "label": "x"
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        }
+    ],
+    "edges": [
+        {
+            "id": 140225457270256,
+            "edge_type": 2,
+            "start": 140225457354016,
+            "end": 140225457269536
+        },
+        {
+            "id": 140225456411600,
+            "edge_type": 2,
+            "start": 140225457269824,
+            "end": 140225457269680
+        },
+        {
+            "id": 140512498175520,
+            "edge_type": 2,
+            "start": 139732197929696,
+            "end": 139976955855872
+        },
+        {
+            "id": 140512498999936,
+            "edge_type": 2,
+            "start": 140225457354016,
+            "end": 139732197929600
+        },
+        {
+            "id": 140442661184080,
+            "edge_type": 2,
+            "start": 140442660781744,
+            "end": 140225457353392
+        },
+        {
+            "id": 140380437860992,
+            "edge_type": 2,
+            "start": 140442660701856,
+            "end": 140225457353824
+        }
+    ]
+}

@@ -29,7 +29,7 @@
                 "content": "",
                 "file": "/home/nichenko_s/Work/Projects/SwissNuclear/2020-2021/ATHESC/Data/Water_Chemistry/water_chemistry.csv"
             },
-            "op_code": 11,
+            "op_code": 101,
             "op_title": "Input file"
         },
         {
@@ -89,7 +89,7 @@
                 "number": "591",
                 "stop": "5.0"
             },
-            "op_code": 71,
+            "op_code": 111,
             "op_title": "Array Number"
         },
         {
@@ -118,7 +118,7 @@
                 "content-widht": 833,
                 "content-height": 676
             },
-            "op_code": 23,
+            "op_code": 203,
             "op_title": "Output plot"
         },
         {
@@ -488,7 +488,7 @@
                 "content-widht": 140,
                 "content-height": 820
             },
-            "op_code": 40,
+            "op_code": 400,
             "op_title": "Data Separate"
         },
         {
@@ -530,7 +530,7 @@
                 "value": "2+2",
                 "label": "res"
             },
-            "op_code": 31,
+            "op_code": 301,
             "op_title": "Expression"
         },
         {
@@ -620,7 +620,7 @@
                 "content-widht": 150,
                 "content-height": 146
             },
-            "op_code": 41,
+            "op_code": 401,
             "op_title": "Data Combine"
         },
         {
@@ -666,7 +666,7 @@
                 "nanToNumValue": "5.0",
                 "dropNAN": true
             },
-            "op_code": 42,
+            "op_code": 402,
             "op_title": "Data Clean"
         },
         {
@@ -726,7 +726,7 @@
                 "content-widht": 150,
                 "content-height": 74
             },
-            "op_code": 41,
+            "op_code": 401,
             "op_title": "Data Combine"
         }
     ],

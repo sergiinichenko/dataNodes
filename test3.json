@@ -63,7 +63,7 @@
                 "number": "100",
                 "stop": "5"
             },
-            "op_code": 71,
+            "op_code": 111,
             "op_title": "Array Number"
         },
         {
@@ -92,7 +92,7 @@
                 "content-widht": 866,
                 "content-height": 677
             },
-            "op_code": 23,
+            "op_code": 203,
             "op_title": "Output plot"
         },
         {
@@ -119,7 +119,7 @@
                 "value": "1.0",
                 "label": "P"
             },
-            "op_code": 12,
+            "op_code": 102,
             "op_title": "Input value"
         },
         {
@@ -146,7 +146,7 @@
                 "value": "2",
                 "label": "T"
             },
-            "op_code": 12,
+            "op_code": 102,
             "op_title": "Input value"
         },
         {
@@ -198,7 +198,7 @@
                 "value": "x/sum(x) + P - T",
                 "label": "res"
             },
-            "op_code": 31,
+            "op_code": 301,
             "op_title": "Expression"
         },
         {
@@ -250,7 +250,7 @@
                 "value": "x*sum(x)",
                 "label": "res2"
             },
-            "op_code": 31,
+            "op_code": 301,
             "op_title": "Expression"
         },
         {
@@ -320,7 +320,7 @@
                 "content-widht": 150,
                 "content-height": 98
             },
-            "op_code": 41,
+            "op_code": 401,
             "op_title": "Data Combine"
         },
         {
@@ -370,7 +370,7 @@
                 "content-widht": 150,
                 "content-height": 74
             },
-            "op_code": 41,
+            "op_code": 401,
             "op_title": "Data Combine"
         },
         {
@@ -440,7 +440,7 @@
                 "content-widht": 150,
                 "content-height": 98
             },
-            "op_code": 41,
+            "op_code": 401,
             "op_title": "Data Combine"
         }
     ],

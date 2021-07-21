@@ -281,11 +281,29 @@ class NodeSubWindow(NodeWidget):
             self.node_actions[node.op_code] = QAction(QIcon(node.icon), node.op_title)
             self.node_actions[node.op_code].setData(node.op_code)
 
-    def initNodesContextMenu(self):
-        context_menu = QMenu(self)
+    def populateSubMenu(self, menu, values=[10, 20]):
+        # Step 1. Remove the old options from the menu
+        menu.clear()
+        # Step 2. Dynamically create the actions
         keys = list(DATA_NODES.keys())
         keys.sort()
-        for key in keys : context_menu.addAction(self.node_actions[key])
+        filtered_keys = [number for number in keys if number >= values[0] and number < values[1]]
+        for key in filtered_keys : menu.addAction(self.node_actions[key])
+
+    def initNodesContextMenu(self):
+        context_menu = QMenu(self)
+        self.input_menu = context_menu.addMenu("Input")
+        self.populateSubMenu(self.input_menu, [100, 200])
+
+        self.output_menu = context_menu.addMenu("Output")
+        self.populateSubMenu(self.output_menu, [200, 300])
+
+        self.math_menu = context_menu.addMenu("Math")
+        self.populateSubMenu(self.math_menu, [300, 400])
+
+        self.data_menu = context_menu.addMenu("Data process")
+        self.populateSubMenu(self.data_menu, [400, 500])
+
         return context_menu
 
     def setTitle(self):
@@ -401,7 +419,7 @@ class NodeSubWindow(NodeWidget):
 
     def handleNewNodeContextMenu(self, event):
         context_menu = self.initNodesContextMenu()
-        action = context_menu.exec_(self.mapToGlobal(event.pos()))
+        action       = context_menu.exec_(self.mapToGlobal(event.pos()))
 
         if action is not None:
             new_data_node = getClassFromOpCode(action.data())(self.scene)

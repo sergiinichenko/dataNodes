@@ -1,6 +1,7 @@
 import traceback
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
+import numpy as np
 
 def dumpException(e):
     print("{0} EXCEPTION: {1}".format(e.__class__.__name__, e))
@@ -23,10 +24,3 @@ def loadStyleSheets(*args):
         stylesheet = file.readAll()
         res += "\n" + str(stylesheet, encoding='utf-8')
     QApplication.instance().setStyleSheet(res)
-
-
-def lenOfDictValue(obj):
-    length = 0
-    for name in obj:
-        length += len(obj[name])
-    return length

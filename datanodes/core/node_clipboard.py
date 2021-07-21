@@ -62,7 +62,7 @@ class SceneClipboard():
         hashmap = {}
 
         # calculate the mouse pointer - scene postion
-        view = self.scene.getView()
+        view      = self.scene.getView()
         mouse_pos = view.last_scene_mouse_position
 
         # calculate selected objects bounding box and its center
@@ -101,6 +101,7 @@ class SceneClipboard():
 
             new_node.setPos(newx, newy)
             new_node.grNode.setSelected(setSelected)
+            new_node.update()
 
         # Create each edge
         if 'edges' in data:
