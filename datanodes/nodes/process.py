@@ -168,7 +168,7 @@ class CombineNode(ResizableInputNode):
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
 
-    def onEdgeConnectionChanged(self, new_edge=None):
+    def onInputChange(self, new_edge=None):
         self.content.changed.emit()
 
     def initInnerClasses(self):

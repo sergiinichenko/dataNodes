@@ -180,8 +180,7 @@ class Node(Serializer):
 
 
     def onEdgeConnectionChanged(self, new_edge=None):
-        self.setDirty()
-        self.setDescendentsDirty()
+        pass
 
     def onInputChanged(self, new_edge=None):
         self.setDirty()

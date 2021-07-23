@@ -33,6 +33,8 @@ class Edge(Serializer):
     def notifyOnConnection(self):
         for socket in [self.start_socket, self.end_socket]:
             socket.node.onEdgeConnectionChanged(self)
+            if socket.is_input:  socket.node.onInputChanged(socket)
+            if socket.is_output: socket.node.onOutputChanged(socket)
 
     def __str__(self) -> str:
         return "<Edge %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])

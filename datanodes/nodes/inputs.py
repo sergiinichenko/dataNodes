@@ -143,19 +143,33 @@ class MultiValueInputContent(ResizableOutputContent):
 
     def serialize(self):
         res = super().serialize()
-        """
-        res['value'] = self.values[0].text()
-        res['label'] = self.labels[0].text()
-        """
+        labels = []
+        values = []
+        sockets = []
+        for label, value in zip(self.labels, self.values):
+            labels.append(self.labels[label].text())
+            values.append(self.values[value].text())
+            sockets.append(label)
+        res['value'] = values
+        res['label'] = labels
+        res['socket'] = sockets
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            """
-            self.values[0].setText(data['value'])
-            self.labels[0].setText(data['label'])
-            """
+            self.clearContent()
+            for i, socket, label, value in zip(range(len(data['socket'])), data['socket'], data['label'], data['value']):
+                self.labels[socket]  = QLineEdit("x"+str(i), self)
+                self.labels[socket].setAlignment(Qt.AlignRight)
+                self.labels[socket].setText(label)
+                self.values[socket]  = QLineEdit("1.0", self)
+                self.values[socket].setAlignment(Qt.AlignLeft)
+                self.values[socket].setText(value)
+                self.mainlayout.addWidget(self.labels[socket], i, 0)
+                self.mainlayout.addWidget(self.values[socket], i, 1)
+                self.labels[socket].textChanged.connect(self.node.recalculateNode)
+                self.values[socket].textChanged.connect(self.node.recalculateNode)
             return True & res
         except Exception as e : dumpException(e)
         return res
