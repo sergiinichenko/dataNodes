@@ -136,8 +136,8 @@ class MultiValueInputContent(ResizableOutputContent):
     def removePair(self, socket):
         self.mainlayout.removeWidget(self.labels[str(socket.id)])
         self.mainlayout.removeWidget(self.values[str(socket.id)])
-        self.labels[str(socket.id)].deleteLater()
-        self.values[str(socket.id)].deleteLater()
+        self.labels[str(socket.id)].setParent(None)
+        self.values[str(socket.id)].setParent(None)
         del self.labels[str(socket.id)]
         del self.values[str(socket.id)]
 
@@ -170,6 +170,7 @@ class MultiValueInputNode(ResizableOutputNode):
         super().__init__(scene, inputs=inputs, outputs=outputs)
         self.content.appendPair(self.getOutput(0))
         self.eval()
+        self.timer = None
 
     def onEdgeConnectionChanged(self, new_edge=None):
         self.recalculateNode()
@@ -229,16 +230,12 @@ class MultiValueInputNode(ResizableOutputNode):
                 self.content.appendPair(socket, at=i)
             if str(socket.id) in self.content.labels:
                 self.content.movePairTo(socket, at=i)
-        self.resize()
 
-        """
-        labels_full.update(labels_empty)
-        values_full.update(values_empty)
-        self.content.labels = labels_full
-        self.content.values = values_full
-        for i, socket in zip(range(len(sockets_full)), sockets_full):
-            self.content.appendPair(socket)
-        """
+        # The timer is set here
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.resize)
+        self.timer.start(1)
+
 
     def removeFreeSocketsWithPairs(self):
         for output in self.outputs[:-1]:
@@ -247,6 +244,7 @@ class MultiValueInputNode(ResizableOutputNode):
                 self.scene.grScene.removeItem(output.grSocket)
                 self.content.removePair(output)
         self.outputs = [output for output in self.outputs if output.hasEdges() or output == self.outputs[-1]]
+
 
     def evalImplementation(self):
         try:
