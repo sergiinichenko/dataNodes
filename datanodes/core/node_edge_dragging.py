@@ -42,7 +42,7 @@ class EdgeDragging:
         """ Ends the drag mouse event between two sockets """
         self.grView.resetMode()
 
-        self.drag_edge.remove()
+        self.drag_edge.remove(silent=True)
         if DEBUG : print("End draging edge")
 
         try:
@@ -60,12 +60,12 @@ class EdgeDragging:
 
                 """ remove the edge if the socket is attached to an input socket
                 and the socket already has an edge """
-                if item.socket.inout == SOCKET_INPUT:
+                if item.socket.is_input:
                     item.socket.clearEdges()
                     if DEBUG : print("View:edgeDragEnd ~ previous edge has been removed from the end socket")
 
                 # cannot connect the socket to itself
-                if self.drag_start_socket.inout == SOCKET_INPUT and self.drag_start_socket.hasEdges():
+                if self.drag_start_socket.is_input and self.drag_start_socket.hasEdges():
                     self.drag_start_socket.clearEdges()
                     if DEBUG : print("View:edgeDragEnd ~ Cannot assign socket to itself")
 
@@ -73,10 +73,7 @@ class EdgeDragging:
                 """ remove the previous edge if there is one """
                 new_edge = self.getEdgeClass()(self.getScene(), self.drag_start_socket, item.socket)
                 if DEBUG : print("View:edgeDragEnd ~ Created the new adge ")
-
-                for socket in [self.drag_start_socket, item.socket]:
-                    socket.node.onEdgeConnectionChanged(new_edge)
-                    if socket.inout == SOCKET_INPUT : socket.node.onInputChanged(new_edge)
+                new_edge.notifyOnConnection()
                     
                 self.getScene().history.storeHistory("created new edge")
                 return True 

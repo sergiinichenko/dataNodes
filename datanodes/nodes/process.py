@@ -132,8 +132,8 @@ class CombineGraphicsNode(ResizableInputGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
-        self.height = 100.0
-        self.min_height = 100.0
+        self.height = 80.0
+        self.min_height = 80.0
 
 class CombineContent(ResizableInputContent):
     def serialize(self):
@@ -168,9 +168,13 @@ class CombineNode(ResizableInputNode):
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
 
+    def onEdgeConnectionChanged(self, new_edge=None):
+        self.content.changed.emit()
+
     def initInnerClasses(self):
         self.content = CombineContent(self)
         self.grNode  = CombineGraphicsNode(self)
+        self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self):
         input_edges = self.getInputs()
@@ -181,7 +185,6 @@ class CombineNode(ResizableInputNode):
         else:
             self.sortSockets()
             self.getSocketsNames()
-            self.generateNewSocket()
             if len(input_edges) > 0:      
                 self.setDirty(False)
                 self.setInvalid(False)

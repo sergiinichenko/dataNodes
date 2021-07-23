@@ -2,9 +2,9 @@
     "id": 139854066741056,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 888.5714285714286,
-    "view_y": 62.85714285714286,
-    "view_scale": 14.0,
+    "view_x": 811.2341344855522,
+    "view_y": 25.92492573588982,
+    "view_scale": 16.0,
     "nodes": [
         {
             "id": 139854067146608,
@@ -25,18 +25,18 @@
                 }
             ],
             "content": {
-                "id": 140313387163072,
+                "id": 140554348216032,
                 "content": "",
                 "file": "/home/nichenko_s/Work/Projects/SwissNuclear/2020-2021/ATHESC/Data/Water_Chemistry/water_chemistry.csv"
             },
             "op_code": 101,
-            "op_title": "Input file"
+            "op_title": "File"
         },
         {
             "id": 139854067029040,
             "title": "Array Number",
-            "pos_x": 201.40416666666658,
-            "pos_y": 236.14674603174606,
+            "pos_x": 663.7320089567016,
+            "pos_y": 184.2968945599664,
             "inputs": [
                 {
                     "id": 139854067146656,
@@ -45,7 +45,7 @@
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
-                    "y": 128.0,
+                    "y": 118.0,
                     "label": null
                 },
                 {
@@ -55,7 +55,7 @@
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
-                    "y": 98.0,
+                    "y": 88.0,
                     "label": null
                 },
                 {
@@ -65,7 +65,7 @@
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
-                    "y": 68.0,
+                    "y": 58.0,
                     "label": null
                 }
             ],
@@ -82,21 +82,21 @@
                 }
             ],
             "content": {
-                "id": 140313323175648,
+                "id": 140554348326192,
                 "content": "",
-                "name": "the x asis",
+                "name": "x",
                 "start": "0",
                 "number": "591",
                 "stop": "5.0"
             },
             "op_code": 111,
-            "op_title": "Array Number"
+            "op_title": "Vector (by size)"
         },
         {
             "id": 139854066714752,
             "title": "Output plot",
-            "pos_x": 999.2955158730165,
-            "pos_y": -330.3123809523808,
+            "pos_x": 1079.2307035586769,
+            "pos_y": -170.4420055810603,
             "inputs": [
                 {
                     "id": 139854064928752,
@@ -111,7 +111,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140313025280752,
+                "id": 140554345240896,
                 "content": "",
                 "width": 853.1666666666665,
                 "height": 720.5,
@@ -119,13 +119,13 @@
                 "content-height": 676
             },
             "op_code": 203,
-            "op_title": "Output plot"
+            "op_title": "Plot"
         },
         {
             "id": 139663670925632,
             "title": "Data Separate",
-            "pos_x": -84.44444444444443,
-            "pos_y": -263.3333333333333,
+            "pos_x": -69.32157109850868,
+            "pos_y": -279.5364119182645,
             "inputs": [
                 {
                     "id": 139663669792624,
@@ -481,7 +481,7 @@
                 }
             ],
             "content": {
-                "id": 140312893354624,
+                "id": 140554345005120,
                 "content": "",
                 "width": 160.0,
                 "height": 864.0,
@@ -489,49 +489,7 @@
                 "content-height": 820
             },
             "op_code": 400,
-            "op_title": "Data Separate"
-        },
-        {
-            "id": 140328336389264,
-            "title": "Expression",
-            "pos_x": 517.9382161060508,
-            "pos_y": 211.63443407744646,
-            "inputs": [
-                {
-                    "id": 140328336389360,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140328336389408,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 261.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140312893516384,
-                "content": "",
-                "width": 260.0,
-                "height": 100.0,
-                "content-widht": 250,
-                "content-height": 66,
-                "value": "2+2",
-                "label": "res"
-            },
-            "op_code": 301,
-            "op_title": "Expression"
+            "op_title": "Separate"
         },
         {
             "id": 140328336390224,
@@ -590,13 +548,33 @@
                     "label": "H3B03_rw"
                 },
                 {
-                    "id": 140312893470272,
+                    "id": 140554345046848,
                     "index": 5,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 160.0,
+                    "label": "SiO2_rw"
+                },
+                {
+                    "id": 140554345173488,
+                    "index": 6,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 184.0,
+                    "label": "Na_rw"
+                },
+                {
+                    "id": 140554345106304,
+                    "index": 7,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 208.0,
                     "label": null
                 }
             ],
@@ -613,15 +591,15 @@
                 }
             ],
             "content": {
-                "id": 140312893026944,
+                "id": 140554344935488,
                 "content": "",
                 "width": 160.0,
-                "height": 180.0,
+                "height": 228.0,
                 "content-widht": 150,
-                "content-height": 146
+                "content-height": 194
             },
             "op_code": 401,
-            "op_title": "Data Combine"
+            "op_title": "Combine"
         },
         {
             "id": 140328089333088,
@@ -653,27 +631,27 @@
                 }
             ],
             "content": {
-                "id": 140312893028816,
+                "id": 140554344937360,
                 "content": "",
                 "dropSTR": false,
-                "removeSTR": false,
-                "strToNum": true,
-                "strToNumValue": "5000",
+                "removeSTR": true,
+                "strToNum": false,
+                "strToNumValue": "500",
                 "infToNum": true,
                 "infToNumValue": "0.0",
                 "dropINF": true,
-                "nanToNum": false,
+                "nanToNum": true,
                 "nanToNumValue": "5.0",
-                "dropNAN": true
+                "dropNAN": false
             },
             "op_code": 402,
-            "op_title": "Data Clean"
+            "op_title": "Clean"
         },
         {
             "id": 140328090378048,
             "title": "Data Combine",
-            "pos_x": 698.5714285714284,
-            "pos_y": -32.85714285714286,
+            "pos_x": 781.7472319740751,
+            "pos_y": -8.01242236024845,
             "inputs": [
                 {
                     "id": 140328090374256,
@@ -683,7 +661,7 @@
                     "inout": 1,
                     "x": -1.0,
                     "y": 40.0,
-                    "label": "the x asis"
+                    "label": "x"
                 },
                 {
                     "id": 140328090374880,
@@ -696,7 +674,7 @@
                     "label": "Cr_rw..."
                 },
                 {
-                    "id": 140313024891152,
+                    "id": 140554337449584,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
@@ -719,7 +697,7 @@
                 }
             ],
             "content": {
-                "id": 140312893072576,
+                "id": 140554344899200,
                 "content": "",
                 "width": 160.0,
                 "height": 108.0,
@@ -727,7 +705,117 @@
                 "content-height": 74
             },
             "op_code": 401,
-            "op_title": "Data Combine"
+            "op_title": "Combine"
+        },
+        {
+            "id": 140554344772032,
+            "title": "Separate",
+            "pos_x": 429.9216851201728,
+            "pos_y": 193.3567377801782,
+            "inputs": [
+                {
+                    "id": 140554352598512,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140554345106976,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140554352097120,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "Cr_rw"
+                },
+                {
+                    "id": 140554352097504,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "Mn_rw"
+                },
+                {
+                    "id": 140554352096736,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Co_rw"
+                },
+                {
+                    "id": 140554352096304,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "Zn_rw"
+                },
+                {
+                    "id": 140554352097360,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "H3B03_rw"
+                },
+                {
+                    "id": 140554352097024,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 184.0,
+                    "label": "SiO2_rw"
+                },
+                {
+                    "id": 140554352099136,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 208.0,
+                    "label": "Na_rw"
+                }
+            ],
+            "content": {
+                "id": 140554413499152,
+                "content": "",
+                "width": 160.0,
+                "height": 240.0,
+                "content-widht": 150,
+                "content-height": 206
+            },
+            "op_code": 400,
+            "op_title": "Separate"
         }
     ],
     "edges": [
@@ -736,12 +824,6 @@
             "edge_type": 2,
             "start": 139854067145792,
             "end": 139663669792624
-        },
-        {
-            "id": 140328460251248,
-            "edge_type": 2,
-            "start": 139663845901888,
-            "end": 139854067080160
         },
         {
             "id": 140328090374928,
@@ -796,6 +878,30 @@
             "edge_type": 2,
             "start": 140328090375792,
             "end": 139854064928752
+        },
+        {
+            "id": 140554352114176,
+            "edge_type": 2,
+            "start": 140328089415584,
+            "end": 140554352598512
+        },
+        {
+            "id": 140554413615808,
+            "edge_type": 2,
+            "start": 139663845900544,
+            "end": 140554345046848
+        },
+        {
+            "id": 140554345046464,
+            "edge_type": 2,
+            "start": 139663670670240,
+            "end": 140554345173488
+        },
+        {
+            "id": 140554379507360,
+            "edge_type": 2,
+            "start": 140554352097120,
+            "end": 139854067080160
         }
     ]
 }

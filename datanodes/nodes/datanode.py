@@ -61,7 +61,8 @@ class DataGraphicsNode(GraphicsNode):
         return super().itemChange(change, value)
 
 class DataContent(NodeContentWidget):
-    changed = pyqtSignal()
+    changed    = pyqtSignal()
+    outchanged = pyqtSignal()
     def initUI(self):
         pass
 
@@ -160,6 +161,9 @@ class DataNode(Node):
         if DEBUG : print("DATANODE : the eval is done")
         self.content.changed.emit()
 
+    def onOutputChanged(self, new_edge=None):
+        pass
+
     def getInputVaue(self, value, default=0):
         num = default
         if isinstance(value, dict):
@@ -175,13 +179,20 @@ class DataNode(Node):
     def getInputLength(self, value, default=0):
         num = default
         if isinstance(value, dict):
-            num = self.lenOrValOfDict(value)
+            if self.lenOrValOfDict(value) == 1:
+                num = int(self.dictFirstValue(value))
+            else:
+                num = self.lenOrValOfDict(value)
+
         if isinstance(value, float):
-            num = 1
+            num = int(value)
         if isinstance(value, int):
-            num = 1
+            num = value
         if isinstance(value, (list, np.ndarray)):
-            num = len(value)
+            if len(value) == 1:
+                num = value[0]
+            else:
+                num = len(value)
         return num
 
     def dictFirstValue(self, obj, default=0):
@@ -292,8 +303,8 @@ class ResizableInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
-        self.height = 160.0
-        self.min_height = 160.0
+        self.height = 80.0
+        self.min_height = 80.0
 
 class ResizableInputContent(DataContent):
     def serialize(self):
@@ -334,8 +345,7 @@ class ResizableInputNode(DataNode):
         self.grNode  = ResizableInputGraphicsNode(self)
         self.content.changed.connect(self.updateSockets)
 
-    def appendNewSocket(self):
-        self.appendInput(input=1)
+    def resize(self):
         size = len(self.getInputs())
         current_size = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
 
@@ -347,6 +357,12 @@ class ResizableInputNode(DataNode):
 
             x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
             self.content.resize(x, y)
+
+
+    def appendNewSocket(self):
+        if self.freeInputs() == 0:
+            self.appendInput(input=1)
+            self.resize()
 
     def sortSockets(self):
         sockets_full = []
@@ -365,13 +381,14 @@ class ResizableInputNode(DataNode):
         self.removeFreeInputs()
         self.appendNewSocket()
 
-    def generateNewSocket(self):
-        if self.freeSockets() < 0:
-            self.appendNewSocket()
-
-        if self.freeSockets() > 1:
-            self.removeFreeInputs()
-            self.appendNewSocket()
+    def removeFreeInputs(self):
+        for input in self.inputs[:-1]:
+            if not input.hasEdges(): 
+                input.grSocket.hide()
+                self.scene.grScene.removeItem(input.grSocket)
+        self.inputs = [input for input in self.inputs if input.hasEdges() or input == self.inputs[-1]]
+        self.resize()
+        self.scene.grScene.update()
 
     def getSocketsNames(self):
         if len(self.inputs) == 0: 
@@ -393,7 +410,6 @@ class ResizableInputNode(DataNode):
     def updateSockets(self):
         self.sortSockets()
         self.getSocketsNames()
-        self.generateNewSocket()
         self.setDirty()
         self.eval()
 
@@ -405,4 +421,138 @@ class ResizableInputNode(DataNode):
         self.updateSockets()
 
 
+
+
+
+
+
+
+
+class ResizableOutputGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 160.0
+        self.height = 160.0
+        self.min_height = 160.0
+
+class ResizableOutputContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.mainlayout = QGridLayout()
+        self.mainlayout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.mainlayout)
+
+    def serialize(self):
+        res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.resize(data['content-widht'], data['content-height'])
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+class ResizableOutputNode(DataNode):
+    icon = "icons/math.png"
+    op_code = 0
+    op_title = ""
+
+    def __init__(self, scene, inputs=[1], outputs=[1]):
+        super().__init__(scene, inputs, outputs)
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+        self.socket_bottom_margin = 20.0
+
+    def initInnerClasses(self):
+        self.content = ResizableOutputContent(self)
+        self.grNode  = ResizableOutputGraphicsNode(self)
+        self.content.changed.connect(self.updateSockets)
+
+    def appendNewSocket(self):
+        self.appendOutput(output=2)
+        self.content.appendPair(self.outputs[-1])
+
+        size = len(self.getOutputs())
+        current_size = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
+
+        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
+
+        if current_size > self.grNode.min_height:
+            self.grNode.height = current_size
+            self.grNode.update()
+
+            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
+            self.content.resize(x, y)
+
+    def sortSockets(self):
+        sockets_full  = []
+        sockets_empty = []
+        labels_full = []
+        values_full = []
+        labels_empty = []
+        values_empty = []
+        for socket in self.outputs:
+            if socket.hasEdges():
+                sockets_full.append(socket)
+                labels_full.append(self.content.labels[socket.id])
+                values_full.append(self.content.values[socket.id])
+            else:
+                sockets_empty.append(socket)
+                labels_empty.append(self.content.labels[socket.id])
+                values_empty.append(self.content.values[socket.id])
+
+        self.content.clearFromLayout()
+        self.outputs = sockets_full + sockets_empty
+        self.content.labels = labels_full + labels_empty
+        self.content.values = values_full + values_empty
+        for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
+            socket.index = i
+            socket.setPos()
+            self.content.mainlayout.addWidget(self.content.labels[socket.id], i, 0)
+            self.content.mainlayout.addWidget(self.content.values[socket.id], i, 1)
+
+        self.removeFreeInputs()
+        self.appendNewSocket()
+
+    def getSocketsNames(self):
+        if len(self.inputs) == 0: 
+            return None
+
+        for socket in self.inputs:
+            if socket.hasEdges():
+                edge = socket.edges[0]
+                other_socket = edge.getOtherSocket(socket)
+                if isinstance(other_socket.value, pd.Series):                
+                    socket.label = other_socket.value.name
+                if isinstance(other_socket.value, dict):
+                    if other_socket.value is not None and len(other_socket.value) > 0:
+                        if len(other_socket.value) == 1:
+                            socket.label = list(other_socket.value.keys())[0]
+                        else:
+                            socket.label = str(list(other_socket.value.keys())[0]) + "..."
+                    
+    def updateSockets(self):
+        self.sortSockets()
+        self.getSocketsNames()
+        self.setDirty()
+        self.eval()
+
+    def evalImplementation(self):
+        pass
+
+    def update(self):
+        super().update()
+        self.updateSockets()
 

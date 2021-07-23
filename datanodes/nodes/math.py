@@ -44,9 +44,8 @@ class MathContent(DataContent):
         self.cb.addItem("Absolute")
         self.cb.addItem("Normalize")
         self.cb.insertSeparator(10)
-        self.cb.addItem("Cut up")
-        self.cb.addItem("Cut down")
-        self.cb.insertSeparator(13)
+        self.cb.addItem("Randomize")
+        self.cb.insertSeparator(12)
         self.cb.addItem("Differentiate")
         self.cb.addItem("Integrate")
 
@@ -115,8 +114,7 @@ class MathNode(DataNode):
                     if self.content.operation == "Sum"           : res = self.sum(values)
                     if self.content.operation == "Absolute"      : res = self.absolute(values)
                     if self.content.operation == "Normalize"     : res = self.normilize(values)
-                    if self.content.operation == "Cut up"        : res = self.cutUp(values)
-                    if self.content.operation == "Cut down"      : res = self.cutDown(values)
+                    if self.content.operation == "Randomize"     : res = self.randomize(values)
                     if self.content.operation == "Differentiate" : res = self.differentiate(values)
                     if self.content.operation == "Integrate"     : res = self.integrate(values)
 
@@ -216,6 +214,14 @@ class MathNode(DataNode):
             res[j] = self.drop_nan(input_values[1][j]) / np.sum(self.drop_nan(input_values[1][j]))
         return res
 
+    def randomize(self, input_values):
+        res = {}
+        for i, j in zip(input_values[0], input_values[1]):
+            rands  = np.random.rand(len(self.drop_nan(input_values[0][i])))
+            corrs  = self.drop_nan(input_values[1][j])
+
+            res[i] = self.drop_nan(input_values[0][i]) * (1.0 + corrs * ( rands * 2.0 - 1.0))
+        return res
 
     def cutUp(self, input_values):
         pass
@@ -308,6 +314,7 @@ class ExpressionNode(ResizableInputNode):
         self.setDescendentsDirty(False)
         self.getOutput(0).value = 4
         self.getOutput(0).type  = "float"
+        self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -332,7 +339,7 @@ class ExpressionNode(ResizableInputNode):
                 expression = self.content.edit.text()
                 methods = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 
                            'cos' : np.cos, 'sin': np.sin, 'abs':np.abs,
-                           'max' : np.max, 'min': np.min, 'sum':np.sum}
+                           'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
 
                 code = compile(expression, "<string>", "eval")
 

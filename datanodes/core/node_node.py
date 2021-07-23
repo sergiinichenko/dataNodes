@@ -140,8 +140,11 @@ class Node(Serializer):
         else:
             self.outputs.append(Socket(node=self, inout=SOCKET_OUTPUT, index=len(self.outputs), position=self.output_socket_position, soket_type=output))        
 
-    def freeSockets(self):
+    def freeInputs(self):
         return sum([not input.hasEdges() for input in self.inputs])
+
+    def freeOutputs(self):
+        return sum([not output.hasEdges() for output in self.outputs])
 
 
     def removeFreeInputs(self):
@@ -150,6 +153,14 @@ class Node(Serializer):
                 input.grSocket.hide()
                 self.scene.grScene.removeItem(input.grSocket)
         self.inputs = [input for input in self.inputs if input.hasEdges()]
+        self.scene.grScene.update()
+
+    def removeFreeOutputs(self):
+        for output in self.outputs:
+            if not output.hasEdges(): 
+                output.grSocket.hide()
+                self.scene.grScene.removeItem(output.grSocket)
+        self.outputs = [output for output in self.outputs if output.hasEdges()]
         self.scene.grScene.update()
 
     def __str__(self) -> str:
@@ -168,14 +179,16 @@ class Node(Serializer):
         self.grNode.title = self._title
 
 
-    def onEdgeConnectionChanged(seld, new_edge):
-        pass
-    
+    def onEdgeConnectionChanged(self, new_edge=None):
+        self.setDirty()
+        self.setDescendentsDirty()
 
     def onInputChanged(self, new_edge=None):
         self.setDirty()
         self.setDescendentsDirty()
 
+    def onOutputChanged(self, new_edge=None):
+        pass
 
     def isDirty(self):
         return self._is_dirty

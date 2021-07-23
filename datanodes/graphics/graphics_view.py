@@ -328,7 +328,10 @@ class GraphicsView(QGraphicsView):
         if DEBUG:
             if isinstance(item, GraphicsEdge): print('RMB DEBUG:', item.edge, ' connecting sockets:',
                                             item.edge.start_socket, '<-->', item.edge.end_socket)
-            if type(item) is GraphicsSocket: print('RMB DEBUG:', item.socket, 'has edge:', item.socket.edge)
+            if type(item) is GraphicsSocket: 
+                print('RMB DEBUG:', item.socket)
+                if item.socket.hasEdges(): 
+                    print('has edge:', item.socket.edge)
 
             if item is None:
                 print('SCENE:')

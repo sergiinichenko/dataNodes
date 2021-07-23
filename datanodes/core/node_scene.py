@@ -234,5 +234,7 @@ class Scene(Serializer):
             Edge(self).deserialize(edge_data, hashmap, restore_id)
 
         # create adges from data
-        
+        for node in self.nodes:
+            node.update()
+
         return True

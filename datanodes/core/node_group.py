@@ -128,7 +128,7 @@ class Group(Serializer):
         self.grNode.title = self._title
 
 
-    def onEdgeConnectionChanged(seld, new_edge):
+    def onEdgeConnectionChanged(self, new_edge=None):
         pass
     
 

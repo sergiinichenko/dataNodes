@@ -304,6 +304,9 @@ class NodeSubWindow(NodeWidget):
         self.data_menu = context_menu.addMenu("Data process")
         self.populateSubMenu(self.data_menu, [400, 500])
 
+        self.data_menu = context_menu.addMenu("Additional")
+        self.populateSubMenu(self.data_menu, [500, 600])
+
         return context_menu
 
     def setTitle(self):
