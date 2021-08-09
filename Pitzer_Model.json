@@ -2,206 +2,15 @@
     "id": 140554352907936,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 10.891176470588233,
-    "view_y": -802.8352941176469,
-    "view_scale": 15.0,
+    "view_x": 588.75,
+    "view_y": -468.75,
+    "view_scale": 16.0,
     "nodes": [
-        {
-            "id": 140554337490448,
-            "title": "Value",
-            "pos_x": -548.6010223214284,
-            "pos_y": -268.9841470238095,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140554337741408,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140046236361632,
-                "content": "",
-                "value": "6.02215e23",
-                "label": "Na"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140554338094384,
-            "title": "Value",
-            "pos_x": -620.2010223214286,
-            "pos_y": -180.18414702380954,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140554338091696,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140046236362928,
-                "content": "",
-                "value": "997.05",
-                "label": "ro"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140554338092848,
-            "title": "Value",
-            "pos_x": -655.0510223214285,
-            "pos_y": -93.13414702380959,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140554338092080,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140046236364224,
-                "content": "",
-                "value": "300.0",
-                "label": "T"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140554337741216,
-            "title": "Combine",
-            "pos_x": -448.2010223214286,
-            "pos_y": -107.23414702380961,
-            "inputs": [
-                {
-                    "id": 140554337739536,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "Na"
-                },
-                {
-                    "id": 140554337739008,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": "ro"
-                },
-                {
-                    "id": 140658901102208,
-                    "index": 2,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 88.0,
-                    "label": "e0"
-                },
-                {
-                    "id": 140658900754240,
-                    "index": 3,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 112.0,
-                    "label": "er"
-                },
-                {
-                    "id": 140658900754096,
-                    "index": 4,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 136.0,
-                    "label": "kb"
-                },
-                {
-                    "id": 140658900752656,
-                    "index": 5,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 160.0,
-                    "label": "T"
-                },
-                {
-                    "id": 140658897435136,
-                    "index": 6,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 184.0,
-                    "label": "e"
-                },
-                {
-                    "id": 140675817272032,
-                    "index": 7,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 208.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140554337739392,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045663798032,
-                "content": "",
-                "width": 160.0,
-                "height": 228.0,
-                "content-widht": 150,
-                "content-height": 194
-            },
-            "op_code": 401,
-            "op_title": "Combine"
-        },
         {
             "id": 140571344049296,
             "title": "Vector (by size)",
-            "pos_x": -608.7792831909939,
-            "pos_y": 302.8941138457556,
+            "pos_x": -352.77928319099385,
+            "pos_y": -17.105886154244402,
             "inputs": [
                 {
                     "id": 140571344049344,
@@ -247,7 +56,7 @@
                 }
             ],
             "content": {
-                "id": 140045663800192,
+                "id": 140190240476176,
                 "content": "",
                 "name": "T",
                 "start": "300",
@@ -258,114 +67,33 @@
             "op_title": "Vector (by size)"
         },
         {
-            "id": 140658900153296,
-            "title": "Value",
-            "pos_x": -660.6749353649072,
-            "pos_y": -5.912407893374848,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140658900153488,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045663840144,
-                "content": "",
-                "value": "8.854187e-12",
-                "label": "e0"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140658900752416,
-            "title": "Value",
-            "pos_x": -632.4510223214286,
-            "pos_y": 80.8158529761904,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140658900752128,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045663841440,
-                "content": "",
-                "value": "78.38",
-                "label": "er"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140658900154448,
-            "title": "Value",
-            "pos_x": -594.5010223214285,
-            "pos_y": 179.71585297619032,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140658900154640,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045663355376,
-                "content": "",
-                "value": "1.38065e-23",
-                "label": "kb"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
             "id": 140658900754336,
             "title": "Combine",
-            "pos_x": 74.51421577380961,
-            "pos_y": -136.03581369047623,
+            "pos_x": 178.51421577380972,
+            "pos_y": -38.70248035714292,
             "inputs": [
                 {
-                    "id": 140658900152528,
+                    "id": 140658897107984,
                     "index": 0,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 40.0,
-                    "label": "T"
+                    "label": "Af_T"
                 },
                 {
-                    "id": 140658897107984,
+                    "id": 140675816582400,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "Af"
+                    "label": "T"
                 },
                 {
-                    "id": 140675816582400,
+                    "id": 139637843370048,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
@@ -388,7 +116,7 @@
                 }
             ],
             "content": {
-                "id": 140045663356672,
+                "id": 140189814478880,
                 "content": "",
                 "width": 160.0,
                 "height": 108.0,
@@ -401,8 +129,8 @@
         {
             "id": 140658900753808,
             "title": "Plot",
-            "pos_x": 422.92641304347853,
-            "pos_y": -338.52663043478253,
+            "pos_x": 653.9409057971018,
+            "pos_y": -233.42518115942013,
             "inputs": [
                 {
                     "id": 140658900154928,
@@ -417,7 +145,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140045663358112,
+                "id": 140189814480320,
                 "content": "",
                 "width": 568.861387163561,
                 "height": 502.6131469979297,
@@ -428,37 +156,10 @@
             "op_title": "Plot"
         },
         {
-            "id": 140658897941408,
-            "title": "Value",
-            "pos_x": -435.8010223214285,
-            "pos_y": 130.2658529761904,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140658897767776,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045663290416,
-                "content": "",
-                "value": "1.602176e-19",
-                "label": "e"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
             "id": 140658853033344,
             "title": "Expression",
-            "pos_x": -240.32551546887657,
-            "pos_y": -163.18169971757146,
+            "pos_x": -270.9921821355432,
+            "pos_y": -171.18169971757146,
             "inputs": [
                 {
                     "id": 140658853033008,
@@ -494,7 +195,7 @@
                 }
             ],
             "content": {
-                "id": 140045663291712,
+                "id": 140189813941584,
                 "content": "",
                 "width": 260.0,
                 "height": 100.0,
@@ -509,17 +210,17 @@
         {
             "id": 140466368761280,
             "title": "Comment",
-            "pos_x": -376.67978676470585,
-            "pos_y": -283.0874667892159,
+            "pos_x": -769.2015258951407,
+            "pos_y": -298.10195954283904,
             "inputs": [],
             "outputs": [],
             "content": {
-                "id": 140045461524976,
+                "id": 140189813943744,
                 "content": "",
-                "width": 695.0159761904761,
-                "height": 119.48060416666672,
-                "content-widht": 681,
-                "content-height": 82,
+                "width": 689.6826428571428,
+                "height": 115.48060416666672,
+                "content-widht": 675,
+                "content-height": 78,
                 "comment": "Calculating the slope of the Debye-H\u00fcckel law for the solvent:"
             },
             "op_code": 500,
@@ -528,8 +229,8 @@
         {
             "id": 140464182881152,
             "title": "Vector Filled",
-            "pos_x": 54.6039725672879,
-            "pos_y": -1000.1046001552793,
+            "pos_x": -2.7182925761328534,
+            "pos_y": -631.7530481430051,
             "inputs": [
                 {
                     "id": 140464182881200,
@@ -565,7 +266,7 @@
                 }
             ],
             "content": {
-                "id": 140045461525840,
+                "id": 140189814055264,
                 "content": "",
                 "name": "a",
                 "number": "10",
@@ -577,8 +278,8 @@
         {
             "id": 140464181351616,
             "title": "Vector Filled",
-            "pos_x": -16.598343685300243,
-            "pos_y": -870.9730848861286,
+            "pos_x": -13.731572911896762,
+            "pos_y": -497.3811285013719,
             "inputs": [
                 {
                     "id": 140464181351808,
@@ -614,7 +315,7 @@
                 }
             ],
             "content": {
-                "id": 140045461528288,
+                "id": 140189814057712,
                 "content": "",
                 "name": "b",
                 "number": "5",
@@ -626,8 +327,8 @@
         {
             "id": 140464182879232,
             "title": "Expression",
-            "pos_x": 189.39952380952377,
-            "pos_y": -622.2951190476186,
+            "pos_x": 422.74107609576254,
+            "pos_y": -672.6345618026115,
             "inputs": [
                 {
                     "id": 140464182878704,
@@ -663,7 +364,7 @@
                 }
             ],
             "content": {
-                "id": 140045461584048,
+                "id": 140189814092992,
                 "content": "",
                 "width": 260.0,
                 "height": 100.0,
@@ -678,8 +379,8 @@
         {
             "id": 140464182882160,
             "title": "Combine",
-            "pos_x": 189.26190476190476,
-            "pos_y": -777.2142857142858,
+            "pos_x": 209.89695585639538,
+            "pos_y": -751.0232224557446,
             "inputs": [
                 {
                     "id": 140464182881824,
@@ -702,17 +403,17 @@
                     "label": "b"
                 },
                 {
-                    "id": 140031302730512,
+                    "id": 139637844410768,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 88.0,
-                    "label": "c_a..."
+                    "label": "Af"
                 },
                 {
-                    "id": 140675818104192,
+                    "id": 139637638681648,
                     "index": 3,
                     "position": 1,
                     "socket_type": 1,
@@ -735,7 +436,7 @@
                 }
             ],
             "content": {
-                "id": 140045461606752,
+                "id": 140189814095152,
                 "content": "",
                 "width": 160.0,
                 "height": 132.0,
@@ -748,8 +449,8 @@
         {
             "id": 140705678926080,
             "title": "Math",
-            "pos_x": -250.96381481162416,
-            "pos_y": -781.3912953537283,
+            "pos_x": -655.1234816700662,
+            "pos_y": -726.2907775596957,
             "inputs": [
                 {
                     "id": 140705678925936,
@@ -785,7 +486,7 @@
                 }
             ],
             "content": {
-                "id": 140045461608336,
+                "id": 140189813601472,
                 "content": "",
                 "sel_ind": 11,
                 "label": "c_a"
@@ -796,8 +497,8 @@
         {
             "id": 140705678978688,
             "title": "Vector Filled",
-            "pos_x": -439.86408848053816,
-            "pos_y": -983.1767469342414,
+            "pos_x": -882.3528970063322,
+            "pos_y": -713.2612925631278,
             "inputs": [
                 {
                     "id": 140705678978880,
@@ -833,7 +534,7 @@
                 }
             ],
             "content": {
-                "id": 140045461610352,
+                "id": 140189813603488,
                 "content": "",
                 "name": "a",
                 "number": "10",
@@ -843,37 +544,10 @@
             "op_title": "Vector Filled"
         },
         {
-            "id": 140705679074400,
-            "title": "Value",
-            "pos_x": -434.1460745300538,
-            "pos_y": -647.2671094865684,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140705679074208,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045461670208,
-                "content": "",
-                "value": "0.2",
-                "label": "x"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
             "id": 140031215220192,
             "title": "Math",
-            "pos_x": -255.9153029100528,
-            "pos_y": -673.422847883598,
+            "pos_x": -643.2999773025354,
+            "pos_y": -610.681224366434,
             "inputs": [
                 {
                     "id": 140031215220528,
@@ -909,7 +583,7 @@
                 }
             ],
             "content": {
-                "id": 140045461671504,
+                "id": 140189813663344,
                 "content": "",
                 "sel_ind": 11,
                 "label": "c_b"
@@ -918,70 +592,10 @@
             "op_title": "Math"
         },
         {
-            "id": 140031215222112,
-            "title": "Combine",
-            "pos_x": -39.336119047618915,
-            "pos_y": -740.9807738095244,
-            "inputs": [
-                {
-                    "id": 140031214367072,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "c_a"
-                },
-                {
-                    "id": 140031214367264,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": "c_b"
-                },
-                {
-                    "id": 140675817447232,
-                    "index": 2,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 88.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140031214366784,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045461698160,
-                "content": "",
-                "width": 160.0,
-                "height": 108.0,
-                "content-widht": 150,
-                "content-height": 74
-            },
-            "op_code": 401,
-            "op_title": "Combine"
-        },
-        {
             "id": 140031302199760,
             "title": "Vector Filled",
-            "pos_x": -436.6150846560847,
-            "pos_y": -834.1697195767199,
+            "pos_x": -846.8110792863692,
+            "pos_y": -582.464286848849,
             "inputs": [
                 {
                     "id": 140031302667856,
@@ -1017,7 +631,7 @@
                 }
             ],
             "content": {
-                "id": 140045461699600,
+                "id": 140189813665360,
                 "content": "",
                 "name": "b",
                 "number": "5",
@@ -1029,8 +643,8 @@
         {
             "id": 140031303065120,
             "title": "Expression",
-            "pos_x": 729.97906547619,
-            "pos_y": -622.5007499999995,
+            "pos_x": 1027.3999580544753,
+            "pos_y": -686.6392667529652,
             "inputs": [
                 {
                     "id": 140031303062816,
@@ -1043,7 +657,7 @@
                     "label": "I..."
                 },
                 {
-                    "id": 140675817359488,
+                    "id": 139637843764416,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
@@ -1066,12 +680,12 @@
                 }
             ],
             "content": {
-                "id": 140045461734880,
+                "id": 140189813704736,
                 "content": "",
                 "width": 260.0,
-                "height": 100.0,
+                "height": 108.0,
                 "content-widht": 250,
-                "content-height": 66,
+                "content-height": 74,
                 "value": "z_a**2 * Af * (I**0.5)",
                 "label": "g_LRa"
             },
@@ -1081,8 +695,8 @@
         {
             "id": 140031303063680,
             "title": "Combine",
-            "pos_x": 501.1645238095234,
-            "pos_y": -580.8294047619042,
+            "pos_x": 786.9912134892584,
+            "pos_y": -669.3157476018268,
             "inputs": [
                 {
                     "id": 140031302405232,
@@ -1102,26 +716,16 @@
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "T..."
+                    "label": "Af_T..."
                 },
                 {
-                    "id": 140031303153024,
+                    "id": 139637844315104,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 88.0,
-                    "label": "z_a..."
-                },
-                {
-                    "id": 140675817020384,
-                    "index": 3,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 112.0,
                     "label": null
                 }
             ],
@@ -1138,12 +742,12 @@
                 }
             ],
             "content": {
-                "id": 140045461737040,
+                "id": 140189813731536,
                 "content": "",
                 "width": 160.0,
-                "height": 132.0,
+                "height": 108.0,
                 "content-widht": 150,
-                "content-height": 98
+                "content-height": 74
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -1151,12 +755,12 @@
         {
             "id": 140031303153120,
             "title": "Comment",
-            "pos_x": -446.3245681216929,
-            "pos_y": -1225.601243386242,
+            "pos_x": -595.6579014550263,
+            "pos_y": -1316.2679100529085,
             "inputs": [],
             "outputs": [],
             "content": {
-                "id": 140045461247168,
+                "id": 140189813732976,
                 "content": "",
                 "width": 631.695595238095,
                 "height": 105.90738095238112,
@@ -1168,124 +772,10 @@
             "op_title": "Comment"
         },
         {
-            "id": 140031303205648,
-            "title": "Combine",
-            "pos_x": 171.24033928571436,
-            "pos_y": -1111.5077202380944,
-            "inputs": [
-                {
-                    "id": 140031214369328,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "z_a"
-                },
-                {
-                    "id": 140031302987488,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": "z_b"
-                },
-                {
-                    "id": 140675816886128,
-                    "index": 2,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 88.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140031214369376,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045461248032,
-                "content": "",
-                "width": 160.0,
-                "height": 108.0,
-                "content-widht": 150,
-                "content-height": 74
-            },
-            "op_code": 401,
-            "op_title": "Combine"
-        },
-        {
-            "id": 140031302015200,
-            "title": "Value",
-            "pos_x": -422.32076719576713,
-            "pos_y": -1079.5224933862428,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140031302093504,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045461249472,
-                "content": "",
-                "value": "2",
-                "label": "z_b"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140031214369856,
-            "title": "Value",
-            "pos_x": -262.59976190476175,
-            "pos_y": -1080.6397883597879,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140031214370048,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140045461287696,
-                "content": "",
-                "value": "-1",
-                "label": "z_a"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
             "id": 140031215221392,
             "title": "Plot",
-            "pos_x": 1230.3846957671951,
-            "pos_y": -814.909014550264,
+            "pos_x": 1649.4571595353116,
+            "pos_y": -1083.6626377386697,
             "inputs": [
                 {
                     "id": 140031100233856,
@@ -1300,7 +790,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140045461288992,
+                "id": 140189813733840,
                 "content": "",
                 "width": 573.8764550264548,
                 "height": 452.8921957671957,
@@ -1311,100 +801,10 @@
             "op_title": "Plot"
         },
         {
-            "id": 140031214367648,
-            "title": "Separate",
-            "pos_x": 757.0577777777771,
-            "pos_y": -839.3781547619043,
-            "inputs": [
-                {
-                    "id": 140031214368896,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140045460534752,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": "DATA"
-                },
-                {
-                    "id": 140045461474512,
-                    "index": 1,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 64.0,
-                    "label": "I"
-                },
-                {
-                    "id": 140045461473888,
-                    "index": 2,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 88.0,
-                    "label": "T"
-                },
-                {
-                    "id": 140045461427008,
-                    "index": 3,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 112.0,
-                    "label": "Af"
-                },
-                {
-                    "id": 140045460209824,
-                    "index": 4,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 136.0,
-                    "label": "z_a"
-                },
-                {
-                    "id": 140045460211504,
-                    "index": 5,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 160.0,
-                    "label": "z_b"
-                }
-            ],
-            "content": {
-                "id": 140045461024336,
-                "content": "",
-                "width": 160.0,
-                "height": 192.0,
-                "content-widht": 150,
-                "content-height": 158
-            },
-            "op_code": 400,
-            "op_title": "Separate"
-        },
-        {
             "id": 140031099827584,
             "title": "Combine",
-            "pos_x": 1003.6165608465603,
-            "pos_y": -791.7401653439147,
+            "pos_x": 1373.4716333103283,
+            "pos_y": -821.8850928801465,
             "inputs": [
                 {
                     "id": 140031169074368,
@@ -1417,13 +817,23 @@
                     "label": "g_LRa"
                 },
                 {
-                    "id": 140675817730352,
+                    "id": 139637640738752,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
+                    "label": "a..."
+                },
+                {
+                    "id": 140190240517568,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
                     "label": null
                 }
             ],
@@ -1440,12 +850,12 @@
                 }
             ],
             "content": {
-                "id": 140045461050992,
+                "id": 140189813497920,
                 "content": "",
                 "width": 160.0,
-                "height": 84.0,
+                "height": 108.0,
                 "content-widht": 150,
-                "content-height": 50
+                "content-height": 74
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -1453,8 +863,8 @@
         {
             "id": 139720796063008,
             "title": "Multi-Value",
-            "pos_x": -875.294117647059,
-            "pos_y": -845.8823529411766,
+            "pos_x": -845.7120240057886,
+            "pos_y": -967.171742272976,
             "inputs": [],
             "outputs": [
                 {
@@ -1496,32 +906,71 @@
                     "x": 141.0,
                     "y": 112.0,
                     "label": null
+                },
+                {
+                    "id": 139637843434512,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 136.0,
+                    "label": null
+                },
+                {
+                    "id": 139637843318816,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 160.0,
+                    "label": null
+                },
+                {
+                    "id": 139637640740672,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 184.0,
+                    "label": null
                 }
             ],
             "content": {
-                "id": 140045461052288,
+                "id": 140189813499360,
                 "content": "",
                 "width": 140.0,
-                "height": 132.0,
+                "height": 204.0,
                 "content-widht": 130,
-                "content-height": 99,
+                "content-height": 171,
                 "value": [
                     "1.0",
                     "125",
                     "250",
+                    "0.2",
+                    "-1.0",
+                    "2.0",
                     "1.0"
                 ],
                 "label": [
                     "alpha",
                     "beta",
                     "teta",
-                    "x3"
+                    "rand",
+                    "z_a",
+                    "z_b",
+                    "x6"
                 ],
                 "socket": [
                     "139720796605456",
                     "139720797405632",
                     "139720796811024",
-                    "139720796105744"
+                    "139720796105744",
+                    "139637843434512",
+                    "139637843318816",
+                    "139637640740672"
                 ]
             },
             "op_code": 103,
@@ -1530,8 +979,8 @@
         {
             "id": 139720796556832,
             "title": "Combine",
-            "pos_x": -664.7058823529412,
-            "pos_y": -801.1764705882354,
+            "pos_x": -414.59941951630685,
+            "pos_y": -970.9172448135989,
             "inputs": [
                 {
                     "id": 139720797388032,
@@ -1571,6 +1020,56 @@
                     "inout": 1,
                     "x": -1.0,
                     "y": 112.0,
+                    "label": "rand"
+                },
+                {
+                    "id": 139637843320256,
+                    "index": 4,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 136.0,
+                    "label": "z_a"
+                },
+                {
+                    "id": 139637843318768,
+                    "index": 5,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 160.0,
+                    "label": "z_b"
+                },
+                {
+                    "id": 139637843858096,
+                    "index": 6,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 184.0,
+                    "label": "c_a"
+                },
+                {
+                    "id": 139637639949040,
+                    "index": 7,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 208.0,
+                    "label": "c_b"
+                },
+                {
+                    "id": 139637639731184,
+                    "index": 8,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 232.0,
                     "label": null
                 }
             ],
@@ -1587,7 +1086,517 @@
                 }
             ],
             "content": {
-                "id": 140045461100000,
+                "id": 140189813544272,
+                "content": "",
+                "width": 160.0,
+                "height": 252.0,
+                "content-widht": 150,
+                "content-height": 218
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 139637639642272,
+            "title": "Separate",
+            "pos_x": -208.20032327881438,
+            "pos_y": -974.6889126325308,
+            "inputs": [
+                {
+                    "id": 139637843861120,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140189702408464,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140189702671136,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "alpha"
+                },
+                {
+                    "id": 140189702672096,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "beta"
+                },
+                {
+                    "id": 140189702668496,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "teta"
+                },
+                {
+                    "id": 140189702668976,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "rand"
+                },
+                {
+                    "id": 140189702671520,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "z_a"
+                },
+                {
+                    "id": 140189702671616,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 184.0,
+                    "label": "z_b"
+                },
+                {
+                    "id": 140189702670704,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 208.0,
+                    "label": "c_a"
+                },
+                {
+                    "id": 140189702671808,
+                    "index": 8,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 232.0,
+                    "label": "c_b"
+                }
+            ],
+            "content": {
+                "id": 140189813546576,
+                "content": "",
+                "width": 160.0,
+                "height": 264.0,
+                "content-widht": 150,
+                "content-height": 230
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 139637844511808,
+            "title": "Separate",
+            "pos_x": 719.4782608695654,
+            "pos_y": -1043.7681159420292,
+            "inputs": [
+                {
+                    "id": 139637640003296,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140190240515600,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140190240516176,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140190240516272,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "b"
+                },
+                {
+                    "id": 140190240516368,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Af"
+                },
+                {
+                    "id": 140190240516464,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "I"
+                },
+                {
+                    "id": 140190240516560,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "alpha"
+                },
+                {
+                    "id": 140190240516656,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 184.0,
+                    "label": "beta"
+                },
+                {
+                    "id": 140190240516752,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 208.0,
+                    "label": "teta"
+                },
+                {
+                    "id": 140190240516848,
+                    "index": 8,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 232.0,
+                    "label": "rand"
+                },
+                {
+                    "id": 140190240516944,
+                    "index": 9,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 256.0,
+                    "label": "z_a"
+                },
+                {
+                    "id": 140190240517040,
+                    "index": 10,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 280.0,
+                    "label": "z_b"
+                },
+                {
+                    "id": 140190240517136,
+                    "index": 11,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 304.0,
+                    "label": "c_a"
+                },
+                {
+                    "id": 140190240517232,
+                    "index": 12,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 328.0,
+                    "label": "c_b"
+                }
+            ],
+            "content": {
+                "id": 140189813577760,
+                "content": "",
+                "width": 160.0,
+                "height": 360.0,
+                "content-widht": 150,
+                "content-height": 326
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 139637843766336,
+            "title": "Separate",
+            "pos_x": 1044.7536231884067,
+            "pos_y": -1052.173913043478,
+            "inputs": [
+                {
+                    "id": 139637640367552,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140189696004400,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140189696004592,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140189696004688,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "b"
+                },
+                {
+                    "id": 140189696004784,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Af"
+                },
+                {
+                    "id": 140189696004880,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "I"
+                },
+                {
+                    "id": 140189696004976,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "alpha"
+                },
+                {
+                    "id": 140189696005072,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 184.0,
+                    "label": "beta"
+                },
+                {
+                    "id": 140189696005168,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 208.0,
+                    "label": "teta"
+                },
+                {
+                    "id": 140189696005264,
+                    "index": 8,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 232.0,
+                    "label": "rand"
+                },
+                {
+                    "id": 140189696005360,
+                    "index": 9,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 256.0,
+                    "label": "z_a"
+                },
+                {
+                    "id": 140189696005456,
+                    "index": 10,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 280.0,
+                    "label": "z_b"
+                },
+                {
+                    "id": 140189696005552,
+                    "index": 11,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 304.0,
+                    "label": "c_a"
+                },
+                {
+                    "id": 140189696005648,
+                    "index": 12,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 328.0,
+                    "label": "c_b"
+                }
+            ],
+            "content": {
+                "id": 140189813113904,
+                "content": "",
+                "width": 160.0,
+                "height": 360.0,
+                "content-widht": 150,
+                "content-height": 326
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 139637638825584,
+            "title": "Combine",
+            "pos_x": 371.0144927536232,
+            "pos_y": -998.2608695652174,
+            "inputs": [
+                {
+                    "id": 139637640177552,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "a..."
+                },
+                {
+                    "id": 139637639399024,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "I"
+                },
+                {
+                    "id": 139637640950352,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "alpha..."
+                },
+                {
+                    "id": 140190240515984,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139637640365440,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140189813170240,
                 "content": "",
                 "width": 160.0,
                 "height": 132.0,
@@ -1598,13 +1607,13 @@
             "op_title": "Combine"
         },
         {
-            "id": 139720789589824,
+            "id": 139639123511952,
             "title": "Text",
-            "pos_x": -668.2352941176471,
-            "pos_y": -577.6470588235294,
+            "pos_x": 1662.434782608696,
+            "pos_y": -309.7391304347826,
             "inputs": [
                 {
-                    "id": 139720789789856,
+                    "id": 139637844200176,
                     "index": 0,
                     "position": 2,
                     "socket_type": 1,
@@ -1616,84 +1625,325 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140045461101584,
+                "id": 140189813171824,
                 "content": "",
-                "value": "{'alpha': 1.0, 'beta': 125.0, 'teta': 250.0}",
-                "width": 200.0,
-                "height": 200.0,
-                "content-widht": 190,
-                "content-height": 166
+                "value": "{'g_LRa': 0.0, 'a': array([-1., -1., -1., -1., -1., -1., -1., -1., -1., -1.]), 'b': array([2., 2., 2., 2., 2.]), 'Af': 0.3878650080300062, 'I': 0.0, 'alpha': 1.0, 'beta': 125.0, 'teta': 250.0, 'rand': 0.2, 'z_a': -1.0, 'z_b': 2.0, 'c_a': array([0.01021259, 0.00836362, 0.01102447, 0.00990868, 0.00816511,\n       0.00840982, 0.00994409, 0.00911265, 0.01020608, 0.00835142]), 'c_b': array([0.00833951, 0.01190207, 0.00969734, 0.00964329, 0.0105345 ])}",
+                "width": 714.782608695652,
+                "height": 577.9710144927537,
+                "content-widht": 704,
+                "content-height": 543
             },
             "op_code": 202,
             "op_title": "Text"
+        },
+        {
+            "id": 139637843210928,
+            "title": "Multi-Value",
+            "pos_x": -789.333333333333,
+            "pos_y": -174.66666666666674,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 139637640178704,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 139637639641600,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 64.0,
+                    "label": null
+                },
+                {
+                    "id": 139637639140448,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 139637639142128,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 112.0,
+                    "label": null
+                },
+                {
+                    "id": 139637639397872,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 136.0,
+                    "label": null
+                },
+                {
+                    "id": 139637639399600,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 160.0,
+                    "label": null
+                },
+                {
+                    "id": 139637636666080,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 184.0,
+                    "label": null
+                },
+                {
+                    "id": 139637843861456,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 208.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140189813172976,
+                "content": "",
+                "width": 140.0,
+                "height": 228.0,
+                "content-widht": 130,
+                "content-height": 195,
+                "value": [
+                    "6.02215e23",
+                    "1.38065e-23",
+                    "8.854187e-12",
+                    "78.38",
+                    "300",
+                    "997.05",
+                    "1.602176e-19",
+                    "1.0"
+                ],
+                "label": [
+                    "Na",
+                    "kb",
+                    "e0",
+                    "er",
+                    "T",
+                    "ro",
+                    "e",
+                    "x7"
+                ],
+                "socket": [
+                    "139637640178704",
+                    "139637639641600",
+                    "139637639140448",
+                    "139637639142128",
+                    "139637639397872",
+                    "139637639399600",
+                    "139637636666080",
+                    "139637843861456"
+                ]
+            },
+            "op_code": 103,
+            "op_title": "Multi-Value"
+        },
+        {
+            "id": 139637640177888,
+            "title": "Combine",
+            "pos_x": -608.0,
+            "pos_y": -173.3333333333336,
+            "inputs": [
+                {
+                    "id": 139637640176784,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "Na"
+                },
+                {
+                    "id": 139637639142416,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "kb"
+                },
+                {
+                    "id": 139637639141600,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "e0"
+                },
+                {
+                    "id": 139637639140736,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": "er"
+                },
+                {
+                    "id": 139637639398256,
+                    "index": 4,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 136.0,
+                    "label": "T"
+                },
+                {
+                    "id": 139637636665744,
+                    "index": 5,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 160.0,
+                    "label": "ro"
+                },
+                {
+                    "id": 139637636665888,
+                    "index": 6,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 184.0,
+                    "label": "e"
+                },
+                {
+                    "id": 139637843860736,
+                    "index": 7,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 208.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139637640950304,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140189813214224,
+                "content": "",
+                "width": 160.0,
+                "height": 228.0,
+                "content-widht": 150,
+                "content-height": 194
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 139637640951744,
+            "title": "Expression",
+            "pos_x": -133.33333333333326,
+            "pos_y": 41.33333333333334,
+            "inputs": [
+                {
+                    "id": 139637640950784,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "Na..."
+                },
+                {
+                    "id": 139637640950400,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "T"
+                },
+                {
+                    "id": 139637843372640,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 139637640949968,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140189813241024,
+                "content": "",
+                "width": 260.0,
+                "height": 108.0,
+                "content-widht": 250,
+                "content-height": 74,
+                "value": "((2.0*pi*Na)**0.5)/3 * ((e**2.0)/(4*pi*e0*kb))**1.5  *ro**0.5  * (1.0/(er*T))**1.5",
+                "label": "Af_T"
+            },
+            "op_code": 301,
+            "op_title": "Expression"
         }
     ],
     "edges": [
-        {
-            "id": 140554337739440,
-            "edge_type": 2,
-            "start": 140554337741408,
-            "end": 140554337739536
-        },
-        {
-            "id": 140554338134288,
-            "edge_type": 2,
-            "start": 140554338091696,
-            "end": 140554337739008
-        },
-        {
-            "id": 140658900753760,
-            "edge_type": 2,
-            "start": 140658900153488,
-            "end": 140658901102208
-        },
-        {
-            "id": 140658900753952,
-            "edge_type": 2,
-            "start": 140658900752128,
-            "end": 140658900754240
-        },
-        {
-            "id": 140658900754192,
-            "edge_type": 2,
-            "start": 140658900154640,
-            "end": 140658900754096
-        },
-        {
-            "id": 140658900753616,
-            "edge_type": 2,
-            "start": 140571344051216,
-            "end": 140658900752656
-        },
-        {
-            "id": 140658900153968,
-            "edge_type": 2,
-            "start": 140571344051216,
-            "end": 140658900152528
-        },
         {
             "id": 140658897688656,
             "edge_type": 2,
             "start": 140658900153872,
             "end": 140658900154928
-        },
-        {
-            "id": 140658897581056,
-            "edge_type": 2,
-            "start": 140658897767776,
-            "end": 140658897435136
-        },
-        {
-            "id": 140658853034208,
-            "edge_type": 2,
-            "start": 140554337739392,
-            "end": 140658853033008
-        },
-        {
-            "id": 140658898560480,
-            "edge_type": 2,
-            "start": 140658853033872,
-            "end": 140658897107984
         },
         {
             "id": 140464182879184,
@@ -1720,40 +1970,10 @@
             "end": 140705678925936
         },
         {
-            "id": 140705679073584,
-            "edge_type": 2,
-            "start": 140705679074208,
-            "end": 140705678976000
-        },
-        {
-            "id": 140031217680336,
-            "edge_type": 2,
-            "start": 140705679074208,
-            "end": 140031215220720
-        },
-        {
-            "id": 140031214367168,
-            "edge_type": 2,
-            "start": 140705678975904,
-            "end": 140031214367072
-        },
-        {
-            "id": 140031215222592,
-            "edge_type": 2,
-            "start": 140031215220816,
-            "end": 140031214367264
-        },
-        {
             "id": 140031302198608,
             "edge_type": 2,
             "start": 140031302793776,
             "end": 140031215220528
-        },
-        {
-            "id": 140031302197360,
-            "edge_type": 2,
-            "start": 140031214366784,
-            "end": 140031302730512
         },
         {
             "id": 140031302404080,
@@ -1772,42 +1992,6 @@
             "edge_type": 2,
             "start": 140031302403696,
             "end": 140031303062816
-        },
-        {
-            "id": 140031214369808,
-            "edge_type": 2,
-            "start": 140031302093504,
-            "end": 140464181351808
-        },
-        {
-            "id": 140031302667088,
-            "edge_type": 2,
-            "start": 140031214370048,
-            "end": 140464182881200
-        },
-        {
-            "id": 140031302424992,
-            "edge_type": 2,
-            "start": 140031214370048,
-            "end": 140031214369328
-        },
-        {
-            "id": 140031303395216,
-            "edge_type": 2,
-            "start": 140031302093504,
-            "end": 140031302987488
-        },
-        {
-            "id": 140031303395168,
-            "edge_type": 2,
-            "start": 140031214369376,
-            "end": 140031303153024
-        },
-        {
-            "id": 140031099827632,
-            "edge_type": 2,
-            "start": 140031302403696,
-            "end": 140031214368896
         },
         {
             "id": 140031169076480,
@@ -1840,10 +2024,184 @@
             "end": 139720796106416
         },
         {
-            "id": 139720789662544,
+            "id": 139637843434464,
+            "edge_type": 2,
+            "start": 139720796105744,
+            "end": 139720796106656
+        },
+        {
+            "id": 139637845073104,
+            "edge_type": 2,
+            "start": 139720796105744,
+            "end": 140031215220720
+        },
+        {
+            "id": 139637844410720,
+            "edge_type": 2,
+            "start": 139720796105744,
+            "end": 140705678976000
+        },
+        {
+            "id": 139637843292224,
             "edge_type": 2,
             "start": 139720797874448,
-            "end": 139720789789856
+            "end": 139637843861120
+        },
+        {
+            "id": 139637843294288,
+            "edge_type": 2,
+            "start": 139637843434512,
+            "end": 139637843320256
+        },
+        {
+            "id": 139637639512368,
+            "edge_type": 2,
+            "start": 139637843318816,
+            "end": 139637843318768
+        },
+        {
+            "id": 139637639642656,
+            "edge_type": 2,
+            "start": 140705678975904,
+            "end": 139637843858096
+        },
+        {
+            "id": 139637843859488,
+            "edge_type": 2,
+            "start": 140031215220816,
+            "end": 139637639949040
+        },
+        {
+            "id": 139637640177840,
+            "edge_type": 2,
+            "start": 139637640365440,
+            "end": 139637640003296
+        },
+        {
+            "id": 139637639398304,
+            "edge_type": 2,
+            "start": 140464182882064,
+            "end": 139637640177552
+        },
+        {
+            "id": 139637844199072,
+            "edge_type": 2,
+            "start": 140031302094704,
+            "end": 139637844200176
+        },
+        {
+            "id": 139637843763984,
+            "edge_type": 2,
+            "start": 140464183645088,
+            "end": 139637639399024
+        },
+        {
+            "id": 139637640950448,
+            "edge_type": 2,
+            "start": 139637640178704,
+            "end": 139637640176784
+        },
+        {
+            "id": 139637640000032,
+            "edge_type": 2,
+            "start": 139637639641600,
+            "end": 139637639142416
+        },
+        {
+            "id": 139637639140976,
+            "edge_type": 2,
+            "start": 139637639140448,
+            "end": 139637639141600
+        },
+        {
+            "id": 139637639143088,
+            "edge_type": 2,
+            "start": 139637639142128,
+            "end": 139637639140736
+        },
+        {
+            "id": 139637639401136,
+            "edge_type": 2,
+            "start": 139637639397872,
+            "end": 139637639398256
+        },
+        {
+            "id": 139637639399264,
+            "edge_type": 2,
+            "start": 139637639399600,
+            "end": 139637636665744
+        },
+        {
+            "id": 139637639641312,
+            "edge_type": 2,
+            "start": 139637640950304,
+            "end": 140658853033008
+        },
+        {
+            "id": 139637636669200,
+            "edge_type": 2,
+            "start": 139637636666080,
+            "end": 139637636665888
+        },
+        {
+            "id": 139637640951408,
+            "edge_type": 2,
+            "start": 139637640950304,
+            "end": 139637640950784
+        },
+        {
+            "id": 139637640951984,
+            "edge_type": 2,
+            "start": 140571344051216,
+            "end": 139637640950400
+        },
+        {
+            "id": 139637639948272,
+            "edge_type": 2,
+            "start": 139637640949968,
+            "end": 140658897107984
+        },
+        {
+            "id": 139637844459232,
+            "edge_type": 2,
+            "start": 140571344051216,
+            "end": 140675816582400
+        },
+        {
+            "id": 139637640541328,
+            "edge_type": 2,
+            "start": 140658853033872,
+            "end": 139637844410768
+        },
+        {
+            "id": 140190240515120,
+            "edge_type": 2,
+            "start": 140189702408464,
+            "end": 139637640950352
+        },
+        {
+            "id": 140190240514544,
+            "edge_type": 2,
+            "start": 140190240515600,
+            "end": 139637640367552
+        },
+        {
+            "id": 140190240517520,
+            "edge_type": 2,
+            "start": 140189696004400,
+            "end": 139637640738752
+        },
+        {
+            "id": 140189702414000,
+            "edge_type": 2,
+            "start": 140189702671520,
+            "end": 140464182881200
+        },
+        {
+            "id": 140189701835312,
+            "edge_type": 2,
+            "start": 140189702671616,
+            "end": 140464181351808
         }
     ]
 }

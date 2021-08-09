@@ -197,16 +197,17 @@ class MultiValueInputNode(ResizableOutputNode):
     def resize(self):
         size = len(self.getOutputs())
         current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
+        try:
+            padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
+            if current_size > self.grNode.min_height:
+                self.grNode.height = current_size
+                self.grNode.update()
 
-        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
-        if current_size > self.grNode.min_height:
-            self.grNode.height = current_size
-            self.grNode.update()
-
-            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title + 1
-            self.content.resize(x, y)
-        self.scene.grScene.update()
-
+                x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title + 1
+                self.content.resize(x, y)
+            self.scene.grScene.update()
+        except Exception as e : pass
+        
     def appendNewSocket(self):
         if self.freeOutputs() == 0:
             self.appendOutput(output=2)
