@@ -556,3 +556,90 @@ class ResizableOutputNode(DataNode):
         super().update()
         self.updateSockets()
 
+
+
+
+
+
+
+class RemoveButton(QToolButton):
+    def __init__(self, id):
+        super().__init__()
+        self.initUI()
+        self.id = id
+
+    def initUI(self):
+        self.setWindowTitle("RemoveButton")
+        self.setGeometry(QRect(0, 0, 24, 24))
+        path = os.path.dirname(os.path.abspath(__file__))
+        self.icon    = QIcon(os.path.join(path, "../icons/remove.png"))
+        self.setIcon(self.icon)   #icon
+        self.setIconSize(QSize(16,16))
+        self.setToolButtonStyle(Qt.ToolButtonIconOnly)
+        self.setToolTip("Remove the variable") #Tool tip
+
+
+class AdjustableOutputGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 200.0
+        self.height = 220.0
+        self.min_height = 220.0
+
+class AdjustableOutputContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.vlayout    = QVBoxLayout()
+        self.mainlayout = QGridLayout()
+        self.vlayout.setContentsMargins(0, 2, 0, 2)
+        self.mainlayout.setContentsMargins(0,0,0,0)
+
+        self.addItems = QPushButton()
+        self.addItems.setText("append variable")
+
+        self.vlayout.addLayout(self.mainlayout)
+        self.vlayout.addWidget(self.addItems)
+        self.setLayout(self.vlayout)
+
+    def serialize(self):
+        res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.resize(data['content-widht'], data['content-height'])
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+class AdjustableOutputNode(DataNode):
+    icon = "icons/math.png"
+    op_code = 0
+    op_title = ""
+
+    def __init__(self, scene, inputs=[], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+        self.socket_bottom_margin = 20.0
+
+    def initInnerClasses(self):
+        self.content = AdjustableOutputContent(self)
+        self.grNode  = AdjustableOutputGraphicsNode(self)
+        self.content.changed.connect(self.updateSockets)
+
+    def evalImplementation(self):
+        pass
+
+

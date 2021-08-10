@@ -79,19 +79,18 @@ class ValueInputNode(DataNode):
 
 
 
-
-
-class MultiValueInputGraphicsNode(ResizableOutputGraphicsNode):
+class MultiValueInputGraphicsNode(AdjustableOutputGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
-        self.height = 70.0
-        self.min_height = 70.0
+        self.width  = 160.0
+        self.height = 100.0
+        self.min_height = 100.0
 
-class MultiValueInputContent(ResizableOutputContent):
+class MultiValueInputContent(AdjustableOutputContent):
     def initUI(self):
         super().initUI()
         self.mainlayout.setSpacing(0)
+        self.remove = {}
         self.labels = {}
         self.values = {}
 
@@ -102,14 +101,18 @@ class MultiValueInputContent(ResizableOutputContent):
             i = at
         else:
             i = 0
+        self.remove[str(socket.id)]  = RemoveButton(str(socket.id))
         self.labels[str(socket.id)]  = QLineEdit("x"+str(i), self)
         self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
         self.values[str(socket.id)]  = QLineEdit("1.0", self)
         self.values[str(socket.id)].setAlignment(Qt.AlignLeft)
-        self.mainlayout.addWidget(self.labels[str(socket.id)], i, 0)
-        self.mainlayout.addWidget(self.values[str(socket.id)], i, 1)
+        self.mainlayout.addWidget(self.remove[str(socket.id)], i, 0)
+        self.mainlayout.addWidget(self.labels[str(socket.id)], i, 1)
+        self.mainlayout.addWidget(self.values[str(socket.id)], i, 2)
+
         self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
         self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
+        self.remove[str(socket.id)].clicked.connect(lambda : self.removePair(socket))
 
     def clearContent(self):
         while self.mainlayout.count():
@@ -118,34 +121,49 @@ class MultiValueInputContent(ResizableOutputContent):
                 child.widget().deleteLater()
         self.labels.clear()
         self.values.clear()
+        self.remove.clear()
 
-    def clearFromLayout(self):
+    def removePair(self, soket):
+        self.mainlayout.removeWidget(self.labels[str(soket.id)])
+        self.mainlayout.removeWidget(self.values[str(soket.id)])
+        self.mainlayout.removeWidget(self.remove[str(soket.id)])
+        self.labels[str(soket.id)].setParent(None)
+        self.values[str(soket.id)].setParent(None)
+        self.remove[str(soket.id)].setParent(None)
+        del self.labels[str(soket.id)]
+        del self.values[str(soket.id)]
+        #del self.remove[str(soket.id)]
+
+        self.node.resize()
+        self.node.removeOutput(soket)
+        self.sortWidgets()
+    
+    def clearContent(self):
         while self.mainlayout.count():
             child = self.mainlayout.takeAt(0)
-            if child.widget():
-                self.mainlayout.removeItem(child)
-                child.widget().deleteLater()
+            #if child.widget():
+            #    child.widget().deleteLater()    
 
-    def movePairTo(self, socket, at):
-        self.mainlayout.removeWidget(self.labels[str(socket.id)])
-        self.mainlayout.removeWidget(self.values[str(socket.id)])
-        self.mainlayout.addWidget(self.labels[str(socket.id)], at, 0)
-        self.mainlayout.addWidget(self.values[str(socket.id)], at, 1)
+    def sortWidgets(self):
+        for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
+            self.remove[str(soket.id)].setParent(None)
+            self.labels[str(soket.id)].setParent(None)
+            self.values[str(soket.id)].setParent(None)
 
+        for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
+            self.mainlayout.addWidget(self.remove[str(soket.id)], i, 0)
+            self.mainlayout.addWidget(self.labels[str(soket.id)], i, 1)
+            self.mainlayout.addWidget(self.values[str(soket.id)], i, 2)
+            soket.index = i
+            soket.setPos()
 
-    def removePair(self, socket):
-        self.mainlayout.removeWidget(self.labels[str(socket.id)])
-        self.mainlayout.removeWidget(self.values[str(socket.id)])
-        self.labels[str(socket.id)].setParent(None)
-        self.values[str(socket.id)].setParent(None)
-        del self.labels[str(socket.id)]
-        del self.values[str(socket.id)]
 
     def serialize(self):
         res = super().serialize()
         labels = []
         values = []
         sockets = []
+
         for label, value in zip(self.labels, self.values):
             labels.append(self.labels[label].text())
             values.append(self.values[value].text())
@@ -160,14 +178,17 @@ class MultiValueInputContent(ResizableOutputContent):
         try:
             self.clearContent()
             for i, socket, label, value in zip(range(len(data['socket'])), data['socket'], data['label'], data['value']):
+                self.remove[socket]  = RemoveButton(socket)
                 self.labels[socket]  = QLineEdit("x"+str(i), self)
                 self.labels[socket].setAlignment(Qt.AlignRight)
                 self.labels[socket].setText(label)
                 self.values[socket]  = QLineEdit("1.0", self)
                 self.values[socket].setAlignment(Qt.AlignLeft)
                 self.values[socket].setText(value)
-                self.mainlayout.addWidget(self.labels[socket], i, 0)
-                self.mainlayout.addWidget(self.values[socket], i, 1)
+                self.mainlayout.addWidget(self.remove[socket], i, 0)
+                self.mainlayout.addWidget(self.labels[socket], i, 1)
+                self.mainlayout.addWidget(self.values[socket], i, 2)
+                self.remove[socket].clicked.connect(lambda:self.removePair(socket))
                 self.labels[socket].textChanged.connect(self.node.recalculateNode)
                 self.values[socket].textChanged.connect(self.node.recalculateNode)
             return True & res
@@ -175,14 +196,14 @@ class MultiValueInputContent(ResizableOutputContent):
         return res
 
 @register_node(OP_MODE_MULVALINPUT)
-class MultiValueInputNode(ResizableOutputNode):
+class MultiValueInputNode(AdjustableOutputNode):
     icon = "icons/valinput.png"
     op_code = OP_MODE_MULVALINPUT
     op_title = "Multi-Value"
 
-    def __init__(self, scene, inputs=[], outputs=[2]):
+    def __init__(self, scene, inputs=[], outputs=[]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
-        self.content.appendPair(self.getOutput(0))
+        self.appendNewPair()
         self.eval()
         self.timer = None
 
@@ -193,11 +214,12 @@ class MultiValueInputNode(ResizableOutputNode):
         self.content = MultiValueInputContent(self)
         self.grNode  = MultiValueInputGraphicsNode(self)
         self.content.changed.connect(self.recalculateNode)
+        self.content.addItems.clicked.connect(self.appendNewPair)
 
     def resize(self):
-        size = len(self.getOutputs())
-        current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
         try:
+            size = len(self.getOutputs())
+            current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin + 30.0
             padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
             if current_size > self.grNode.min_height:
                 self.grNode.height = current_size
@@ -208,62 +230,18 @@ class MultiValueInputNode(ResizableOutputNode):
             self.scene.grScene.update()
         except Exception as e : pass
         
-    def appendNewSocket(self):
-        if self.freeOutputs() == 0:
-            self.appendOutput(output=2)
 
-
-    def sortSockets(self):
-        sockets_full  = []
-        sockets_empty = []
-        labels_full = {}
-        values_full = {}
-        labels_empty = {}
-        values_empty = {}
-        for socket in self.getOutputs():
-            if socket.hasEdges():
-                sockets_full.append(socket)
-                labels_full[str(socket.id)] = self.content.labels[str(socket.id)]
-                values_full[str(socket.id)] = self.content.values[str(socket.id)]
-            else:
-                sockets_empty.append(socket)
-                labels_empty[str(socket.id)] = self.content.labels[str(socket.id)]
-                values_empty[str(socket.id)] = self.content.values[str(socket.id)]
-
-        self.outputs = sockets_full + sockets_empty
-
-        self.removeFreeSocketsWithPairs()
-        #self.removeFreeOutputs()
-        self.appendNewSocket()
-
-        for i, socket in zip(range(len(self.outputs)), self.outputs):
-            socket.index = i
-            socket.setPos()
-
-        for i, socket in zip(range(len(self.getOutputs())), self.getOutputs()):
-            if str(socket.id) not in self.content.labels:
-                self.content.appendPair(socket, at=i)
-            if str(socket.id) in self.content.labels:
-                self.content.movePairTo(socket, at=i)
-
+    def appendNewPair(self):
+        self.appendOutput(output=2)
+        self.content.appendPair(self.getOutputs()[-1])
         # The timer is set here
         self.timer = QTimer()
         self.timer.timeout.connect(self.resize)
         self.timer.start(1)
 
 
-    def removeFreeSocketsWithPairs(self):
-        for output in self.outputs[:-1]:
-            if not output.hasEdges(): 
-                output.grSocket.hide()
-                self.scene.grScene.removeItem(output.grSocket)
-                self.content.removePair(output)
-        self.outputs = [output for output in self.outputs if output.hasEdges() or output == self.outputs[-1]]
-
-
     def evalImplementation(self):
         try:
-            self.sortSockets()
             for socket in self.getOutputs():
                 u_value = self.content.values[str(socket.id)].text()
                 s_value = float(u_value)

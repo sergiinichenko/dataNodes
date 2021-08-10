@@ -107,9 +107,7 @@ class Node(Serializer):
 
     def clearInputs(self):
         for socket in self.inputs:
-            if socket.hasEdges():
-                socket.clearEdges()
-            self.scene.grScene.removeItem(socket.grSocket)
+            socket.remove()
         self.inputs = []
 
     def createInputs(self, inputs, names=None):
@@ -154,6 +152,19 @@ class Node(Serializer):
                 self.scene.grScene.removeItem(input.grSocket)
         self.inputs = [input for input in self.inputs if input.hasEdges()]
         self.scene.grScene.update()
+
+    def removeInput(self, to_remove):
+        to_remove.grSocket.hide()
+        self.scene.grScene.removeItem(to_remove.grSocket)
+
+        self.inputs = [input for input in self.inputs if input != to_remove]
+        self.scene.grScene.update()
+
+    def removeOutput(self, to_remove):
+        to_remove.remove()
+        self.outputs = [output for output in self.outputs if output != to_remove]
+        self.scene.grScene.update()
+
 
     def removeFreeOutputs(self):
         for output in self.outputs:
