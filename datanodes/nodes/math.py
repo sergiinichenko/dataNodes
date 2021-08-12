@@ -252,16 +252,15 @@ class MathNode(DataNode):
 
 
 
-class ExpressionGraphicsNode(ResizableInputGraphicsNode):
+class ExpressionGraphicsNode(ResizableGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.min_height = 100.0
         self.width  = 260.0
         self.height = 100.0
 
-class ExpressionContent(ResizableInputContent):
+class ExpressionContent(ResizableContent):
     def initUI(self):
-        super().initUI()
         self.mainlayout = QVBoxLayout()
         self.mainlayout.setContentsMargins(40,0,0,0)
 

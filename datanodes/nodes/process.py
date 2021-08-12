@@ -4,41 +4,10 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import re
 import copy
-class SeparateGraphicsNode(DataGraphicsNode):
-    def initSizes(self):
-        super().initSizes()
-        self.width  = 160.0
-        self.height = 200.0
-
-class SeparateContent(DataContent):
-    def initUI(self):
-        super().initUI()
-        self.operation = "To Float"
-        layout = QHBoxLayout()
-        self.setLayout(layout)
-        self.setWindowTitle("Data Separate")
-
-    def serialize(self):
-        res = super().serialize()
-        res['width']          = self.node.grNode.width
-        res['height']         = self.node.grNode.height
-        res['content-widht']  = self.size().width()
-        res['content-height'] = self.size().height()
-        return res
-
-    def deserialize(self, data, hashmap=[]):
-        res = super().deserialize(data, hashmap)
-        try:
-            self.node.grNode.height = data['height']
-            self.node.grNode.width  = data['width']
-            self.resize(data['content-widht'], data['content-height'])
-        except Exception as e: 
-            dumpException(e)
-        return True & res
 
 
 @register_node(OP_MODE_DATA_SEP)
-class SeparateNode(DataNode):
+class SeparateNode(ResizableOutputNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_SEP
     op_title = "Separate"
@@ -53,16 +22,37 @@ class SeparateNode(DataNode):
 
 
     def initInnerClasses(self):
-        self.content = SeparateContent(self)
-        self.grNode  = SeparateGraphicsNode(self)
+        self.content = ResizableContent(self)
+        self.grNode  = ResizableGraphicsNode(self)
 
-    def generateSockets(self, data, names=None):
-        self.clearOutputs()        
-        outputs = [SOCKET_DATA_TEXT for l in range(len(data)+1)]
+    def generateSockets(self):
         dnames  = ['DATA']
-        if names is not None: dnames.extend(names)
-        self.createOutputs(outputs, dnames)
-        self.grNode.height = (len(data)+1) * self.socket_spacing + 2.0 * self.socket_spacing
+        dnames.extend(list(self.value.keys()))
+        size = len(self.value)
+
+        existing = []
+        if self.getOutputs():
+            existing = [soket.label for soket in self.getOutputs()]
+
+            # remove the socket from the node if the socket is not in the input data
+            for name in existing:
+                if name not in dnames and name is not None:
+                    soket = self.getOutputByLabel(name)
+                    soket.remove()
+
+            # remove sockets without labels:
+            for soket in self.getOutputs():
+                if soket.label is None : soket.remove()
+
+        # append a socket with a label if the label does not exist
+        for name in dnames:
+            if name not in existing:
+                self.appendOutput(SOCKET_DATA_TEXT, name)
+                existing.extend([name])
+
+        self.updateOutputsPos()
+
+        self.grNode.height = (size+1) * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.update()
 
         self.border_radius = 10.0
@@ -71,7 +61,7 @@ class SeparateNode(DataNode):
         self._hpadding     = 5.0
         self._vpadding     = 5.0
 
-        x, y = self.grNode.width - 2.0 * self.grNode.padding, (len(data)+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
+        x, y = self.grNode.width - 2.0 * self.grNode.padding, (size+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
         self.content.resize(x, y)
 
 
@@ -107,7 +97,7 @@ class SeparateNode(DataNode):
 
                 if len(self.outputs) != (len(self.value)+1):
                     if DEBUG : print("PRCNODE_SEP: generate new sockets")
-                    self.generateSockets(self.value, list(self.value.keys()))
+                    self.generateSockets()
                     if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
                 else:
                     self.setSocketsNames()
@@ -128,32 +118,6 @@ class SeparateNode(DataNode):
 
 
 
-class CombineGraphicsNode(ResizableInputGraphicsNode):
-    def initSizes(self):
-        super().initSizes()
-        self.width  = 160.0
-        self.height = 80.0
-        self.min_height = 80.0
-
-class CombineContent(ResizableInputContent):
-    def serialize(self):
-        res = super().serialize()
-        res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
-        return res
-
-    def deserialize(self, data, hashmap=[]):
-        res = super().deserialize(data, hashmap)
-        try:
-            self.node.grNode.height = data['height']
-            self.resize(data['content-widht'], data['content-height'])
-            return True & res
-        except Exception as e: 
-            dumpException(e)
-        return True & res
-
-
 @register_node(OP_MODE_DATA_COMBXY)
 class CombineNode(ResizableInputNode):
     icon = "icons/math.png"
@@ -172,8 +136,8 @@ class CombineNode(ResizableInputNode):
         self.content.changed.emit()
 
     def initInnerClasses(self):
-        self.content = CombineContent(self)
-        self.grNode  = CombineGraphicsNode(self)
+        self.content = ResizableContent(self)
+        self.grNode  = ResizableGraphicsNode(self)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self):
@@ -219,6 +183,110 @@ class CombineNode(ResizableInputNode):
                 self.getOutput(0).value = 0
                 self.getOutput(0).type = "float"
                 return False
+
+
+
+
+
+
+
+class UpdateGraphicsNode(ResizableGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 160.0
+        self.height = 80.0
+        self.min_height = 80.0
+
+class UpdateContent(ResizableContent):
+    def serialize(self):
+        res = super().serialize()
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.node.grNode.height = data['height']
+            self.resize(data['content-widht'], data['content-height'])
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+
+@register_node(OP_MODE_DATA_UPDATE)
+class UpdateNode(ResizableInputNode):
+    icon = "icons/math.png"
+    op_code = OP_MODE_DATA_UPDATE
+    op_title = "Update"
+
+    def __init__(self, scene, inputs=[1], outputs=[1]):
+        super().__init__(scene, inputs, outputs)
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+
+    def onInputChange(self, new_edge=None):
+        self.content.changed.emit()
+
+    def initInnerClasses(self):
+        self.content = UpdateContent(self)
+        self.grNode  = UpdateGraphicsNode(self)
+        self.content.changed.connect(self.recalculateNode)
+
+    def evalImplementation(self):
+        input_edges = self.getInputs()
+        if not input_edges:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
+        else:
+            self.sortSockets()
+            self.getSocketsNames()
+            if len(input_edges) > 0:      
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = {}
+                for input in input_edges:
+                    try:
+                        if isinstance(input.value, dict):
+                            for name in input.value:
+                                try:
+                                    self.value[name] = input.value[name].copy()
+                                except:
+                                    self.value[name] = input.value[name]
+
+                        if isinstance(input.value, pd.Series):
+                            self.value[input.value.name] = pd.Series(input.value.values)
+
+                        if isinstance(input.value, pd.DataFrame):
+                            for name in input.value.columns:
+                                self.value[name] = pd.Series(input.value[name].values)
+                    except Exception as e:
+                        self.e = e
+                        dumpException(e)
+                        
+                self.getOutput(0).value = self.value
+                self.getOutput(0).type = "df"
+                return True
+            else:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = "Not enough input data"
+                self.getOutput(0).value = 0
+                self.getOutput(0).type = "float"
+                return False
+
+
+
+
+
+
 
 
 

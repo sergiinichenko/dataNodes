@@ -98,13 +98,6 @@ class Node(Serializer):
         self.createOutputs(outputs, outnames)
 
 
-    def clearOutputs(self):
-        for socket in self.outputs:
-            if socket.hasEdges():
-                socket.clearEdges()
-            self.scene.grScene.removeItem(socket.grSocket)
-        self.outputs = []
-
     def clearInputs(self):
         for socket in self.inputs:
             socket.remove()
@@ -379,6 +372,32 @@ class Node(Serializer):
         except Exception as e:
             dumpException(e)
             return None
+
+
+
+    def getOutputByLabel(self, label=None):
+        if label is None : return
+        for soket in self.outputs:
+            if soket.label == label:
+                break
+        return soket
+
+    def getInputByLabel(self, label=None):
+        if label is None : return
+        for soket in self.inputs:
+            if soket.lable == label:
+                break
+        return soket
+
+    def getSocketByID(self, id = None):
+        if id is None : return
+        found = None
+        for soket in self.inputs + self.outputs:
+            if soket.id == int(id):
+                found = soket
+                break
+        return found
+
 
     def eval(self):
         self.setDirty(False)

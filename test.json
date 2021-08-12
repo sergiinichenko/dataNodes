@@ -1,610 +1,100 @@
 {
-    "id": 140550685954400,
+    "id": 140144246442928,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 1066.8166666666664,
-    "view_y": 141.06666666666663,
-    "view_scale": 13.0,
+    "view_x": -1.0,
+    "view_y": 4.0,
+    "view_scale": 20.0,
     "nodes": [
         {
-            "id": 140550146360896,
-            "title": "Input file",
-            "pos_x": -551.0,
-            "pos_y": -48.0,
+            "id": 140144246552320,
+            "title": "Value",
+            "pos_x": 106.0,
+            "pos_y": -285.0,
             "inputs": [],
             "outputs": [
                 {
-                    "id": 140550146360944,
+                    "id": 140144246552368,
                     "index": 0,
-                    "position": 5,
-                    "socket_type": 1,
+                    "position": 4,
+                    "socket_type": 2,
                     "inout": 2,
-                    "x": 181.0,
-                    "y": 68.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140346645456640,
-                "content": "",
-                "file": "/home/nichenko_s/Development/datanodes/water_chemistry.csv"
-            },
-            "op_code": 101,
-            "op_title": "File"
-        },
-        {
-            "id": 140550686025952,
-            "title": "Data Separate",
-            "pos_x": -338.0,
-            "pos_y": -143.0,
-            "inputs": [
-                {
-                    "id": 140550685993088,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
+                    "x": 141.0,
                     "y": 40.0,
                     "label": null
                 }
             ],
+            "content": {
+                "id": 140144246524656,
+                "content": "",
+                "value": "1.0",
+                "label": "x"
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 140143922947360,
+            "title": "Value",
+            "pos_x": 17.0,
+            "pos_y": -191.0,
+            "inputs": [],
             "outputs": [
                 {
-                    "id": 140550146428016,
+                    "id": 140143922947504,
                     "index": 0,
                     "position": 4,
                     "socket_type": 2,
                     "inout": 2,
-                    "x": 161.0,
+                    "x": 141.0,
                     "y": 40.0,
-                    "label": "Start"
-                },
-                {
-                    "id": 140550146427248,
-                    "index": 1,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 64.0,
-                    "label": "End"
-                },
-                {
-                    "id": 140550146427632,
-                    "index": 2,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 88.0,
-                    "label": "Fuel-\nCycle"
-                },
-                {
-                    "id": 140550146427152,
-                    "index": 3,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 112.0,
-                    "label": "Sample\nPoint"
-                },
-                {
-                    "id": 140550146427056,
-                    "index": 4,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 136.0,
-                    "label": "Power"
-                },
-                {
-                    "id": 140550146426816,
-                    "index": 5,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 160.0,
-                    "label": "Power.1"
-                },
-                {
-                    "id": 140550146426912,
-                    "index": 6,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 184.0,
-                    "label": "Temp. Recirc"
-                },
-                {
-                    "id": 140550146427104,
-                    "index": 7,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 208.0,
-                    "label": "FW flow"
-                },
-                {
-                    "id": 140550146427296,
-                    "index": 8,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 232.0,
-                    "label": "Recirc flow"
-                },
-                {
-                    "id": 140550146426624,
-                    "index": 9,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 256.0,
-                    "label": "RWCU A flow"
-                },
-                {
-                    "id": 140550685980848,
-                    "index": 10,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 280.0,
-                    "label": "RWCU B flow"
-                },
-                {
-                    "id": 140550685980896,
-                    "index": 11,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 304.0,
-                    "label": "Cond\n\"CIS\""
-                },
-                {
-                    "id": 140550146297424,
-                    "index": 12,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 328.0,
-                    "label": "Cond.\nRecirc"
-                },
-                {
-                    "id": 140550146297712,
-                    "index": 13,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 352.0,
-                    "label": "Cond.\nRWCU Inlet"
-                },
-                {
-                    "id": 140550146297472,
-                    "index": 14,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 376.0,
-                    "label": "Cond.\nRWCU A"
-                },
-                {
-                    "id": 140550146297040,
-                    "index": 15,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 400.0,
-                    "label": "Cond.\nRWCU B"
-                },
-                {
-                    "id": 140550146297328,
-                    "index": 16,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 424.0,
-                    "label": "H2-feedrate FW"
-                },
-                {
-                    "id": 140550146297088,
-                    "index": 17,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 448.0,
-                    "label": "O_rw"
-                },
-                {
-                    "id": 140550146296656,
-                    "index": 18,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 472.0,
-                    "label": "Fe_rw"
-                },
-                {
-                    "id": 140550146296944,
-                    "index": 19,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 496.0,
-                    "label": "Cr_rw"
-                },
-                {
-                    "id": 140550146296704,
-                    "index": 20,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 520.0,
-                    "label": "Cu_rw"
-                },
-                {
-                    "id": 140550146296272,
-                    "index": 21,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 544.0,
-                    "label": "Mn_rw"
-                },
-                {
-                    "id": 140550146296560,
-                    "index": 22,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 568.0,
-                    "label": "Co_rw"
-                },
-                {
-                    "id": 140550146296320,
-                    "index": 23,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 592.0,
-                    "label": "Ni_rw"
-                },
-                {
-                    "id": 140550146295888,
-                    "index": 24,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 616.0,
-                    "label": "Zn_rw"
-                },
-                {
-                    "id": 140550146296176,
-                    "index": 25,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 640.0,
-                    "label": "SiO2_rw"
-                },
-                {
-                    "id": 140550146295936,
-                    "index": 26,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 664.0,
-                    "label": "H3B03_rw"
-                },
-                {
-                    "id": 140550146295504,
-                    "index": 27,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 688.0,
-                    "label": "Pt_rw"
-                },
-                {
-                    "id": 140550146295792,
-                    "index": 28,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 712.0,
-                    "label": "Na_rw"
-                },
-                {
-                    "id": 140550146295552,
-                    "index": 29,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 736.0,
-                    "label": "Fe_fw"
-                },
-                {
-                    "id": 140550146295120,
-                    "index": 30,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 760.0,
-                    "label": "Co_fw"
-                },
-                {
-                    "id": 140550146295408,
-                    "index": 31,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 784.0,
-                    "label": "Zn_fw"
-                },
-                {
-                    "id": 140550146295168,
-                    "index": 32,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 808.0,
-                    "label": "Mn_fw"
-                },
-                {
-                    "id": 140550146294736,
-                    "index": 33,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 832.0,
-                    "label": "Mn_fw"
-                }
-            ],
-            "content": {
-                "id": 140346582215120,
-                "content": "",
-                "width": 160.0,
-                "height": 864.0,
-                "content-widht": 150,
-                "content-height": 830
-            },
-            "op_code": 400,
-            "op_title": "Separate"
-        },
-        {
-            "id": 140550146294208,
-            "title": "Data Combine",
-            "pos_x": -51.57749999999999,
-            "pos_y": -130.92749999999998,
-            "inputs": [
-                {
-                    "id": 140550146294016,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "O_rw"
-                },
-                {
-                    "id": 140550145573168,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": "Cr_rw"
-                },
-                {
-                    "id": 140550145573264,
-                    "index": 2,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 88.0,
-                    "label": "Cu_rw"
-                },
-                {
-                    "id": 140550145573360,
-                    "index": 3,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 112.0,
-                    "label": "Mn_rw"
-                },
-                {
-                    "id": 140550145573648,
-                    "index": 4,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 136.0,
-                    "label": "Zn_rw"
-                },
-                {
-                    "id": 140550145573936,
-                    "index": 5,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 160.0,
-                    "label": "H3B03_rw"
-                },
-                {
-                    "id": 140550145574128,
-                    "index": 6,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 184.0,
-                    "label": "Fe_fw"
-                },
-                {
-                    "id": 140442226492848,
-                    "index": 7,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 208.0,
-                    "label": "Pt_rw"
-                },
-                {
-                    "id": 140346069115136,
-                    "index": 8,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 232.0,
                     "label": null
                 }
             ],
+            "content": {
+                "id": 140143922983696,
+                "content": "",
+                "value": "1.0",
+                "label": "x1"
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 140143922966928,
+            "title": "Value",
+            "pos_x": 69.0,
+            "pos_y": -89.0,
+            "inputs": [],
             "outputs": [
                 {
-                    "id": 140550146293872,
+                    "id": 140143922967168,
                     "index": 0,
                     "position": 4,
-                    "socket_type": 1,
+                    "socket_type": 2,
                     "inout": 2,
-                    "x": 161.0,
+                    "x": 141.0,
                     "y": 40.0,
                     "label": null
                 }
             ],
             "content": {
-                "id": 140346176737776,
+                "id": 140143922985280,
                 "content": "",
-                "width": 160.0,
-                "height": 252.0,
-                "content-widht": 150,
-                "content-height": 218
+                "value": "1.0",
+                "label": "x2"
             },
-            "op_code": 401,
-            "op_title": "Combine"
+            "op_code": 102,
+            "op_title": "Value"
         },
         {
-            "id": 140550145574608,
-            "title": "Data Clean",
-            "pos_x": 173.24749999999995,
-            "pos_y": -190.4283308823529,
+            "id": 140143922948800,
+            "title": "Combine",
+            "pos_x": 288.0,
+            "pos_y": -122.0,
             "inputs": [
                 {
-                    "id": 140550145574656,
-                    "index": 0,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 128.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140550145937664,
-                    "index": 0,
-                    "position": 5,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 201.0,
-                    "y": 128.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140346176740080,
-                "content": "",
-                "dropSTR": false,
-                "removeSTR": false,
-                "strToNum": true,
-                "strToNumValue": "0.0",
-                "infToNum": false,
-                "infToNumValue": "0.0",
-                "dropINF": false,
-                "nanToNum": false,
-                "nanToNumValue": "0.0",
-                "dropNAN": false
-            },
-            "op_code": 402,
-            "op_title": "Clean"
-        },
-        {
-            "id": 140550145573792,
-            "title": "Output plot",
-            "pos_x": 1516.5974379084957,
-            "pos_y": -255.2918129084965,
-            "inputs": [
-                {
-                    "id": 140550145937760,
-                    "index": 0,
-                    "position": 2,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 158.0,
-                    "label": null
-                }
-            ],
-            "outputs": [],
-            "content": {
-                "id": 140346070107616,
-                "content": "",
-                "width": 645.1724999999999,
-                "height": 532.76,
-                "content-widht": 635,
-                "content-height": 498
-            },
-            "op_code": 203,
-            "op_title": "Plot"
-        },
-        {
-            "id": 140550143909072,
-            "title": "Data Combine",
-            "pos_x": 1167.4030326797383,
-            "pos_y": -140.35248284313718,
-            "inputs": [
-                {
-                    "id": 140550142766960,
+                    "id": 140143922948848,
                     "index": 0,
                     "position": 1,
                     "socket_type": 1,
@@ -614,27 +104,27 @@
                     "label": "x"
                 },
                 {
-                    "id": 139945154325568,
+                    "id": 140143922967408,
                     "index": 1,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "O_rw..."
+                    "label": "x"
                 },
                 {
-                    "id": 139718845144608,
+                    "id": 140143922967456,
                     "index": 2,
                     "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
                     "y": 88.0,
-                    "label": "res"
+                    "label": "x"
                 },
                 {
-                    "id": 140346069618800,
+                    "id": 140143922967600,
                     "index": 3,
                     "position": 1,
                     "socket_type": 1,
@@ -646,7 +136,7 @@
             ],
             "outputs": [
                 {
-                    "id": 140550143624720,
+                    "id": 140143922948896,
                     "index": 0,
                     "position": 4,
                     "socket_type": 1,
@@ -657,7 +147,7 @@
                 }
             ],
             "content": {
-                "id": 140346069638448,
+                "id": 140143923019840,
                 "content": "",
                 "width": 160.0,
                 "height": 132.0,
@@ -668,147 +158,25 @@
             "op_title": "Combine"
         },
         {
-            "id": 140550143909120,
-            "title": "Array Number",
-            "pos_x": 47.186022058823525,
-            "pos_y": 200.70882352941175,
+            "id": 140143922967888,
+            "title": "Separate",
+            "pos_x": 516.0,
+            "pos_y": -148.0,
             "inputs": [
                 {
-                    "id": 140550143626112,
+                    "id": 140143922967840,
                     "index": 0,
-                    "position": 3,
+                    "position": 1,
                     "socket_type": 1,
                     "inout": 1,
                     "x": -1.0,
-                    "y": 128.0,
-                    "label": null
-                },
-                {
-                    "id": 140550142780128,
-                    "index": 1,
-                    "position": 3,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 98.0,
-                    "label": null
-                },
-                {
-                    "id": 140550142780320,
-                    "index": 2,
-                    "position": 3,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 68.0,
+                    "y": 40.0,
                     "label": null
                 }
             ],
             "outputs": [
                 {
-                    "id": 140550143626304,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 146.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140346069451680,
-                "content": "",
-                "name": "x",
-                "start": "0",
-                "number": "591",
-                "stop": "1"
-            },
-            "op_code": 111,
-            "op_title": "By Size"
-        },
-        {
-            "id": 139718845857744,
-            "title": "Expression",
-            "pos_x": 849.8015906862746,
-            "pos_y": -17.240610294117317,
-            "inputs": [
-                {
-                    "id": 139924400079728,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "x..."
-                },
-                {
-                    "id": 139924291768864,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 139718845857552,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 261.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140346069454704,
-                "content": "",
-                "width": 260.0,
-                "height": 100.0,
-                "content-widht": 250,
-                "content-height": 66,
-                "value": "x**0.5+y+z+b*2",
-                "label": "res"
-            },
-            "op_code": 301,
-            "op_title": "Expression"
-        },
-        {
-            "id": 140481401071216,
-            "title": "Data Combine",
-            "pos_x": 939.3639705882349,
-            "pos_y": -196.81911764705876,
-            "inputs": [
-                {
-                    "id": 140481401071360,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "x"
-                },
-                {
-                    "id": 140346068154256,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140481401071408,
+                    "id": 140143922967648,
                     "index": 0,
                     "position": 4,
                     "socket_type": 1,
@@ -816,178 +184,64 @@
                     "x": 161.0,
                     "y": 40.0,
                     "label": null
+                },
+                {
+                    "id": 140143922968080,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140143922968320,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "x"
                 }
             ],
             "content": {
-                "id": 140346069489696,
+                "id": 140143923022864,
                 "content": "",
                 "width": 160.0,
-                "height": 100.0,
+                "height": 200.0,
                 "content-widht": 150,
-                "content-height": 66
+                "content-height": 166
             },
-            "op_code": 401,
-            "op_title": "Combine"
-        },
-        {
-            "id": 139924398701152,
-            "title": "Data Rename",
-            "pos_x": 541.5384615384615,
-            "pos_y": 72.30769230769229,
-            "inputs": [
-                {
-                    "id": 139924398701392,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 139924398701488,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 201.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140346069490992,
-                "content": "",
-                "map": {
-                    "O_rw": "x",
-                    "Cr_rw": "y",
-                    "Cu_rw": "z",
-                    "Mn_rw": "Mn_rw",
-                    "Zn_rw": "Zn_rw",
-                    "H3B03_rw": "b",
-                    "Fe_fw": "Fe_fw",
-                    "Pt_rw": "Pt_rw"
-                },
-                "width": 200.0,
-                "height": 293.0,
-                "content-widht": 190,
-                "content-height": 259
-            },
-            "op_code": 403,
-            "op_title": "Rename"
+            "op_code": 400,
+            "op_title": "Separate"
         }
     ],
     "edges": [
         {
-            "id": 140550146427968,
+            "id": 140143922948944,
             "edge_type": 2,
-            "start": 140550146360944,
-            "end": 140550685993088
+            "start": 140144246552368,
+            "end": 140143922948848
         },
         {
-            "id": 140550146297808,
+            "id": 140143922967504,
             "edge_type": 2,
-            "start": 140550146296656,
-            "end": 140550146294016
+            "start": 140143922947504,
+            "end": 140143922967408
         },
         {
-            "id": 140550145573312,
+            "id": 140143922967792,
             "edge_type": 2,
-            "start": 140550146296704,
-            "end": 140550145573168
+            "start": 140143922967168,
+            "end": 140143922967456
         },
         {
-            "id": 140550145573600,
+            "id": 140143922948992,
             "edge_type": 2,
-            "start": 140550146296272,
-            "end": 140550145573264
-        },
-        {
-            "id": 140550145573504,
-            "edge_type": 2,
-            "start": 140550146296560,
-            "end": 140550145573360
-        },
-        {
-            "id": 140550145573744,
-            "edge_type": 2,
-            "start": 140550146296176,
-            "end": 140550145573648
-        },
-        {
-            "id": 140550145573696,
-            "edge_type": 2,
-            "start": 140550146295504,
-            "end": 140550145573936
-        },
-        {
-            "id": 140550145573840,
-            "edge_type": 2,
-            "start": 140550146295120,
-            "end": 140550145574128
-        },
-        {
-            "id": 140550146294256,
-            "edge_type": 2,
-            "start": 140550146293872,
-            "end": 140550145574656
-        },
-        {
-            "id": 140550143500048,
-            "edge_type": 2,
-            "start": 140550146296656,
-            "end": 140550142780128
-        },
-        {
-            "id": 140550142807632,
-            "edge_type": 2,
-            "start": 140550143624720,
-            "end": 140550145937760
-        },
-        {
-            "id": 140442222720048,
-            "edge_type": 2,
-            "start": 140550146295792,
-            "end": 140442226492848
-        },
-        {
-            "id": 139945154602848,
-            "edge_type": 2,
-            "start": 140550145937664,
-            "end": 139945154325568
-        },
-        {
-            "id": 139718846743456,
-            "edge_type": 2,
-            "start": 139718845857552,
-            "end": 139718845144608
-        },
-        {
-            "id": 140481401072080,
-            "edge_type": 2,
-            "start": 140550143626304,
-            "end": 140481401071360
-        },
-        {
-            "id": 140481401072224,
-            "edge_type": 2,
-            "start": 140481401071408,
-            "end": 140550142766960
-        },
-        {
-            "id": 139924398701536,
-            "edge_type": 2,
-            "start": 140550145937664,
-            "end": 139924398701392
-        },
-        {
-            "id": 139924398701584,
-            "edge_type": 2,
-            "start": 139924398701488,
-            "end": 139924400079728
+            "start": 140143922948896,
+            "end": 140143922967840
         }
     ]
 }

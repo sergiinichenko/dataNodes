@@ -79,6 +79,9 @@ class ValueInputNode(DataNode):
 
 
 
+
+
+
 class MultiValueInputGraphicsNode(AdjustableOutputGraphicsNode):
     def initSizes(self):
         super().initSizes()
@@ -101,7 +104,7 @@ class MultiValueInputContent(AdjustableOutputContent):
             i = at
         else:
             i = 0
-        self.remove[str(socket.id)]  = RemoveButton(str(socket.id))
+        self.remove[str(socket.id)]  = RemoveButton(self, str(socket.id))
         self.labels[str(socket.id)]  = QLineEdit("x"+str(i), self)
         self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
         self.values[str(socket.id)]  = QLineEdit("1.0", self)
@@ -112,39 +115,9 @@ class MultiValueInputContent(AdjustableOutputContent):
 
         self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
         self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
-        self.remove[str(socket.id)].clicked.connect(lambda : self.removePair(socket))
+        self.remove[str(socket.id)].clicked.connect(self.remove[str(socket.id)].removePair)
 
-    def clearContent(self):
-        while self.mainlayout.count():
-            child = self.mainlayout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-        self.labels.clear()
-        self.values.clear()
-        self.remove.clear()
-
-    def removePair(self, soket):
-        self.mainlayout.removeWidget(self.labels[str(soket.id)])
-        self.mainlayout.removeWidget(self.values[str(soket.id)])
-        self.mainlayout.removeWidget(self.remove[str(soket.id)])
-        self.labels[str(soket.id)].setParent(None)
-        self.values[str(soket.id)].setParent(None)
-        self.remove[str(soket.id)].setParent(None)
-        del self.labels[str(soket.id)]
-        del self.values[str(soket.id)]
-        #del self.remove[str(soket.id)]
-
-        self.node.resize()
-        self.node.removeOutput(soket)
-        self.sortWidgets()
     
-    def clearContent(self):
-        while self.mainlayout.count():
-            child = self.mainlayout.takeAt(0)
-            #if child.widget():
-            #    child.widget().deleteLater()    
-        self.node.clearOutputs()
-
     def sortWidgets(self):
         for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
             self.remove[str(soket.id)].setParent(None)
@@ -160,9 +133,9 @@ class MultiValueInputContent(AdjustableOutputContent):
 
 
     def serialize(self):
-        res = super().serialize()
-        labels = []
-        values = []
+        res     = super().serialize()
+        labels  = []
+        values  = []
         sockets = []
 
         for key in self.labels:
@@ -178,7 +151,7 @@ class MultiValueInputContent(AdjustableOutputContent):
         res = super().deserialize(data, hashmap)
         try:
             for i, socket, label, value in zip(range(len(data['label'])), self.node.getOutputs(), data['label'], data['value']):
-                self.remove[str(socket.id)]  = RemoveButton()
+                self.remove[str(socket.id)]  = RemoveButton(self, str(socket.id))
                 self.labels[str(socket.id)]  = QLineEdit(label, self)
                 self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
                 self.values[str(socket.id)]  = QLineEdit(value, self)
@@ -187,7 +160,7 @@ class MultiValueInputContent(AdjustableOutputContent):
                 self.mainlayout.addWidget(self.remove[str(socket.id)], i, 0)
                 self.mainlayout.addWidget(self.labels[str(socket.id)], i, 1)
                 self.mainlayout.addWidget(self.values[str(socket.id)], i, 2)
-                self.remove[str(socket.id)].clicked.connect(lambda:self.removePair(socket))
+                self.remove[str(socket.id)].clicked.connect(self.remove[str(socket.id)].removePair)
                 self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
                 self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
             return True & res
@@ -202,7 +175,6 @@ class MultiValueInputNode(AdjustableOutputNode):
 
     def __init__(self, scene, inputs=[], outputs=[]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
-        self.appendNewPair()
         self.eval()
         self.timer = None
 
@@ -241,12 +213,13 @@ class MultiValueInputNode(AdjustableOutputNode):
 
     def evalImplementation(self):
         try:
-            for socket in self.getOutputs():
-                u_value = self.content.values[str(socket.id)].text()
-                s_value = float(u_value)
-                label   = self.content.labels[str(socket.id)].text()
-                socket.value = {label : s_value}
-                socket.type  = "float"
+            if self.getOutputs():
+                for socket in self.getOutputs():
+                    u_value = self.content.values[str(socket.id)].text()
+                    s_value = float(u_value)
+                    label   = self.content.labels[str(socket.id)].text()
+                    socket.value = {label : s_value}
+                    socket.type  = "float"
             return True
 
         except Exception as e: 

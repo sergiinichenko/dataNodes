@@ -101,9 +101,11 @@ class Socket(Serializer):
         return len(self.edges) > 0
 
     def remove(self):
-        if self.hasEdges():
-            self.clearEdges()
+        if self.hasEdges() : self.clearEdges()
+        self.node.outputs = [output for output in self.node.outputs if output != self]
         self.node.scene.grScene.removeItem(self.grSocket)
+        self.node.scene.grScene.update()
+
 
     def serialize(self):
         return OrderedDict([
