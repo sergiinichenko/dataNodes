@@ -245,23 +245,27 @@ class Edge(Serializer):
 
 
     def serialize(self):
-        return OrderedDict([
-            ('id'        , self.id),
-            ('edge_type' , self.edge_type),
-            ('start'     , self.start_socket.id),
-            ('end'       , self.end_socket.id),
-        ])
+        try:
+            return OrderedDict([
+                ('id'        , self.id),
+                ('edge_type' , self.edge_type),
+                ('start'     , self.start_socket.id),
+                ('end'       , self.end_socket.id),
+            ])
+        except Exception as e : 
+            return
 
     def deserialize(self, data, hashmap=[], restore_id=True):
+        try:
+            if restore_id : self.id = data['id']
 
-        if restore_id : self.id = data['id']
+            self.start_socket = hashmap[data['start']]
+            self.end_socket   = hashmap[data['end']]
+            self.edge_type    = data['edge_type']
 
-        self.start_socket = hashmap[data['start']]
-        self.end_socket   = hashmap[data['end']]
-        self.edge_type    = data['edge_type']
-
-        return True
-
+            return True
+        except Exception as e : 
+            return False
 
 # Example: using validators for Edge
 # You can register edge validators wherever you want, even here...

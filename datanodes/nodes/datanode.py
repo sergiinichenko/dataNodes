@@ -563,7 +563,7 @@ class ResizableOutputNode(DataNode):
 
 
 class RemoveButton(QToolButton):
-    def __init__(self, id):
+    def __init__(self, id=None):
         super().__init__()
         self.initUI()
         self.id = id
@@ -603,7 +603,6 @@ class AdjustableOutputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
-        res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
         res['content-widht'] = self.size().width()
         res['content-height'] = self.size().height()
@@ -613,7 +612,6 @@ class AdjustableOutputContent(DataContent):
         res = super().deserialize(data, hashmap)
         try:
             self.node.grNode.height = data['height']
-            self.node.grNode.width  = data['width']
             self.resize(data['content-widht'], data['content-height'])
             return True & res
         except Exception as e: 

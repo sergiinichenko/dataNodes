@@ -174,6 +174,15 @@ class Node(Serializer):
         self.outputs = [output for output in self.outputs if output.hasEdges()]
         self.scene.grScene.update()
 
+    def clearOutputs(self):
+        for output in self.outputs:
+            output.remove()
+            output.grSocket.hide()
+            self.scene.grScene.removeItem(output.grSocket)
+        self.outputs = []
+        self.scene.grScene.update()
+
+
     def __str__(self) -> str:
         return "<Node %s..%s>" % (hex(id(self))[2:5], hex(id(self))[-4:])
 

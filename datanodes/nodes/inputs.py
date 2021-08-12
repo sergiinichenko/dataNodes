@@ -143,6 +143,7 @@ class MultiValueInputContent(AdjustableOutputContent):
             child = self.mainlayout.takeAt(0)
             #if child.widget():
             #    child.widget().deleteLater()    
+        self.node.clearOutputs()
 
     def sortWidgets(self):
         for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
@@ -164,10 +165,10 @@ class MultiValueInputContent(AdjustableOutputContent):
         values = []
         sockets = []
 
-        for label, value in zip(self.labels, self.values):
-            labels.append(self.labels[label].text())
-            values.append(self.values[value].text())
-            sockets.append(label)
+        for key in self.labels:
+            labels.append(self.labels[key].text())
+            values.append(self.values[key].text())
+            sockets.append(key)
         res['value'] = values
         res['label'] = labels
         res['socket'] = sockets
@@ -176,21 +177,19 @@ class MultiValueInputContent(AdjustableOutputContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            self.clearContent()
-            for i, socket, label, value in zip(range(len(data['socket'])), data['socket'], data['label'], data['value']):
-                self.remove[socket]  = RemoveButton(socket)
-                self.labels[socket]  = QLineEdit("x"+str(i), self)
-                self.labels[socket].setAlignment(Qt.AlignRight)
-                self.labels[socket].setText(label)
-                self.values[socket]  = QLineEdit("1.0", self)
-                self.values[socket].setAlignment(Qt.AlignLeft)
-                self.values[socket].setText(value)
-                self.mainlayout.addWidget(self.remove[socket], i, 0)
-                self.mainlayout.addWidget(self.labels[socket], i, 1)
-                self.mainlayout.addWidget(self.values[socket], i, 2)
-                self.remove[socket].clicked.connect(lambda:self.removePair(socket))
-                self.labels[socket].textChanged.connect(self.node.recalculateNode)
-                self.values[socket].textChanged.connect(self.node.recalculateNode)
+            for i, socket, label, value in zip(range(len(data['label'])), self.node.getOutputs(), data['label'], data['value']):
+                self.remove[str(socket.id)]  = RemoveButton()
+                self.labels[str(socket.id)]  = QLineEdit(label, self)
+                self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
+                self.values[str(socket.id)]  = QLineEdit(value, self)
+                self.values[str(socket.id)].setAlignment(Qt.AlignLeft)
+
+                self.mainlayout.addWidget(self.remove[str(socket.id)], i, 0)
+                self.mainlayout.addWidget(self.labels[str(socket.id)], i, 1)
+                self.mainlayout.addWidget(self.values[str(socket.id)], i, 2)
+                self.remove[str(socket.id)].clicked.connect(lambda:self.removePair(socket))
+                self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
+                self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
             return True & res
         except Exception as e : dumpException(e)
         return res
