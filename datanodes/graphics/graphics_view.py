@@ -24,11 +24,11 @@ MODE_NODE_DRAG   = 6
 STATE_STRING = ['', 'Noop', 'Edge Drag', 'Edge Cut', 'Edge Rerouting', 'Node Drag']
 
 #: Socket snapping distance
-EDGE_SNAPPING_RADIUS = 15
+EDGE_SNAPPING_RADIUS = 10
 #: Enable socket snapping feature
-EDGE_SNAPPING = True
+EDGE_SNAPPING        = True
 
-DEBUG = False
+DEBUG                = False
 
 class GraphicsView(QGraphicsView):
     scenePosChanged = pyqtSignal(int, int)
@@ -87,9 +87,9 @@ class GraphicsView(QGraphicsView):
         self.setAcceptDrops(True)
 
 
-    def isStappingEnabled(self, event: 'QInputEvent' = None) -> bool:
+    def isSnappingEnabled(self, event: 'QInputEvent' = None) -> bool:
         """ Return ''True'' is the snapping is currently enabled"""
-        return EDGE_SNAPPING and (event.modifiers() & Qt.ControlModifier) if event else True
+        return EDGE_SNAPPING if event else True
 
     def dragEnterEvent(self, event):
         for callback in self._drap_enter_listeners : callback(event)
@@ -224,7 +224,7 @@ class GraphicsView(QGraphicsView):
 
 
         # if the socket is within the snapping distance
-        if self.isStappingEnabled(event):
+        if self.isSnappingEnabled(event):
             item = self.snapping.getSnappedSocketItem(event)
 
 
@@ -279,7 +279,7 @@ class GraphicsView(QGraphicsView):
                     
                     # defines if the snapping is enabled and returs the closest
                     # socket item
-                    if self.isStappingEnabled(event):
+                    if self.isSnappingEnabled(event):
                         item = self.snapping.getSnappedSocketItem(event)
 
                     res = self.dragging.edgeDragEnd(item)
@@ -289,7 +289,7 @@ class GraphicsView(QGraphicsView):
             if self.mode == MODE_EDGE_REROUT:
                 # defines if the snapping is enabled and returs the closest
                 # socket item
-                if self.isStappingEnabled(event):
+                if self.isSnappingEnabled(event):
                     item = self.snapping.getSnappedSocketItem(event)
 
                 self.rerouting.stopRerouting(item.socket if isinstance(item, GraphicsSocket) else None)
@@ -352,7 +352,7 @@ class GraphicsView(QGraphicsView):
 
             # defines if the snapping is enabled and returs the closest
             # socket item
-            if self.isStappingEnabled(event):
+            if self.isSnappingEnabled(event):
                _, pos = self.snapping.getSnappedSocketPosition(pos)
 
             if modified:
