@@ -98,8 +98,6 @@ class NodeWidget(QWidget):
             self.filename = file
             self.scene.history.clear()
             self.scene.history.storeInitialHistoryStamp()
-            for node in self.scene.nodes:
-                node.eval()
             return True
 
         except InvalidFile as e:

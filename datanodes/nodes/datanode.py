@@ -83,7 +83,7 @@ class DataNode(Node):
     def initInnerClasses(self):
         self.content = DataContent(self)
         self.grNode  = DataGraphicsNode(self)
-        self.content.changed.connect(self.eval())
+        self.content.changed.connect(self.eval)
 
 
     def initSettings(self):
@@ -95,14 +95,14 @@ class DataNode(Node):
         self.output_socket_position = RIGHT_CENTER
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         return 123
 
     def recalculateNode(self):
         self.setDirty()
         self.eval()
 
-    def eval(self):
+    def eval(self, silent=False):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:
             #return self.value
             return True
@@ -128,7 +128,7 @@ class DataNode(Node):
                 self.evalChildren()
                 return True
 
-            elif self.evalImplementation():
+            elif self.evalImplementation(silent):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
@@ -441,11 +441,12 @@ class ResizableInputNode(DataNode):
         self.setDirty()
         self.eval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         pass
 
-    def update(self):
-        super().update()
+
+    def update(self, silent=False):
+        super().update(silent)
         self.updateSockets()
 
 
@@ -508,37 +509,6 @@ class ResizableOutputNode(DataNode):
         self.outputs = sockets_full + sockets_empty
 
 
-        """
-        sockets_full  = []
-        sockets_empty = []
-        labels_full = []
-        values_full = []
-        labels_empty = []
-        values_empty = []
-        if self.getOutputs():
-            for socket in self.outputs:
-                if socket.hasEdges():
-                    sockets_full.append(socket)
-                    labels_full.append(self.content.labels[str(socket.id)])
-                    values_full.append(self.content.values[str(socket.id)])
-                else:
-                    sockets_empty.append(socket)
-                    labels_empty.append(self.content.labels[str(socket.id)])
-                    values_empty.append(self.content.values[str(socket.id)])
-
-        self.content.clearFromLayout()
-        self.outputs = sockets_full + sockets_empty
-        self.content.labels = labels_full + labels_empty
-        self.content.values = values_full + values_empty
-        for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
-            socket.index = i
-            socket.setPos()
-            self.content.mainlayout.addWidget(self.content.labels[socket.id], i, 0)
-            self.content.mainlayout.addWidget(self.content.values[socket.id], i, 1)
-
-        self.removeFreeInputs()
-        self.appendNewSocket()
-        """
     def getSocketsNames(self):
         if len(self.inputs) == 0: 
             return None
@@ -562,11 +532,11 @@ class ResizableOutputNode(DataNode):
         self.setDirty()
         self.eval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         pass
 
-    def update(self):
-        super().update()
+    def update(self, silent=False):
+        super().update(silent)
         self.updateSockets()
 
 
@@ -661,11 +631,11 @@ class ResizableInOutNode(DataNode):
         self.setDirty()
         self.eval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         pass
 
-    def update(self):
-        super().update()
+    def update(self, silent=False):
+        super().update(silent)
         self.updateSockets()
 
 
@@ -769,7 +739,7 @@ class AdjustableOutputNode(DataNode):
         self.grNode  = AdjustableOutputGraphicsNode(self)
         self.content.changed.connect(self.updateSockets)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         pass
 
 

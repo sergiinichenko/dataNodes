@@ -71,7 +71,7 @@ class GraphicsOutputNode(DataNode):
         self.grNode  = GraphicsOutputGraphicsNode(self)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
         if not input_edge:
             self.setInvalid()

@@ -89,7 +89,7 @@ class MathNode(DataNode):
         self.content.changed.connect(self.recalculateNode)
         self.content.label.textChanged.connect(self.recalculateNode)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_values = self.getInputs()
         if not input_values:
             self.setInvalid()
@@ -326,7 +326,7 @@ class ExpressionNode(ResizableInputNode):
         self.content.label.returnPressed.connect(self.recalculateNode)
         self.content.changed.connect(self.updateSockets)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         inputs = self.getInputs()
         if not inputs:
             self.setInvalid()

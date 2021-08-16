@@ -88,7 +88,7 @@ class StepRangeNode(DataNode):
         self.recalculate = True
         self.eval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             self.setDirty(False)
             self.setInvalid(False)
@@ -222,7 +222,7 @@ class NumRangeNode(DataNode):
         else:
             self.content.stop.setReadOnly(False)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             self.checkTheInputs()
             self.setDirty(False)
@@ -341,7 +341,7 @@ class FilledArrayNode(DataNode):
         self.recalculate = True
         self.eval()
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             self.setDirty(False)
             self.setInvalid(False)
@@ -486,7 +486,7 @@ class Mesh2DNode(DataNode):
             self.content.numy.setReadOnly(False)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             self.checkTheInputs()
             name  = self.content.name.text()

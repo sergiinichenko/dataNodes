@@ -308,7 +308,7 @@ class Group(Serializer):
             dumpException(e)
             return None
 
-    def eval(self):
+    def eval(self, silent=False):
         self.setDirty(False)
         self.setInvalid(False)
         return 0
@@ -317,7 +317,7 @@ class Group(Serializer):
         for node in self.getChildNodes():
             node.eval()
 
-    def update(self):
+    def update(self, silent=False):
         self.setDirty()
         self.setDescendentsDirty()
         self.eval()

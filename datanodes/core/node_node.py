@@ -399,20 +399,20 @@ class Node(Serializer):
         return found
 
 
-    def eval(self):
+    def eval(self, silent=False):
         self.setDirty(False)
         self.setInvalid(False)
         return 0
 
-    def evalChildren(self):
+    def evalChildren(self, silent=False):
         for node in self.getChildNodes():
-            node.eval()
+            node.eval(silent)
 
-    def update(self):
+    def update(self, silent=False):
         self.setDirty()
         self.setDescendentsDirty()
-        self.eval()
-        self.evalChildren()
+        self.eval(silent)
+        self.evalChildren(silent)
 
     def updateDescendents(self):
         for other_node in self.getChildNodes():

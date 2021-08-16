@@ -49,7 +49,7 @@ class ValueOutputNode(DataNode):
         self.grNode  = ValueOutputGraphicsNode(self)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
         if not input_edge:
             self.setInvalid()
@@ -127,7 +127,7 @@ class TableOutputNode(DataNode):
         self.grNode  = TableOutputGraphicsNode(self)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
         if not input_edge:
             self.setInvalid()
@@ -212,7 +212,7 @@ class TextOutputNode(DataNode):
         self.grNode  = TextOutputGraphicsNode(self)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
         if not input_edge:
             if DEBUG : print("OUTNODE_TXT: no input edge")

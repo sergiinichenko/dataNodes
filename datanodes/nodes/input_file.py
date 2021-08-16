@@ -96,6 +96,6 @@ class FileInputNode(DataNode):
             self.can_read = False
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         if self.can_read : return True
         else: return False

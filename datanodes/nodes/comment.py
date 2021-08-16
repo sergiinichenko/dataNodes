@@ -58,7 +58,7 @@ class CommentNode(DataNode):
         self.content = CommentContent(self)
         self.grNode  = CommentGraphicsNode(self)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             self.setDirty(False)
             self.setInvalid(False)

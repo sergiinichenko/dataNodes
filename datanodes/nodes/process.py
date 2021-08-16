@@ -75,7 +75,7 @@ class SeparateNode(ResizableOutputNode):
             socket.label = name
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
 
         if not input_edge:
@@ -95,12 +95,13 @@ class SeparateNode(ResizableOutputNode):
             if isinstance(self.value, dict):
                 if DEBUG : print("PRCNODE_SEP: input is df")
 
-                if len(self.outputs) != (len(self.value)+1):
-                    if DEBUG : print("PRCNODE_SEP: generate new sockets")
-                    self.generateSockets()
-                    if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
-                else:
-                    self.setSocketsNames()
+                if not silent:
+                    if len(self.outputs) != (len(self.value)+1):
+                        if DEBUG : print("PRCNODE_SEP: generate new sockets")
+                        self.generateSockets()
+                        if DEBUG : print("PRCNODE_SEP: new sockets have been generated")
+                    else:
+                        self.setSocketsNames()
 
                 self.getOutput(0).value = self.value
                 self.getOutput(0).type  = "df"
@@ -140,7 +141,7 @@ class CombineNode(ResizableInputNode):
         self.grNode  = ResizableGraphicsNode(self)
         self.content.changed.connect(self.recalculateNode)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edges = self.getInputs()
         if not input_edges:
             self.setInvalid()
@@ -238,7 +239,7 @@ class UpdateNode(ResizableInputNode):
         self.grNode  = UpdateGraphicsNode(self)
         self.content.changed.connect(self.recalculateNode)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edges = self.getInputs()
         if not input_edges:
             self.setInvalid()
@@ -406,7 +407,7 @@ class RenameNode(DataNode):
             self.content.resize(x, y)
             self.grNode.update()
         
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
         if not input_edge:
             self.setInvalid()
@@ -590,7 +591,7 @@ class CleanNode(DataNode):
     def onlyNumerics(self, seq):
         return re.sub("[^\d\.]", "", seq)
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         input_socket = self.getInput(0)
 
         if not input_socket:

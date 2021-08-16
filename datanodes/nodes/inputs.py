@@ -61,7 +61,7 @@ class ValueInputNode(DataNode):
         self.content.label.returnPressed.connect(self.onInputChanged)
         self.content.changed.connect(self.recalculateNode)    
         
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             u_value = self.content.value.text()
             s_value = float(u_value)
@@ -211,7 +211,7 @@ class MultiValueInputNode(AdjustableOutputNode):
         self.timer.start(1)
 
 
-    def evalImplementation(self):
+    def evalImplementation(self, silent=False):
         try:
             if self.getOutputs():
                 for socket in self.getOutputs():
