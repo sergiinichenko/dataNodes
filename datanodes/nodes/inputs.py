@@ -85,7 +85,7 @@ class ValueInputNode(DataNode):
 class MultiValueInputGraphicsNode(AdjustableOutputGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 160.0
+        self.width  = 200.0
         self.height = 100.0
         self.min_height = 100.0
 
