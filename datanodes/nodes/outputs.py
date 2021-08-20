@@ -101,14 +101,21 @@ class TableOutputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
-        #res['value'] = self.table.text()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['content-widht'] = self.size().width()
+        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['value']
-            #self.table.setText(value)
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.resize(data['content-widht'], data['content-height'])
+            except Exception as e: 
+                dumpException(e)
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -126,6 +133,47 @@ class TableOutputNode(DataNode):
         self.content = TableOutputContent(self)
         self.grNode  = TableOutputGraphicsNode(self)
 
+    def getFormatedValue(self, value):
+        if value > 1000000.0:
+            return "{:.3e}".format(value)
+        if value > 1000.0 and value <= 1000000.0:
+            return "{:.3e}".format(value)
+        if value > 100.0 and value <= 1000.0:
+            return "{:.2f}".format(value)
+        if value > 1.0 and value <= 100.0:
+            return "{:.3f}".format(value)
+
+        if value > 0.01 and value <= 1.0:
+            return "{:.4f}".format(value)
+
+        if value <= 0.01:
+            return "{:.3e}".format(value)
+
+    def fillTable(self):
+        self.content.table.clear()
+        self.content.table.setRowCount(0)
+        self.content.table.setColumnCount(0)
+
+        nofrows = 1
+        for key in self.value:
+
+            if isinstance(self.value[key], (np.ndarray)):
+                if len(self.value[key]) > nofrows : nofrows = len(self.value[key])
+
+        self.content.table.setColumnCount(len(self.value))
+        self.content.table.setRowCount(nofrows+1)
+
+        for c, key in enumerate(self.value):
+            item = QTableWidgetItem(key)
+            self.content.table.setItem(0, c, item)
+            
+            if isinstance(self.value[key], (np.ndarray)):
+                for r, value in enumerate(self.value[key]):
+                    item = QTableWidgetItem(self.getFormatedValue(value))
+                    self.content.table.setItem(r+1, c, item)
+            else:
+                item = QTableWidgetItem(self.getFormatedValue(self.value[key]))
+                self.content.table.setItem(1, c, item)
 
     def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
@@ -140,6 +188,7 @@ class TableOutputNode(DataNode):
             self.e = ""
             self.value = input_edge.value
             self.type  = input_edge.type
+            self.fillTable()
             if input_edge.type == "df":
                 self.table.setRowCount(self.value.shape[0])
                 self.table.setColumnCount(self.value.shape[1])

@@ -101,7 +101,7 @@ class MathNode(DataNode):
                     self.setDirty(False)
                     self.setInvalid(False)
                     self.e = ""
-                    label  = self.content.label.text()
+                    label  = self.content.label.text() if self.content.label.text() != "" else list(input_values[0].value.keys())[0]
                     values = [copy.deepcopy(input_values[0].value), 
                             copy.deepcopy(input_values[1].value)]
                     res = {}
