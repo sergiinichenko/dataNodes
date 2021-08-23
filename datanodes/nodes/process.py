@@ -24,6 +24,7 @@ class SeparateNode(ResizableOutputNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
+        self.properties = DataProperties(self)
 
     def generateSockets(self):
         dnames  = ['DATA']
@@ -139,6 +140,7 @@ class CombineNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
@@ -237,6 +239,7 @@ class UpdateNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = UpdateContent(self)
         self.grNode  = UpdateGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
@@ -390,6 +393,7 @@ class RenameNode(DataNode):
     def initInnerClasses(self):
         self.content = RenameContent(self)
         self.grNode  = RenameGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def resize(self):
@@ -566,6 +570,7 @@ class CleanNode(DataNode):
     def initInnerClasses(self):
         self.content = CleanContent(self)
         self.grNode  = CleanGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.nanToNumValue.returnPressed.connect(self.recalculate)
         self.content.strToNumValue.returnPressed.connect(self.recalculate)
         self.content.infToNumValue.returnPressed.connect(self.recalculate)

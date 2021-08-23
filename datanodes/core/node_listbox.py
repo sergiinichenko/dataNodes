@@ -65,3 +65,15 @@ class NodeListBox(QListWidget):
 
         except Exception as e : dumpException(e)
 
+
+class NodesDock(QDockWidget):
+    def __init__(self, name, parent = None):
+        super().__init__(name, parent=parent)
+
+        self.initUI()
+
+    def initUI(self):
+        self.nodesListWidget = NodeListBox()
+        self.setWidget(self.nodesListWidget)
+        self.setFloating(False)
+        self.hide()

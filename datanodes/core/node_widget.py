@@ -15,6 +15,7 @@ class NodeWidget(QWidget):
         super().__init__(parent)
 
         self.filename = None
+        self.window   = parent
 
         self.initUI()
 
@@ -26,7 +27,7 @@ class NodeWidget(QWidget):
         self.setLayout(self.layout)
 
         # create the scene
-        self.scene = Scene()
+        self.scene = Scene(self.window)
 
         # create the view
         self.view = GraphicsView(self.scene, self)

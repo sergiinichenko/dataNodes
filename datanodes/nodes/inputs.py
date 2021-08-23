@@ -57,6 +57,7 @@ class ValueInputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.value.returnPressed.connect(self.onInputChanged)
         self.content.label.returnPressed.connect(self.onInputChanged)
         self.content.changed.connect(self.recalculateNode)    
@@ -184,6 +185,7 @@ class MultiValueInputNode(AdjustableOutputNode):
     def initInnerClasses(self):
         self.content = MultiValueInputContent(self)
         self.grNode  = MultiValueInputGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.recalculateNode)
         self.content.addItems.clicked.connect(self.appendNewPair)
 

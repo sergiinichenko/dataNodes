@@ -1,6 +1,7 @@
 from datanodes.core.node_window import NodeWindow, NodeSubWindow
 from datanodes.core.node_widget import NodeWidget
-from datanodes.core.node_listbox import NodeListBox
+from datanodes.core.node_listbox import NodeListBox, NodesDock
+from datanodes.core.node_propertiesdock import PropertiesDock
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
@@ -39,12 +40,14 @@ class MainWindow(NodeWindow):
         self.empty_icon = QIcon(".")
 
         self.createNodesDock()
+        self.createPropertiesDock()
         self.createActions()
         self.createMenus()
         self.createToolBars()
         self.updateMenus()
         self.createStatusBar()
         self.readSettings()
+
 
         self.setWindowTitle("DataNodes Editor")
         self.show()
@@ -136,6 +139,12 @@ class MainWindow(NodeWindow):
         toolbar_nodes.setChecked(self.nodesDock.isVisible())
         toolbar_nodes.setShortcut(QKeySequence('N'))
 
+        toolbar_properties = self.windowMenu.addAction("Properties Toolbar")
+        toolbar_properties.setCheckable(True)
+        toolbar_properties.triggered.connect(self.onWindowPropertiesDock)
+        toolbar_properties.setChecked(self.propertiesDock.isVisible())
+        toolbar_properties.setShortcut(QKeySequence('P'))
+
         self.windowMenu.addSeparator()
 
         self.windowMenu.addAction(self.actClose)
@@ -168,17 +177,23 @@ class MainWindow(NodeWindow):
             self.nodesDock.hide()
         else:
             self.nodesDock.show()
-            
 
     def createNodesDock(self):
-        self.nodesListWidget = NodeListBox()
-
-        self.nodesDock = QDockWidget("Nodes")
-        self.nodesDock.setWidget(self.nodesListWidget)
-        self.nodesDock.setFloating(False)
-        self.nodesDock.hide()
-        
+        self.nodesDock = NodesDock("Nodes")
         self.addDockWidget(Qt.RightDockWidgetArea, self.nodesDock)
+
+
+    def onWindowPropertiesDock(self):
+        if self.propertiesDock.isVisible():
+            self.propertiesDock.hide()
+        else:
+            self.propertiesDock.show()
+
+    def createPropertiesDock(self):
+        self.propertiesDock = PropertiesDock("Propertes")
+        self.addDockWidget(Qt.LeftDockWidgetArea, self.propertiesDock)
+
+
 
     def readSettings(self):
         settings = QSettings(self.name_company, self.name_product)
@@ -217,7 +232,7 @@ class MainWindow(NodeWindow):
                         self.mdiArea.setActiveSubWindow(existing)
                     else:
                         # we create new subWindow for a file and open file
-                        nodeeditor = NodeSubWindow()
+                        nodeeditor = NodeSubWindow(self)
                         if nodeeditor.fileLoad(fname):
                             self.statusBar().showMessage("File {0} loaded".format(fname))
                             nodeeditor.setTitle()
@@ -230,7 +245,7 @@ class MainWindow(NodeWindow):
         
 
     def createMdiChild(self, childWidget = None):
-        nodeeditor = childWidget if childWidget is not None else NodeSubWindow()
+        nodeeditor = childWidget if childWidget is not None else NodeSubWindow(self)
         subwnd     = self.mdiArea.addSubWindow(nodeeditor)
         subwnd.setWindowIcon(self.empty_icon)
         #nodeeditor.scene.addItemSelectedListener(self.updateEditMenu)

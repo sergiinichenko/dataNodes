@@ -66,6 +66,46 @@ class DataContent(NodeContentWidget):
     def initUI(self):
         pass
 
+
+class DataProperties(QWidget, Serializer):
+    changed    = pyqtSignal()
+    outchanged = pyqtSignal()
+
+    def __init__(self, node, parent=None):
+        self.node = node
+        super().__init__(parent)
+        self.initUI()
+
+    def initUI(self):
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
+        self.title_name = QLabel("Title", self)        
+        self.title_name.setAlignment(Qt.AlignRight)
+        self.title = QLineEdit(self.node.title, self)
+        self.title.setAlignment(Qt.AlignCenter)
+        self.title.setFixedWidth(60)
+        self.title.textChanged.connect(self.emitChanged)
+        self.layout.addWidget(self.title_name, 0, 0)
+        self.layout.addWidget(self.title, 0, 1)
+
+    def emitChanged(self):
+        self.changed.emit()
+        self.node.title = self.title.text()
+
+    def serialize(self):
+        return OrderedDict([
+            ('id' , self.id),
+            ('content', "")
+        ])
+        
+    def deserialize(self, data, hashmap=[]):
+        return True
+
+
+
 class DataNode(Node):
     op_code  = 0
     op_title = "Base node"
@@ -79,11 +119,17 @@ class DataNode(Node):
         self.type  = "float"
         # Mark all nodes dirty by default before it is connected to anything
         self.setDirty()
+        self.scene.addItemSelectedListener(self.catchSelected)
 
     def initInnerClasses(self):
-        self.content = DataContent(self)
-        self.grNode  = DataGraphicsNode(self)
+        self.content    = DataContent(self)
+        self.grNode     = DataGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.eval)
+
+    def catchSelected(self):
+        print("Selected")
+        self.scene.window.propertiesDock.setWidget(self.properties)
 
 
     def initSettings(self):
@@ -371,6 +417,7 @@ class ResizableInputNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def resize(self):
@@ -475,6 +522,7 @@ class ResizableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def appendNewSocket(self):
@@ -561,6 +609,7 @@ class ResizableInOutNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def resize(self):
@@ -737,6 +786,7 @@ class AdjustableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = AdjustableOutputContent(self)
         self.grNode  = AdjustableOutputGraphicsNode(self)
+        self.properties = DataProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def evalImplementation(self, silent=False):

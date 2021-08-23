@@ -14,10 +14,11 @@ class InvalidFile(Exception): pass
 
 
 class Scene(Serializer):
-    def __init__(self):
+    def __init__(self, window):
         super().__init__()
         self.nodes = []
         self.edges = []
+        self.window = window
 
         self.scene_width  = 64000
         self.scene_height = 64000
@@ -123,6 +124,10 @@ class Scene(Serializer):
 
     def getView(self):
         return self.grScene.views()[0]
+
+    def getMainWindow(self):
+        pass
+        #return self.getView().
 
     def getItemAtPos(self, pos):
         return self.getView().itemAt(pos)

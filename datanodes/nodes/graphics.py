@@ -69,6 +69,7 @@ class GraphicsOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = GraphicsOutputContent(self)
         self.grNode  = GraphicsOutputGraphicsNode(self)
+        self.properties = DataProperties(self)
 
 
     def evalImplementation(self, silent=False):

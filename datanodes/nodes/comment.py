@@ -57,6 +57,7 @@ class CommentNode(DataNode):
     def initInnerClasses(self):
         self.content = CommentContent(self)
         self.grNode  = CommentGraphicsNode(self)
+        self.properties = DataProperties(self)
 
     def evalImplementation(self, silent=False):
         try:

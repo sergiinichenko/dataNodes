@@ -255,8 +255,8 @@ class NodeWindow(QMainWindow):
         self.onEditPaste(setSelected=True)
 
 class NodeSubWindow(NodeWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, window):
+        super().__init__(window)
         self.setAttribute(Qt.WA_DeleteOnClose)
         self.scene.addHasBeenModifiedListener(self.setTitle)
         self.scene.addDragEnterListener(self.onDragEnter)

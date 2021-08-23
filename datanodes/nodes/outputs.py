@@ -47,6 +47,7 @@ class ValueOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueOutputContent(self)
         self.grNode  = ValueOutputGraphicsNode(self)
+        self.properties = DataProperties(self)
 
 
     def evalImplementation(self, silent=False):
@@ -132,6 +133,7 @@ class TableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = TableOutputContent(self)
         self.grNode  = TableOutputGraphicsNode(self)
+        self.properties = DataProperties(self)
 
     def getFormatedValue(self, value):
         if value > 1000000.0:
@@ -259,6 +261,7 @@ class TextOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = TextOutputContent(self)
         self.grNode  = TextOutputGraphicsNode(self)
+        self.properties = DataProperties(self)
 
 
     def evalImplementation(self, silent=False):
