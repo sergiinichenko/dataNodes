@@ -47,7 +47,7 @@ class ValueOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueOutputContent(self)
         self.grNode  = ValueOutputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
 
 
     def evalImplementation(self, silent=False):
@@ -104,8 +104,6 @@ class TableOutputContent(DataContent):
         res = super().serialize()
         res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -114,7 +112,7 @@ class TableOutputContent(DataContent):
             try:
                 self.node.grNode.height = data['height']
                 self.node.grNode.width  = data['width']
-                self.resize(data['content-widht'], data['content-height'])
+                self.updateSize()
             except Exception as e: 
                 dumpException(e)
             return True & res
@@ -133,7 +131,7 @@ class TableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = TableOutputContent(self)
         self.grNode  = TableOutputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
 
     def getFormatedValue(self, value):
         if value > 1000000.0:
@@ -228,8 +226,6 @@ class TextOutputContent(DataContent):
         res['value'] = self.textOut.toPlainText()
         res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -241,7 +237,7 @@ class TextOutputContent(DataContent):
             try:
                 self.node.grNode.height = data['height']
                 self.node.grNode.width  = data['width']
-                self.resize(data['content-widht'], data['content-height'])
+                self.updateSize()
             except Exception as e: 
                 dumpException(e)
             return True & res
@@ -261,7 +257,7 @@ class TextOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = TextOutputContent(self)
         self.grNode  = TextOutputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
 
 
     def evalImplementation(self, silent=False):

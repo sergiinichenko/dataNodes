@@ -254,6 +254,9 @@ class GraphicsView(QGraphicsView):
                 super().mouseReleaseEvent(fakeEvent)
                 QApplication.setOverrideCursor(Qt.CrossCursor)
                 return
+            else:
+                self.rubberBandDraggingRect = True
+
 
         super().mousePressEvent(event)
 
@@ -313,6 +316,22 @@ class GraphicsView(QGraphicsView):
                 self.edgeIntersect.leaveState(scenepos.x(), scenepos.y())
                 self.mode = MODE_NONE
                 self.update()
+
+
+            if self.rubberBandDraggingRect:
+                self.rubberBandDraggingRect = False
+                current_selected_items = self.grScene.selectedItems()
+
+                if current_selected_items != self.grScene.scene._last_selected_items:
+                    if current_selected_items == []:
+                        self.grScene.itemsDeselected.emit()
+                    else:
+                        self.grScene.itemSelected.emit()
+                    self.grScene.scene._last_selected_items = current_selected_items
+
+                # the rubber band rectangle doesn't disappear without handling the event
+                super().mouseReleaseEvent(event)
+                return
 
         except Exception as e: dumpException(e)
 

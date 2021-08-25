@@ -172,7 +172,11 @@ class Edge(Serializer):
             self.grEdge.setDestination(source_pos.x(), source_pos.y())
         self.grEdge.update()
 
+    def onSelected(self):
+        pass
 
+    def onDeselected(self):
+        pass
 
     def removeFromSockets(self):
         """

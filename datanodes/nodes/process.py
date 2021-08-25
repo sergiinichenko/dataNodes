@@ -24,7 +24,7 @@ class SeparateNode(ResizableOutputNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
 
     def generateSockets(self):
         dnames  = ['DATA']
@@ -61,9 +61,7 @@ class SeparateNode(ResizableOutputNode):
         self.title_height = 24.0
         self._hpadding     = 5.0
         self._vpadding     = 5.0
-
-        x, y = self.grNode.width - 2.0 * self.grNode.padding, (size+1) * self.socket_spacing + 2.0 * self.socket_spacing - self.grNode.title_height - 2.0 * self.grNode.padding
-        self.content.resize(x, y)
+        self.content.updateSize()
 
 
     def setSocketsNames(self):
@@ -140,7 +138,7 @@ class CombineNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
@@ -204,15 +202,13 @@ class UpdateContent(ResizableContent):
     def serialize(self):
         res = super().serialize()
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             self.node.grNode.height = data['height']
-            self.resize(data['content-widht'], data['content-height'])
+            self.updateSize()
             return True & res
         except Exception as e: 
             dumpException(e)
@@ -239,7 +235,7 @@ class UpdateNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = UpdateContent(self)
         self.grNode  = UpdateGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
@@ -354,8 +350,6 @@ class RenameContent(DataContent):
         res['map']            = self.node.map
         res['width']          = self.node.grNode.width
         res['height']         = self.node.grNode.height
-        res['content-widht']  = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -364,7 +358,7 @@ class RenameContent(DataContent):
             self.node.map           = data['map']
             self.node.grNode.height = data['height']
             self.node.grNode.width  = data['width']
-            self.resize(data['content-widht'], data['content-height'])
+            self.updateSize()
             for name in self.node.map:
                 self.appendPair(name, self.node.map[name])
             return True & res
@@ -393,7 +387,7 @@ class RenameNode(DataNode):
     def initInnerClasses(self):
         self.content = RenameContent(self)
         self.grNode  = RenameGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
     def resize(self):
@@ -407,9 +401,8 @@ class RenameNode(DataNode):
 
         if current_size >= self.grNode.min_height:
             self.grNode.height = current_size
-            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
-            self.content.resize(x, y)
             self.grNode.update()
+            self.content.updateSize()
         
     def evalImplementation(self, silent=False):
         input_edge = self.getInput(0)
@@ -570,7 +563,7 @@ class CleanNode(DataNode):
     def initInnerClasses(self):
         self.content = CleanContent(self)
         self.grNode  = CleanGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.nanToNumValue.returnPressed.connect(self.recalculate)
         self.content.strToNumValue.returnPressed.connect(self.recalculate)
         self.content.infToNumValue.returnPressed.connect(self.recalculate)

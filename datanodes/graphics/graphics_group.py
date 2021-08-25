@@ -65,9 +65,6 @@ class GraphicsGroup(QGraphicsItem):
         self._pen_hov.setWidthF(self._widht + 2)
 
 
-    def onSelected(self):
-        self.node.scene.grScene.itemSelected.emit()
-
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
         self._wasMoved = True
@@ -88,7 +85,7 @@ class GraphicsGroup(QGraphicsItem):
         if self._lastSelectedState != self.isSelected() or self.node.scene._last_selected_items != self.node.scene.selectedItems():
             self.node.scene.resetLastSelectedStates()
             self._lastSelectedState = self.isSelected()
-            self.onSelected()
+            self.node.scene.grScene.itemSelected.emit()
 
 
     @property

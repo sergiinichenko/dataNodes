@@ -59,7 +59,7 @@ class FileInputNode(DataNode):
     def initInnerClasses(self):
         self.content = FileInputContent(self)
         self.grNode  = FileInputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.edit.textChanged.connect(self.onInputChanged)
         self.content.edit.textChanged.connect(self.onInputChanged)
         self.content.openFile.clicked.connect(self.openInputFile)

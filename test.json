@@ -1,20 +1,57 @@
 {
-    "id": 140144246442928,
+    "id": 140153252807440,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": -1.0,
-    "view_y": 4.0,
+    "view_x": -104.0,
+    "view_y": 2.0,
     "view_scale": 20.0,
     "nodes": [
         {
-            "id": 140144246552320,
+            "id": 140153172475520,
+            "title": "Plot25",
+            "pos_x": -411.0,
+            "pos_y": -174.0,
+            "inputs": [
+                {
+                    "id": 140153172475568,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140153172457792,
+                "content": "",
+                "width": 300.0,
+                "height": 300.0,
+                "content-widht": 290,
+                "content-height": 266
+            },
+            "properties": {
+                "id": 140153172172656,
+                "title": "Plot25",
+                "width": 300.0,
+                "height": 300.0,
+                "content-width": 290,
+                "content-height": 266
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        },
+        {
+            "id": 140153171921216,
             "title": "Value",
-            "pos_x": 106.0,
-            "pos_y": -285.0,
+            "pos_x": 44.0,
+            "pos_y": -185.0,
             "inputs": [],
             "outputs": [
                 {
-                    "id": 140144246552368,
+                    "id": 140153171790528,
                     "index": 0,
                     "position": 4,
                     "socket_type": 2,
@@ -25,223 +62,22 @@
                 }
             ],
             "content": {
-                "id": 140144246524656,
+                "id": 140152927962160,
                 "content": "",
                 "value": "1.0",
                 "label": "x"
             },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140143922947360,
-            "title": "Value",
-            "pos_x": 17.0,
-            "pos_y": -191.0,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140143922947504,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140143922983696,
-                "content": "",
-                "value": "1.0",
-                "label": "x1"
+            "properties": {
+                "id": 140152927963168,
+                "title": "Value",
+                "width": 140.0,
+                "height": 70.0,
+                "content-width": 132,
+                "content-height": 36
             },
             "op_code": 102,
             "op_title": "Value"
-        },
-        {
-            "id": 140143922966928,
-            "title": "Value",
-            "pos_x": 69.0,
-            "pos_y": -89.0,
-            "inputs": [],
-            "outputs": [
-                {
-                    "id": 140143922967168,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 141.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140143922985280,
-                "content": "",
-                "value": "1.0",
-                "label": "x2"
-            },
-            "op_code": 102,
-            "op_title": "Value"
-        },
-        {
-            "id": 140143922948800,
-            "title": "Combine",
-            "pos_x": 288.0,
-            "pos_y": -122.0,
-            "inputs": [
-                {
-                    "id": 140143922948848,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": "x"
-                },
-                {
-                    "id": 140143922967408,
-                    "index": 1,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 64.0,
-                    "label": "x"
-                },
-                {
-                    "id": 140143922967456,
-                    "index": 2,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 88.0,
-                    "label": "x"
-                },
-                {
-                    "id": 140143922967600,
-                    "index": 3,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 112.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140143922948896,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "content": {
-                "id": 140143923019840,
-                "content": "",
-                "width": 160.0,
-                "height": 132.0,
-                "content-widht": 150,
-                "content-height": 98
-            },
-            "op_code": 401,
-            "op_title": "Combine"
-        },
-        {
-            "id": 140143922967888,
-            "title": "Separate",
-            "pos_x": 516.0,
-            "pos_y": -148.0,
-            "inputs": [
-                {
-                    "id": 140143922967840,
-                    "index": 0,
-                    "position": 1,
-                    "socket_type": 1,
-                    "inout": 1,
-                    "x": -1.0,
-                    "y": 40.0,
-                    "label": null
-                }
-            ],
-            "outputs": [
-                {
-                    "id": 140143922967648,
-                    "index": 0,
-                    "position": 4,
-                    "socket_type": 1,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 40.0,
-                    "label": null
-                },
-                {
-                    "id": 140143922968080,
-                    "index": 1,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 64.0,
-                    "label": "DATA"
-                },
-                {
-                    "id": 140143922968320,
-                    "index": 2,
-                    "position": 4,
-                    "socket_type": 2,
-                    "inout": 2,
-                    "x": 161.0,
-                    "y": 88.0,
-                    "label": "x"
-                }
-            ],
-            "content": {
-                "id": 140143923022864,
-                "content": "",
-                "width": 160.0,
-                "height": 200.0,
-                "content-widht": 150,
-                "content-height": 166
-            },
-            "op_code": 400,
-            "op_title": "Separate"
         }
     ],
-    "edges": [
-        {
-            "id": 140143922948944,
-            "edge_type": 2,
-            "start": 140144246552368,
-            "end": 140143922948848
-        },
-        {
-            "id": 140143922967504,
-            "edge_type": 2,
-            "start": 140143922947504,
-            "end": 140143922967408
-        },
-        {
-            "id": 140143922967792,
-            "edge_type": 2,
-            "start": 140143922967168,
-            "end": 140143922967456
-        },
-        {
-            "id": 140143922948992,
-            "edge_type": 2,
-            "start": 140143922948896,
-            "end": 140143922967840
-        }
-    ]
+    "edges": []
 }

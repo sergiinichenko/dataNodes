@@ -57,7 +57,7 @@ class ValueInputNode(DataNode):
     def initInnerClasses(self):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.value.returnPressed.connect(self.onInputChanged)
         self.content.label.returnPressed.connect(self.onInputChanged)
         self.content.changed.connect(self.recalculateNode)    
@@ -185,7 +185,7 @@ class MultiValueInputNode(AdjustableOutputNode):
     def initInnerClasses(self):
         self.content = MultiValueInputContent(self)
         self.grNode  = MultiValueInputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
         self.content.addItems.clicked.connect(self.appendNewPair)
 
@@ -197,9 +197,7 @@ class MultiValueInputNode(AdjustableOutputNode):
             if current_size > self.grNode.min_height:
                 self.grNode.height = current_size
                 self.grNode.update()
-
-                x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title + 1
-                self.content.resize(x, y)
+                self.content.updateSize()
             self.scene.grScene.update()
         except Exception as e : pass
         

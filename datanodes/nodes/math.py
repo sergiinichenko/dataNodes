@@ -86,7 +86,7 @@ class MathNode(DataNode):
     def initInnerClasses(self):
         self.content = MathContent(self)
         self.grNode  = MathGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
         self.content.label.textChanged.connect(self.recalculateNode)
 
@@ -323,7 +323,7 @@ class ExpressionNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = ExpressionContent(self)
         self.grNode  = ExpressionGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.label.returnPressed.connect(self.recalculateNode)
         self.content.changed.connect(self.updateSockets)

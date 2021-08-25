@@ -44,16 +44,13 @@ class GraphicsEdge(QGraphicsPathItem):
         self._pen_drag.setStyle(Qt.DashLine)
         self._pen_hov.setWidthF(self._widht + 2)
 
-    def onSelected(self):
-        self.edge.scene.grScene.itemSelected.emit()
-        
 
     def mouseReleaseEvent(self, event):
         super().mouseReleaseEvent(event)
         if self._lastSelectedState != self.isSelected():
             self.edge.scene.resetLastSelectedStates()
             self._lastSelectedState = self.isSelected()
-            self.onSelected()
+            self.edge.scene.grScene.itemSelected.emit()
 
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:
         self.hovered = True

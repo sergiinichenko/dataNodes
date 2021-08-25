@@ -79,7 +79,7 @@ class StepRangeNode(DataNode):
     def initInnerClasses(self):
         self.content = StepRangeContent(self)
         self.grNode  = StepRangeGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.name.textChanged.connect(self.onReturnPressed)
         self.content.start.textChanged.connect(self.onReturnPressed)
         self.content.step.textChanged.connect(self.onReturnPressed)
@@ -197,7 +197,7 @@ class NumRangeNode(DataNode):
     def initInnerClasses(self):
         self.content = NumRangeContent(self)
         self.grNode  = NumRangeGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.name.textChanged.connect(self.onContentChanged)
         self.content.start.textChanged.connect(self.onContentChanged)
         self.content.number.textChanged.connect(self.onContentChanged)
@@ -335,7 +335,7 @@ class FilledArrayNode(DataNode):
     def initInnerClasses(self):
         self.content = FilledArrayContent(self)
         self.grNode  = FilledArrayGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.name.textChanged.connect(self.onReturnPressed)
         self.content.number.textChanged.connect(self.onReturnPressed)
         self.content.value.textChanged.connect(self.onReturnPressed)
@@ -462,7 +462,7 @@ class Mesh2DNode(DataNode):
     def initInnerClasses(self):
         self.content = Mesh2DContent(self)
         self.grNode  = Mesh2DGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.sizex.textChanged.connect(self.recalculateNode)
         self.content.sizey.textChanged.connect(self.recalculateNode)
         self.content.numx.textChanged.connect(self.recalculateNode)

@@ -53,14 +53,16 @@ class Scene(Serializer):
             self._last_selected_items = current_selected_items
             self.history.storeHistory("Selection changed")
             for callback in self._selected_listeners: callback()
+            for item in current_selected_items: item.onSelected()
 
 
     def onItemsDeselected(self):
         self.resetLastSelectedStates()
         if self._last_selected_items is not None:
-            self._last_selected_items = None
             self.history.storeHistory("Deselected everything")
             for callback in self._deselected_listeners: callback()
+            for item in self._last_selected_items: item.onDeselected()
+            self._last_selected_items = None
 
 
     def isModified(self):

@@ -2,8 +2,8 @@
     "id": 139656084826048,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 504.46666666666664,
-    "view_y": 420.1333333333333,
+    "view_x": 767.142857142857,
+    "view_y": 197.1428571428571,
     "view_scale": 14.0,
     "nodes": [
         {
@@ -46,10 +46,16 @@
                 }
             ],
             "content": {
-                "id": 140554617797792,
+                "id": 139629541602928,
                 "content": "",
                 "sel_ind": 0,
                 "label": "res"
+            },
+            "properties": {
+                "id": 139628964163152,
+                "title": "Math",
+                "width": 160.0,
+                "height": 90.0
             },
             "op_code": 300,
             "op_title": "Math"
@@ -73,13 +79,17 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140554413499872,
+                "id": 139628964308016,
                 "content": "",
                 "value": "{'x': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ]), 'y': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ]), 'z': array([0.        , 0.22222222, 0.44444444, 0.66666667, 0.88888889,\n       1.11111111, 1.33333333, 1.55555556, 1.77777778, 2.        ])}",
                 "width": 420.5268749999999,
-                "height": 238.021875,
-                "content-widht": 410,
-                "content-height": 204
+                "height": 238.021875
+            },
+            "properties": {
+                "id": 139628964308880,
+                "title": "Text",
+                "width": 420.5268749999999,
+                "height": 238.021875
             },
             "op_code": 202,
             "op_title": "Text"
@@ -134,12 +144,18 @@
                 }
             ],
             "content": {
-                "id": 140554379224976,
+                "id": 139628964309744,
                 "content": "",
                 "name": "x",
                 "start": "0",
                 "number": "10",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628963840640,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -194,12 +210,18 @@
                 }
             ],
             "content": {
-                "id": 140554378920864,
+                "id": 139628963842368,
                 "content": "",
                 "name": "y",
                 "start": "0",
                 "number": "10",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628963868880,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -254,12 +276,18 @@
                 }
             ],
             "content": {
-                "id": 140554378923456,
+                "id": 139628963870608,
                 "content": "",
                 "name": "z",
                 "start": "0",
                 "number": "10",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628963872480,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -324,12 +352,16 @@
                 }
             ],
             "content": {
-                "id": 140554378377680,
+                "id": 139628963894752,
                 "content": "",
                 "width": 160.0,
-                "height": 132.0,
-                "content-widht": 150,
-                "content-height": 98
+                "height": 132.0
+            },
+            "properties": {
+                "id": 139628963895472,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 132.0
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -394,12 +426,16 @@
                 }
             ],
             "content": {
-                "id": 140554378399808,
+                "id": 139628963897056,
                 "content": "",
                 "width": 160.0,
-                "height": 132.0,
-                "content-widht": 150,
-                "content-height": 98
+                "height": 132.0
+            },
+            "properties": {
+                "id": 139628963938800,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 132.0
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -464,14 +500,18 @@
                 }
             ],
             "content": {
-                "id": 140554378401392,
+                "id": 139628963940384,
                 "content": "",
                 "width": 260.0,
                 "height": 132.0,
-                "content-widht": 250,
-                "content-height": 98,
                 "value": "sum(x*g*t)/sum(x*g)",
                 "label": "res"
+            },
+            "properties": {
+                "id": 139628963941824,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 132.0
             },
             "op_code": 301,
             "op_title": "Expression"
@@ -495,13 +535,17 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140554378436672,
+                "id": 139628963968048,
                 "content": "",
                 "value": "{'res': 0.7894736842105263}",
                 "width": 200.0,
-                "height": 200.0,
-                "content-widht": 190,
-                "content-height": 166
+                "height": 200.0
+            },
+            "properties": {
+                "id": 139628963968912,
+                "title": "Text",
+                "width": 200.0,
+                "height": 200.0
             },
             "op_code": 202,
             "op_title": "Text"
@@ -556,12 +600,18 @@
                 }
             ],
             "content": {
-                "id": 140554378437824,
+                "id": 139628963969776,
                 "content": "",
                 "name": "g",
                 "start": "0",
                 "number": "10",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628963996288,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -616,12 +666,18 @@
                 }
             ],
             "content": {
-                "id": 140554378457296,
+                "id": 139628963998016,
                 "content": "",
                 "name": "t",
                 "start": "0",
                 "number": "10",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628964020432,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -676,12 +732,18 @@
                 }
             ],
             "content": {
-                "id": 140554378460320,
+                "id": 139628964022160,
                 "content": "",
                 "name": "x",
                 "start": "0",
                 "number": "1000",
                 "stop": "1"
+            },
+            "properties": {
+                "id": 139628964024032,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
             },
             "op_code": 111,
             "op_title": "Vector (by size)"
@@ -726,14 +788,18 @@
                 }
             ],
             "content": {
-                "id": 140554378475696,
+                "id": 139628964058592,
                 "content": "",
                 "width": 260.0,
                 "height": 100.0,
-                "content-widht": 250,
-                "content-height": 66,
                 "value": "exp(x**2.0)",
                 "label": "y"
+            },
+            "properties": {
+                "id": 139628964060032,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 100.0
             },
             "op_code": 301,
             "op_title": "Expression"
@@ -778,10 +844,16 @@
                 }
             ],
             "content": {
-                "id": 140554378502496,
+                "id": 139628964090064,
                 "content": "",
                 "sel_ind": 14,
                 "label": "diff"
+            },
+            "properties": {
+                "id": 139628964091216,
+                "title": "Math",
+                "width": 160.0,
+                "height": 90.0
             },
             "op_code": 300,
             "op_title": "Math"
@@ -805,12 +877,14 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140554378504512,
-                "content": "",
-                "width": 468.1159420289855,
-                "height": 422.70531400966183,
-                "content-widht": 458,
-                "content-height": 388
+                "id": 139628964092656,
+                "content": ""
+            },
+            "properties": {
+                "id": 139628963529056,
+                "title": "Plot",
+                "width": 300.0,
+                "height": 300.0
             },
             "op_code": 203,
             "op_title": "Plot"
@@ -855,10 +929,16 @@
                 }
             ],
             "content": {
-                "id": 140554352943168,
+                "id": 139628963529920,
                 "content": "",
-                "sel_ind": 15,
+                "sel_ind": 1,
                 "label": "int"
+            },
+            "properties": {
+                "id": 139628963531072,
+                "title": "Math",
+                "width": 160.0,
+                "height": 90.0
             },
             "op_code": 300,
             "op_title": "Math"
@@ -933,12 +1013,16 @@
                 }
             ],
             "content": {
-                "id": 140554352945184,
+                "id": 139628963532512,
                 "content": "",
                 "width": 160.0,
-                "height": 156.0,
-                "content-widht": 150,
-                "content-height": 122
+                "height": 156.0
+            },
+            "properties": {
+                "id": 139628963066352,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 156.0
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -993,12 +1077,16 @@
                 }
             ],
             "content": {
-                "id": 140554352946912,
+                "id": 139628963068080,
                 "content": "",
                 "width": 160.0,
-                "height": 108.0,
-                "content-widht": 150,
-                "content-height": 74
+                "height": 108.0
+            },
+            "properties": {
+                "id": 139628963068800,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 108.0
             },
             "op_code": 401,
             "op_title": "Combine"
@@ -1053,12 +1141,16 @@
                 }
             ],
             "content": {
-                "id": 140554352977088,
+                "id": 139628963111264,
                 "content": "",
                 "width": 160.0,
-                "height": 120.0,
-                "content-widht": 150,
-                "content-height": 86
+                "height": 120.0
+            },
+            "properties": {
+                "id": 139628963111984,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 120.0
             },
             "op_code": 400,
             "op_title": "Separate"
@@ -1103,11 +1195,17 @@
                 }
             ],
             "content": {
-                "id": 140554352978672,
+                "id": 139628963113424,
                 "content": "",
                 "name": "int",
                 "number": "1000",
-                "value": "1.46"
+                "value": "-1.00"
+            },
+            "properties": {
+                "id": 139628963131456,
+                "title": "Vector Filled",
+                "width": 145.0,
+                "height": 120.0
             },
             "op_code": 112,
             "op_title": "Vector Filled"
@@ -1162,12 +1260,16 @@
                 }
             ],
             "content": {
-                "id": 140554353018048,
+                "id": 139628963132896,
                 "content": "",
                 "width": 160.0,
-                "height": 120.0,
-                "content-widht": 150,
-                "content-height": 86
+                "height": 120.0
+            },
+            "properties": {
+                "id": 139628963133616,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 120.0
             },
             "op_code": 400,
             "op_title": "Separate"
@@ -1191,12 +1293,14 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140554353019632,
-                "content": "",
-                "width": 435.36176470588225,
-                "height": 376.23823529411766,
-                "content-widht": 425,
-                "content-height": 342
+                "id": 139628963135056,
+                "content": ""
+            },
+            "properties": {
+                "id": 139628962902944,
+                "title": "Plot",
+                "width": 300.0,
+                "height": 300.0
             },
             "op_code": 203,
             "op_title": "Plot"

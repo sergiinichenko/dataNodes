@@ -1,8 +1,8 @@
-
 from datanodes.core.utils import dumpException
 from PyQt5.sip import dump
 from datanodes.graphics.graphics_node import GraphicsNode
 from datanodes.core.node_content_widget import NodeContentWidget
+from datanodes.core.node_properties import NodeProperties
 from datanodes.core.node_socket import LEFT_BOTTOM, LEFT_TOP, RIGHT_BOTTOM, RIGHT_TOP, Socket
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict
@@ -17,6 +17,7 @@ class Node(Serializer):
     """
     GraphicsNode_class = GraphicsNode
     NodeContent_class = NodeContentWidget
+    NodeProperties_class = NodeProperties
     Socket_class = Socket
 
     def __init__(self, scene, title="Empty node", 
@@ -57,12 +58,17 @@ class Node(Serializer):
         """Sets up graphics Node (PyQt) and Content Widget"""
         node_content_class = self.getNodeContentClass()
         graphics_node_class = self.getGraphicsNodeClass()
+        properties_node_class = self.getNodePropertiesClass()
         if node_content_class is not None: self.content = node_content_class(self)
         if graphics_node_class is not None: self.grNode = graphics_node_class(self)
+        if properties_node_class is not None: self.properties = properties_node_class(self)
 
     def getNodeContentClass(self):
         """Returns class representing nodeeditor content"""
         return self.__class__.NodeContent_class
+
+    def getNodePropertiesClass(self):
+        return self.__class__.NodeProperties_class
 
     def getGraphicsNodeClass(self):
         return self.__class__.GraphicsNode_class
@@ -483,11 +489,19 @@ class Node(Serializer):
         self.scene.removeNode(self)
         if DEBUG : print("  - removing is done")        
 
+
+    def onSelected(self):
+        pass
+
+    def onDeselected(self):
+        pass
+
     def serialize(self):
         inputs, outputs = [], []
         for socket in self.inputs:  inputs.append(socket.serialize())
         for socket in self.outputs: outputs.append(socket.serialize())
         ser_content = self.content.serialize() if isinstance(self.content, Serializer) else {}
+        ser_properties = self.properties.serialize() if isinstance(self.properties, Serializer) else {}
 
         return OrderedDict([
             ('id'      , self.id),
@@ -497,6 +511,7 @@ class Node(Serializer):
             ("inputs"  , inputs),
             ("outputs" , outputs),
             ("content" , ser_content),
+            ("properties", ser_properties)
         ])
 
     def deserialize(self, data, hashmap=[], restore_id=True):
@@ -530,6 +545,10 @@ class Node(Serializer):
             self.outputs.append(soket)
         
         # deserialize the content of the node
-        res = self.content.deserialize(data['content'], hashmap)
+        cont, props = True, True
+        if 'content' in data:
+            cont = self.content.deserialize(data['content'], hashmap)
+        if 'properties' in data:
+            props= self.properties.deserialize(data['properties'], hashmap)
 
-        return True & res
+        return True & cont & props

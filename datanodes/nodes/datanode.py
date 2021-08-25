@@ -1,3 +1,4 @@
+from datanodes.core.node_properties import NodeProperties
 from datanodes.graphics.graphics_view import MODE_DRAG_RESIZE, MODE_NONE
 from datanodes.core.utils import dumpException
 from datanodes.core.node_node import Node
@@ -66,45 +67,10 @@ class DataContent(NodeContentWidget):
     def initUI(self):
         pass
 
-
-class DataProperties(QWidget, Serializer):
-    changed    = pyqtSignal()
-    outchanged = pyqtSignal()
-
-    def __init__(self, node, parent=None):
-        self.node = node
-        super().__init__(parent)
-        self.initUI()
-
-    def initUI(self):
-        self.layout = QGridLayout()
-        self.layout.setContentsMargins(0,0,0,0)
-        self.layout.setSpacing(0)
-        self.setLayout(self.layout)
-
-        self.title_name = QLabel("Title", self)        
-        self.title_name.setAlignment(Qt.AlignRight)
-        self.title = QLineEdit(self.node.title, self)
-        self.title.setAlignment(Qt.AlignCenter)
-        self.title.setFixedWidth(60)
-        self.title.textChanged.connect(self.emitChanged)
-        self.layout.addWidget(self.title_name, 0, 0)
-        self.layout.addWidget(self.title, 0, 1)
-
-    def emitChanged(self):
-        self.changed.emit()
-        self.node.title = self.title.text()
-
-    def serialize(self):
-        return OrderedDict([
-            ('id' , self.id),
-            ('content', "")
-        ])
-        
-    def deserialize(self, data, hashmap=[]):
-        return True
-
-
+    def updateSize(self):
+        x, y = (self.node.grNode.width - 2.0 * self.node.grNode.padding, 
+                self.node.grNode.height - (self.node.grNode.title_height + 2.0 * self.node.grNode.padding + 1))
+        self.resize(x, y)
 
 class DataNode(Node):
     op_code  = 0
@@ -119,17 +85,19 @@ class DataNode(Node):
         self.type  = "float"
         # Mark all nodes dirty by default before it is connected to anything
         self.setDirty()
-        self.scene.addItemSelectedListener(self.catchSelected)
 
     def initInnerClasses(self):
         self.content    = DataContent(self)
         self.grNode     = DataGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.eval)
 
-    def catchSelected(self):
-        print("Selected")
-        self.scene.window.propertiesDock.setWidget(self.properties)
+    def onSelected(self):
+        self.scene.window.propertiesDock.setPropertyWidget(self.properties)
+
+    def onDeselected(self):
+        self.properties.setParent(None)
+        self.scene.window.propertiesDock.setPropertyWidget(None)
 
 
     def initSettings(self):
@@ -327,8 +295,7 @@ class ResizebleDataNode(DataGraphicsNode):
             self.width  = self.init_size[0] + scale.x()
             self.height = self.init_size[1] + scale.y()
             self.update()
-            x, y = self.content_init_size.width() + scale.x(), self.content_init_size.height() + scale.y()
-            self.content.resize(x, y)
+            self.content.updateSize()
             return
 
         super().mouseMoveEvent(event)
@@ -378,8 +345,6 @@ class ResizableContent(DataContent):
         res = super().serialize()
         res['width']  = self.node.grNode.width
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -387,7 +352,7 @@ class ResizableContent(DataContent):
         try:
             self.node.grNode.height = data['height']
             self.node.grNode.width  = data['width']
-            self.resize(data['content-widht'], data['content-height'])
+            self.updateSize()
             return True & res
         except Exception as e: 
             dumpException(e)
@@ -417,7 +382,7 @@ class ResizableInputNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def resize(self):
@@ -429,9 +394,7 @@ class ResizableInputNode(DataNode):
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
-
-            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
-            self.content.resize(x, y)
+            self.content.updateSize()
 
 
     def appendNewSocket(self):
@@ -522,7 +485,7 @@ class ResizableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def appendNewSocket(self):
@@ -537,9 +500,7 @@ class ResizableOutputNode(DataNode):
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
-
-            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
-            self.content.resize(x, y)
+            self.content.updateSize()
 
     def sortSockets(self):
         sockets_full = []
@@ -609,7 +570,7 @@ class ResizableInOutNode(DataNode):
     def initInnerClasses(self):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def resize(self):
@@ -621,9 +582,7 @@ class ResizableInOutNode(DataNode):
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
-
-            x, y = self.grNode.width - 2.0 * self.grNode.padding, current_size - padding_title
-            self.content.resize(x, y)
+            self.content.updateSize()
 
 
     def appendNewSocket(self):
@@ -755,15 +714,13 @@ class AdjustableOutputContent(DataContent):
     def serialize(self):
         res = super().serialize()
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             self.node.grNode.height = data['height']
-            self.resize(data['content-widht'], data['content-height'])
+            self.updateSize()
             return True & res
         except Exception as e: 
             dumpException(e)
@@ -786,7 +743,7 @@ class AdjustableOutputNode(DataNode):
     def initInnerClasses(self):
         self.content = AdjustableOutputContent(self)
         self.grNode  = AdjustableOutputGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
         self.content.changed.connect(self.updateSockets)
 
     def evalImplementation(self, silent=False):

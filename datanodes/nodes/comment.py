@@ -23,8 +23,6 @@ class CommentContent(DataContent):
         res = super().serialize()
         res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
-        res['content-widht'] = self.size().width()
-        res['content-height'] = self.size().height()
         res['comment']        = self.comment.toPlainText()
         return res
 
@@ -34,7 +32,7 @@ class CommentContent(DataContent):
             try:
                 self.node.grNode.height = data['height']
                 self.node.grNode.width  = data['width']
-                self.resize(data['content-widht'], data['content-height'])
+                self.updateSize()
                 self.comment.insertPlainText(data['comment'])
             except Exception as e: 
                 dumpException(e)
@@ -57,7 +55,7 @@ class CommentNode(DataNode):
     def initInnerClasses(self):
         self.content = CommentContent(self)
         self.grNode  = CommentGraphicsNode(self)
-        self.properties = DataProperties(self)
+        self.properties = NodeProperties(self)
 
     def evalImplementation(self, silent=False):
         try:
