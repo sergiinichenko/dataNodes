@@ -290,60 +290,48 @@ class UpdateNode(ResizableInputNode):
 
 
 
-
-
-
-class RenameGraphicsNode(DataGraphicsNode):
+class RenameGraphicsNode(ResizableGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 200.0
-        self.height = 100.0
-        self.min_height = 100.0
+        self.height = 80.0
+        self.min_height = 80.0
 
-class RenameContent(DataContent):
+
+class RenameContent(ResizableContent):
     def initUI(self):
         super().initUI()
-        self.labels_in = {}
+        self.labels_in  = {}
         self.labels_out = {}
-        self.mainlayout = QGridLayout()
-        self.mainlayout.setContentsMargins(0,0,0,0)
-        self.setLayout(self.mainlayout)
+        self.mainlayout.setSpacing(2)
 
-    def appendPair(self, namein, nameout, onchangemethod=None):
-        i = len(self.labels_in)
-        self.labels_in[namein]  = QLabel(namein, self)
-        self.labels_out[namein] = QLineEdit(nameout, self)
-        self.labels_in[namein].setAlignment(Qt.AlignRight)
-        self.labels_out[namein].setAlignment(Qt.AlignLeft)
-        self.mainlayout.addWidget(self.labels_in[namein], i, 0)
-        self.mainlayout.addWidget(self.labels_out[namein], i, 1)
-        self.labels_out[namein].textChanged.connect(self.node.recalculateNode)
+    def getSize(self, dic):
+        size = 0
+        for name in dic:
+            size += len(dic[name])
+        return size
 
-    def resize(self, x, y):
-        super().resize(x, y)
-        self.setFixedSize(x, y)
+    def appendPair(self, id, namein, nameout, onchangemethod=None):
+        i = self.getSize(self.labels_in)
+        
+        if str(id) not in self.labels_in  : self.labels_in[str(id)]  = {}
+        if str(id) not in self.labels_out : self.labels_out[str(id)] = {}
+
+        self.labels_in[str(id)][namein]  = QLabel(namein, self)
+        self.labels_out[str(id)][namein] = QLineEdit(nameout, self)
+        self.labels_in[str(id)][namein].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labels_out[str(id)][namein].setAlignment(Qt.AlignLeft)
+        self.mainlayout.addWidget(self.labels_in[str(id)][namein], i, 0)
+        self.mainlayout.addWidget(self.labels_out[str(id)][namein], i, 1)
+        self.labels_out[str(id)][namein].textChanged.connect(self.node.recalculateNode)
 
     def clearContent(self):
         while self.mainlayout.count():
             child = self.mainlayout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-        self.labels_in.clear()
-        self.labels_out.clear()
-        """
-        self.mainlayout.setParent(None)
-        self.mainlayout = QGridLayout()
-        self.mainlayout.setContentsMargins(0,0,0,0)
-        self.setLayout(self.mainlayout)
-        """
-
-    def removePair(self, key):
-        self.mainlayout.removeWidget(self.labels_in[key])
-        self.mainlayout.removeWidget(self.labels_out[key])
-        self.labels_in.deleteLater()
-        self.labels_out.deleteLater()
-        self.labels_in  = None
-        self.labels_out = None
+        self.labels_in  = []
+        self.labels_out = []
 
     def serialize(self):
         res = super().serialize()
@@ -368,7 +356,7 @@ class RenameContent(DataContent):
 
 
 @register_node(OP_MODE_DATA_RENAME)
-class RenameNode(DataNode):
+class RenameNode(ResizableInputNode):
     icon = "icons/math.png"
     op_code = OP_MODE_DATA_RENAME
     op_title = "Rename"
@@ -385,60 +373,67 @@ class RenameNode(DataNode):
         self.output_socket_position = RIGHT_TOP
 
     def initInnerClasses(self):
-        self.content = RenameContent(self)
-        self.grNode  = RenameGraphicsNode(self)
+        self.content    = RenameContent(self)
+        self.grNode     = RenameGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
 
+    def onInputChange(self, new_edge=None):
+        self.content.changed.emit()
+
     def resize(self):
-        if not self.getInput(0):
-            current_size = self.grNode.min_height + 1
-        else:
-            size = len(self.getInput(0).value)
-            current_size = size * 30.0 + self.socket_bottom_margin + self.socket_top_margin
+        size = self.content.getSize(self.content.labels_in)
+        current_size = (size) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
 
-        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
-
-        if current_size >= self.grNode.min_height:
+        if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
             self.content.updateSize()
+
         
     def evalImplementation(self, silent=False):
-        input_edge = self.getInput(0)
-        if not input_edge:
+        input_edges = self.getInputs()
+        if not input_edges:
             self.setInvalid()
             self.e = "Does not have and intry Node"
-            self.content.clearContent()
-            self.resize()
             return False
         else:
-            try:
-                self.value = self.getInput(0).value
-                self.out   = {}
-
-                for name in self.value:
-                    if name not in self.map:
-                        self.map[name] = name
-                        self.content.appendPair(name, name)
-                        self.resize()
-                
-                for name in self.map:
-                    if name not in self.content.labels_in:
-                        self.content.appendPair(name, name)
-                    self.map[name] = self.content.labels_out[name].text()
-
-                for name in self.map:
-                    self.out[self.map[name]] = self.value[name]
-                    
-                self.getOutput(0).value = self.out
-                self.getOutput(0).type = "df"
-                return True
-            except Exception as e:
+            self.sortSockets()
+            if len(input_edges) > 0:      
                 self.setDirty(False)
                 self.setInvalid(False)
-                self.e = e
-                self.getOutput(0).value = {}
+                self.e     = ""
+                self.value = {}
+                try:
+                    for input in input_edges:
+                        if str(input.id) not in self.map : self.map[str(input.id)] = {}
+
+                        if isinstance(input.value, dict):
+                            for name in input.value:
+                                if name not in self.map[str(input.id)]:
+                                    self.map[str(input.id)][name] = name
+                                    self.content.appendPair(input.id, name, name)
+
+                            for name in self.map[str(input.id)]:
+                                self.map[str(input.id)][name] = self.content.labels_out[str(input.id)][name].text()
+
+                            for name in input.value:
+                                self.value[self.map[str(input.id)][name]] = input.value[name]
+
+                        self.resize()
+                                
+                    self.getOutput(0).value = self.value
+                    self.getOutput(0).type = "df"
+                    return True
+                except Exception as e:
+                    self.e = e
+                    dumpException(e)
+                    return False
+            else:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = "Not enough input data"
+                self.getOutput(0).value = 0
                 self.getOutput(0).type = "float"
                 return False
 

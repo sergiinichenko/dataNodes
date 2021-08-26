@@ -63,6 +63,11 @@ class GraphicsEdge(QGraphicsPathItem):
     def boundingRect(self):
         return super().boundingRect()
 
+    def onSelected(self):
+        self.edge.onSelected()
+
+    def onDeselected(self):
+        self.edge.onDeselected()
 
     def shape(self):
         return self.calcPath()

@@ -505,17 +505,18 @@ class ResizableOutputNode(DataNode):
     def sortSockets(self):
         sockets_full = []
         sockets_empty = []
-        for socket in self.getOutputs():
-            if socket.hasEdges():
-                sockets_full.append(socket)
-            else:
-                sockets_empty.append(socket)
+        if self.getOutputs():
+            for socket in self.getOutputs():
+                if socket.hasEdges():
+                    sockets_full.append(socket)
+                else:
+                    sockets_empty.append(socket)
 
-        for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
-            socket.index = i
-            socket.setPos()
+            for i, socket in zip(range(len(sockets_full + sockets_empty)), sockets_full + sockets_empty):
+                socket.index = i
+                socket.setPos()
 
-        self.outputs = sockets_full + sockets_empty
+            self.outputs = sockets_full + sockets_empty
 
 
     def getSocketsNames(self):
