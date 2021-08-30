@@ -58,8 +58,8 @@ class ValueInputNode(DataNode):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.value.returnPressed.connect(self.onInputChanged)
-        self.content.label.returnPressed.connect(self.onInputChanged)
+        self.content.value.textChanged.connect(self.onInputChanged)
+        self.content.label.textChanged.connect(self.onInputChanged)
         self.content.changed.connect(self.recalculateNode)    
         
     def evalImplementation(self, silent=False):

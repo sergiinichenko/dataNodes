@@ -308,7 +308,7 @@ class ExpressionNode(ResizableInputNode):
     op_code = OP_MODE_EXPRESSION
     op_title = "Expression"
 
-    def __init__(self, scene, inputs=[1], outputs=[2]):
+    def __init__(self, scene, inputs=[1], outputs=[2, 1]):
         super().__init__(scene, inputs, outputs)
         self.setDirty(False)
         self.setDescendentsDirty(False)
@@ -321,8 +321,8 @@ class ExpressionNode(ResizableInputNode):
         self.output_socket_position = RIGHT_TOP
 
     def initInnerClasses(self):
-        self.content = ExpressionContent(self)
-        self.grNode  = ExpressionGraphicsNode(self)
+        self.content    = ExpressionContent(self)
+        self.grNode     = ExpressionGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.label.returnPressed.connect(self.recalculateNode)
@@ -330,6 +330,7 @@ class ExpressionNode(ResizableInputNode):
 
     def evalImplementation(self, silent=False):
         inputs = self.getInputs()
+        self.value = {}
         if not inputs:
             self.setInvalid()
             self.e = "Does not have and intry Node"
@@ -355,8 +356,15 @@ class ExpressionNode(ResizableInputNode):
                             self.filtered[name] = np.nan_to_num(input.value[name])
 
                     res = eval(code, self.filtered, methods)
+                    for input in inputs[:-1]:
+                        for name in input.value: 
+                            self.value[name] = self.filtered[name]
+
+                    self.value[label] = res
                     self.getOutput(0).value = {label : res}
                     self.getOutput(0).type  = "df"
+                    self.getOutput(1).value = self.value
+                    self.getOutput(1).type  = "df"
                     return True
 
                 else:

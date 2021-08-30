@@ -382,7 +382,7 @@ class Mesh2DGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 145.0
-        self.height = 140.0
+        self.height = 156.0
 
 class Mesh2DContent(DataContent):
     def initUI(self):
@@ -392,33 +392,41 @@ class Mesh2DContent(DataContent):
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
+        self.label_name = QLabel("Name", self)        
+        self.label_name.setAlignment(Qt.AlignRight)
+        self.name = QLineEdit("m", self)
+        self.name.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_name, 0, 0)
+        self.layout.addWidget(self.name, 0, 1)
+
+
         self.label_sizex = QLabel("Size x", self)        
         self.label_sizex.setAlignment(Qt.AlignRight)
         self.sizex = QLineEdit("10.0", self)
         self.sizex.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label_sizex, 0, 0)
-        self.layout.addWidget(self.sizex, 0, 1)
+        self.layout.addWidget(self.label_sizex, 1, 0)
+        self.layout.addWidget(self.sizex, 1, 1)
 
         self.label_sizey = QLabel("Size y", self)        
         self.label_sizey.setAlignment(Qt.AlignRight)
         self.sizey = QLineEdit("10.0", self)
         self.sizey.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label_sizey, 1, 0)
-        self.layout.addWidget(self.sizey, 1, 1)
+        self.layout.addWidget(self.label_sizey, 2, 0)
+        self.layout.addWidget(self.sizey, 2, 1)
 
         self.label_numx = QLabel("Num x", self)        
         self.label_numx.setAlignment(Qt.AlignRight)
         self.numx = QLineEdit("10", self)
         self.numx.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label_numx, 2, 0)
-        self.layout.addWidget(self.numx, 2, 1)
+        self.layout.addWidget(self.label_numx, 3, 0)
+        self.layout.addWidget(self.numx, 3, 1)
 
         self.label_numy = QLabel("Num y", self)        
         self.label_numy.setAlignment(Qt.AlignRight)
         self.numy = QLineEdit("10", self)
         self.numy.setAlignment(Qt.AlignCenter)
-        self.layout.addWidget(self.label_numy, 3, 0)
-        self.layout.addWidget(self.numy, 3, 1)
+        self.layout.addWidget(self.label_numy, 4, 0)
+        self.layout.addWidget(self.numy, 4, 1)
 
 
     def serialize(self):
@@ -453,10 +461,11 @@ class Mesh2DNode(DataNode):
 
     def initSettings(self):
         super().initSettings()
-        self.input_socket_position  = LEFT_BOTTOM
+        self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
-        self.socket_spacing = 30.0
-        self.socket_bottom_margin = 22.0
+        self.socket_spacing = 24.0
+        self.socket_bottom_margin = 0.0
+        self.socket_top_margin    = 64.0
 
 
     def initInnerClasses(self):
@@ -494,26 +503,35 @@ class Mesh2DNode(DataNode):
         try:
             self.checkTheInputs()
             name  = self.content.name.text()
-            name
-            if self.getInput(2) is not None:
-                start = self.getInputVaue(self.getInput(2).value, float(self.content.start.text()))
-                self.content.start.setText("{:.2f}".format(start))
-            else:
-                start = float(self.content.start.text())
-
-            if self.getInput(1) is not None:
-                num = int(self.getInputVaue(self.getInput(1).value, int(self.content.number.text())))
-                self.content.number.setText(str(num))
-            else:
-                num = int(self.content.number.text())
 
             if self.getInput(0) is not None:
-                stop = self.getInputVaue(self.getInput(0).value, self.content.stop.text())
-                self.content.stop.setText("{:.2f}".format(stop))
+                sizex = self.getInputVaue(self.getInput(0).value, float(self.content.sizex.text()))
+                self.content.sizex.setText("{:.2f}".format(sizex))
             else:
-                stop = float(self.content.stop.text())
+                sizex = float(self.content.sizex.text())
 
-            self.getOutput(0).value =  { name : np.linspace(start, stop, num) }
+            if self.getInput(1) is not None:
+                sizey = self.getInputVaue(self.getInput(1).value, float(self.content.sizey.text()))
+                self.content.sizey.setText(str(sizey))
+            else:
+                sizey = float(self.content.sizey.text())
+
+            if self.getInput(2) is not None:
+                numx = self.getInputVaue(self.getInput(2).value, int(self.content.numx.text()))
+                self.content.numx.setText(int(numx))
+            else:
+                numx = int(self.content.numx.text())
+
+            if self.getInput(3) is not None:
+                numy = self.getInputVaue(self.getInput(2).value, int(self.content.numy.text()))
+                self.content.numx.setText(int(numy))
+            else:
+                numy = int(self.content.numy.text())
+
+            x = np.linspace(0, sizex, numx)
+            y = np.linspace(0, sizey, numy)
+            xv, yv = np.meshgrid(x, y)
+            self.getOutput(0).value =  { "x" : xv.flatten(), "y" : yv.flatten() }
             return True
         except Exception as e : 
             self.e = e

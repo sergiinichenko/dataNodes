@@ -1,0 +1,1004 @@
+{
+    "id": 140078757147120,
+    "scene_widht": 64000,
+    "scene_height": 64000,
+    "view_x": 794.7368421052631,
+    "view_y": -642.1052631578947,
+    "view_scale": 19.0,
+    "nodes": [
+        {
+            "id": 140079168415968,
+            "title": "Vector (by size)",
+            "pos_x": -168.56,
+            "pos_y": -103.54500000000002,
+            "inputs": [
+                {
+                    "id": 140079168415440,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 140079168414240,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 140079168414624,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140079168415008,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140544365197056,
+                "content": "",
+                "name": "u",
+                "start": "1",
+                "number": "100",
+                "stop": "3"
+            },
+            "properties": {
+                "id": 140079167868064,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 140079168414048,
+            "title": "Value",
+            "pos_x": -165.52750000000003,
+            "pos_y": -182.8675,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140078882228928,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543884794032,
+                "content": "",
+                "value": "5",
+                "label": "a"
+            },
+            "properties": {
+                "id": 140079167871152,
+                "title": "Value",
+                "width": 140.0,
+                "height": 70.0
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 140078757140176,
+            "title": "Expression",
+            "pos_x": 34.900000000000006,
+            "pos_y": -240.09999999999997,
+            "inputs": [
+                {
+                    "id": 140070049122672,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140069823757808,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "u"
+                },
+                {
+                    "id": 140069823774096,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140078757140416,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140078757141712,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543884894272,
+                "content": "",
+                "width": 260.0,
+                "height": 108.0,
+                "value": "a*(3.0*(u - 1./8.))**0.5",
+                "label": "Rtet"
+            },
+            "properties": {
+                "id": 140078675018224,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 108.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140637034285664,
+            "title": "Expression",
+            "pos_x": 32.900000000000006,
+            "pos_y": -132.1,
+            "inputs": [
+                {
+                    "id": 140637034284128,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "a..."
+                },
+                {
+                    "id": 140070047928224,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140069824382768,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140637034286480,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140637034283936,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543884897440,
+                "content": "",
+                "width": 260.0,
+                "height": 108.0,
+                "value": "a*(3.0*u**2.0 - 2.0*u+3.0/8.0)**0.5",
+                "label": "Roct"
+            },
+            "properties": {
+                "id": 140078675018224,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 108.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140070292631216,
+            "title": "Separate",
+            "pos_x": 54.14387499999998,
+            "pos_y": 21.147374999999943,
+            "inputs": [
+                {
+                    "id": 140070292631408,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069860864976,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140069860867712,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140069860607168,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "u"
+                },
+                {
+                    "id": 140069860609136,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Rtet"
+                },
+                {
+                    "id": 140069860609568,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140070047926736,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "Roct"
+                }
+            ],
+            "content": {
+                "id": 140543884405056,
+                "content": "",
+                "width": 160.0,
+                "height": 192.0
+            },
+            "properties": {
+                "id": 140069860743632,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 192.0
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 140070292631264,
+            "title": "Combine",
+            "pos_x": 263.99387499999995,
+            "pos_y": 48.047374999999946,
+            "inputs": [
+                {
+                    "id": 140069860608464,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "u"
+                },
+                {
+                    "id": 140069860607120,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "Rtet"
+                },
+                {
+                    "id": 140069860607648,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": "Roct"
+                },
+                {
+                    "id": 140069823754976,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 112.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069860609088,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543884436384,
+                "content": "",
+                "width": 160.0,
+                "height": 132.0
+            },
+            "properties": {
+                "id": 140069859383040,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 132.0
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140069860607696,
+            "title": "Plot",
+            "pos_x": 472.6229999999998,
+            "pos_y": -58.804861336835955,
+            "inputs": [
+                {
+                    "id": 140069860608272,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140543884438688,
+                "content": ""
+            },
+            "properties": {
+                "id": 140069824480736,
+                "title": "Plot",
+                "width": 569.1948749999999,
+                "height": 491.63025
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        },
+        {
+            "id": 140069823754688,
+            "title": "Separate",
+            "pos_x": 522.1000000000003,
+            "pos_y": -583.0499999999997,
+            "inputs": [
+                {
+                    "id": 140070049122000,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069824209104,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140069824211072,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140069824212944,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "u"
+                },
+                {
+                    "id": 140069824212224,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Rtet"
+                },
+                {
+                    "id": 140069824211216,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140070047926016,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "Roct"
+                }
+            ],
+            "content": {
+                "id": 140543884379760,
+                "content": "",
+                "width": 160.0,
+                "height": 192.0
+            },
+            "properties": {
+                "id": 140069823803248,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 192.0
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 140070047925056,
+            "title": "Vector (by size)",
+            "pos_x": -184.0,
+            "pos_y": 58.649999999999984,
+            "inputs": [
+                {
+                    "id": 140070047927984,
+                    "index": 0,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 118.0,
+                    "label": null
+                },
+                {
+                    "id": 140070047925344,
+                    "index": 1,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                },
+                {
+                    "id": 140070047925296,
+                    "index": 2,
+                    "position": 3,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 58.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140070047924624,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 146.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543883948240,
+                "content": "",
+                "name": "x",
+                "start": "0",
+                "number": "100",
+                "stop": "1"
+            },
+            "properties": {
+                "id": 140079167868064,
+                "title": "Vector (by size)",
+                "width": 145.0,
+                "height": 140.0
+            },
+            "op_code": 111,
+            "op_title": "Vector (by size)"
+        },
+        {
+            "id": 140069861382176,
+            "title": "Expression",
+            "pos_x": 736.0,
+            "pos_y": -569.25,
+            "inputs": [
+                {
+                    "id": 140069823797184,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140069823798768,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "R"
+                },
+                {
+                    "id": 140070046633888,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069823796560,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140069823797328,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543883951840,
+                "content": "",
+                "width": 260.0,
+                "height": 108.0,
+                "value": "-R*(x*log(x) + (1-x)*log(1-x) + x*log(x/2.) + (2. - x)*log(1-x/2.))",
+                "label": "S"
+            },
+            "properties": {
+                "id": 140069860925504,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 108.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140069861054400,
+            "title": "Multi-Value",
+            "pos_x": 501.4,
+            "pos_y": -733.6999999999998,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140069861053728,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 201.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543883979648,
+                "content": "",
+                "height": 100.0,
+                "value": [
+                    "8.314"
+                ],
+                "label": [
+                    "R"
+                ],
+                "socket": [
+                    "140069861053728"
+                ]
+            },
+            "properties": {
+                "id": 140069823996256,
+                "title": "Multi-Value",
+                "width": 200.0,
+                "height": 100.0
+            },
+            "op_code": 103,
+            "op_title": "Multi-Value"
+        },
+        {
+            "id": 140070046632448,
+            "title": "Separate",
+            "pos_x": 1044.2000000000003,
+            "pos_y": -564.65,
+            "inputs": [
+                {
+                    "id": 140070047903264,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069823104336,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140069823103520,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140069823105440,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "R"
+                },
+                {
+                    "id": 140069823103280,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "S"
+                }
+            ],
+            "content": {
+                "id": 140543884010688,
+                "content": "",
+                "width": 160.0,
+                "height": 144.0
+            },
+            "properties": {
+                "id": 140069823999280,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 144.0
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 140070046631536,
+            "title": "Combine",
+            "pos_x": 1031.5499999999995,
+            "pos_y": -382.94999999999993,
+            "inputs": [
+                {
+                    "id": 140069823103472,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140069861357168,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "S"
+                },
+                {
+                    "id": 140069861358656,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140069823103328,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140543884012992,
+                "content": "",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "properties": {
+                "id": 140069824076096,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140069823131360,
+            "title": "Plot",
+            "pos_x": 1264.172182900313,
+            "pos_y": -655.2947604155077,
+            "inputs": [
+                {
+                    "id": 140069616597264,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140543884047984,
+                "content": ""
+            },
+            "properties": {
+                "id": 140069616613552,
+                "title": "Plot",
+                "width": 625.4499999999998,
+                "height": 482.84999999999997
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        }
+    ],
+    "edges": [
+        {
+            "id": 140070292630784,
+            "edge_type": 2,
+            "start": 140078757141712,
+            "end": 140637034284128
+        },
+        {
+            "id": 140070292630688,
+            "edge_type": 2,
+            "start": 140637034283936,
+            "end": 140070292631408
+        },
+        {
+            "id": 140069860607024,
+            "edge_type": 2,
+            "start": 140069860607168,
+            "end": 140069860608464
+        },
+        {
+            "id": 140069860609808,
+            "edge_type": 2,
+            "start": 140069860609136,
+            "end": 140069860607120
+        },
+        {
+            "id": 140069824237472,
+            "edge_type": 2,
+            "start": 140069860609088,
+            "end": 140069860608272
+        },
+        {
+            "id": 140070049124112,
+            "edge_type": 2,
+            "start": 140078882228928,
+            "end": 140070049122672
+        },
+        {
+            "id": 140069823757856,
+            "edge_type": 2,
+            "start": 140079168415008,
+            "end": 140069823757808
+        },
+        {
+            "id": 140070049123824,
+            "edge_type": 2,
+            "start": 140069860864976,
+            "end": 140070049122000
+        },
+        {
+            "id": 140069858525344,
+            "edge_type": 2,
+            "start": 140070047924624,
+            "end": 140070047928224
+        },
+        {
+            "id": 140069823756032,
+            "edge_type": 2,
+            "start": 140070047926736,
+            "end": 140069860607648
+        },
+        {
+            "id": 140069823795744,
+            "edge_type": 2,
+            "start": 140069824211216,
+            "end": 140069823797184
+        },
+        {
+            "id": 140070046632208,
+            "edge_type": 2,
+            "start": 140069861053728,
+            "end": 140069823798768
+        },
+        {
+            "id": 140069858525536,
+            "edge_type": 2,
+            "start": 140069823797328,
+            "end": 140070047903264
+        },
+        {
+            "id": 140069823131600,
+            "edge_type": 2,
+            "start": 140069823103520,
+            "end": 140069823103472
+        },
+        {
+            "id": 140069861356640,
+            "edge_type": 2,
+            "start": 140069823103280,
+            "end": 140069861357168
+        },
+        {
+            "id": 140069616535584,
+            "edge_type": 2,
+            "start": 140069823103328,
+            "end": 140069616597264
+        }
+    ]
+}
