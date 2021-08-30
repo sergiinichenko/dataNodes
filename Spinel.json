@@ -2,9 +2,9 @@
     "id": 140078757147120,
     "scene_widht": 64000,
     "scene_height": 64000,
-    "view_x": 794.7368421052631,
-    "view_y": -642.1052631578947,
-    "view_scale": 19.0,
+    "view_x": 865.9038901601832,
+    "view_y": -1399.5423340961102,
+    "view_scale": 20.0,
     "nodes": [
         {
             "id": 140079168415968,
@@ -56,7 +56,7 @@
                 }
             ],
             "content": {
-                "id": 140544365197056,
+                "id": 140465865858784,
                 "content": "",
                 "name": "u",
                 "start": "1",
@@ -75,8 +75,8 @@
         {
             "id": 140079168414048,
             "title": "Value",
-            "pos_x": -165.52750000000003,
-            "pos_y": -182.8675,
+            "pos_x": -158.2643421052632,
+            "pos_y": -205.86749999999998,
             "inputs": [],
             "outputs": [
                 {
@@ -91,7 +91,7 @@
                 }
             ],
             "content": {
-                "id": 140543884794032,
+                "id": 140465318798672,
                 "content": "",
                 "value": "5",
                 "label": "a"
@@ -165,7 +165,7 @@
                 }
             ],
             "content": {
-                "id": 140543884894272,
+                "id": 140465318800544,
                 "content": "",
                 "width": 260.0,
                 "height": 108.0,
@@ -241,7 +241,7 @@
                 }
             ],
             "content": {
-                "id": 140543884897440,
+                "id": 140465318848832,
                 "content": "",
                 "width": 260.0,
                 "height": 108.0,
@@ -337,7 +337,7 @@
                 }
             ],
             "content": {
-                "id": 140543884405056,
+                "id": 140465318884832,
                 "content": "",
                 "width": 160.0,
                 "height": 192.0
@@ -411,7 +411,7 @@
                 }
             ],
             "content": {
-                "id": 140543884436384,
+                "id": 140465318408256,
                 "content": "",
                 "width": 160.0,
                 "height": 132.0
@@ -444,7 +444,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140543884438688,
+                "id": 140465318410560,
                 "content": ""
             },
             "properties": {
@@ -536,7 +536,7 @@
                 }
             ],
             "content": {
-                "id": 140543884379760,
+                "id": 140465317884688,
                 "content": "",
                 "width": 160.0,
                 "height": 192.0
@@ -600,7 +600,7 @@
                 }
             ],
             "content": {
-                "id": 140543883948240,
+                "id": 140465317887280,
                 "content": "",
                 "name": "x",
                 "start": "0",
@@ -676,12 +676,12 @@
                 }
             ],
             "content": {
-                "id": 140543883951840,
+                "id": 140465317927808,
                 "content": "",
                 "width": 260.0,
                 "height": 108.0,
                 "value": "-R*(x*log(x) + (1-x)*log(1-x) + x*log(x/2.) + (2. - x)*log(1-x/2.))",
-                "label": "S"
+                "label": "Sc"
             },
             "properties": {
                 "id": 140069860925504,
@@ -695,8 +695,8 @@
         {
             "id": 140069861054400,
             "title": "Multi-Value",
-            "pos_x": 501.4,
-            "pos_y": -733.6999999999998,
+            "pos_x": 260.5052631578948,
+            "pos_y": -680.4368421052629,
             "inputs": [],
             "outputs": [
                 {
@@ -711,7 +711,9 @@
                 }
             ],
             "content": {
-                "id": 140543883979648,
+                "id": [
+                    "27038"
+                ],
                 "content": "",
                 "height": 100.0,
                 "value": [
@@ -719,9 +721,6 @@
                 ],
                 "label": [
                     "R"
-                ],
-                "socket": [
-                    "140069861053728"
                 ]
             },
             "properties": {
@@ -789,11 +788,11 @@
                     "inout": 2,
                     "x": 161.0,
                     "y": 112.0,
-                    "label": "S"
+                    "label": "Sc"
                 }
             ],
             "content": {
-                "id": 140543884010688,
+                "id": 140465317994560,
                 "content": "",
                 "width": 160.0,
                 "height": 144.0
@@ -831,7 +830,7 @@
                     "inout": 1,
                     "x": -1.0,
                     "y": 64.0,
-                    "label": "S"
+                    "label": "Sc"
                 },
                 {
                     "id": 140069861358656,
@@ -857,7 +856,7 @@
                 }
             ],
             "content": {
-                "id": 140543884012992,
+                "id": 140465317996864,
                 "content": "",
                 "width": 160.0,
                 "height": 108.0
@@ -890,7 +889,7 @@
             ],
             "outputs": [],
             "content": {
-                "id": 140543884047984,
+                "id": 140465318023664,
                 "content": ""
             },
             "properties": {
@@ -901,6 +900,698 @@
             },
             "op_code": 203,
             "op_title": "Plot"
+        },
+        {
+            "id": 140244039384560,
+            "title": "Comment",
+            "pos_x": -70.31578947368416,
+            "pos_y": -1420.473684210526,
+            "inputs": [],
+            "outputs": [],
+            "content": {
+                "id": 140465317759584,
+                "content": "",
+                "width": 500.0,
+                "height": 105.26315789473688,
+                "comment": "Site preference energy calculations"
+            },
+            "properties": {
+                "id": 140244037224192,
+                "title": "Comment",
+                "width": 500.0,
+                "height": 105.26315789473688
+            },
+            "op_code": 500,
+            "op_title": "Comment"
+        },
+        {
+            "id": 140243905536064,
+            "title": "Combine",
+            "pos_x": 286.89473684210526,
+            "pos_y": -1235.9473684210525,
+            "inputs": [
+                {
+                    "id": 140243769148464,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "a..."
+                },
+                {
+                    "id": 140244038199952,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "Gab..."
+                },
+                {
+                    "id": 140465317206912,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140243905536304,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465317791920,
+                "content": "",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "properties": {
+                "id": 140243906252224,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140244037418096,
+            "title": "Expression",
+            "pos_x": 496.927536231884,
+            "pos_y": -1279.8807526061526,
+            "inputs": [
+                {
+                    "id": 140244038937856,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x0..."
+                },
+                {
+                    "id": 140243775926224,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140244038449088,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140244038449040,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465317823104,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "value": "x*Gab",
+                "label": "Gint"
+            },
+            "properties": {
+                "id": 140243905239648,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 100.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140243771705904,
+            "title": "Plot",
+            "pos_x": 1643.4782608695655,
+            "pos_y": -1303.3816425120779,
+            "inputs": [
+                {
+                    "id": 140243769019360,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 158.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140465317826128,
+                "content": ""
+            },
+            "properties": {
+                "id": 140243769044128,
+                "title": "Plot",
+                "width": 300.0,
+                "height": 300.0
+            },
+            "op_code": 203,
+            "op_title": "Plot"
+        },
+        {
+            "id": 140243771705760,
+            "title": "Separate",
+            "pos_x": 1030.9178743961356,
+            "pos_y": -1045.410628019324,
+            "inputs": [
+                {
+                    "id": 140243769164992,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140243769151104,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": "DATA"
+                },
+                {
+                    "id": 140243769150816,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 64.0,
+                    "label": "a"
+                },
+                {
+                    "id": 140243769150480,
+                    "index": 2,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 88.0,
+                    "label": "u"
+                },
+                {
+                    "id": 140243769150096,
+                    "index": 3,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 112.0,
+                    "label": "Rtet"
+                },
+                {
+                    "id": 140243769149568,
+                    "index": 4,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 136.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140243769150000,
+                    "index": 5,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 160.0,
+                    "label": "Roct"
+                },
+                {
+                    "id": 140243769149232,
+                    "index": 6,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 184.0,
+                    "label": "Gab"
+                },
+                {
+                    "id": 140243658359280,
+                    "index": 7,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 208.0,
+                    "label": "GNsp"
+                },
+                {
+                    "id": 140243769151248,
+                    "index": 8,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 232.0,
+                    "label": "Gint"
+                }
+            ],
+            "content": {
+                "id": 140465317586976,
+                "content": "",
+                "width": 160.0,
+                "height": 264.0
+            },
+            "properties": {
+                "id": 140243771783344,
+                "title": "Separate",
+                "width": 160.0,
+                "height": 264.0
+            },
+            "op_code": 400,
+            "op_title": "Separate"
+        },
+        {
+            "id": 140243769164224,
+            "title": "Combine",
+            "pos_x": 1324.63768115942,
+            "pos_y": -941.0628019323674,
+            "inputs": [
+                {
+                    "id": 140243769614784,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x"
+                },
+                {
+                    "id": 140243776431344,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": "Gint"
+                },
+                {
+                    "id": 140243658939312,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 88.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140243769148656,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 161.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465317086400,
+                "content": "",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "properties": {
+                "id": 140243771718672,
+                "title": "Combine",
+                "width": 160.0,
+                "height": 108.0
+            },
+            "op_code": 401,
+            "op_title": "Combine"
+        },
+        {
+            "id": 140243657059104,
+            "title": "Expression",
+            "pos_x": 886.9565217391307,
+            "pos_y": -1275.3623188405793,
+            "inputs": [
+                {
+                    "id": 140243657059008,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "x0..."
+                },
+                {
+                    "id": 140243775874096,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140243657058432,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140243657058240,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465317088560,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "value": "2+2",
+                "label": "res"
+            },
+            "properties": {
+                "id": 140243769134384,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 100.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140465311644544,
+            "title": "Multi-Value",
+            "pos_x": -14.526315789473685,
+            "pos_y": -1212.9473684210527,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140465311641760,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 201.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": [
+                    "387738",
+                    "651840",
+                    "261823"
+                ],
+                "content": "",
+                "height": 138.0,
+                "value": [
+                    "5.25",
+                    "-12.0",
+                    "1.0"
+                ],
+                "label": [
+                    "Gab",
+                    "GNsp",
+                    "x2"
+                ]
+            },
+            "properties": {
+                "id": 140465311362640,
+                "title": "Multi-Value",
+                "width": 200.0,
+                "height": 138.0
+            },
+            "op_code": 103,
+            "op_title": "Multi-Value"
+        },
+        {
+            "id": 140465311702416,
+            "title": "Multi-Value",
+            "pos_x": 35.10526315789474,
+            "pos_y": -1727.421052631579,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 140465317528672,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 201.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": [
+                    "578742",
+                    "545721"
+                ],
+                "content": "",
+                "height": 114.0,
+                "value": [
+                    "8.314",
+                    "300.0"
+                ],
+                "label": [
+                    "R",
+                    "T"
+                ]
+            },
+            "properties": {
+                "id": 140465308886208,
+                "title": "Multi-Value",
+                "width": 200.0,
+                "height": 114.0
+            },
+            "op_code": 103,
+            "op_title": "Multi-Value"
+        },
+        {
+            "id": 140465309763760,
+            "title": "Expression",
+            "pos_x": 300.22883295194515,
+            "pos_y": -1708.009153318078,
+            "inputs": [
+                {
+                    "id": 140465316158528,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "R..."
+                },
+                {
+                    "id": 140465309765536,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140465316156416,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140465316158720,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465309045520,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "value": "-23000+13.4*T",
+                "label": "RT"
+            },
+            "properties": {
+                "id": 140465309046960,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 100.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
+        },
+        {
+            "id": 140465316220208,
+            "title": "Table",
+            "pos_x": 832.0366132723116,
+            "pos_y": -1580.7780320366135,
+            "inputs": [
+                {
+                    "id": 140465316218864,
+                    "index": 0,
+                    "position": 2,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 108.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 140465309048112,
+                "content": "",
+                "width": 491.99084668192233,
+                "height": 167.96338672768866
+            },
+            "properties": {
+                "id": 140465299624144,
+                "title": "Table",
+                "width": 491.99084668192233,
+                "height": 167.96338672768866
+            },
+            "op_code": 201,
+            "op_title": "Table"
+        },
+        {
+            "id": 140465309826256,
+            "title": "Expression",
+            "pos_x": 682.8375286041191,
+            "pos_y": -1723.5697940503435,
+            "inputs": [
+                {
+                    "id": 140465309848528,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": "R..."
+                },
+                {
+                    "id": 140465309848192,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 140465309848864,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 40.0,
+                    "label": null
+                },
+                {
+                    "id": 140465309849248,
+                    "index": 1,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 261.0,
+                    "y": 64.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 140465299627024,
+                "content": "",
+                "width": 260.0,
+                "height": 100.0,
+                "value": "RT/(R*T)",
+                "label": "res"
+            },
+            "properties": {
+                "id": 140465297236320,
+                "title": "Expression",
+                "width": 260.0,
+                "height": 100.0
+            },
+            "op_code": 301,
+            "op_title": "Expression"
         }
     ],
     "edges": [
@@ -999,6 +1690,72 @@
             "edge_type": 2,
             "start": 140069823103328,
             "end": 140069616597264
+        },
+        {
+            "id": 140243775925456,
+            "edge_type": 2,
+            "start": 140243905536304,
+            "end": 140244038937856
+        },
+        {
+            "id": 140243769164080,
+            "edge_type": 2,
+            "start": 140244038449040,
+            "end": 140243769164992
+        },
+        {
+            "id": 140243769098352,
+            "edge_type": 2,
+            "start": 140243769148656,
+            "end": 140243769019360
+        },
+        {
+            "id": 140243775873424,
+            "edge_type": 2,
+            "start": 140244038449040,
+            "end": 140243657059008
+        },
+        {
+            "id": 140244037118080,
+            "edge_type": 2,
+            "start": 140069824209104,
+            "end": 140243769148464
+        },
+        {
+            "id": 140243769601520,
+            "edge_type": 2,
+            "start": 140243769151248,
+            "end": 140243776431344
+        },
+        {
+            "id": 140465311645168,
+            "edge_type": 2,
+            "start": 140465311641760,
+            "end": 140244038199952
+        },
+        {
+            "id": 140465316471328,
+            "edge_type": 2,
+            "start": 140243769149568,
+            "end": 140243769614784
+        },
+        {
+            "id": 140465309764720,
+            "edge_type": 2,
+            "start": 140465317528672,
+            "end": 140465316158528
+        },
+        {
+            "id": 140465309847712,
+            "edge_type": 2,
+            "start": 140465316158720,
+            "end": 140465309848528
+        },
+        {
+            "id": 140465309848912,
+            "edge_type": 2,
+            "start": 140465309849248,
+            "end": 140465316218864
         }
     ]
 }

@@ -48,7 +48,7 @@ class SeparateNode(ResizableOutputNode):
         # append a socket with a label if the label does not exist
         for name in dnames:
             if name not in existing:
-                self.appendOutput(SOCKET_DATA_TEXT, name)
+                self.appendOutput(SOCKET_TYPE_VALUE, name)
                 existing.extend([name])
 
         self.updateOutputsPos()

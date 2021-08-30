@@ -1,6 +1,7 @@
 
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
+from datanodes.core.node_settings import *
 from datanodes.nodes.datanode import *
 
 
@@ -98,72 +99,73 @@ class MultiValueInputContent(AdjustableOutputContent):
         self.labels = {}
         self.values = {}
 
-    def appendPair(self, socket, at=None):
+    def appendPair(self, at=None):
         if self.labels and not at:
             i = len(self.labels)
         elif at:
             i = at
         else:
             i = 0
-        self.remove[str(socket.id)]  = RemoveButton(self, str(socket.id))
-        self.labels[str(socket.id)]  = QLineEdit("x"+str(i), self)
-        self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
-        self.values[str(socket.id)]  = QLineEdit("1.0", self)
-        self.values[str(socket.id)].setAlignment(Qt.AlignLeft)
-        self.mainlayout.addWidget(self.remove[str(socket.id)], i, 0)
-        self.mainlayout.addWidget(self.labels[str(socket.id)], i, 1)
-        self.mainlayout.addWidget(self.values[str(socket.id)], i, 2)
+        
+        id = str(int(np.random.rand()*1000000))
+        while id in self.labels : id = str(int(np.random.rand()*1000000))
 
-        self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
-        self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
-        self.remove[str(socket.id)].clicked.connect(self.remove[str(socket.id)].removePair)
+        self.remove[id]  = RemoveButton(self, id)
+        self.labels[id]  = QLineEdit("x"+str(i), self)
+        self.labels[id].setAlignment(Qt.AlignRight)
+        self.values[id]  = QLineEdit("1.0", self)
+        self.values[id].setAlignment(Qt.AlignLeft)
+        self.mainlayout.addWidget(self.remove[id], i, 0)
+        self.mainlayout.addWidget(self.labels[id], i, 1)
+        self.mainlayout.addWidget(self.values[id], i, 2)
 
-    
+        self.labels[id].textChanged.connect(self.node.recalculateNode)
+        self.values[id].textChanged.connect(self.node.recalculateNode)
+        self.remove[id].clicked.connect(self.remove[id].removePair)
+
+
     def sortWidgets(self):
-        for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
-            self.remove[str(soket.id)].setParent(None)
-            self.labels[str(soket.id)].setParent(None)
-            self.values[str(soket.id)].setParent(None)
+        for i, key in enumerate(self.labels):
+            self.remove[key].setParent(None)
+            self.labels[key].setParent(None)
+            self.values[key].setParent(None)
 
-        for i, soket in zip(range(len(self.labels)), self.node.getOutputs()):
-            self.mainlayout.addWidget(self.remove[str(soket.id)], i, 0)
-            self.mainlayout.addWidget(self.labels[str(soket.id)], i, 1)
-            self.mainlayout.addWidget(self.values[str(soket.id)], i, 2)
-            soket.index = i
-            soket.setPos()
-
+        for i, key in enumerate(self.labels):
+            self.mainlayout.addWidget(self.remove[key], i, 0)
+            self.mainlayout.addWidget(self.labels[key], i, 1)
+            self.mainlayout.addWidget(self.values[key], i, 2)
 
     def serialize(self):
         res     = super().serialize()
         labels  = []
         values  = []
-        sockets = []
-
+        ids     = []
         for key in self.labels:
             labels.append(self.labels[key].text())
             values.append(self.values[key].text())
-            sockets.append(key)
+            ids.append(key)
+
         res['value'] = values
         res['label'] = labels
-        res['socket'] = sockets
+        res['id']    = ids
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            for i, socket, label, value in zip(range(len(data['label'])), self.node.getOutputs(), data['label'], data['value']):
-                self.remove[str(socket.id)]  = RemoveButton(self, str(socket.id))
-                self.labels[str(socket.id)]  = QLineEdit(label, self)
-                self.labels[str(socket.id)].setAlignment(Qt.AlignRight)
-                self.values[str(socket.id)]  = QLineEdit(value, self)
-                self.values[str(socket.id)].setAlignment(Qt.AlignLeft)
+            for i, id, label, value in zip(range(len(data['label'])), data['id'], data['label'], data['value']):
+                self.remove[id]  = RemoveButton(self, id)
+                self.labels[id]  = QLineEdit(label, self)
+                self.labels[id].setAlignment(Qt.AlignRight)
+                self.values[id]  = QLineEdit(value, self)
+                self.values[id].setAlignment(Qt.AlignLeft)
 
-                self.mainlayout.addWidget(self.remove[str(socket.id)], i, 0)
-                self.mainlayout.addWidget(self.labels[str(socket.id)], i, 1)
-                self.mainlayout.addWidget(self.values[str(socket.id)], i, 2)
-                self.remove[str(socket.id)].clicked.connect(self.remove[str(socket.id)].removePair)
-                self.labels[str(socket.id)].textChanged.connect(self.node.recalculateNode)
-                self.values[str(socket.id)].textChanged.connect(self.node.recalculateNode)
+                self.mainlayout.addWidget(self.remove[id], i, 0)
+                self.mainlayout.addWidget(self.labels[id], i, 1)
+                self.mainlayout.addWidget(self.values[id], i, 2)
+                self.remove[id].clicked.connect(self.remove[id].removePair)
+                self.labels[id].textChanged.connect(self.node.recalculateNode)
+                self.values[id].textChanged.connect(self.node.recalculateNode)
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -174,7 +176,7 @@ class MultiValueInputNode(AdjustableOutputNode):
     op_code = OP_MODE_MULVALINPUT
     op_title = "Multi-Value"
 
-    def __init__(self, scene, inputs=[], outputs=[]):
+    def __init__(self, scene, inputs=[], outputs=[SOCKET_TYPE_DATA]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
         self.eval()
         self.timer = None
@@ -191,7 +193,7 @@ class MultiValueInputNode(AdjustableOutputNode):
 
     def resize(self):
         try:
-            size = len(self.getOutputs())
+            size = len(self.content.labels)
             current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin + 30.0
             padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
             if current_size > self.grNode.min_height:
@@ -203,8 +205,7 @@ class MultiValueInputNode(AdjustableOutputNode):
         
 
     def appendNewPair(self):
-        self.appendOutput(output=2)
-        self.content.appendPair(self.getOutputs()[-1])
+        self.content.appendPair()
         # The timer is set here
         self.timer = QTimer()
         self.timer.timeout.connect(self.resize)
@@ -214,12 +215,14 @@ class MultiValueInputNode(AdjustableOutputNode):
     def evalImplementation(self, silent=False):
         try:
             if self.getOutputs():
-                for socket in self.getOutputs():
-                    u_value = self.content.values[str(socket.id)].text()
-                    s_value = float(u_value)
-                    label   = self.content.labels[str(socket.id)].text()
-                    socket.value = {label : s_value}
-                    socket.type  = "float"
+                self.value = {}
+                for id in self.content.values:
+                    value = float(self.content.values[id].text())
+                    label = self.content.labels[id].text()
+                    self.value[label] = value
+
+                self.getOutput(0).value = self.value
+                self.getOutput(0).type  = "df"
             return True
 
         except Exception as e: 

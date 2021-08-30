@@ -47,7 +47,7 @@ class FileInputNode(DataNode):
     op_code = OP_MODE_FILEINPUT
     op_title = "File"
 
-    def __init__(self, scene, inputs=[], outputs=[SOCKET_DATA_NUMERIC]):
+    def __init__(self, scene, inputs=[], outputs=[SOCKET_TYPE_DATA]):
         super().__init__(scene, inputs, outputs)
         #self.value = None
         self.separator = ","

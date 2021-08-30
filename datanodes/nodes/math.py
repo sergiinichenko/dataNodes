@@ -326,6 +326,7 @@ class ExpressionNode(ResizableInputNode):
         self.properties = NodeProperties(self)
         self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.label.returnPressed.connect(self.recalculateNode)
+        self.content.label.textChanged.connect(self.recalculateNode)
         self.content.changed.connect(self.updateSockets)
 
     def evalImplementation(self, silent=False):

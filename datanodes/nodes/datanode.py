@@ -683,12 +683,9 @@ class RemoveButton(QToolButton):
         self.content.remove[self.id].setParent(None)
         del self.content.labels[self.id]
         del self.content.values[self.id]
-        #del self.content.remove[self.id]
-
-        soket = self.content.node.getSocketByID(self.id)
-        soket.remove()
         self.content.node.resize()
         self.content.sortWidgets()
+#        del self.content.remove[self.id]
 
 class AdjustableOutputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
