@@ -21,10 +21,10 @@ class NodeProperties(QWidget, Serializer):
     def __init__(self, node, parent=None):
         self.node = node
         super().__init__(parent)
-
-        self.names  = {}
-        self.widgets = {}
-        self.keys   = ["title", "pos_x", "pos_y"]
+        
+        self.title_label = None
+        self.title       = None
+        self.i       = 0
         self.initUI()
         self.setMinimumHeight(150)
 
@@ -37,24 +37,15 @@ class NodeProperties(QWidget, Serializer):
         self.layout.setColumnStretch(1, 1)
         self.setLayout(self.layout)
 
-        self.names["title"] = QLabel("Title ", self)        
-        self.names["title"].setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.title_label = QLabel("Title ", self)        
+        self.title_label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
         
-        self.widgets["title"] = DataLineEdit(self.node.title, self.node)
-        self.widgets["title"].setAlignment(Qt.AlignLeft)
-        self.widgets["title"].textChanged.connect(self.widgets[str("title")].setTitle)
+        self.title = DataLineEdit(self.node.title, self.node)
+        self.title.setAlignment(Qt.AlignLeft)
+        self.title.textChanged.connect(self.title.setTitle)
         
-        self.layout.addWidget(self.names[str("title")], 0, 0)
-        self.layout.addWidget(self.widgets[str("title")], 0, 1)
-
-    def appendWidgetPair(self, text, widget2):
-        self.names[str(self.i)] = QLabel(text + " ", self)        
-        self.names[str(self.i)].setAlignment(Qt.AlignLeft | Qt.AlignCenter)
-
-        self.widgets[str(self.i)] = widget2
-        
-        self.layout.addWidget(self.names[str(self.i)], 0, 0)
-        self.layout.addWidget(self.widgets[str(self.i)], 0, 1)
+        self.layout.addWidget(self.title_label, self.i, 0)
+        self.layout.addWidget(self.title, self.i, 1)
         self.i += 1
 
     def emitChanged(self):
@@ -64,7 +55,7 @@ class NodeProperties(QWidget, Serializer):
     def serialize(self):
         return OrderedDict([
             ('id' ,   self.id),
-            ('title', self.widgets["title"].text()),
+            ('title', self.title.text()),
             ('width',  self.node.grNode.width),
             ('height', self.node.grNode.height),
         ])
