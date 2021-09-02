@@ -10,7 +10,8 @@ class DataLineEdit(QLineEdit):
         self.node     = node
 
     def setTitle(self):
-        self.node.title = self.text()
+        self.node.title             = self.text()
+        self.node.properties.title  = self.text()
 
         
 
@@ -23,7 +24,8 @@ class NodeProperties(QWidget, Serializer):
         super().__init__(parent)
         
         self.title_label = None
-        self.title       = None
+        self.title       = ""
+        self.title_widget= None
         self.i       = 0
         self.initUI()
         self.setMinimumHeight(150)
@@ -40,22 +42,23 @@ class NodeProperties(QWidget, Serializer):
         self.title_label = QLabel("Title ", self)        
         self.title_label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
         
-        self.title = DataLineEdit(self.node.title, self.node)
-        self.title.setAlignment(Qt.AlignLeft)
-        self.title.textChanged.connect(self.title.setTitle)
+        self.title_widget = DataLineEdit(self.title, self.node)
+        self.title_widget.setAlignment(Qt.AlignLeft)
+        self.title_widget.textChanged.connect(self.title_widget.setTitle)
         
         self.layout.addWidget(self.title_label, self.i, 0)
-        self.layout.addWidget(self.title, self.i, 1)
+        self.layout.addWidget(self.title_widget, self.i, 1)
         self.i += 1
 
     def emitChanged(self):
         self.changed.emit()
-        self.node.title = self.title.text()
+        self.node.title = self.title_widget.text()
+        self.title = self.title_widget.text()
 
     def serialize(self):
         return OrderedDict([
-            ('id' ,   self.id),
-            ('title', self.title.text()),
+            ('id' ,    self.id),
+            ('title',  self.title),
             ('width',  self.node.grNode.width),
             ('height', self.node.grNode.height),
         ])
@@ -66,5 +69,7 @@ class NodeProperties(QWidget, Serializer):
         self.node.grNode.height = data['height']
         self.node.grNode.width  = data['width']
         self.node.title         = data['title']
+        self.title              = data['title']
         self.node.content.updateSize()
+        self.title_widget.setText(data['title'])
         return True

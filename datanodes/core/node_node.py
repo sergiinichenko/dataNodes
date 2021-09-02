@@ -197,7 +197,6 @@ class Node(Serializer):
         self._title = value
         self.grNode.title = self._title
 
-
     def onEdgeConnectionChanged(self, new_edge=None):
         pass
 
@@ -505,7 +504,7 @@ class Node(Serializer):
 
         return OrderedDict([
             ('id'      , self.id),
-            ("title"   , self.title),
+            ("title"   , self.properties.title),
             ("pos_x"   , self.grNode.scenePos().x()),
             ("pos_y"   , self.grNode.scenePos().y()),
             ("inputs"  , inputs),
