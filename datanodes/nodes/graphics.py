@@ -88,11 +88,7 @@ class GraphicsProperties(NodeProperties):
         self.c = 0
 
     def resetWidgets(self):
-        for name in self.names:
-            self.names[name].setParent(None)
-            self.linesize[name].setParent(None)
-            self.linecolor[name].setParent(None)
-            self.linestyle[name].setParent(None)
+        self.resetProperties()
         self.names     = {}
         self.linesize  = {}
         self.linecolor = {}
@@ -100,50 +96,39 @@ class GraphicsProperties(NodeProperties):
         self.linetype  = {}
         self.c = 0
 
-    def extend(self, name):
-        x_name = list(self.node.value.keys())[0]
-        if name not in self.linecolor : 
-            self.names[name]     = name
-            self.linecolor[name] = COLORS[self.c]
-            self.linestyle[name] = "solid"
-            self.linetype[name]  = "line"
-            self.linesize[name]  = 2.0
-            self.c += 1
+    def cleanProperties(self):
+        value = self.node.value
+        x_name = list(value.keys())[0]
 
+        for name in value:
             if name != x_name:
+                if name not in self.names : 
+                    self.names[name]     = name
+                    self.linecolor[name] = COLORS[self.c]
+                    self.linestyle[name] = "solid"
+                    self.linetype[name]  = "line"
+                    self.linesize[name]  = 2.0
+                    self.c += 1
 
-                label = QLabel(name + " ", self)        
-                label.setStyleSheet("margin-top: 5px;")
-                label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
-
-                style = LineStylePicker(self.node, name)
-                style.setStyleSheet("margin-top: 5px;")
-
-                self.layout.addWidget(label, self.i, 0)
-                self.layout.addWidget(style, self.i, 1)
-                self.i += 1
+        for name in reversed(self.names):
+            if name not in value : 
+                del self.names[name]
+                del self.linecolor[name]
+                del self.linestyle[name]
+                del self.linetype[name]
+                del self.linesize[name]
 
 
-                size  = LineSizePicker(self.node, name, 2.0)
-                size.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
-
-                color = QWidget(self)
-                color.setStyleSheet("background-color:" + self.linecolor[name] + " ;")
-
-                self.layout.addWidget(size, self.i, 0)
-                self.layout.addWidget(color, self.i, 1)
-                self.i += 1
 
     def fillWidgets(self):
-        self.i = 0
         for name in self.names : 
 
             label = QLabel(name + " ", self)        
-            label.setStyleSheet("margin-top: 5px;")
+            label.setStyleSheet("margin-top: 10px;")
             label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
 
             style = LineStylePicker(self.node, name, self.linestyle[name])
-            style.setStyleSheet("margin-top: 5px;")
+            style.setStyleSheet("margin-top: 10px;")
 
             self.layout.addWidget(label, self.i, 0)
             self.layout.addWidget(style, self.i, 1)
@@ -187,6 +172,7 @@ class GraphicsProperties(NodeProperties):
         res = super().deserialize(data, hashmap)
         try:
             try:
+                self.resetWidgets()
                 for i, name in enumerate(data['names']):
                     self.names[name]     = name
                     self.linecolor[name] = data['colors'][i]
@@ -216,18 +202,24 @@ class GraphicsOutputNode(DataNode):
         self.c = 0
         
     def initInnerClasses(self):
-        self.content = GraphicsOutputContent(self)
-        self.grNode  = GraphicsOutputGraphicsNode(self)
+        self.content    = GraphicsOutputContent(self)
+        self.grNode     = GraphicsOutputGraphicsNode(self)
         self.properties = GraphicsProperties(self)
+
+
+    def prepareSettings(self):
+        self.properties.resetProperties()
+        self.properties.cleanProperties()
+        self.properties.fillWidgets()
+
+        return True
 
     def drawPlot(self):
         self.content.axis.clear()
         x_name = list(self.value.keys())[0]
         x_val  = self.value[x_name]
-
         for i, name in enumerate(self.value):
             if name != x_name:
-                self.properties.extend(name)
                 self.content.axis.plot(x_val, self.value[name], label=name, 
                                         color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
                                         linewidth=self.properties.linesize[name])
@@ -237,30 +229,8 @@ class GraphicsOutputNode(DataNode):
 
 
     def evalImplementation(self, silent=False):
-        input_edge = self.getInput(0)
-        if not input_edge:
-            self.setInvalid()
-            self.e = "Does not have and intry Node"
-            return False
-        else:            
-            try:
-                self.setDirty(False)
-                self.setInvalid(False)
-                self.e = ""
-                self.value = input_edge.value
-                self.type  = input_edge.type
-                if isinstance(self.value, dict):
-                    self.drawPlot()
-                else:
-                    pass
-                return True
-            except Exception as e:
-                self.setDirty(False)
-                self.setInvalid(False)
-                self.e = e
-                return False
-
-
-
-
-
+        if isinstance(self.value, dict):
+            self.drawPlot()
+        else:
+            pass
+        return True

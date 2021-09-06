@@ -1,3 +1,4 @@
+from contextlib import redirect_stdout
 from datanodes.core.node_properties import NodeProperties
 from datanodes.graphics.graphics_view import MODE_DRAG_RESIZE, MODE_NONE
 from datanodes.core.utils import dumpException
@@ -142,7 +143,7 @@ class DataNode(Node):
                 self.evalChildren()
                 return True
 
-            elif self.evalImplementation(silent):
+            elif self.evaluateNode(silent):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
@@ -161,6 +162,36 @@ class DataNode(Node):
             self.setInvalid()
             dumpException(e)
             self.grNode.setToolTip(str(e))
+
+
+    def evaluateNode(self, silent=False):
+        if not self.getInputData() :       return False
+        if not self.prepareSettings() :    return False
+        if not self.evalImplementation() : return False
+        return True
+
+
+    def getInputData(self):
+        input_edge = self.getInput(0)
+        if not input_edge:
+            return True
+        else:            
+            try:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = input_edge.value
+                self.type  = input_edge.type
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                return False
+        return True
+
+    def prepareSettings(self):
+        return True
+
 
 
     def reEvaluate(self):
