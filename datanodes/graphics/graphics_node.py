@@ -70,6 +70,19 @@ class GraphicsNode(QGraphicsItem):
     def onDeselected(self):
         self.node.onDeselected()
 
+
+    def select(self, new_state=True):
+        """Safe version of selecting the `Graphics Node`. Takes care about the selection state flag used internally
+
+        :param new_state: ``True`` to select, ``False`` to deselect
+        :type new_state: ``bool``
+        """
+        self.setSelected(new_state)
+        self._lastSelectedState = new_state
+        if new_state: self.onSelected()
+
+
+
     def mouseMoveEvent(self, event):
         super().mouseMoveEvent(event)
         self._wasMoved = True

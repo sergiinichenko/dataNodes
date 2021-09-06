@@ -1,3 +1,4 @@
+from datanodes.graphics.graphics_view import MODE_EDGE_DRAG
 from datanodes.core.node_edge import EDGE_BEZIER, EDGE_DIRECT
 from datanodes.core.node_widget import NodeWidget
 from PyQt5.QtWidgets import *
@@ -254,6 +255,9 @@ class NodeWindow(QMainWindow):
         self.getCurrentNodeEditorWidget().scene.deselectAll()
         self.onEditPaste(setSelected=True)
 
+
+
+
 class NodeSubWindow(NodeWidget):
     def __init__(self, window):
         super().__init__(window)
@@ -420,6 +424,24 @@ class NodeSubWindow(NodeWidget):
         if selected and action == bezierAct: selected.edge_type = EDGE_BEZIER
         if selected and action == directAct: selected.edge_type = EDGE_DIRECT
 
+
+    # helper functions
+    def determine_target_socket_of_node(self, was_dragged_flag, new_node):
+        target_socket = None
+        if was_dragged_flag:
+            if len(new_node.inputs) > 0: target_socket = new_node.inputs[0]
+        else:
+            if len(new_node.outputs) > 0: target_socket = new_node.outputs[0]
+        return target_socket
+
+    def finish_new_node_state(self, new_node):
+        self.scene.deselectAll()
+        new_node.grNode.select(True)
+        new_node.grNode.onSelected()
+
+
+
+
     def handleNewNodeContextMenu(self, event):
         context_menu = self.initNodesContextMenu()
         action       = context_menu.exec_(self.mapToGlobal(event.pos()))
@@ -430,14 +452,12 @@ class NodeSubWindow(NodeWidget):
             
             new_data_node.setPos(scene_pos.x(), scene_pos.y())
 
-            """
             if self.scene.getView().mode == MODE_EDGE_DRAG:
                 # if we were dragging an edge...
-                target_socket = self.determine_target_socket_of_node(self.scene.getView().dragging.drag_start_socket.is_output, new_calc_node)
+                target_socket = self.determine_target_socket_of_node(self.scene.getView().dragging.drag_start_socket.is_output, new_data_node)
                 if target_socket is not None:
                     self.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
-                    self.finish_new_node_state(new_calc_node)
+                    self.finish_new_node_state(new_data_node)
 
             else:
-                self.scene.history.storeHistory("Created %s" % new_calc_node.__class__.__name__)
-            """
+                self.scene.history.storeHistory("Created %s" % new_data_node.__class__.__name__)
