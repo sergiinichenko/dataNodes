@@ -8,6 +8,12 @@ node_modules/
 dist/
 build/
 
+.eggs
+.tox
+.vscode
+datanodes.egg-info
+__pycache__
+
 # Compiled Java class files
 *.class
 
@@ -50,3 +56,4 @@ Thumbs.db
 *.wmv
 
 .vscode/settings.json
+
