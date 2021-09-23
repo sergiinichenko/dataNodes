@@ -1,6 +1,5 @@
 
 from datanodes.core.utils import dumpException
-from PyQt5.sip import dump
 from datanodes.graphics.graphics_group import GraphicsGroup
 from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.core.node_socket import LEFT_BOTTOM, LEFT_TOP, RIGHT_BOTTOM, RIGHT_TOP, Socket

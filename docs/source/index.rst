@@ -10,7 +10,7 @@ Welcome to datanodes's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+   rst/datanodes
 
 Indices and tables
 ==================

@@ -1,5 +1,4 @@
 from datanodes.core.utils import dumpException
-from PyQt5.sip import dump
 from datanodes.graphics.graphics_node import GraphicsNode
 from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.core.node_properties import NodeProperties
