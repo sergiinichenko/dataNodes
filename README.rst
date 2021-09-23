@@ -23,13 +23,15 @@ Requirements
 
 Installation
 ------------
+.. code-block:: bash
 
-::
-    $ pip install -i https://test.pypi.org/simple/ datanodes
+    pip install -i https://test.pypi.org/simple/ datanodes
 
 
 
-Or download the source code from gitlab::
+Or download the source code from gitlab
+
+.. code-block:: bash
 
     git clone https://github.com/sergiinichenko/dataNodes
 
