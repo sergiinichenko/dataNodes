@@ -8,9 +8,9 @@ node_modules/
 dist/
 build/
 
-./eggs
-./tox
-./vscode
+.eggs
+.tox
+.vscode
 datanodes.egg-info
 __pycache__
 
