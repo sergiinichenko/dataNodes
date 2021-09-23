@@ -35,6 +35,39 @@ Or download the source code from gitlab
 
     git clone https://github.com/sergiinichenko/dataNodes
 
+
+Or download the source code from gitlab
+
+.. code-block:: bash
+
+    git clone https://github.com/sergiinichenko/dataNodes
+
+
+How to run
+------------
+
+To be able to run the DataNodes you have to create a minimal python script and run it, e.g. datanodes.py file
+
+.. code-block:: python
+
+    # the datanodes.py file 
+    import sys, os
+    from PyQt5.QtWidgets import *
+    from datanodes.core.main_window import MainWindow
+
+    if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        wnd = MainWindow()
+        sys.exit(app.exec_())
+
+Then you can use any python IDE to run the script (VSCode, Spyder3, etc.) or run it from the console by running:
+
+.. code-block:: bash
+
+    python3 datanodes.py
+
+This script will start the DataNodes. 
+
 Screenshots
 -----------
 
