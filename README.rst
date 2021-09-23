@@ -1,5 +1,15 @@
-Welcome to DataNodes
+Welcome to DataNodes 
 ==========================
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/datanodes.png
+    :width: 150
+    :alt: Screenshot of Simple Data Node
+
+.. contents:: Outline
+
+
+About
+=====
 
 This package is created with the goal of simplifying data processing and analysis. 
 https://github.com/sergiinichenko/dataNodes
@@ -67,6 +77,68 @@ Then you can use any python IDE to run the script (VSCode, Spyder3, etc.) or run
     python3 datanodes.py
 
 This script will start the DataNodes. 
+
+
+Basic Tutorial
+--------------
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/EmptyDataNodes.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/NewDataNodes.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddInputFile.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddTableOutput.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/ConnectInputToTable.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddCleanNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/CleanNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/DropCleanNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/SetupCleanNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddSeparateNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/ConnectSeparateNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/SeparateNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddCombineNode.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddPlot.png
+    :width: 500
+    :alt: Screenshot of Simple Data Node
+
+
 
 Screenshots
 -----------
