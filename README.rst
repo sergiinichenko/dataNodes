@@ -1,7 +1,7 @@
 Welcome to DataNodes
 ==========================
 
-This package is create with a goal of simplifying data processing and alalysis.
+This package is created with the goal of simplifying data processing and analysis. 
 https://github.com/sergiinichenko/dataNodes
 
 Features
