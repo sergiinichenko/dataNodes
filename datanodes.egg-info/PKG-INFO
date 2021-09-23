@@ -19,60 +19,49 @@ Classifier: Programming Language :: Python :: 3.8
 Requires-Python: >=3.6
 License-File: LICENSE
 
-<h1 align="center"> Welcome to DataNodes </h1>
-<p align="center"> 
-  <img src="" alt="Data-Nodes logo" height="282px" width="637">
-</p>
+Welcome to DataNodes
+==========================
 
-<!-- TABLE OF CONTENTS -->
-<details open="open">
-  <summary>Table of Contents</summary>
-  <ol>
-    <li><a href="#about-the-project"> About The Project</a></li>
-    <li><a href="#overview"> Overview</a></li>
-    <li><a href="#getting-started"> Getting Started</a></li>
-    <li><a href="#credits"> Credits</a></li>
-  </ol>
-</details>
+This package is create with a goal of simplifying data processing and alalysis.
+https://github.com/sergiinichenko/dataNodes
 
-<!-- ABOUT THE PROJECT -->
-<h2 id="about-the-project"> :pencil: About The Project</h2>
+Features
+--------
 
-<p align="justify"> 
-  This is a data processing pagacke designed to simplify data analysis and visualization. The inspiration for this project was the node based editor from Blender.
-</p>
+- a set of nodes for loading and reading data
+- data processing node for cleaning and removing NaN data
+- separate and combine data for convenience of work
+- plot the data
+- show data in a table format
 
-<!-- OVERVIEW -->
-<h2 id="overview"> :cloud: Overview</h2>
+Requirements
+------------
 
-<p align="justify"> 
-  To be done
-</p>
+- Python 3.x
+- PyQt5 or PySide2 (using wrapper QtPy)
+- matplotlib>=3.4.0
+- pandas>=1.2.0
 
-<!-- GETTING STARTED -->
-<h2 id="getting-started"> :book: Getting Started</h2>
+Installation
+------------
 
-<p>
-  To start the DataNodes window here is the minimal python code you have to write and run after you installed the dataNodes package:
-</p>
-<pre>
-  <code>
-    import sys, os
-    from PyQt5.QtWidgets import *
-    from datanodes.core.main_window import MainWindow
+::
+    $ python3 -m pip install --index-url https://test.pypi.org/simple/ datanodes
 
-    if __name__ == '__main__':
-        app = QApplication(sys.argv)
-        wnd = MainWindow()
-        sys.exit(app.exec_())
 
-  </code>
-</pre>
 
-<!-- CREDITS -->
-<h2 id="credits"> :scroll: Credits</h2>
+Or download the source code from gitlab::
 
-Sergii Nichenko
+    git clone https://github.com/sergiinichenko/dataNodes
+
+Screenshots
+-----------
+
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/img/DataNodes.png
+  :alt: Screenshot of Simple Data Node
+
+Other links
+-----------
 
 
 =======

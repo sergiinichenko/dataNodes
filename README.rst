@@ -25,7 +25,7 @@ Installation
 ------------
 
 ::
-    $ python3 -m pip install --index-url https://test.pypi.org/simple/ datanodes
+    $ pip install -i https://test.pypi.org/simple/ datanodes
 
 
 
@@ -36,11 +36,8 @@ Or download the source code from gitlab::
 Screenshots
 -----------
 
-.. image:: https://www.blenderfreak.com/media/products/NodeEditor/screenshot-calculator.png
-  :alt: Screenshot of Calculator Example
-
-.. image:: https://www.blenderfreak.com/media/products/NodeEditor/screenshot-example.png
-  :alt: Screenshot of Node Editor
+.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/img/DataNodes.png
+  :alt: Screenshot of Simple Data Node
 
 Other links
 -----------
