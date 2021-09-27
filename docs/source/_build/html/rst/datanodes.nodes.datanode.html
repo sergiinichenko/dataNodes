@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>datanodes.nodes.datanode module &mdash; datanodes 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="datanodes.nodes.graphics module" href="datanodes.nodes.graphics.html" />
+    <link rel="prev" title="datanodes.nodes.comment module" href="datanodes.nodes.comment.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> datanodes
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="datanodes.html">datanodes Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datanodes.core.html">datanodes.core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datanodes.graphics.html">datanodes.graphics package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="datanodes.nodes.html">datanodes.nodes Package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.array.html">datanodes.nodes.array module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.comment.html">datanodes.nodes.comment module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">datanodes.nodes.datanode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.graphics.html">datanodes.nodes.graphics module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.input_file.html">datanodes.nodes.input_file module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.inputs.html">datanodes.nodes.inputs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.math.html">datanodes.nodes.math module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.outputs.html">datanodes.nodes.outputs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.process.html">datanodes.nodes.process module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">datanodes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="datanodes.html">datanodes Package</a> &raquo;</li>
+          <li><a href="datanodes.nodes.html">datanodes.nodes Package</a> &raquo;</li>
+      <li>datanodes.nodes.datanode module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rst/datanodes.nodes.datanode.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-datanodes.nodes.datanode">
+<span id="datanodes-nodes-datanode-module"></span><h1>datanodes.nodes.datanode module<a class="headerlink" href="#module-datanodes.nodes.datanode" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">DataGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.graphics.graphics_node.html#datanodes.graphics.graphics_node.GraphicsNode" title="datanodes.graphics.graphics_node.GraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.graphics.graphics_node.GraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataGraphicsNode.initAssets">
+<span class="sig-name descname"><span class="pre">initAssets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataGraphicsNode.initAssets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataGraphicsNode.paint">
+<span class="sig-name descname"><span class="pre">paint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QPainter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QStyleOptionGraphicsItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataGraphicsNode.paint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataGraphicsNode.itemChange">
+<span class="sig-name descname"><span class="pre">itemChange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="pre">self</span></em>, <em class="sig-param"><span class="pre">QGraphicsItem.GraphicsItemChange</span></em>, <em class="sig-param"><span class="pre">Any</span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Any</span></span></span><a class="headerlink" href="#datanodes.nodes.datanode.DataGraphicsNode.itemChange" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">DataContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.core.node_content_widget.html#datanodes.core.node_content_widget.NodeContentWidget" title="datanodes.core.node_content_widget.NodeContentWidget"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.core.node_content_widget.NodeContentWidget</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataContent.changed">
+<span class="sig-name descname"><span class="pre">changed</span></span><a class="headerlink" href="#datanodes.nodes.datanode.DataContent.changed" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataContent.outchanged">
+<span class="sig-name descname"><span class="pre">outchanged</span></span><a class="headerlink" href="#datanodes.nodes.datanode.DataContent.outchanged" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataContent.updateSize">
+<span class="sig-name descname"><span class="pre">updateSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataContent.updateSize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">DataNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[2,</span> <span class="pre">2]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">innames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outnames</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.core.node_node.html#datanodes.core.node_node.Node" title="datanodes.core.node_node.Node"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.core.node_node.Node</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Base</span> <span class="pre">node'</span></em><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.onSelected">
+<span class="sig-name descname"><span class="pre">onSelected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.onSelected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.onDeselected">
+<span class="sig-name descname"><span class="pre">onDeselected</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.onDeselected" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.recalculateNode">
+<span class="sig-name descname"><span class="pre">recalculateNode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.recalculateNode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.eval">
+<span class="sig-name descname"><span class="pre">eval</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.eval" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.evaluateNode">
+<span class="sig-name descname"><span class="pre">evaluateNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.evaluateNode" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.getInputData">
+<span class="sig-name descname"><span class="pre">getInputData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.getInputData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.prepareSettings">
+<span class="sig-name descname"><span class="pre">prepareSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.prepareSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.reEvaluate">
+<span class="sig-name descname"><span class="pre">reEvaluate</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.reEvaluate" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.onInputChanged">
+<span class="sig-name descname"><span class="pre">onInputChanged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.onInputChanged" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.onOutputChanged">
+<span class="sig-name descname"><span class="pre">onOutputChanged</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.onOutputChanged" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.getInputVaue">
+<span class="sig-name descname"><span class="pre">getInputVaue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.getInputVaue" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.getInputLength">
+<span class="sig-name descname"><span class="pre">getInputLength</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.getInputLength" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.dictFirstValue">
+<span class="sig-name descname"><span class="pre">dictFirstValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.dictFirstValue" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.lenOrValOfDict">
+<span class="sig-name descname"><span class="pre">lenOrValOfDict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.lenOrValOfDict" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.updateOutputsPos">
+<span class="sig-name descname"><span class="pre">updateOutputsPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.updateOutputsPos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.updateInputsPos">
+<span class="sig-name descname"><span class="pre">updateInputsPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.updateInputsPos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.DataNode.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.DataNode.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizebleDataNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataGraphicsNode" title="datanodes.nodes.datanode.DataGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataGraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode.adjustSize">
+<span class="sig-name descname"><span class="pre">adjustSize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode.adjustSize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode.mousePressEvent">
+<span class="sig-name descname"><span class="pre">mousePressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QGraphicsSceneMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode.mousePressEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode.mouseMoveEvent">
+<span class="sig-name descname"><span class="pre">mouseMoveEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QGraphicsSceneMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode.mouseMoveEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode.mouseReleaseEvent">
+<span class="sig-name descname"><span class="pre">mouseReleaseEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QGraphicsSceneMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode.mouseReleaseEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizebleDataNode.paint">
+<span class="sig-name descname"><span class="pre">paint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QPainter</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QStyleOptionGraphicsItem</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">widget</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizebleDataNode.paint" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizableGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataGraphicsNode" title="datanodes.nodes.datanode.DataGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataGraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizableContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableContent.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableContent.serialize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableContent.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableContent.deserialize" title="Permalink to this definition"></a></dt>
+<dd><p>The default deserialize method. Has to be overwritten in the inherited class
+Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
+<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizableInputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/math.png'</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.resize">
+<span class="sig-name descname"><span class="pre">resize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.resize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.appendNewSocket">
+<span class="sig-name descname"><span class="pre">appendNewSocket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.appendNewSocket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.sortSockets">
+<span class="sig-name descname"><span class="pre">sortSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.sortSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.removeFreeInputs">
+<span class="sig-name descname"><span class="pre">removeFreeInputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.removeFreeInputs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.getSocketsNames">
+<span class="sig-name descname"><span class="pre">getSocketsNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.getSocketsNames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.updateSockets">
+<span class="sig-name descname"><span class="pre">updateSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.updateSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInputNode.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInputNode.update" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizableOutputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/math.png'</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.appendNewSocket">
+<span class="sig-name descname"><span class="pre">appendNewSocket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.appendNewSocket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.sortSockets">
+<span class="sig-name descname"><span class="pre">sortSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.sortSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.getSocketsNames">
+<span class="sig-name descname"><span class="pre">getSocketsNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.getSocketsNames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.updateSockets">
+<span class="sig-name descname"><span class="pre">updateSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.updateSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableOutputNode.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableOutputNode.update" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">ResizableInOutNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/math.png'</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.resize">
+<span class="sig-name descname"><span class="pre">resize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.resize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.appendNewSocket">
+<span class="sig-name descname"><span class="pre">appendNewSocket</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.appendNewSocket" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.sortSockets">
+<span class="sig-name descname"><span class="pre">sortSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.sortSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.removeFreeInputs">
+<span class="sig-name descname"><span class="pre">removeFreeInputs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.removeFreeInputs" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.getSocketsNames">
+<span class="sig-name descname"><span class="pre">getSocketsNames</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.getSocketsNames" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.updateSockets">
+<span class="sig-name descname"><span class="pre">updateSockets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.updateSockets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.ResizableInOutNode.update">
+<span class="sig-name descname"><span class="pre">update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.ResizableInOutNode.update" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.RemoveButton">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">RemoveButton</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">content</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.RemoveButton" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QToolButton</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.RemoveButton.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.RemoveButton.initUI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.RemoveButton.removePair">
+<span class="sig-name descname"><span class="pre">removePair</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.RemoveButton.removePair" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">AdjustableOutputGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataGraphicsNode" title="datanodes.nodes.datanode.DataGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataGraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">AdjustableOutputContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputContent.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputContent.serialize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputContent.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputContent.deserialize" title="Permalink to this definition"></a></dt>
+<dd><p>The default deserialize method. Has to be overwritten in the inherited class
+Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
+<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.datanode.</span></span><span class="sig-name descname"><span class="pre">AdjustableOutputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/math.png'</span></em><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">0</span></em><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">''</span></em><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.datanode.AdjustableOutputNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.datanode.AdjustableOutputNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="datanodes.nodes.comment.html" class="btn btn-neutral float-left" title="datanodes.nodes.comment module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datanodes.nodes.graphics.html" class="btn btn-neutral float-right" title="datanodes.nodes.graphics module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Sergii Nichenko.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

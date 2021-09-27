@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>datanodes.graphics.graphics_view module &mdash; datanodes 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="datanodes.nodes Package" href="datanodes.nodes.html" />
+    <link rel="prev" title="datanodes.graphics.graphics_socket module" href="datanodes.graphics.graphics_socket.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> datanodes
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="datanodes.html">datanodes Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datanodes.core.html">datanodes.core package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="datanodes.graphics.html">datanodes.graphics package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="datanodes.graphics.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_cutline.html">datanodes.graphics.graphics_cutline module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_edge.html">datanodes.graphics.graphics_edge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_group.html">datanodes.graphics.graphics_group module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_node.html">datanodes.graphics.graphics_node module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_scene.html">datanodes.graphics.graphics_scene module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.graphics.graphics_socket.html">datanodes.graphics.graphics_socket module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">datanodes.graphics.graphics_view module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.graphics.html#module-datanodes.graphics">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datanodes.nodes.html">datanodes.nodes Package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">datanodes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="datanodes.html">datanodes Package</a> &raquo;</li>
+          <li><a href="datanodes.graphics.html">datanodes.graphics package</a> &raquo;</li>
+      <li>datanodes.graphics.graphics_view module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rst/datanodes.graphics.graphics_view.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-datanodes.graphics.graphics_view">
+<span id="datanodes-graphics-graphics-view-module"></span><h1>datanodes.graphics.graphics_view module<a class="headerlink" href="#module-datanodes.graphics.graphics_view" title="Permalink to this headline"></a></h1>
+<dl class="py data">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.EDGE_SNAPPING_RADIUS">
+<span class="sig-prename descclassname"><span class="pre">datanodes.graphics.graphics_view.</span></span><span class="sig-name descname"><span class="pre">EDGE_SNAPPING_RADIUS</span></span><em class="property"> <span class="pre">=</span> <span class="pre">10</span></em><a class="headerlink" href="#datanodes.graphics.graphics_view.EDGE_SNAPPING_RADIUS" title="Permalink to this definition"></a></dt>
+<dd><p>Socket snapping distance</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.EDGE_SNAPPING">
+<span class="sig-prename descclassname"><span class="pre">datanodes.graphics.graphics_view.</span></span><span class="sig-name descname"><span class="pre">EDGE_SNAPPING</span></span><em class="property"> <span class="pre">=</span> <span class="pre">True</span></em><a class="headerlink" href="#datanodes.graphics.graphics_view.EDGE_SNAPPING" title="Permalink to this definition"></a></dt>
+<dd><p>Enable socket snapping feature</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.graphics.graphics_view.</span></span><span class="sig-name descname"><span class="pre">GraphicsView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QGraphicsView</span></code></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.scenePosChanged">
+<span class="sig-name descname"><span class="pre">scenePosChanged</span></span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.scenePosChanged" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.initUI" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.isSnappingEnabled">
+<span class="sig-name descname"><span class="pre">isSnappingEnabled</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">PyQt5.QtGui.QInputEvent</span><span class="p"><span class="pre">]</span></span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.isSnappingEnabled" title="Permalink to this definition"></a></dt>
+<dd><p>Return ‘’True’’ is the snapping is currently enabled</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.dragEnterEvent">
+<span class="sig-name descname"><span class="pre">dragEnterEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QDragEnterEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.dragEnterEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.dropEvent">
+<span class="sig-name descname"><span class="pre">dropEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QDropEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.dropEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.addDragEnterListener">
+<span class="sig-name descname"><span class="pre">addDragEnterListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.addDragEnterListener" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.addDropListener">
+<span class="sig-name descname"><span class="pre">addDropListener</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">callback</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.addDropListener" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.resetMode">
+<span class="sig-name descname"><span class="pre">resetMode</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.resetMode" title="Permalink to this definition"></a></dt>
+<dd><p>Helper function to re-set the grView state machine to default value</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.getItemAtClick">
+<span class="sig-name descname"><span class="pre">getItemAtClick</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.getItemAtClick" title="Permalink to this definition"></a></dt>
+<dd><p>return the object above which the mouse was clicked</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.clickClickDist">
+<span class="sig-name descname"><span class="pre">clickClickDist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.clickClickDist" title="Permalink to this definition"></a></dt>
+<dd><p>returns true if the mouse moved between the mouse click and the current event more
+then the threshold value set in the __init__</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.cutInersectingEdges">
+<span class="sig-name descname"><span class="pre">cutInersectingEdges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.cutInersectingEdges" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.setSocketHighlights">
+<span class="sig-name descname"><span class="pre">setSocketHighlights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenepos</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">PyQt5.QtCore.QPointF</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">highlighted</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">bool</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">float</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">50</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.setSocketHighlights" title="Permalink to this definition"></a></dt>
+<dd><p>Set/disable socket highlights in Scene area defined by <cite>scenepos</cite> and <cite>radius</cite></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.mousePressEvent">
+<span class="sig-name descname"><span class="pre">mousePressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.mousePressEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.mouseReleaseEvent">
+<span class="sig-name descname"><span class="pre">mouseReleaseEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.mouseReleaseEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.middleMouseButtonPress">
+<span class="sig-name descname"><span class="pre">middleMouseButtonPress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.middleMouseButtonPress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.middleMouseButtonRelease">
+<span class="sig-name descname"><span class="pre">middleMouseButtonRelease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.middleMouseButtonRelease" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.leftMouseButtonPress">
+<span class="sig-name descname"><span class="pre">leftMouseButtonPress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.leftMouseButtonPress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.leftMouseButtonRelease">
+<span class="sig-name descname"><span class="pre">leftMouseButtonRelease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.leftMouseButtonRelease" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.rightMouseButtonPress">
+<span class="sig-name descname"><span class="pre">rightMouseButtonPress</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.rightMouseButtonPress" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.rightMouseButtonRelease">
+<span class="sig-name descname"><span class="pre">rightMouseButtonRelease</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.rightMouseButtonRelease" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.mouseMoveEvent">
+<span class="sig-name descname"><span class="pre">mouseMoveEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.mouseMoveEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.keyPressEvent">
+<span class="sig-name descname"><span class="pre">keyPressEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QKeyEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.keyPressEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.deleteSelectedItem">
+<span class="sig-name descname"><span class="pre">deleteSelectedItem</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.deleteSelectedItem" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.graphics.graphics_view.GraphicsView.wheelEvent">
+<span class="sig-name descname"><span class="pre">wheelEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QWheelEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.graphics.graphics_view.GraphicsView.wheelEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="datanodes.graphics.graphics_socket.html" class="btn btn-neutral float-left" title="datanodes.graphics.graphics_socket module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datanodes.nodes.html" class="btn btn-neutral float-right" title="datanodes.nodes Package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Sergii Nichenko.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

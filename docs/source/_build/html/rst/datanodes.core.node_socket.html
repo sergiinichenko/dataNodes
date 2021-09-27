@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>datanodes.core.node_socket module &mdash; datanodes 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="datanodes.core.node_widget module" href="datanodes.core.node_widget.html" />
+    <link rel="prev" title="datanodes.core.node_settings module" href="datanodes.core.node_settings.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> datanodes
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="datanodes.html">datanodes Package</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="datanodes.core.html">datanodes.core package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="datanodes.core.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.main_conf.html">datanodes.core.main_conf module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.main_window.html">datanodes.core.main_window module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_clipboard.html">datanodes.core.node_clipboard module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_content_widget.html"><code class="xref py py-mod docutils literal notranslate"><span class="pre">node_content_widget</span></code> Module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge.html">datanodes.core.node_edge module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge_dragging.html">datanodes.core.node_edge_dragging module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge_intersect.html">datanodes.core.node_edge_intersect module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge_rerouting.html">datanodes.core.node_edge_rerouting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge_snapping.html">datanodes.core.node_edge_snapping module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_edge_validators.html">datanodes.core.node_edge_validators module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_group.html">datanodes.core.node_group module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_history.html">datanodes.core.node_history module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_listbox.html">datanodes.core.node_listbox module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_node.html">datanodes.core.node_node module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_properties.html">datanodes.core.node_properties module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_propertiesdock.html">datanodes.core.node_propertiesdock module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_scene.html">datanodes.core.node_scene module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_serializer.html">datanodes.core.node_serializer module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_settings.html">datanodes.core.node_settings module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">datanodes.core.node_socket module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_widget.html">datanodes.core.node_widget module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.node_window.html">datanodes.core.node_window module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="datanodes.core.utils.html">datanodes.core.utils module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.core.html#module-datanodes.core">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="datanodes.graphics.html">datanodes.graphics package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datanodes.nodes.html">datanodes.nodes Package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">datanodes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="datanodes.html">datanodes Package</a> &raquo;</li>
+          <li><a href="datanodes.core.html">datanodes.core package</a> &raquo;</li>
+      <li>datanodes.core.node_socket module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rst/datanodes.core.node_socket.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-datanodes.core.node_socket">
+<span id="datanodes-core-node-socket-module"></span><h1>datanodes.core.node_socket module<a class="headerlink" href="#module-datanodes.core.node_socket" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.core.node_socket.</span></span><span class="sig-name descname"><span class="pre">Socket</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">position</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">soket_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.core.node_serializer.html#datanodes.core.node_serializer.Serializer" title="datanodes.core.node_serializer.Serializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.core.node_serializer.Serializer</span></code></a></p>
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.value">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">value</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.value" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.type">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">type</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.type" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.label">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.label" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.pos">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">pos</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.pos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.is_input">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_input</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.is_input" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.is_output">
+<em class="property"><span class="pre">property</span> </em><span class="sig-name descname"><span class="pre">is_output</span></span><a class="headerlink" href="#datanodes.core.node_socket.Socket.is_output" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.setPos">
+<span class="sig-name descname"><span class="pre">setPos</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.setPos" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.connectEdge">
+<span class="sig-name descname"><span class="pre">connectEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.connectEdge" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.disconnectEdge">
+<span class="sig-name descname"><span class="pre">disconnectEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.disconnectEdge" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.clearEdges">
+<span class="sig-name descname"><span class="pre">clearEdges</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.clearEdges" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.hasEdge">
+<span class="sig-name descname"><span class="pre">hasEdge</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.hasEdge" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.hasEdges">
+<span class="sig-name descname"><span class="pre">hasEdges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.hasEdges" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.remove">
+<span class="sig-name descname"><span class="pre">remove</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.remove" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.core.node_socket.Socket.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">restore_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.core.node_socket.Socket.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="datanodes.core.node_settings.html" class="btn btn-neutral float-left" title="datanodes.core.node_settings module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datanodes.core.node_widget.html" class="btn btn-neutral float-right" title="datanodes.core.node_widget module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Sergii Nichenko.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

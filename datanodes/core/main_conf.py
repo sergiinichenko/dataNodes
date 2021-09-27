@@ -30,6 +30,9 @@ OP_MODE_DATA_RENAME = 405
 
 OP_MODE_COMMENT     = 500
 
+OP_STAT_DESCRIBE    = 601
+
+
 DATA_NODES = {}
 
 class ConfException(Exception) : pass

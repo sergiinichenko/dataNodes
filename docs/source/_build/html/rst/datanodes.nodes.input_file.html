@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>datanodes.nodes.input_file module &mdash; datanodes 0.1.0 documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="datanodes.nodes.inputs module" href="datanodes.nodes.inputs.html" />
+    <link rel="prev" title="datanodes.nodes.graphics module" href="datanodes.nodes.graphics.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> datanodes
+          </a>
+              <div class="version">
+                0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="datanodes.html">datanodes Package</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="datanodes.core.html">datanodes.core package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datanodes.graphics.html">datanodes.graphics package</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="datanodes.nodes.html">datanodes.nodes Package</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.array.html">datanodes.nodes.array module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.comment.html">datanodes.nodes.comment module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.datanode.html">datanodes.nodes.datanode module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.graphics.html">datanodes.nodes.graphics module</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">datanodes.nodes.input_file module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.inputs.html">datanodes.nodes.inputs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.math.html">datanodes.nodes.math module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.outputs.html">datanodes.nodes.outputs module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="datanodes.nodes.process.html">datanodes.nodes.process module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">datanodes</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="datanodes.html">datanodes Package</a> &raquo;</li>
+          <li><a href="datanodes.nodes.html">datanodes.nodes Package</a> &raquo;</li>
+      <li>datanodes.nodes.input_file module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/rst/datanodes.nodes.input_file.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-datanodes.nodes.input_file">
+<span id="datanodes-nodes-input-file-module"></span><h1>datanodes.nodes.input_file module<a class="headerlink" href="#module-datanodes.nodes.input_file" title="Permalink to this headline"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.input_file.</span></span><span class="sig-name descname"><span class="pre">FileInputGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataGraphicsNode" title="datanodes.nodes.datanode.DataGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataGraphicsNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.input_file.</span></span><span class="sig-name descname"><span class="pre">FileInputContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputContent.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputContent.serialize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputContent.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputContent.deserialize" title="Permalink to this definition"></a></dt>
+<dd><p>The default deserialize method. Has to be overwritten in the inherited class
+Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
+<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.input_file.</span></span><span class="sig-name descname"><span class="pre">FileInputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/valinput.png'</span></em><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">101</span></em><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'File'</span></em><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.openInputFile">
+<span class="sig-name descname"><span class="pre">openInputFile</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.openInputFile" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.readDFFile">
+<span class="sig-name descname"><span class="pre">readDFFile</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.readDFFile" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.input_file.FileInputNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.input_file.FileInputNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="datanodes.nodes.graphics.html" class="btn btn-neutral float-left" title="datanodes.nodes.graphics module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="datanodes.nodes.inputs.html" class="btn btn-neutral float-right" title="datanodes.nodes.inputs module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Sergii Nichenko.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

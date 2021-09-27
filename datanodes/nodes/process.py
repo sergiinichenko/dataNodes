@@ -498,7 +498,7 @@ class CleanContent(DataContent):
         self.mainlayout.addWidget(self.nanToNumValue, 5, 1)
 
         self.dropNAN = QCheckBox('Drop NAN', self)
-        self.dropNAN.toggle()
+        #self.dropNAN.toggle()
         self.dropNAN.stateChanged.connect(self.recalculate)
         self.mainlayout.addWidget(self.dropNAN, 6, 0, 1, 2)
 

@@ -134,20 +134,20 @@ class TableOutputNode(DataNode):
         self.properties = NodeProperties(self)
 
     def getFormatedValue(self, value):
-        if value > 1000000.0:
+        if np.abs(value) > 1000000.0:
             return "{:.3e}".format(value)
-        if value > 1000.0 and value <= 1000000.0:
+        if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0:
             return "{:.3e}".format(value)
-        if value > 100.0 and value <= 1000.0:
+        if np.abs(value) > 100.0 and np.abs(value) <= 1000.0:
             return "{:.2f}".format(value)
-        if value > 1.0 and value <= 100.0:
+        if np.abs(value) > 1.0 and np.abs(value) <= 100.0:
             return "{:.3f}".format(value)
-
-        if value > 0.01 and value <= 1.0:
+        if np.abs(value) > 0.01 and np.abs(value) <= 1.0:
             return "{:.4f}".format(value)
-
-        if value <= 0.01:
+        if np.abs(value) > 0.00 and np.abs(value) <= 0.01:
             return "{:.3e}".format(value)
+        else:
+            return "{:.1}".format(value)
 
     def fillTable(self):
         self.content.table.clear()
