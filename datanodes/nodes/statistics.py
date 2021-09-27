@@ -3,6 +3,9 @@ from pandas.core.frame import DataFrame
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+import matplotlib.pyplot as plt
 
 
 class DescribeGraphicsNode(ResizebleDataNode):
@@ -181,3 +184,108 @@ class DescribeOutputNode(DataNode):
 
 
 
+
+
+
+class CrossCorrelationGraphicsNode(ResizebleDataNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 300.0
+        self.height = 300.0
+
+class CrossCorrelationContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+
+        # graph area
+        self.graph = Figure()
+        #self.graph.autofmt_xdate()
+        #self.axis   = self.graph.add_subplot(111)
+        self.axis   = self.graph.add_axes([0., 0., 1., 1.])
+        
+        self.canvas = FigureCanvas(self.graph)
+        self.layout.addWidget(self.canvas)
+
+
+    def serialize(self):
+        res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.updateSize()
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+@register_node(OP_STAT_CROSSCORRPLOT)
+class CrossCorrelationNode(DataNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_STAT_CROSSCORRPLOT
+    op_title = "Cross Correlation"
+
+    def __init__(self, scene, inputs=[1], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+
+    def initInnerClasses(self):
+        self.content = CrossCorrelationContent(self)
+        self.grNode  = CrossCorrelationGraphicsNode(self)
+        self.properties = NodeProperties(self)
+
+
+    def prepareSettings(self):
+        return True
+
+
+    def drawPlot(self):
+        self.content.axis.clear()
+
+        size = len(self.value)
+        names = list(self.value.keys())
+
+        nofelems = 0
+        for key in self.value:
+            if isinstance(self.value[key], (np.ndarray)):
+                if len(self.value[key]) > nofelems : nofelems = len(self.value[key])
+
+
+        data = np.empty((0, nofelems))
+        for key in self.value:
+            data = np.append(data, [self.value[key]], axis=0)
+        corr = np.corrcoef(data)
+
+        self.content.axis.matshow(corr, vmin = -1.0, vmax = 1.0)
+
+        ticks = np.arange(0, size, 1)
+        self.content.axis.set_xticks(ticks)
+        self.content.axis.set_yticks(ticks)
+
+        self.content.axis.set_xticklabels(names, rotation=60)
+        self.content.axis.set_yticklabels(names)
+
+        for i in range(size):
+            for j in range(size):
+                text = self.content.axis.text(j, i, np.round(corr[i, j], decimals=2),
+                        ha='center', va='center', color='white')
+
+        self.content.graph.tight_layout()
+        self.content.canvas.draw()
+
+
+    def evalImplementation(self, silent=False):
+        if isinstance(self.value, dict):
+            self.drawPlot()
+        else:
+            pass
+        return True
