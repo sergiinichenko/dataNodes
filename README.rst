@@ -1,4 +1,5 @@
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/datanodes.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/datanodes.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/datanodes.png
     :width: 100
     :alt: Screenshot of Simple Data Node
 
@@ -84,7 +85,8 @@ Basic Tutorial
 
 Once you run the DataNodes you will see the empty screen of the DataNodes editor window.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/EmptyDataNodes.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/EmptyDataNodes.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/EmptyDataNodes.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -92,13 +94,15 @@ You can use ether the main menu to creat new file (File > New) or by using the "
 Here you see how the new file looks like. 
 It allows you to zoom-in and zoom-out using your mouse wheel and to pan around using your mouse middle button.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/NewDataNodes.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/NewDataNodes.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/NewDataNodes.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
 To start working with the data in the DanaNodes you need a source of data. You can drop one of the input nodes into the editor window to start working. There are a number of options among which is the File Input node. To create new File Input node press the right mouse button to call the context menu. From the context menu select (Input > File).
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddInputFile.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddInputFile.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddInputFile.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -106,7 +110,8 @@ This will create the Input File node which will have a yellow round color to it 
 Now to see the data that is read by the File Input node you can use the Table Output node. 
 Call the context menu (right mouse click) and select (Output > Table). The newly created Table Output node will as well have a yellow tint to it and an exlamation mark. This is due to the fact that there is no input data provided to this node.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddTableOutput.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddTableOutput.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddTableOutput.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -114,7 +119,8 @@ And here we come to the main concept of the DataNodes package: the data between 
 
 To see this concept in action you have to connect the output socket of Input File node (yellow dot on the right side of the File Input node) to the input socket of the Table Input node (yellow dot on the left side of the Table Output node). Press once with a left mouse button on the output socket of the File Input node and you will see and edge that is being dragged from the socket to the mouse cursor. Now move the mouse cursor to the input socket of the Table Output node and press left mouse button again. The edge will snap to the socket and the two nodes will connect through the newly created edge. And the data will be transfered from the File Input node to the Table Output node.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/ConnectInputToTable.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/ConnectInputToTable.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/ConnectInputToTable.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -122,13 +128,15 @@ But you will not see the data currently. That is because the data that you are r
 
 To clean the data you have to use the Clean node. Add it to the editor by calling the context menu and selectig (Data Process > Clean)
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddCleanNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddCleanNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddCleanNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
 The Clean node is added to the editor. But we have to locate it between our nodes to clean the data from the File Input node before going to the Table Output node.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/CleanNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/CleanNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/CleanNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -136,7 +144,8 @@ To do that we could create two new edges from the File Input node to the Clean n
 
 But there is a faster way to do it. You just drag the Clean node (by pressing left mouse button on the header of the Clean node and dragging it) on the already existing edge between the File Input node and Table Output nodes. When you will drag the Clean node above the edge it will highlight blue indicating that it is ready to be dropped. When you release the Clean node it will "cut into" the edge and will create two new edges insted of the existing one.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/DropCleanNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/DropCleanNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/DropCleanNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -146,13 +155,15 @@ But what this node does is it goes through each entry in the data and "fixes" th
 
 But in our case the data will be cleaned and prepared for later work.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/SetupCleanNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/SetupCleanNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/SetupCleanNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
 Now you should see the data in the table.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddSeparateNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddSeparateNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddSeparateNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -160,13 +171,15 @@ You can further manipulate data.
 
 For exmple lets separate some data and plot it. Add a (Data Process > Separate) node to the scene. 
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/ConnectSeparateNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/ConnectSeparateNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/ConnectSeparateNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
 And connect the Clean node output, which provides cleaned data, to the Separate node. You will see a number of the output sockets on the Separate node each corresponding to a certain "column" in the data set from the Clean node.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/SeparateNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/SeparateNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/SeparateNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -176,13 +189,15 @@ Now you can select a certain set of data to be combined again for later processi
 
 Add a (Data Process > Combine) node and connect "x" and "float" data to the input sockets of the Combine node. Each time you connect an edge to the combine node another input socket will be created to allow for adding more edges.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddCombineNode.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddCombineNode.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddCombineNode.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
 Add a (Output > Plot) node and connect Combine node output socket to the input socket of the Plot node. You will see the data plotted. The first etry of the Combine node will serve as an "x" value and the rest of the data will be plotted against it.
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/tutorial-basic/AddPlot.png
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddPlot.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/tutorial-basic/AddPlot.png
     :width: 500
     :alt: Screenshot of Simple Data Node
 
@@ -205,8 +220,9 @@ I am constantly working on adding new nodes to the package to make it more flexi
 Screenshots
 ===========
 
-.. image:: https://github.com/sergiinichenko/dataNodes/blob/master/media/img/DataNodes.png
-  :alt: Screenshot of Simple Data Node
+.. image:: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/img/DataNodes.png
+    :target: https://raw.githubusercontent.com/sergiinichenko/dataNodes/master/media/img/DataNodes.png
+    :alt: Screenshot of Simple Data Node
 
 Other links
 ===========
