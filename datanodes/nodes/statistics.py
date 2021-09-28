@@ -5,6 +5,7 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
 
 
@@ -184,6 +185,18 @@ class DescribeOutputNode(DataNode):
 
 
 
+class MplCanvas(FigureCanvas):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
+        self.axes = self.fig.add_subplot(111)
+
+        # create an axes on the right side of ax. The width of cax will be 5%
+        # of ax and the padding between cax and ax will be fixed at 0.05 inch.
+        divider = make_axes_locatable(self.axes)
+        self.bar = divider.append_axes("right", size="5%", pad=0.05)
+
+        super(MplCanvas, self).__init__(self.fig)
 
 
 
@@ -201,12 +214,11 @@ class CrossCorrelationContent(DataContent):
         self.setLayout(self.layout)
 
         # graph area
-        self.graph = Figure()
+        #self.graph = Figure()
         #self.graph.autofmt_xdate()
         #self.axis   = self.graph.add_subplot(111)
-        self.axis   = self.graph.add_axes([0., 0., 1., 1.])
-        
-        self.canvas = FigureCanvas(self.graph)
+        #self.axis   = self.graph.add_axes([0., 0., 0.8, 0.8])
+        self.canvas = MplCanvas()
         self.layout.addWidget(self.canvas)
 
 
@@ -249,9 +261,9 @@ class CrossCorrelationNode(DataNode):
 
 
     def drawPlot(self):
-        self.content.axis.clear()
+        self.content.canvas.axes.clear()
 
-        size = len(self.value)
+        size  = len(self.value)
         names = list(self.value.keys())
 
         nofelems = 0
@@ -265,21 +277,24 @@ class CrossCorrelationNode(DataNode):
             data = np.append(data, [self.value[key]], axis=0)
         corr = np.corrcoef(data)
 
-        self.content.axis.matshow(corr, vmin = -1.0, vmax = 1.0)
+        im = self.content.canvas.axes.imshow(corr, vmin = -1.0, vmax = 1.0)
+        plt.colorbar(im, cax=self.content.canvas.bar)
+        #bar = self.content.canvas.fig.colorbar(im)
+
 
         ticks = np.arange(0, size, 1)
-        self.content.axis.set_xticks(ticks)
-        self.content.axis.set_yticks(ticks)
+        self.content.canvas.axes.set_xticks(ticks)
+        self.content.canvas.axes.set_yticks(ticks)
 
-        self.content.axis.set_xticklabels(names, rotation=60)
-        self.content.axis.set_yticklabels(names)
+        self.content.canvas.axes.set_xticklabels(names, rotation=60)
+        self.content.canvas.axes.set_yticklabels(names)
 
         for i in range(size):
             for j in range(size):
-                text = self.content.axis.text(j, i, np.round(corr[i, j], decimals=2),
+                text = self.content.canvas.axes.text(j, i, np.round(corr[i, j], decimals=2),
                         ha='center', va='center', color='white')
 
-        self.content.graph.tight_layout()
+        self.content.canvas.fig.tight_layout()
         self.content.canvas.draw()
 
 
