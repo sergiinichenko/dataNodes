@@ -245,7 +245,7 @@ class CrossCorrelationContent(DataContent):
 class CrossCorrelationNode(DataNode):
     icon = "icons/valoutput.png"
     op_code = OP_STAT_CROSSCORRPLOT
-    op_title = "Cross Correlation"
+    op_title = "Correlation Heatmap"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
