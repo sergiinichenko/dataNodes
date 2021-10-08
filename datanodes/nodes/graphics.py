@@ -4,6 +4,10 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
+from sklearn.linear_model import LinearRegression
+import matplotlib.tri as tri
+from mpl_toolkits.axes_grid1 import make_axes_locatable
+import matplotlib.pyplot as plt
 
 LINE_STYLES = ['solid',   'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'dotted', 'dashed','dashdot']
 COLORS      = ['#D98880', '#AF7AC5', '#85C1E9', '#6C3483', '#196F3D', '#CB4335', '#58D68D', '#2874A6', '#A2D9CE', '#935116', '#DC7633', '#E59866', '#154360', '#16A085', '#7D6608', '#313131']
@@ -187,10 +191,10 @@ class GraphicsProperties(NodeProperties):
         except Exception as e : dumpException(e)
         return res
 
-@register_node(OP_MODE_GRAPHOUTPUT)
+@register_node(OP_MODE_PLOT)
 class GraphicsOutputNode(DataNode):
     icon = "icons/valoutput.png"
-    op_code = OP_MODE_GRAPHOUTPUT
+    op_code = OP_MODE_PLOT
     op_title = "Plot"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
@@ -233,4 +237,183 @@ class GraphicsOutputNode(DataNode):
             self.drawPlot()
         else:
             pass
+        return True
+
+
+
+
+
+
+
+
+
+
+class TernaryPlotCanvas(FigureCanvas):
+
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
+        self.axes = self.fig.add_subplot(111)
+        # create an axes on the right side of ax. The width of cax will be 5%
+        # of ax and the padding between cax and ax will be fixed at 0.05 inch.
+        #divider = make_axes_locatable(self.axes)
+        #self.bar = divider.append_axes("right", size="5%", pad=0.1)
+        self.bar = self.fig.add_axes([0.90, 0.25, 0.05, 0.70])#divider.append_axes("right", size="5%", pad=0.2)
+
+        super(TernaryPlotCanvas, self).__init__(self.fig)
+
+
+
+class TernaryPlotGraphicsNode(ResizebleDataNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 300.0
+        self.height = 300.0
+
+class TernaryPlotContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+
+        self.canvas = TernaryPlotCanvas()
+        self.layout.addWidget(self.canvas)
+
+
+    def serialize(self):
+        res = super().serialize()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.updateSize()
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+@register_node(OP_MODE_PLOT_TERNARY)
+class TernaryPlotNode(DataNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_MODE_PLOT_TERNARY
+    op_title = "Ternary Diagram"
+
+    def __init__(self, scene, inputs=[1], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+
+    def initInnerClasses(self):
+        self.content = TernaryPlotContent(self)
+        self.grNode  = TernaryPlotGraphicsNode(self)
+        self.properties = NodeProperties(self)
+
+    def prepareSettings(self):
+        return True
+
+
+    def cAxes(self, ax, x, y, pos='x'):
+        xmin = x[0]
+        xmax = x[-1]
+        ymin = y[0]
+        ymax = y[-1]
+        ax.plot(x, y, color='black')
+        
+        xt = xmin
+        yt = ymin
+        dx = (xmax - xmin) / 10
+        dy = (ymax - ymin) / 10
+        x2 = ( dx * np.cos(1.5708) - dy * np.sin(1.5708) ) / 5 
+        y2 = ( dy * np.cos(1.5708) + dx * np.sin(1.5708) ) / 5 
+        for i in range(0, 11):
+            ax.plot([xt, xt+x2], [yt, yt+y2], color='black')
+            ax.text(xt + 1.75*x2, yt + 1.75*y2, i/10,
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    color='black', fontsize=15)
+            xt = xt + dx
+            yt = yt + dy
+        
+        
+        
+    def mesh(self, num):
+        # creating mesh 
+        sc = 0.5 * np.sqrt(3) * 1.0
+        dx = 1.0 / (num)
+        dy = 1.0 / (num)
+        size = int((num+1) * ((num+1) + 1) / 2)
+        xm = np.zeros(size)
+        ym = np.zeros(size)
+        index = 0
+        for i in range(0, (num+1)):
+            for n in range(0, i+1):
+                xm[index] = 0.5 - 0.5 * i / num + 1.0 * n / num
+                ym[index] = (1.0 - dy * i) * sc
+                index = index + 1
+        
+        return np.array([xm, ym]).transpose()
+    
+
+    def drawPlot(self):
+        self.content.canvas.axes.clear()
+
+        size  = len(self.value)
+        names = list(self.value.keys())
+
+        # barycentric coords: (a,b,c)
+        self.a = np.array( self.value[names[0]] )
+        self.b = np.array( self.value[names[1]] )
+        self.c = np.array( self.value[names[2]] )
+    
+        # values is stored in the last column
+        self.v = np.array( self.value[names[-1]] )
+
+        # translate the data to cartesian corrds
+        self.x = 0.5 * ( 2. * self.b + self.c ) / ( self.a + self.b + self.c )
+        self.y = 0.5 * np.sqrt(3) * self.c / (self.a + self.b + self.c)
+        ylim   = 0.5 * np.sqrt(3) * 1.0
+            
+        #add frame
+        self.cAxes(self.content.canvas.axes, [0, 0.5], [0, ylim])
+        self.cAxes(self.content.canvas.axes, [1, 0],   [0, 0])
+        self.cAxes(self.content.canvas.axes, [0.5, 1.0], [ylim, 0])
+        
+        # plot the contour
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v)
+        plt.colorbar(im, cax=self.content.canvas.bar)
+        self.content.canvas.bar.set_label(names[-1])
+        
+        #position the axis labels
+        self.content.canvas.axes.text(1.05, -0.05,  names[1], fontsize=24, ha="left")
+        self.content.canvas.axes.text(0.50,  0.92,  names[2], fontsize=24, ha="center")
+        self.content.canvas.axes.text(-0.05,-0.05,  names[0], fontsize=24, ha="right")
+
+        self.content.canvas.axes.set_axis_off()
+        self.content.canvas.draw()
+
+
+    def evalImplementation(self, silent=False):
+        input_edge = self.getInput(0)
+        if not input_edge:
+            if DEBUG : print("OUTNODE_TXT: no input edge")
+            self.setInvalid()
+            if DEBUG : print("OUTNODE_TXT: set invalid")
+            self.e = "Does not have and intry Node"
+            self.content.textOut.clear()
+            self.content.textOut.insertPlainText("NaN")
+            if DEBUG : print("OUTNODE_TXT: clear the content")
+            return False
+        else:            
+            if DEBUG : print("OUTNODE_TXT: process the input edge data")
+            self.setDirty(False)
+            self.setInvalid(False)
+            if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
+            self.e = ""
+            self.value = input_edge.value
+            self.drawPlot()
         return True
