@@ -361,6 +361,10 @@ class TernaryPlotNode(ResizableInputNode):
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
+        self.vmax = 1.0
+        self.vmin = 0.0
+        self.cmap = plt.cm.viridis
+        self.inputs = []
 
     def initInnerClasses(self):
         self.content = TernaryPlotContent(self)
@@ -424,19 +428,19 @@ class TernaryPlotNode(ResizableInputNode):
         return np.array([xm, ym]).transpose()
     
 
-    def drawPlot(self):
+    def drawTernary(self, value):
         self.content.canvas.axes.clear()
-
-        size  = len(self.value)
-        names = list(self.value.keys())
+        names = list(value.keys())
 
         # barycentric coords: (a,b,c)
-        self.a = np.array( self.value[names[0]] )
-        self.b = np.array( self.value[names[1]] )
-        self.c = np.array( self.value[names[2]] )
+        self.a = np.array( value[names[0]] )
+        self.b = np.array( value[names[1]] )
+        self.c = np.array( value[names[2]] )
     
         # values is stored in the last column
-        self.v = np.array( self.value[names[-1]] )
+        self.v = np.array( value[names[-1]] )
+        self.vmin = self.v.min()
+        self.vmax = self.v.max()
 
         # translate the data to cartesian corrds
         self.x = 0.5 * ( 2. * self.b + self.c ) / ( self.a + self.b + self.c )
@@ -449,7 +453,7 @@ class TernaryPlotNode(ResizableInputNode):
         self.cAxes(self.content.canvas.axes, [0.5, 1.0], [ylim, 0])
         
         # plot the contour
-        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v)
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
         plt.colorbar(im, cax=self.content.canvas.bar)
         self.content.canvas.bar.set_label(names[-1])
         
@@ -458,13 +462,40 @@ class TernaryPlotNode(ResizableInputNode):
         self.content.canvas.axes.text(0.50,  0.92,  names[2], fontsize=24, ha="center")
         self.content.canvas.axes.text(-0.05,-0.05,  names[0], fontsize=24, ha="right")
 
+    def addScatter(self, value):
+        names = list(value.keys())
+
+        # barycentric coords: (a,b,c)
+        self.a = np.array( value[names[0]] )
+        self.b = np.array( value[names[1]] )
+        self.c = np.array( value[names[2]] )
+    
+        # values is stored in the last column
+        self.v = np.array( value[names[-1]] )
+
+        # translate the data to cartesian corrds
+        self.x = 0.5 * ( 2. * self.b + self.c ) / ( self.a + self.b + self.c )
+        self.y = 0.5 * np.sqrt(3) * self.c / (self.a + self.b + self.c)
+        ylim   = 0.5 * np.sqrt(3) * 1.0
+                    
+        # plot the contour
+        self.content.canvas.axes.scatter(self.x, self.y, s=200, c=self.v, 
+                                         cmap=self.cmap, vmin=self.vmin, vmax=self.vmax, 
+                                         edgecolors='black', linewidths=1.0)
+
+    def drawPlot(self):
+        self.drawTernary(self.inputs[0].value)
+        if len(self.inputs) > 1:
+            for input in self.inputs[1:]:
+                if input.value:
+                    self.addScatter(input.value)
         self.content.canvas.axes.set_axis_off()
         self.content.canvas.draw()
 
 
     def evalImplementation(self, silent=False):
-        input_edge = self.getInput(0)
-        if not input_edge:
+        self.inputs = self.getInputs()
+        if not self.inputs:
             if DEBUG : print("OUTNODE_TXT: no input edge")
             self.setInvalid()
             if DEBUG : print("OUTNODE_TXT: set invalid")
@@ -479,6 +510,7 @@ class TernaryPlotNode(ResizableInputNode):
             self.setInvalid(False)
             if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
             self.e = ""
-            self.value = input_edge.value
+            self.value = self.inputs[0].value
             self.drawPlot()
+
         return True
