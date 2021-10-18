@@ -537,3 +537,108 @@ class Mesh2DNode(DataNode):
             self.e = e
             dumpException(e)
             return False            
+
+
+
+
+
+
+
+
+
+
+
+class TernaryGridGraphicsNode(DataGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 140.0
+        self.height = 70.0
+
+class TernaryGridContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setSpacing(0)
+        self.setLayout(self.layout)
+
+        self.label_size = QLabel("Size", self)        
+        self.label_size.setAlignment(Qt.AlignRight)
+        self.size = QLineEdit("10", self)
+        self.size.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.label_size, 1, 0)
+        self.layout.addWidget(self.size, 1, 1)
+
+    def serialize(self):
+        res = super().serialize()
+        res['size']  = self.size.text()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.size.setText(res['size'])
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+@register_node(OP_TERNARY_GRID)
+class TernaryGridNode(DataNode):
+    icon = "icons/math.png"
+    op_code = OP_TERNARY_GRID
+    op_title = "Grid ternary"
+
+    def __init__(self, scene, inputs=[1], outputs=[2]):
+        super().__init__(scene, inputs, outputs)
+        self.eval()
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+
+    def initInnerClasses(self):
+        self.content = TernaryGridContent(self)
+        self.grNode  = TernaryGridGraphicsNode(self)
+        self.properties = NodeProperties(self)
+        self.content.size.textChanged.connect(self.recalculateNode)
+
+
+    def checkTheInputs(self):
+        if self.getInput(0) is not None:
+            self.content.size.setReadOnly(True)
+        else:
+            self.content.size.setReadOnly(False)
+
+    def evalImplementation(self, silent=False):
+        try:
+            self.checkTheInputs()
+
+            if self.getInput(0) is not None:
+                size = self.getInputVaue(self.getInput(0).value, float(self.content.size.text()))
+                self.content.size.setText("{:.2f}".format(size))
+            else:
+                size = float(self.content.size.text())
+
+            size = int(size)
+            step = 1.0 / size
+
+            x = np.empty((0))
+            y = np.empty((0))
+            z = np.empty((0))
+
+            for i in range(size):
+                x = np.append(x, np.arange(0, 1.0 + step * (1.0 - i), step))
+                y = np.append(y, np.full(size + 1 - i, i * step))
+            x = np.append(x, [0.0])
+            y = np.append(y, [1.0])
+            z = 1.0 - x - y
+
+            self.value = { "x" : x, "y" : y, 'z' : z }
+            self.getOutput(0).value =  self.value
+            return True
+        except Exception as e : 
+            self.e = e
+            dumpException(e)
+            return False            

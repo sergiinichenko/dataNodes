@@ -300,13 +300,16 @@ class NodeSubWindow(NodeWidget):
         self.populateSubMenu(self.input_menu, [100, 200])
 
         self.output_menu = context_menu.addMenu("Output")
-        self.populateSubMenu(self.output_menu, [200, 300])
+        self.populateSubMenu(self.output_menu, [200, 249])
 
         self.math_menu = context_menu.addMenu("Math")
         self.populateSubMenu(self.math_menu, [300, 400])
 
         self.data_menu = context_menu.addMenu("Data process")
         self.populateSubMenu(self.data_menu, [400, 500])
+
+        self.output_menu = context_menu.addMenu("Plot")
+        self.populateSubMenu(self.output_menu, [250, 300])
 
         self.data_menu = context_menu.addMenu("Additional")
         self.populateSubMenu(self.data_menu, [500, 600])
