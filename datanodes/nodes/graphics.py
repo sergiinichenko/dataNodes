@@ -88,7 +88,7 @@ class GraphicsProperties(NodeProperties):
         self.linesize  = {}
         self.linecolor = {}
         self.linestyle = {}
-        self.linetype  = {}
+        self.graphtype = {}
         self.c = 0
 
     def resetWidgets(self):
@@ -97,31 +97,38 @@ class GraphicsProperties(NodeProperties):
         self.linesize  = {}
         self.linecolor = {}
         self.linestyle = {}
-        self.linetype  = {}
+        self.graphtype  = {}
         self.c = 0
 
     def cleanProperties(self):
-        value = self.node.value
-        x_name = list(value.keys())[0]
+        for input in self.node.inputs:
+            if not input.value : return 
 
-        for name in value:
-            if name != x_name:
-                if name not in self.names : 
-                    self.names[name]     = name
-                    self.linecolor[name] = COLORS[self.c]
-                    self.linestyle[name] = "solid"
-                    self.linetype[name]  = "line"
-                    self.linesize[name]  = 2.0
-                    self.c += 1
+            value  = input.value
+            x_name = list(value.keys())[0]
+
+            for name in value:
+                if name != x_name:
+                    if name not in self.names : 
+                        self.names[name]     = name
+                        self.linecolor[name] = COLORS[self.c]
+                        self.linestyle[name] = "solid"
+                        self.graphtype[name] = "line"
+                        self.linesize[name]  = 2.0
+                        self.c += 1
 
         for name in reversed(self.names):
-            if name not in value : 
+            to_remove = True
+            for input in self.node.inputs:
+                if name in input.value: 
+                    to_remove = False
+
+            if to_remove:
                 del self.names[name]
                 del self.linecolor[name]
                 del self.linestyle[name]
-                del self.linetype[name]
+                del self.graphtype[name]
                 del self.linesize[name]
-
 
 
     def fillWidgets(self):
@@ -161,7 +168,7 @@ class GraphicsProperties(NodeProperties):
         for name in self.names:
             styles.append(self.linestyle[name])
             colors.append(self.linecolor[name])
-            types.append( self.linetype[name])
+            types.append( self.graphtype[name])
             sizes.append( self.linesize[name])
             names.append(name)
 
@@ -181,7 +188,7 @@ class GraphicsProperties(NodeProperties):
                     self.names[name]     = name
                     self.linecolor[name] = data['colors'][i]
                     self.linestyle[name] = data['styles'][i]
-                    self.linetype[name]  = data['types'][i]
+                    self.graphtype[name]  = data['types'][i]
                     self.linesize[name]  = data['sizes'][i]
                     self.c += 1
                 self.fillWidgets()
@@ -191,53 +198,100 @@ class GraphicsProperties(NodeProperties):
         except Exception as e : dumpException(e)
         return res
 
+
 @register_node(OP_MODE_PLOT)
-class GraphicsOutputNode(DataNode):
+class GraphicsOutputNode(ResizableInputNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_PLOT
     op_title = "Plot"
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
+        self.inputs    = []
         self.linecolor = {}
         self.linestyle = {}
-        self.linetype  = {}
+        self.graphtype = {}
         self.linesize  = {}
         self.c = 0
-        
+        self.input_socket_position  = LEFT_TOP
+
+    def onInputChange(self, new_edge=None):
+        self.content.changed.emit()
+
+    def resize(self):
+        pass
+
     def initInnerClasses(self):
         self.content    = GraphicsOutputContent(self)
         self.grNode     = GraphicsOutputGraphicsNode(self)
         self.properties = GraphicsProperties(self)
+        self.content.changed.connect(self.recalculateNode)
+        self.content.changed.connect(self.updateSockets)
 
 
     def prepareSettings(self):
         self.properties.resetProperties()
         self.properties.cleanProperties()
         self.properties.fillWidgets()
-
         return True
 
-    def drawPlot(self):
+    def prepareCanvas(self):
+        value = self.getInput(0).value
         self.content.axis.clear()
-        x_name = list(self.value.keys())[0]
-        x_val  = self.value[x_name]
-        for i, name in enumerate(self.value):
-            if name != x_name:
-                self.content.axis.plot(x_val, self.value[name], label=name, 
-                                        color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
-                                        linewidth=self.properties.linesize[name])
-        self.content.axis.legend(loc = 1)
+        x_name = list(value.keys())[0]
+        self.x_val  = value[x_name]
         self.content.axis.set_xlabel(x_name)
+
+    def addData(self, value):
+        if not value : return 
+
+        x_name = list(value.keys())[0]
+        x_val  = value[x_name]
+
+        for i, name in enumerate(value):
+            if name != x_name:
+                if self.properties.graphtype[name] == 'line':
+                    self.content.axis.plot(x_val, value[name], label=name, 
+                                            color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
+                                            linewidth=self.properties.linesize[name])
+
+                if self.properties.graphtype[name] == 'scatter':
+                    self.content.axis.scatter(x_val, value[name], label=name, 
+                                            color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
+                                            linewidth=self.properties.linesize[name])
+
+    def drawPlot(self):
+        self.prepareCanvas()
+        for input in self.inputs:
+            self.addData(input.value)
+        self.content.axis.legend(loc = 1)
         self.content.canvas.draw()
 
 
     def evalImplementation(self, silent=False):
-        if isinstance(self.value, dict):
-            self.drawPlot()
+        self.inputs = self.getInputs()
+        if not self.inputs:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
         else:
-            pass
-        return True
+            self.sortSockets()
+            if len(self.inputs) > 0:      
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = {}
+
+                self.drawPlot()
+
+                return True
+            else:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = "Not enough input data"
+                self.getOutput(0).value = 0
+                self.getOutput(0).type = "float"
+                return False
 
 
 
@@ -300,7 +354,7 @@ class TernaryPlotContent(DataContent):
         return res
 
 @register_node(OP_MODE_PLOT_TERNARY)
-class TernaryPlotNode(DataNode):
+class TernaryPlotNode(ResizableInputNode):
     icon = "icons/valoutput.png"
     op_code = OP_MODE_PLOT_TERNARY
     op_title = "Ternary Diagram"
@@ -312,10 +366,21 @@ class TernaryPlotNode(DataNode):
         self.content = TernaryPlotContent(self)
         self.grNode  = TernaryPlotGraphicsNode(self)
         self.properties = NodeProperties(self)
+        self.content.changed.connect(self.updateSockets)
+
+    def prepareSettings(self):
+        """
+        self.properties.resetProperties()
+        self.properties.cleanProperties()
+        self.properties.fillWidgets()
+        """
+        return True
 
     def prepareSettings(self):
         return True
 
+    def resize(self):
+        pass
 
     def cAxes(self, ax, x, y, pos='x'):
         xmin = x[0]
