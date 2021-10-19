@@ -430,6 +430,7 @@ class TernaryPlotNode(ResizableInputNode):
 
     def drawTernary(self, value):
         self.content.canvas.axes.clear()
+        if not value : return
         names = list(value.keys())
 
         # barycentric coords: (a,b,c)
@@ -500,8 +501,6 @@ class TernaryPlotNode(ResizableInputNode):
             self.setInvalid()
             if DEBUG : print("OUTNODE_TXT: set invalid")
             self.e = "Does not have and intry Node"
-            self.content.textOut.clear()
-            self.content.textOut.insertPlainText("NaN")
             if DEBUG : print("OUTNODE_TXT: clear the content")
             return False
         else:            
