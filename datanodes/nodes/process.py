@@ -640,9 +640,9 @@ class CleanNode(DataNode):
                         nansel = None
                         for name in self.filtered:
                             if nansel is None:
-                                nansel = np.isnan(self.filtered[name])
+                                nansel = ~np.isnan(self.filtered[name])
                             else:
-                                sel = np.isnan(self.filtered[name])
+                                sel = ~np.isnan(self.filtered[name])
                                 nansel = np.logical_and(nansel, sel)
                         for name in self.filtered:
                             self.filtered[name] = self.filtered[name][nansel]

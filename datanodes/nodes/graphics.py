@@ -51,15 +51,26 @@ class LineStylePicker(QComboBox):
         self.addItem("dashed")
         self.addItem("dashdot")
         self.addItem("dotted")
+        self.addItem(" ")
+        self.addItem("o")
+        self.addItem("x")
+        self.addItem("s")
+
         if value is not None:
             index = self.findText(value, Qt.MatchFixedString)
             self.setCurrentIndex(index)
         self.currentIndexChanged.connect(self.chageStyle)
 
     def chageStyle(self):
-        self.node.properties.linestyle[self.name] = self.currentText()
-        self.node.drawPlot()    
-
+        item = self.currentText()
+        if item == "solid" or item == "dashed" or item == "dashdot" or item == "dotted":
+            self.node.properties.graphtype[self.name] = 'line'
+            self.node.properties.linestyle[self.name] = item
+            self.node.drawPlot()    
+        else:
+            self.node.properties.graphtype[self.name] = 'scatter'
+            self.node.properties.linestyle[self.name] = item
+            self.node.drawPlot()    
 
 class LineSizePicker(QLineEdit):
     def __init__(self, node, name, text):
@@ -81,6 +92,30 @@ class LineSizePicker(QLineEdit):
         return float(self.text())
 
 
+class ColorPicker(QWidget):
+    def __init__(self, node, name, color=None):
+        super().__init__()
+        self.color = color
+        self.node = node
+        self.name = name
+        self.setAutoFillBackground(True)
+        self.setAttribute(Qt.WA_StyledBackground, True)
+        self.setStyleSheet("background-color:" + self.color + " ;")
+
+    def mouseReleaseEvent(self, event):
+        self.color = QColorDialog.getColor()
+
+        if self.color.isValid():
+            print(self.color.name())
+            self.setStyleSheet("background-color:" + self.color.name() + " ;")
+
+            try:
+                self.node.properties.linecolor[self.name] = self.color.name()
+                self.node.drawPlot()    
+            except Exception as e:
+                self.node.e = e
+
+
 class GraphicsProperties(NodeProperties):
     def __init__(self, node, parent=None):
         super().__init__(node)
@@ -90,6 +125,12 @@ class GraphicsProperties(NodeProperties):
         self.linestyle = {}
         self.graphtype = {}
         self.c = 0
+        self.xtitle    = ""
+        self.xsize     = 12.0
+        self.ytitle    = ""
+        self.ysize     = 12.0
+        self.ticksize  = 10.0
+        self.legendsize = 12.0
 
     def resetWidgets(self):
         self.resetProperties()
@@ -130,8 +171,74 @@ class GraphicsProperties(NodeProperties):
                 del self.graphtype[name]
                 del self.linesize[name]
 
+    def adjustAxes(self):
+        self.xtitle = self.xlabelW.text()
+        self.xsize  = float(self.xsizeW.text())
+        self.ytitle = self.ylabelW.text()
+        self.ysize  = float(self.ysizeW.text())
+        self.ticksize = float(self.ticksizeW.text())
+        self.legendsize = float(self.legendsizeW.text())
+        self.node.drawPlot()
+
 
     def fillWidgets(self):
+
+        label = QLabel("x name", self)        
+        label.setStyleSheet("margin-top: 10px;")
+        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.xsizeW  = QLineEdit(str(self.xsize), self)
+        self.xsizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(label, self.i, 0)
+        self.layout.addWidget(self.xsizeW, self.i, 1)
+        self.i += 1
+
+        self.xlabelW  = QLineEdit(self.xtitle, self)
+        self.xlabelW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(self.xlabelW, self.i, 0, 1, 2)
+        self.i += 1
+
+
+        label = QLabel("y name", self)        
+        label.setStyleSheet("margin-top: 10px;")
+        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.ysizeW  = QLineEdit(str(self.ysize), self)
+        self.ysizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(label, self.i, 0)
+        self.layout.addWidget(self.ysizeW, self.i, 1)
+        self.i += 1
+
+        self.ylabelW  = QLineEdit(self.ytitle, self)
+        self.ylabelW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(self.ylabelW, self.i, 0, 1, 2)
+        self.i += 1
+
+
+        label = QLabel("tick", self)        
+        label.setStyleSheet("margin-top: 10px;")
+        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
+        self.ticksizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(label, self.i, 0)
+        self.layout.addWidget(self.ticksizeW, self.i, 1)
+        self.i += 1
+
+        label = QLabel("legend", self)        
+        label.setStyleSheet("margin-top: 10px;")
+        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
+        self.legendsizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.layout.addWidget(label, self.i, 0)
+        self.layout.addWidget(self.legendsizeW, self.i, 1)
+        self.i += 1
+
+
+        self.xlabelW.returnPressed.connect(self.adjustAxes)
+        self.ylabelW.returnPressed.connect(self.adjustAxes)
+        self.xsizeW.returnPressed.connect(self.adjustAxes)
+        self.ysizeW.returnPressed.connect(self.adjustAxes)
+        self.ticksizeW.returnPressed.connect(self.adjustAxes)
+        self.legendsizeW.returnPressed.connect(self.adjustAxes)
+
         for name in self.names : 
 
             label = QLabel(name + " ", self)        
@@ -149,8 +256,8 @@ class GraphicsProperties(NodeProperties):
             size  = LineSizePicker(self.node, name, self.linesize[name])
             size.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
 
-            color = QWidget(self)
-            color.setStyleSheet("background-color:" + self.linecolor[name] + " ;")
+            color = ColorPicker(self.node, name, color=self.linecolor[name])
+
 
             self.layout.addWidget(size, self.i, 0)
             self.layout.addWidget(color, self.i, 1)
@@ -177,6 +284,12 @@ class GraphicsProperties(NodeProperties):
         res['types']  = types
         res['sizes']  = sizes
         res['names']  = names
+        res['xtitle'] = self.xtitle
+        res['xsize']  = self.xsize
+        res['ytitle'] = self.ytitle
+        res['ysize']  = self.ysize
+        res['ticksize'] = self.ticksize
+        res['legendsize'] = self.legendsize
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -188,8 +301,15 @@ class GraphicsProperties(NodeProperties):
                     self.names[name]     = name
                     self.linecolor[name] = data['colors'][i]
                     self.linestyle[name] = data['styles'][i]
-                    self.graphtype[name]  = data['types'][i]
+                    self.graphtype[name] = data['types'][i]
                     self.linesize[name]  = data['sizes'][i]
+                    if 'xtitle' in data : self.xtitle = data['xtitle']
+                    if 'xsize'  in data : self.xsize  = data['xsize']
+                    if 'ytitle' in data : self.ytitle = data['ytitle']
+                    if 'ysize'  in data : self.ysize  = data['ysize']
+                    if 'ticksize'  in data : self.ticksize  = data['ticksize']
+                    if 'legendsize'  in data : self.legendsize  = data['legendsize']
+
                     self.c += 1
                 self.fillWidgets()
             except Exception as e: 
@@ -207,7 +327,7 @@ class GraphicsOutputNode(ResizableInputNode):
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
-        self.inputs    = []
+        self.insockets    = []
         self.linecolor = {}
         self.linestyle = {}
         self.graphtype = {}
@@ -240,13 +360,25 @@ class GraphicsOutputNode(ResizableInputNode):
         self.content.axis.clear()
         x_name = list(value.keys())[0]
         self.x_val  = value[x_name]
-        self.content.axis.set_xlabel(x_name)
+
+        if self.properties.xtitle == "":
+            self.content.axis.set_xlabel(x_name)
+        else:
+            self.content.axis.set_xlabel(self.properties.xtitle)
+
+        self.content.axis.set_ylabel(self.properties.ytitle)
+        self.content.axis.xaxis.label.set_size( self.properties.xsize )
+        self.content.axis.yaxis.label.set_size( self.properties.ysize )
+
+        self.content.axis.tick_params(labelsize= self.properties.ticksize)
+        self.content.axis.tick_params(labelsize= self.properties.ticksize)
 
     def addData(self, value):
         if not value : return 
 
         x_name = list(value.keys())[0]
         x_val  = value[x_name]
+        type = 'line'
 
         for i, name in enumerate(value):
             if name != x_name:
@@ -257,26 +389,26 @@ class GraphicsOutputNode(ResizableInputNode):
 
                 if self.properties.graphtype[name] == 'scatter':
                     self.content.axis.scatter(x_val, value[name], label=name, 
-                                            color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
-                                            linewidth=self.properties.linesize[name])
+                                            color=self.properties.linecolor[name], marker=self.properties.linestyle[name],
+                                            s=self.properties.linesize[name]*10)
 
     def drawPlot(self):
         self.prepareCanvas()
-        for input in self.inputs:
+        for input in self.insockets:
             self.addData(input.value)
-        self.content.axis.legend(loc = 1)
+        self.content.axis.legend(loc = 1, fontsize=self.properties.legendsize)
         self.content.canvas.draw()
 
 
     def evalImplementation(self, silent=False):
-        self.inputs = self.getInputs()
-        if not self.inputs:
+        self.insockets = self.getInputs()
+        if not self.insockets:
             self.setInvalid()
             self.e = "Does not have and intry Node"
             return False
         else:
             self.sortSockets()
-            if len(self.inputs) > 0:      
+            if len(self.insockets) > 0:      
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""
@@ -364,7 +496,7 @@ class TernaryPlotNode(ResizableInputNode):
         self.vmax = 1.0
         self.vmin = 0.0
         self.cmap = plt.cm.viridis
-        self.inputs = []
+        self.insockets = []
 
     def initInnerClasses(self):
         self.content = TernaryPlotContent(self)
@@ -485,9 +617,9 @@ class TernaryPlotNode(ResizableInputNode):
                                          edgecolors='black', linewidths=1.0)
 
     def drawPlot(self):
-        self.drawTernary(self.inputs[0].value)
-        if len(self.inputs) > 1:
-            for input in self.inputs[1:]:
+        self.drawTernary(self.insockets[0].value)
+        if len(self.insockets) > 1:
+            for input in self.insockets[1:]:
                 if input.value:
                     self.addScatter(input.value)
         self.content.canvas.axes.set_axis_off()
@@ -495,8 +627,8 @@ class TernaryPlotNode(ResizableInputNode):
 
 
     def evalImplementation(self, silent=False):
-        self.inputs = self.getInputs()
-        if not self.inputs:
+        self.insockets = self.getInputs()
+        if not self.insockets:
             if DEBUG : print("OUTNODE_TXT: no input edge")
             self.setInvalid()
             if DEBUG : print("OUTNODE_TXT: set invalid")
@@ -509,7 +641,7 @@ class TernaryPlotNode(ResizableInputNode):
             self.setInvalid(False)
             if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
             self.e = ""
-            self.value = self.inputs[0].value
+            self.value = self.insockets[0].value
             self.drawPlot()
 
         return True
