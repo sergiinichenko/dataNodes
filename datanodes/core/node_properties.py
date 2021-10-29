@@ -32,13 +32,13 @@ class NodeProperties(QWidget, Serializer):
     
     def setTitle(self):
         self.title_label = QLabel("Title ", self)        
-        self.title_label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
-        self.title_label.setStyleSheet("margin-bottom: 5px;")
+        self.title_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.title_label.setStyleSheet("margin-bottom: 15px; margin-top:5px;")
         
         self.title_widget = DataLineEdit(self.title, self.node)
         self.title_widget.setAlignment(Qt.AlignLeft)
         self.title_widget.textChanged.connect(self.title_widget.setTitle)
-        self.title_widget.setStyleSheet("margin-bottom: 5px;")
+        self.title_widget.setStyleSheet("margin-bottom: 15px; margin-top:5px;")
         
         self.layout.addWidget(self.title_label, self.i, 0)
         self.layout.addWidget(self.title_widget, self.i, 1)
@@ -57,7 +57,7 @@ class NodeProperties(QWidget, Serializer):
 
     def initUI(self):
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setContentsMargins(10,5,10,5)
         self.layout.setSpacing(0)
         self.layout.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
         self.layout.setColumnStretch(0, 1)

@@ -182,51 +182,49 @@ class GraphicsProperties(NodeProperties):
 
 
     def fillWidgets(self):
-
-        label = QLabel("x name", self)        
-        label.setStyleSheet("margin-top: 10px;")
-        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        
+        label = QLabel("x name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.xsizeW  = QLineEdit(str(self.xsize), self)
-        self.xsizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.xsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         self.layout.addWidget(label, self.i, 0)
         self.layout.addWidget(self.xsizeW, self.i, 1)
         self.i += 1
 
         self.xlabelW  = QLineEdit(self.xtitle, self)
-        self.xlabelW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.xlabelW.setStyleSheet("margin-bottom: 5px;")
         self.layout.addWidget(self.xlabelW, self.i, 0, 1, 2)
         self.i += 1
 
 
-        label = QLabel("y name", self)        
-        label.setStyleSheet("margin-top: 10px;")
-        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        label = QLabel("y name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ysizeW  = QLineEdit(str(self.ysize), self)
-        self.ysizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.ysizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         self.layout.addWidget(label, self.i, 0)
         self.layout.addWidget(self.ysizeW, self.i, 1)
         self.i += 1
 
         self.ylabelW  = QLineEdit(self.ytitle, self)
-        self.ylabelW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.ylabelW.setStyleSheet("margin-bottom: 15px;")
         self.layout.addWidget(self.ylabelW, self.i, 0, 1, 2)
         self.i += 1
 
 
         label = QLabel("tick", self)        
-        label.setStyleSheet("margin-top: 10px;")
-        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ticksizeW  = QLineEdit(str(self.ticksize), self)
-        self.ticksizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         self.layout.addWidget(label, self.i, 0)
         self.layout.addWidget(self.ticksizeW, self.i, 1)
         self.i += 1
 
         label = QLabel("legend", self)        
-        label.setStyleSheet("margin-top: 10px;")
-        label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.legendsizeW  = QLineEdit(str(self.legendsize), self)
-        self.legendsizeW.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
         self.layout.addWidget(label, self.i, 0)
         self.layout.addWidget(self.legendsizeW, self.i, 1)
         self.i += 1
@@ -242,11 +240,12 @@ class GraphicsProperties(NodeProperties):
         for name in self.names : 
 
             label = QLabel(name + " ", self)        
-            label.setStyleSheet("margin-top: 10px;")
-            label.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+            label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
             style = LineStylePicker(self.node, name, self.linestyle[name])
-            style.setStyleSheet("margin-top: 10px;")
+
+            label.setStyleSheet("margin-top: 15px;")
+            style.setStyleSheet("margin-top: 15px;")
 
             self.layout.addWidget(label, self.i, 0)
             self.layout.addWidget(style, self.i, 1)
@@ -254,7 +253,7 @@ class GraphicsProperties(NodeProperties):
 
 
             size  = LineSizePicker(self.node, name, self.linesize[name])
-            size.setAlignment(Qt.AlignLeft | Qt.AlignCenter)
+            size.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
             color = ColorPicker(self.node, name, color=self.linecolor[name])
 

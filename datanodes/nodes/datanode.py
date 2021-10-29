@@ -167,7 +167,7 @@ class DataNode(Node):
     def evaluateNode(self, silent=False):
         if not self.getInputData() :       return False
         if not self.prepareSettings() :    return False
-        if not self.evalImplementation() : return False
+        if not self.evalImplementation(silent) : return False
         return True
 
 

@@ -246,7 +246,6 @@ class Scene(Serializer):
             if not node.getInputs():
                 node.update(silent=True)
 
-
         for node in self.nodes:
             node.eval(silent=True)
 

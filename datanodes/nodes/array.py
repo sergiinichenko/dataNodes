@@ -74,7 +74,7 @@ class StepRangeNode(DataNode):
 
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
+        #self.eval()
 
     def initInnerClasses(self):
         self.content = StepRangeContent(self)
@@ -184,7 +184,7 @@ class NumRangeNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
+        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -250,7 +250,8 @@ class NumRangeNode(DataNode):
             else:
                 stop = float(self.content.stop.text())
 
-            self.getOutput(0).value =  { name : np.linspace(start, stop, num) }
+            self.value              =  { name : np.linspace(start, stop, num) }
+            self.getOutput(0).value =  self.value
             return True
         except Exception as e : 
             self.e = e
@@ -323,7 +324,7 @@ class FilledArrayNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
+        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -457,7 +458,7 @@ class Mesh2DNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
+        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -591,7 +592,7 @@ class TernaryGridNode(DataNode):
 
     def __init__(self, scene, inputs=[1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        self.eval()
+        #self.eval()
 
     def initSettings(self):
         super().initSettings()
