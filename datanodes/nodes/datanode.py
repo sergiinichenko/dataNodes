@@ -86,6 +86,7 @@ class DataNode(Node):
         self.type  = "float"
         # Mark all nodes dirty by default before it is connected to anything
         self.setDirty()
+        self.eval()
 
     def initInnerClasses(self):
         self.content    = DataContent(self)

@@ -74,7 +74,6 @@ class StepRangeNode(DataNode):
 
     def __init__(self, scene, inputs=[], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        #self.eval()
 
     def initInnerClasses(self):
         self.content = StepRangeContent(self)
@@ -184,7 +183,6 @@ class NumRangeNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -324,7 +322,6 @@ class FilledArrayNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -441,10 +438,10 @@ class Mesh2DContent(DataContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            self.sizex.setText(res['sizex'])
-            self.sizey.setText(res['sizey'])
-            self.numx.setText(res['numx'] )
-            self.numy.setText(res['numy'] )
+            self.sizex.setText(data['sizex'])
+            self.sizey.setText(data['sizey'])
+            self.numx.setText(data['numx'] )
+            self.numy.setText(data['numy'] )
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -458,7 +455,6 @@ class Mesh2DNode(DataNode):
 
     def __init__(self, scene, inputs=[1,1,1,1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -578,7 +574,7 @@ class TernaryGridContent(DataContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            self.size.setText(res['size'])
+            self.size.setText(data['size'])
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -592,7 +588,6 @@ class TernaryGridNode(DataNode):
 
     def __init__(self, scene, inputs=[1], outputs=[2]):
         super().__init__(scene, inputs, outputs)
-        #self.eval()
 
     def initSettings(self):
         super().initSettings()

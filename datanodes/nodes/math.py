@@ -10,17 +10,19 @@ class MathGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 160.0
-        self.height = 90.0
+        self.height = 150.0
         self.setZValue(5)
 
 class MathContent(DataContent):
 
     def initUI(self):
         super().initUI()
+        self.setWindowTitle("Math node")
+
         self.operation = "Add"
 
         self.layout = QGridLayout()
-        self.layout.setContentsMargins(0,0,0,0)
+        self.layout.setContentsMargins(5,5,5,5)
         self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
@@ -49,10 +51,17 @@ class MathContent(DataContent):
         self.cb.addItem("Differentiate")
         self.cb.addItem("Integrate")
 
+        self.cb.setStyleSheet("margin-bottom: 10px;")
         self.layout.addWidget(self.cb, 1, 0, 1, 2)
-        self.setLayout(self.layout)
-        self.setWindowTitle("Math node")
         self.cb.currentIndexChanged.connect(self.selectionchange)
+
+        self.valuex = QLineEdit("1.0", self)
+        self.valuex.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.valuex, 2, 0, 1, 2)
+
+        self.valuey = QLineEdit("1.0", self)
+        self.valuey.setAlignment(Qt.AlignCenter)
+        self.layout.addWidget(self.valuey, 3, 0, 1, 2)
 
     def selectionchange(self,i):
         self.operation = self.cb.currentText()
@@ -89,55 +98,75 @@ class MathNode(DataNode):
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
         self.content.label.textChanged.connect(self.recalculateNode)
+        self.content.valuex.textChanged.connect(self.recalculateNode)
+        self.content.valuey.textChanged.connect(self.recalculateNode)
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_BOTTOM
+        self.output_socket_position = RIGHT_TOP
+        self.socket_bottom_margin   = 24
+        self.socket_spacing         = 23
+
+    def checkTheInputs(self):
+        if self.getInput(0) is not None:
+            self.content.valuey.setReadOnly(True)
+            self.content.valuey.setStyleSheet("color: rgba(255, 255, 255, 0.2);")
+        else:
+            self.content.valuey.setReadOnly(False)
+            self.content.valuey.setStyleSheet("color: rgba(255, 255, 255, 1.0);")
+
+        if self.getInput(1) is not None:
+            self.content.valuex.setReadOnly(True)
+            self.content.valuex.setStyleSheet("color: rgba(255, 255, 255, 0.2);")
+        else:
+            self.content.valuex.setReadOnly(False)
+            self.content.valuex.setStyleSheet("color: rgba(255, 255, 255, 1.0);")
+
 
     def evalImplementation(self, silent=False):
-        input_values = self.getInputs()
-        if not input_values:
-            self.setInvalid()
-            self.e = "Does not have and intry Node"
-            return False
-        else:      
-            if len(input_values) == 2:      
-                try:
-                    self.setDirty(False)
-                    self.setInvalid(False)
-                    self.e = ""
-                    label  = self.content.label.text() if self.content.label.text() != "" else list(input_values[0].value.keys())[0]
-                    values = [copy.deepcopy(input_values[0].value), 
-                            copy.deepcopy(input_values[1].value)]
-                    res = {}
-                    if self.content.operation == "Add"           : res = self.add(values)
-                    if self.content.operation == "Substract"     : res = self.substract(values)
-                    if self.content.operation == "Multiply"      : res = self.multiply(values)
-                    if self.content.operation == "Divide"        : res = self.devide(values)
-                    if self.content.operation == "Power"         : res = self.power(values)
-                    if self.content.operation == "Distance"      : res = self.distance(values)
-                    if self.content.operation == "Sum"           : res = self.sum(values)
-                    if self.content.operation == "Absolute"      : res = self.absolute(values)
-                    if self.content.operation == "Normalize"     : res = self.normilize(values)
-                    if self.content.operation == "Randomize"     : res = self.randomize(values)
-                    if self.content.operation == "Differentiate" : res = self.differentiate(values)
-                    if self.content.operation == "Integrate"     : res = self.integrate(values)
+        try:
+            self.checkTheInputs()
+            self.setDirty(False)
+            self.setInvalid(False)
+            self.e = ""
 
-                    if len(res) > 1:
-                        self.getOutput(0).value = res
-                    else:
-                        self.getOutput(0).value = {label : res[list(res.keys())[0]]}
-                    self.getOutput(0).type  = "df"
-                    return True
-                except Exception as e:
-                    self.setInvalid()
-                    self.e = e
-                    self.getOutput(0).value = {"x" : 0.0}
-                    self.getOutput(0).type = "df"
-                    return False
+            if self.getInput(1): valuex = self.getInput(1).value
+            else:                valuex = float(self.content.valuex.text())
+
+            if self.getInput(0): valuey = self.getInput(0).value
+            else:                valuey = float(self.content.valuey.text())
+
+            res = {}
+            if self.content.operation == "Add"           : res = self.add(valuex, valuey)
+            """
+            if self.content.operation == "Substract"     : res = self.substract(values)
+            if self.content.operation == "Multiply"      : res = self.multiply(values)
+            if self.content.operation == "Divide"        : res = self.devide(values)
+            if self.content.operation == "Power"         : res = self.power(values)
+            if self.content.operation == "Distance"      : res = self.distance(values)
+            if self.content.operation == "Sum"           : res = self.sum(values)
+            if self.content.operation == "Absolute"      : res = self.absolute(values)
+            if self.content.operation == "Normalize"     : res = self.normilize(values)
+            if self.content.operation == "Randomize"     : res = self.randomize(values)
+            if self.content.operation == "Differentiate" : res = self.differentiate(values)
+            if self.content.operation == "Integrate"     : res = self.integrate(values)
+            if len(res) > 1:
+                self.getOutput(0).value = res
             else:
-                self.setDirty(False)
-                self.setInvalid(False)
-                self.e = "Not all input nodes are connected"
-                self.getOutput(0).value = {"x" : 0.0}
-                self.getOutput(0).type = "df"
-                return False
+                self.getOutput(0).value = {label : res[list(res.keys())[0]]}
+            """
+            
+            self.getOutput(0).value = res
+            self.getOutput(0).type  = "df"
+            return True
+        except Exception as e:
+            self.setInvalid()
+            self.e = e
+            self.getOutput(0).value = {"x" : 0.0}
+            self.getOutput(0).type = "df"
+            return False
+
 
     def drop_nan(self, input_value):
         
@@ -160,10 +189,39 @@ class MathNode(DataNode):
         if isinstance(input_value, float) or isinstance(input_value, int):
             return input_value
 
-    def add(self, input_values):
+    def singleValue(self, value):
+        if isinstance(value, float) or isinstance(value, int):
+            return True, value
+
+        if isinstance(value, (np.ndarray, np.generic)):
+            value.size() == 1
+            return True, value[0]
+
+        if isinstance(value, dict):
+            if len(value) == 1:
+                if len(list(value.values())) == 1:
+                    return True, list(value.values())[0]
+        return False, value
+
+    def add(self, valuex, valuey):
         res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = self.drop_nan(input_values[0][i]) + self.drop_nan(input_values[1][j])
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": valx + valy}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = valx + self.drop_nan(valuey[name])
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = valy + self.drop_nan(valuex[name])
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = self.drop_nan(valuex[i]) + self.drop_nan(valuey[j])
         return res
 
     def substract(self, input_values):

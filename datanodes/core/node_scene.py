@@ -242,11 +242,11 @@ class Scene(Serializer):
 
         # create adges from data
 
-        for node in self.nodes:
-            if not node.getInputs():
-                node.update(silent=True)
+        #for node in self.nodes:
+        #    if not node.getInputs():
+        #        node.update(silent=True)
 
         for node in self.nodes:
-            node.eval(silent=True)
+            node.update(silent=True)
 
         return True

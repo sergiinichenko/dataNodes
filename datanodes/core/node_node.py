@@ -27,7 +27,7 @@ class Node(Serializer):
 
         self.initInnerClasses()
         self.initSettings()
-
+        self.initProperties()
         self.title  = self._title
 
         # just to be sure, init these variables
@@ -87,6 +87,9 @@ class Node(Serializer):
             RIGHT_CENTER: 1,
             RIGHT_TOP:    1,
         }
+
+    def initProperties(self):
+        self.properties.title = self.title
 
     def initSockets(self, inputs, outputs, reset=True, innames=None, outnames=None):
         self.in_count  = len(inputs)

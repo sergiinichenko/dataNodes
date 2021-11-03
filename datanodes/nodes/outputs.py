@@ -180,7 +180,6 @@ class TableOutputNode(DataNode):
         if not input_edge:
             self.setInvalid()
             self.e = "Does not have and intry Node"
-            self.content.edit.setText("NaN")
             return False
         else:            
             self.setDirty(False)
