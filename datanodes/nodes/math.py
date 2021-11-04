@@ -139,12 +139,12 @@ class MathNode(DataNode):
 
             res = {}
             if self.content.operation == "Add"           : res = self.add(valuex, valuey)
+            if self.content.operation == "Substract"     : res = self.substract(valuex, valuey)
+            if self.content.operation == "Multiply"      : res = self.multiply(valuex, valuey)
+            if self.content.operation == "Divide"        : res = self.devide(valuex, valuey)
+            if self.content.operation == "Power"         : res = self.power(valuex, valuey)
+            if self.content.operation == "Distance"      : res = self.distance(valuex, valuey)
             """
-            if self.content.operation == "Substract"     : res = self.substract(values)
-            if self.content.operation == "Multiply"      : res = self.multiply(values)
-            if self.content.operation == "Divide"        : res = self.devide(values)
-            if self.content.operation == "Power"         : res = self.power(values)
-            if self.content.operation == "Distance"      : res = self.distance(values)
             if self.content.operation == "Sum"           : res = self.sum(values)
             if self.content.operation == "Absolute"      : res = self.absolute(values)
             if self.content.operation == "Normalize"     : res = self.normilize(values)
@@ -224,32 +224,115 @@ class MathNode(DataNode):
                 res[j] = self.drop_nan(valuex[i]) + self.drop_nan(valuey[j])
         return res
 
-    def substract(self, input_values):
+    def substract(self, valuex, valuey):
         res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = self.drop_nan(input_values[0][i]) - self.drop_nan(input_values[1][j])
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": valx - valy}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = valx - self.drop_nan(valuey[name])
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = (-1.0)*valy + self.drop_nan(valuex[name])
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = self.drop_nan(valuex[i]) - self.drop_nan(valuey[j])
         return res
 
-    def multiply(self, input_values):
+
+    def multiply(self, valuex, valuey):
         res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = self.drop_nan(input_values[0][i]) * self.drop_nan(input_values[1][j])
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": valx * valy}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = valx * self.drop_nan(valuey[name])
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = valy * self.drop_nan(valuex[name])
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = self.drop_nan(valuex[i]) * self.drop_nan(valuey[j])
         return res
 
-    def devide(self, input_values):
+
+    def devide(self, valuex, valuey):
         res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = self.drop_nan(input_values[0][i]) / self.drop_nan(input_values[1][j])
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": valx / valy}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = valx / self.drop_nan(valuey[name])
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = self.drop_nan(valuex[name]) / valy
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = self.drop_nan(valuex[i]) / self.drop_nan(valuey[j])
         return res
 
-    def power(self, input_values):
+
+    def power(self, valuex, valuey):
         res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = np.power(self.drop_nan(input_values[0][i]), self.drop_nan(input_values[1][j]))
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": valx ** valy}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = valx ** self.drop_nan(valuey[name])
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = self.drop_nan(valuex[name]) ** valy
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = self.drop_nan(valuex[i]) ** self.drop_nan(valuey[j])
         return res
 
-    def distance(self, input_values):
-        pass
+
+    def distance(self, valuex, valuey):
+        res = {}
+        valx_s, valx = self.singleValue(valuex)
+        valy_s, valy = self.singleValue(valuey)
+
+        if valx_s and valy_s:
+            return {"x": np.abs(valx - valy)}
+
+        elif valx_s:
+            for name in valuey:
+                res[name] = np.abs(valx - self.drop_nan(valuey[name]))
+
+        elif valy_s:
+            for name in valuex:
+                res[name] = np.abs(self.drop_nan(valuex[name]) - valy)
+
+        else:
+            for i, j in zip(valuex, valuey):
+                res[j] = np.abs(self.drop_nan(valuex[i]) - self.drop_nan(valuey[j]))
+        return res
+
 
     def sum(self, input_values):
         res = {}

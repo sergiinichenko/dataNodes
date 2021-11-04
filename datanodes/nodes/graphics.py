@@ -318,6 +318,7 @@ class GraphicsProperties(NodeProperties):
         return res
 
 
+
 @register_node(OP_MODE_PLOT)
 class GraphicsOutputNode(ResizableInputNode):
     icon = "icons/valoutput.png"
@@ -641,6 +642,274 @@ class TernaryPlotNode(ResizableInputNode):
             if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
             self.e = ""
             self.value = self.insockets[0].value
+            self.drawPlot()
+
+        return True
+
+
+
+
+
+
+
+
+
+
+
+
+class HeatMapCanvas(FigureCanvas):
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig  = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
+        self.axes = self.fig.add_axes([0.1,  0.1, 0.75, 0.85])
+        self.bar  = self.fig.add_axes([0.90, 0.1, 0.05, 0.75])
+
+        super(HeatMapCanvas, self).__init__(self.fig)
+
+class HeatMapGraphicsNode(ResizebleDataNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 300.0
+        self.height = 300.0
+
+class HeatMapContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+
+        self.canvas = HeatMapCanvas()
+        self.layout.addWidget(self.canvas)
+
+
+    def serialize(self):
+        res = super().serialize()
+        res['width']  = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.updateSize()
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+class HeatMapProperties(NodeProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+        self.levels     = 10
+        self.xtitle     = ""
+        self.xsize      = 12.0
+        self.ytitle     = ""
+        self.ysize      = 12.0
+        self.ticksize   = 10.0
+        self.legendsize = 12.0
+
+        label = QLabel("levels ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.levelsW  = QLineEdit(str(self.levels), self)
+        self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 1, 0)
+        self.layout.addWidget(self.levelsW, 1, 1)
+        label.setStyleSheet("margin-bottom: 10px;")
+        self.levelsW.setStyleSheet("margin-bottom: 10px;")
+
+        label = QLabel("x name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.xsizeW  = QLineEdit(str(self.xsize), self)
+        self.xsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 2, 0)
+        self.layout.addWidget(self.xsizeW, 2, 1)
+
+        self.xlabelW  = QLineEdit(self.xtitle, self)
+        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.xlabelW.setStyleSheet("margin-bottom: 5px;")
+        self.layout.addWidget(self.xlabelW, 3, 0, 1, 2)
+
+        label = QLabel("y name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ysizeW  = QLineEdit(str(self.ysize), self)
+        self.ysizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 4, 0)
+        self.layout.addWidget(self.ysizeW, 4, 1)
+
+        self.ylabelW  = QLineEdit(self.ytitle, self)
+        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.ylabelW.setStyleSheet("margin-bottom: 15px;")
+        self.layout.addWidget(self.ylabelW, 5, 0, 1, 2)
+
+        label = QLabel("tick", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
+        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 6, 0)
+        self.layout.addWidget(self.ticksizeW, 6, 1)
+
+        label = QLabel("legend", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
+        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 7, 0)
+        self.layout.addWidget(self.legendsizeW, 7, 1)
+
+        self.levelsW.returnPressed.connect(self.updateData)
+        self.xlabelW.returnPressed.connect(self.updateData)
+        self.ylabelW.returnPressed.connect(self.updateData)
+        self.xsizeW.returnPressed.connect(self.updateData)
+        self.ysizeW.returnPressed.connect(self.updateData)
+        self.ticksizeW.returnPressed.connect(self.updateData)
+        self.legendsizeW.returnPressed.connect(self.updateData)
+
+
+    def updateData(self):
+        self.levels     = int(self.levelsW.text())
+        self.xtitle     = self.xlabelW.text()
+        self.xsize      = float(self.xsizeW.text())
+        self.ytitle     = self.ylabelW.text()
+        self.ysize      = float(self.ysizeW.text())
+        self.ticksize   = float(self.ticksizeW.text())
+        self.legendsize = float(self.legendsizeW.text())
+        self.node.drawPlot()
+
+    def fillWidgets(self):
+        self.levelsW.setText(str(self.levels))
+        self.xlabelW.setText(self.xtitle)
+        self.xsizeW.setText(str(self.xsize))
+        self.ylabelW.setText(self.ytitle)
+        self.ysizeW.setText(str(self.ysize))
+        self.ticksizeW.setText(str(self.ticksize))
+        self.legendsizeW.setText(str(self.legendsize))
+
+    def serialize(self):
+        res = super().serialize()
+
+        res['levels']     = self.levels
+        res['xtitle']     = self.xtitle
+        res['xsize']      = self.xsize
+        res['ytitle']     = self.ytitle
+        res['ysize']      = self.ysize
+        res['ticksize']   = self.ticksize
+        res['legendsize'] = self.legendsize
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'levels'      in data : self.levels = data['levels']
+                if 'xtitle'      in data : self.xtitle = data['xtitle']
+                if 'xsize'       in data : self.xsize  = data['xsize']
+                if 'ytitle'      in data : self.ytitle = data['ytitle']
+                if 'ysize'       in data : self.ysize  = data['ysize']
+                if 'ticksize'    in data : self.ticksize  = data['ticksize']
+                if 'legendsize'  in data : self.legendsize  = data['legendsize']
+                self.fillWidgets()
+
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+
+@register_node(OP_MODE_PLOT_HEATMAP)
+class HeatMapNode(ResizableInputNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_MODE_PLOT_HEATMAP
+    op_title = "Heat Map"
+
+    def __init__(self, scene, inputs=[1], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+        self.vmax = 1.0
+        self.vmin = 0.0
+        self.cmap = plt.cm.viridis
+        self.insockets = []
+
+    def initInnerClasses(self):
+        self.content = HeatMapContent(self)
+        self.grNode  = HeatMapGraphicsNode(self)
+        self.properties = HeatMapProperties(self)
+        self.content.changed.connect(self.updateSockets)
+
+    def prepareSettings(self):
+        """
+        self.properties.resetProperties()
+        self.properties.cleanProperties()
+        self.properties.fillWidgets()
+        """
+        return True
+
+    def prepareSettings(self):
+        return True
+
+    def resize(self):
+        pass
+
+    def addMap(self, value):
+        self.content.canvas.axes.clear()
+        if not value : return
+        names = list(value.keys())
+
+        # barycentric coords: (a,b,c)
+        self.x = np.array( value[names[0]] )
+        self.y = np.array( value[names[1]] )
+    
+        # values is stored in the last column
+        self.z = np.array( value[names[-1]] )
+        self.vmin = self.z.min()
+        self.vmax = self.z.max()
+
+        # plot the contour
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.z, 
+                                                  cmap=self.cmap, vmin=self.vmin, vmax=self.vmax,
+                                                  levels=self.properties.levels)
+        self.content.canvas.bar.set_title(names[-1])
+        plt.colorbar(im, cax=self.content.canvas.bar)
+        self.content.canvas.axes.set_xlabel(self.properties.xtitle, fontsize=self.properties.xsize)
+        self.content.canvas.axes.set_ylabel(self.properties.ytitle, fontsize=self.properties.ysize)
+        
+        self.content.canvas.axes.axes.tick_params(labelsize= self.properties.ticksize)
+        self.content.canvas.axes.axes.tick_params(labelsize= self.properties.ticksize)
+
+        """
+        self.content.canvas.axes.text(1.05, -0.05,  names[1], fontsize=24, ha="left")
+        self.content.canvas.axes.text(0.50,  0.92,  names[2], fontsize=24, ha="center")
+        self.content.canvas.axes.text(-0.05,-0.05,  names[0], fontsize=24, ha="right")
+        """
+        
+
+    def drawPlot(self):
+        self.insockets = self.getInputs()
+
+        for input in self.insockets:
+            if input.value:
+                self.addMap(input.value)
+        self.content.canvas.draw()
+
+
+    def evalImplementation(self, silent=False):
+        self.insockets = self.getInputs()
+        if not self.insockets:
+            if DEBUG : print("OUTNODE_TXT: no input edge")
+            self.setInvalid()
+            if DEBUG : print("OUTNODE_TXT: set invalid")
+            self.e = "Does not have and intry Node"
+            if DEBUG : print("OUTNODE_TXT: clear the content")
+            return False
+        else:            
+            if DEBUG : print("OUTNODE_TXT: process the input edge data")
+            self.setDirty(False)
+            self.setInvalid(False)
+            if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
+            self.e = ""
             self.drawPlot()
 
         return True
