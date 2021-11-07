@@ -16,6 +16,7 @@ class InvalidFile(Exception): pass
 class Scene(Serializer):
     def __init__(self, window):
         super().__init__()
+        self.id    = 0
         self.nodes = []
         self.edges = []
         self.window = window

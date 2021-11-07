@@ -114,7 +114,28 @@ class DataNode(Node):
     def evalImplementation(self, silent=False):
         return 123
 
+    # ---------------- Input sockets functionality ------------
+    def sortSockets(self):
+        pass
+
+    def appendNewSocket(self):
+        pass
+
+    def getSocketsNames(self):
+        pass
+
+    def updateInputSockets(self):
+        self.removeFreeInputs()
+        self.sortSockets()
+        self.appendNewSocket()
+        self.getSocketsNames()
+
+    def updateOutputSockes(self):
+        pass
+
     def recalculateNode(self):
+        self.updateInputSockets()
+        self.updateOutputSockes()
         self.setDirty()
         self.eval()
 
@@ -412,16 +433,14 @@ class ResizableInputNode(DataNode):
         self.socket_bottom_margin = 20.0
 
     def initInnerClasses(self):
-        self.content = ResizableContent(self)
-        self.grNode  = ResizableGraphicsNode(self)
+        self.content    = ResizableContent(self)
+        self.grNode     = ResizableGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def resize(self):
         size = len(self.getInputs())
         current_size = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
-
-        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
 
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
@@ -433,11 +452,12 @@ class ResizableInputNode(DataNode):
         if self.freeInputs() == 0:
             self.appendInput(input=1)
             self.resize()
+        self.scene.grScene.update()
 
     def sortSockets(self):
         sockets_full = []
         sockets_empty = []
-        for socket in self.inputs:
+        for socket in self.getInputs():
             if socket.hasEdges():
                 sockets_full.append(socket)
             else:
@@ -448,8 +468,7 @@ class ResizableInputNode(DataNode):
             socket.setPos()
 
         self.inputs = sockets_full + sockets_empty
-        self.removeFreeInputs()
-        self.appendNewSocket()
+        self.scene.grScene.update()
 
     def removeFreeInputs(self):
         for input in self.inputs[:-1]:
@@ -477,19 +496,12 @@ class ResizableInputNode(DataNode):
                         else:
                             socket.label = str(list(other_socket.value.keys())[0]) + "..."
                     
-    def updateSockets(self):
-        self.sortSockets()
-        self.getSocketsNames()
-        self.setDirty()
-        self.eval()
-
     def evalImplementation(self, silent=False):
         pass
 
-
     def update(self, silent=False):
         super().update(silent)
-        self.updateSockets()
+        self.recalculateNode()
 
 
 
@@ -518,7 +530,7 @@ class ResizableOutputNode(DataNode):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def appendNewSocket(self):
         self.appendOutput(output=2)
@@ -526,9 +538,7 @@ class ResizableOutputNode(DataNode):
 
         size = len(self.getOutputs())
         current_size = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
-
-        padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
-
+        
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
@@ -568,18 +578,11 @@ class ResizableOutputNode(DataNode):
                         else:
                             socket.label = str(list(other_socket.value.keys())[0]) + "..."
                     
-    def updateSockets(self):
-        self.sortSockets()
-        self.getSocketsNames()
-        self.setDirty()
-        self.eval()
-
     def evalImplementation(self, silent=False):
         pass
 
     def update(self, silent=False):
         super().update(silent)
-        self.updateSockets()
 
 
 
@@ -604,7 +607,7 @@ class ResizableInOutNode(DataNode):
         self.content = ResizableContent(self)
         self.grNode  = ResizableGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def resize(self):
         size = len(self.getInputs())
@@ -666,18 +669,11 @@ class ResizableInOutNode(DataNode):
                         else:
                             socket.label = str(list(other_socket.value.keys())[0]) + "..."
                     
-    def updateSockets(self):
-        self.sortSockets()
-        self.getSocketsNames()
-        self.setDirty()
-        self.eval()
-
     def evalImplementation(self, silent=False):
         pass
 
     def update(self, silent=False):
         super().update(silent)
-        self.updateSockets()
 
 
 
@@ -774,7 +770,7 @@ class AdjustableOutputNode(DataNode):
         self.content = AdjustableOutputContent(self)
         self.grNode  = AdjustableOutputGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
         pass

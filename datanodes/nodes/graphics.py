@@ -346,7 +346,6 @@ class GraphicsOutputNode(ResizableInputNode):
         self.grNode     = GraphicsOutputGraphicsNode(self)
         self.properties = GraphicsProperties(self)
         self.content.changed.connect(self.recalculateNode)
-        self.content.changed.connect(self.updateSockets)
 
 
     def prepareSettings(self):
@@ -502,7 +501,7 @@ class TernaryPlotNode(ResizableInputNode):
         self.content = TernaryPlotContent(self)
         self.grNode  = TernaryPlotGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def prepareSettings(self):
         """
@@ -837,7 +836,7 @@ class HeatMapNode(ResizableInputNode):
         self.content = HeatMapContent(self)
         self.grNode  = HeatMapGraphicsNode(self)
         self.properties = HeatMapProperties(self)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def prepareSettings(self):
         """
@@ -897,19 +896,25 @@ class HeatMapNode(ResizableInputNode):
 
     def evalImplementation(self, silent=False):
         self.insockets = self.getInputs()
-        if not self.insockets:
-            if DEBUG : print("OUTNODE_TXT: no input edge")
-            self.setInvalid()
-            if DEBUG : print("OUTNODE_TXT: set invalid")
-            self.e = "Does not have and intry Node"
-            if DEBUG : print("OUTNODE_TXT: clear the content")
-            return False
-        else:            
-            if DEBUG : print("OUTNODE_TXT: process the input edge data")
+        try:
+            if not self.insockets:
+                if DEBUG : print("OUTNODE_TXT: no input edge")
+                self.setInvalid()
+                if DEBUG : print("OUTNODE_TXT: set invalid")
+                self.e = "Does not have and intry Node"
+                if DEBUG : print("OUTNODE_TXT: clear the content")
+                return False
+            else:            
+                if DEBUG : print("OUTNODE_TXT: process the input edge data")
+                self.setDirty(False)
+                self.setInvalid(False)
+                if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
+                self.e = ""
+                self.drawPlot()
+
+            return True
+        except Exception as e:
             self.setDirty(False)
             self.setInvalid(False)
-            if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
-            self.e = ""
-            self.drawPlot()
-
-        return True
+            self.e = e
+            return False

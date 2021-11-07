@@ -136,8 +136,8 @@ class CombineNode(ResizableInputNode):
         self.content.changed.emit()
 
     def initInnerClasses(self):
-        self.content = ResizableContent(self)
-        self.grNode  = ResizableGraphicsNode(self)
+        self.content    = ResizableContent(self)
+        self.grNode     = ResizableGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
 

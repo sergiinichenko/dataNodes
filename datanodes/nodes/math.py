@@ -455,7 +455,7 @@ class ExpressionNode(ResizableInputNode):
         self.setDescendentsDirty(False)
         self.getOutput(0).value = 4
         self.getOutput(0).type  = "float"
-        self.eval()
+        #self.eval()
 
     def initSettings(self):
         super().initSettings()
@@ -468,7 +468,7 @@ class ExpressionNode(ResizableInputNode):
         self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.label.returnPressed.connect(self.recalculateNode)
         self.content.label.textChanged.connect(self.recalculateNode)
-        self.content.changed.connect(self.updateSockets)
+        self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
         inputs = self.getInputs()

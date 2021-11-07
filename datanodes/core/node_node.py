@@ -523,6 +523,14 @@ class Node(Serializer):
         self.title = data['title']
         self.setPos(data['pos_x'], data['pos_y'])
 
+        # deserialize the content of the node
+        cont, props = True, True
+        if 'content' in data:
+            cont = self.content.deserialize(data['content'], hashmap)
+        if 'properties' in data:
+            props= self.properties.deserialize(data['properties'], hashmap)
+
+
         self.inputs = []
         for socket_data in data["inputs"]:
             soket = Socket(node=self, 
@@ -545,11 +553,4 @@ class Node(Serializer):
             soket.deserialize(socket_data, hashmap, restore_id)
             self.outputs.append(soket)
         
-        # deserialize the content of the node
-        cont, props = True, True
-        if 'content' in data:
-            cont = self.content.deserialize(data['content'], hashmap)
-        if 'properties' in data:
-            props= self.properties.deserialize(data['properties'], hashmap)
-
         return True & cont & props
