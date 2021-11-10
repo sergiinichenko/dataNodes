@@ -1,85 +1,9 @@
+from numpy import NaN
 from pandas.core.algorithms import isin
 from pandas.core.frame import DataFrame
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
-
-class ValueOutputGraphicsNode(DataGraphicsNode):
-    def initSizes(self):
-        super().initSizes()
-        self.width  = 120.0
-        self.height = 80.0
-
-class ValueOutputContent(DataContent):
-    def initUI(self):
-        super().initUI()
-        self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0,0,0,0)
-        self.setLayout(self.layout)
-        self.edit = QLineEdit("1", self)
-        self.edit.setAlignment(Qt.AlignCenter)
-        self.edit.setReadOnly(True)
-        self.layout.addWidget(self.edit)
-
-    def serialize(self):
-        res = super().serialize()
-        res['value'] = self.edit.text()
-        return res
-
-    def deserialize(self, data, hashmap=[]):
-        res = super().deserialize(data, hashmap)
-        try:
-            value = data['value']
-            self.edit.setText(value)
-            return True & res
-        except Exception as e : dumpException(e)
-        return res
-
-@register_node(OP_MODE_VALOUTPUT)
-class ValueOutputNode(DataNode):
-    icon = "icons/valoutput.png"
-    op_code = OP_MODE_VALOUTPUT
-    op_title = "Value"
-
-    def __init__(self, scene, inputs=[1], outputs=[]):
-        super().__init__(scene, inputs, outputs)
-
-    def initInnerClasses(self):
-        self.content = ValueOutputContent(self)
-        self.grNode  = ValueOutputGraphicsNode(self)
-        self.properties = NodeProperties(self)
-
-
-    def evalImplementation(self, silent=False):
-        input_edge = self.getInput(0)
-        if not input_edge:
-            self.setInvalid()
-            self.e = "Does not have and intry Node"
-            self.content.edit.setText("NaN")
-            return False
-        else:            
-            self.setDirty(False)
-            self.setInvalid(False)
-            self.e = ""
-            self.value = input_edge.value
-            self.type  = input_edge.type
-            if self.type == "float" or self.type == "int":
-                if self.value < 1000.0:
-                    self.content.edit.setText("{0:.3f}".format(self.value))
-                elif self.value > 1000.0 and self.value < 100000.0:
-                    self.content.edit.setText("{0:.2f}".format(self.value))
-                else:
-                    self.content.edit.setText("{0:.1f}".format(self.value))
-            else:
-                self.content.edit.setText("NaN")
-            return True
-
-
-
-
-
-
-
 
 
 class TableOutputGraphicsNode(ResizebleDataNode):
@@ -128,26 +52,38 @@ class TableOutputNode(DataNode):
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
 
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+
+
     def initInnerClasses(self):
-        self.content = TableOutputContent(self)
-        self.grNode  = TableOutputGraphicsNode(self)
+        self.content    = TableOutputContent(self)
+        self.grNode     = TableOutputGraphicsNode(self)
         self.properties = NodeProperties(self)
 
+    def isString(self, x):
+        try:
+            float(x)
+            return False
+        except:
+            return True
+
     def getFormatedValue(self, value):
-        if np.abs(value) > 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 100.0 and np.abs(value) <= 1000.0:
-            return "{:.2f}".format(value)
-        if np.abs(value) > 1.0 and np.abs(value) <= 100.0:
-            return "{:.3f}".format(value)
-        if np.abs(value) > 0.01 and np.abs(value) <= 1.0:
-            return "{:.4f}".format(value)
-        if np.abs(value) > 0.00 and np.abs(value) <= 0.01:
-            return "{:.3e}".format(value)
+        if not self.isString(value):
+            if str(value) == ""           : return ""
+            if np.isnan(value)            : return "nan"
+            if np.isinf(value)            : return "inf"
+
+            if np.abs(value) > 1000000.0                            : return "{:.3e}".format(value)
+            if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0: return "{:.3e}".format(value)
+            if np.abs(value) > 100.0 and np.abs(value) <= 1000.0    : return "{:.2f}".format(value)
+            if np.abs(value) > 1.0 and np.abs(value) <= 100.0       : return "{:.3f}".format(value)
+            if np.abs(value) > 0.01 and np.abs(value) <= 1.0        : return "{:.4f}".format(value)
+            if np.abs(value) > 0.00 and np.abs(value) <= 0.01       : return "{:.3e}".format(value)
+            else                                                    : return "{:.1f}".format(value)
         else:
-            return "{:.1}".format(value)
+            return value
 
     def fillTable(self):
         self.content.table.clear()
@@ -252,6 +188,12 @@ class TextOutputNode(DataNode):
 
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
+
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+
 
     def initInnerClasses(self):
         self.content = TextOutputContent(self)

@@ -7,36 +7,73 @@ class FileInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
         self.width  = 180.0
-        self.height = 120.0
+        self.height = 140.0
 
 class FileInputContent(DataContent):
     def initUI(self):
         super().initUI()
-        self.layout = QVBoxLayout()
-        self.layout.setContentsMargins(0,0,0,0)
+
+        self.separator = "Add"
+
+        self.layout = QGridLayout()
+        self.layout.setContentsMargins(5,5,5,5)
+        self.layout.setSpacing(0)
         self.setLayout(self.layout)
 
         self.openFile = QPushButton("Open input file")
-        self.layout.addWidget(self.openFile)
+        self.openFile.setStyleSheet("margin-bottom: 10px; height: 30px;")
+        self.layout.addWidget(self.openFile, 0, 0, 1, 2)
+
+        self.cb = QComboBox()
+        self.cb.addItem(",")
+        self.cb.addItem(".")
+        self.cb.addItem(";")
+        self.cb.addItem("tab")
+
+        label = QLabel("Sep:  ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+        #self.cb.setStyleSheet("margin-bottom: 10px;")
+        self.layout.addWidget(label, 1, 0)
+        self.layout.addWidget(self.cb, 1, 1)
+
+        self.cb.currentIndexChanged.connect(self.selectionchange)
+
 
         self.edit = QLineEdit("1", self)
         self.edit.setAlignment(Qt.AlignCenter)
         self.edit.setReadOnly(True)
         self.edit.setText("File name")
-        self.layout.addWidget(self.edit)
+        self.layout.addWidget(self.edit, 2, 0, 1, 2)
 
+    def selectionchange(self):
+        self.setSeparator()
+        self.changed.emit()
+        
+    def setSeparator(self):
+        sep = self.cb.currentText()
+        if sep == "," or sep == "." or sep == ";":
+            self.node.separator = sep
+            return
+        if sep == "tab":
+            self.node.separator = "\t"
+            return
+        self.node.separator = ""        
 
     def serialize(self):
         res = super().serialize()
+        res['sel_ind'] = self.cb.currentIndex()
         res['file'] = self.node.file
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
+            self.cb.setCurrentIndex(data['sel_ind'])
+            self.setSeparator()
+
             self.node.file = data['file']
             self.edit.setText(os.path.basename(self.node.file))
-            self.node.readDFFile(self.node.file)
             return True & res
         except Exception as e : dumpException(e)
         return res
@@ -50,21 +87,23 @@ class FileInputNode(DataNode):
     def __init__(self, scene, inputs=[], outputs=[SOCKET_TYPE_DATA]):
         super().__init__(scene, inputs, outputs)
         #self.value = None
+        self.can_read = True
         self.separator = ","
         self.file = ""
         self.setDirty()
-        self.can_read = True
 
 
     def initInnerClasses(self):
         self.content = FileInputContent(self)
         self.grNode  = FileInputGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.edit.textChanged.connect(self.onInputChanged)
-        self.content.edit.textChanged.connect(self.onInputChanged)
         self.content.openFile.clicked.connect(self.openInputFile)
         self.content.openFile.clicked.connect(self.onInputChanged)
+        self.content.changed.connect(self.rereadFile)
 
+    def rereadFile(self):
+        self.readDFFile(self.file)
+        self.recalculateNode()
 
     def openInputFile(self):
         file, filter = QFileDialog.getOpenFileName(self.scene.getView(), 'Open Node-Tree from File')
@@ -98,5 +137,6 @@ class FileInputNode(DataNode):
 
 
     def evalImplementation(self, silent=False):
+        self.readDFFile(self.file)
         if self.can_read : return True
         else: return False

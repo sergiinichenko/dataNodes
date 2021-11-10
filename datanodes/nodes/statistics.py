@@ -55,6 +55,12 @@ class DescribeOutputNode(DataNode):
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
 
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+
+
     def initInnerClasses(self):
         self.content = DescribeContent(self)
         self.grNode  = DescribeGraphicsNode(self)
