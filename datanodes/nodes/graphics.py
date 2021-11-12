@@ -37,7 +37,7 @@ class GraphicsOutputContent(DataContent):
         # graph area
         self.graph = Figure()
         self.graph.autofmt_xdate()
-        self.axis   = self.graph.add_subplot(111)
+        self.axes   = self.graph.add_subplot(111)
         self.canvas = FigureCanvas(self.graph)
         self.layout.addWidget(self.canvas)
 
@@ -355,22 +355,24 @@ class GraphicsOutputNode(ResizableInputNode):
         return True
 
     def prepareCanvas(self):
+        if not self.hasValue(0) : return
+
         value = self.getInput(0).value
-        self.content.axis.clear()
+        self.content.axes.clear()
         x_name = list(value.keys())[0]
         self.x_val  = value[x_name]
 
         if self.properties.xtitle == "":
-            self.content.axis.set_xlabel(x_name)
+            self.content.axes.set_xlabel(x_name)
         else:
-            self.content.axis.set_xlabel(self.properties.xtitle)
+            self.content.axes.set_xlabel(self.properties.xtitle)
 
-        self.content.axis.set_ylabel(self.properties.ytitle)
-        self.content.axis.xaxis.label.set_size( self.properties.xsize )
-        self.content.axis.yaxis.label.set_size( self.properties.ysize )
+        self.content.axes.set_ylabel(self.properties.ytitle)
+        self.content.axes.xaxis.label.set_size( self.properties.xsize )
+        self.content.axes.yaxis.label.set_size( self.properties.ysize )
 
-        self.content.axis.tick_params(labelsize= self.properties.ticksize)
-        self.content.axis.tick_params(labelsize= self.properties.ticksize)
+        self.content.axes.tick_params(labelsize= self.properties.ticksize)
+        self.content.axes.tick_params(labelsize= self.properties.ticksize)
 
     def addData(self, value):
         if not value : return 
@@ -382,20 +384,21 @@ class GraphicsOutputNode(ResizableInputNode):
         for i, name in enumerate(value):
             if name != x_name:
                 if self.properties.graphtype[name] == 'line':
-                    self.content.axis.plot(x_val, value[name], label=name, 
+                    self.content.axes.plot(x_val, value[name], label=name, 
                                             color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
                                             linewidth=self.properties.linesize[name])
 
                 if self.properties.graphtype[name] == 'scatter':
-                    self.content.axis.scatter(x_val, value[name], label=name, 
+                    self.content.axes.scatter(x_val, value[name], label=name, 
                                             color=self.properties.linecolor[name], marker=self.properties.linestyle[name],
                                             s=self.properties.linesize[name]*10)
 
     def drawPlot(self):
+        self.content.axes.clear()
         self.prepareCanvas()
         for input in self.insockets:
             self.addData(input.value)
-        self.content.axis.legend(loc = 1, fontsize=self.properties.legendsize)
+        self.content.axes.legend(loc = 1, fontsize=self.properties.legendsize)
         self.content.canvas.draw()
 
 
@@ -407,7 +410,7 @@ class GraphicsOutputNode(ResizableInputNode):
             return False
         else:
             self.sortSockets()
-            if len(self.insockets) > 0:      
+            if len(self.insockets) > 0:
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = ""

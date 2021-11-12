@@ -93,7 +93,7 @@ class TableOutputNode(DataNode):
         nofrows = 1
         for key in self.value:
 
-            if isinstance(self.value[key], (np.ndarray)):
+            if isinstance(self.value[key], (list, np.ndarray)):
                 if len(self.value[key]) > nofrows : nofrows = len(self.value[key])
 
         self.content.table.setColumnCount(len(self.value))
@@ -103,7 +103,7 @@ class TableOutputNode(DataNode):
             item = QTableWidgetItem(key)
             self.content.table.setItem(0, c, item)
             
-            if isinstance(self.value[key], (np.ndarray)):
+            if isinstance(self.value[key], (list, np.ndarray)):
                 for r, value in enumerate(self.value[key]):
                     item = QTableWidgetItem(self.getFormatedValue(value))
                     self.content.table.setItem(r+1, c, item)
@@ -158,7 +158,6 @@ class TextOutputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
-        res['value'] = self.textOut.toPlainText()
         res['width'] = self.node.grNode.width
         res['height'] = self.node.grNode.height
         return res
@@ -166,9 +165,7 @@ class TextOutputContent(DataContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            value = data['value']
             self.textOut.clear()
-            self.textOut.insertPlainText(value)
             try:
                 self.node.grNode.height = data['height']
                 self.node.grNode.width  = data['width']

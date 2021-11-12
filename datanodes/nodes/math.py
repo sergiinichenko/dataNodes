@@ -3,6 +3,7 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import numpy as np
+import re
 from math import *
 import copy
 
@@ -520,5 +521,152 @@ class ExpressionNode(ResizableInputNode):
                 self.setInvalid(False)
                 self.e = e
                 self.getOutput(0).value = {label : 0.0}
+                self.getOutput(0).type = "float"
+                return False
+
+
+
+
+
+
+
+
+
+
+
+
+class TextField(QPlainTextEdit):
+    def __init__(self, content = None):
+        super().__init__()
+        self.content = content
+        self.setFixedHeight(215)
+        #self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
+        self.setPlainText("x = 2 + 2")
+
+    def initUI(self):
+        self.installEventFilter(self)
+
+    def keyPressEvent(self, qKeyEvent):
+        if qKeyEvent.key() == Qt.Key_Return and qKeyEvent.modifiers() & Qt.ShiftModifier:
+            self.content.node.recalculateNode()
+            return
+        super().keyPressEvent(qKeyEvent)
+
+
+class CodeGraphicsNode(ResizableGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.min_height = 260.0
+        self.width   = 350.0
+        self.height  = 260.0
+
+class CodeContent(ResizableContent):
+    def initUI(self):
+        self.mainlayout = QVBoxLayout()
+        self.mainlayout.setContentsMargins(40,5,5,5)
+
+        self.hlayout = QHBoxLayout()
+        self.vlayout = QHBoxLayout()
+        self.mainlayout.addLayout(self.hlayout)
+        self.mainlayout.addLayout(self.vlayout)
+
+        self.edit = TextField(self)
+        self.vlayout.addWidget(self.edit)
+        self.mainlayout.addStretch()
+
+        self.setLayout(self.mainlayout)
+
+    def serialize(self):
+        res = super().serialize()
+        res['value'] = self.edit.toPlainText()
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.edit.setPlainText( data['value'])
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+@register_node(OP_MODE_CODEBLOCK)
+class CodeNode(ResizableInputNode):
+    icon = "icons/math.png"
+    op_code = OP_MODE_CODEBLOCK
+    op_title = "Code block"
+
+    def __init__(self, scene, inputs=[1], outputs=[2]):
+        super().__init__(scene, inputs, outputs)
+        self.setDirty(False)
+        self.setDescendentsDirty(False)
+        self.getOutput(0).value = 4
+        self.getOutput(0).type  = "float"
+        #self.eval()
+
+    def initSettings(self):
+        super().initSettings()
+        self.output_socket_position = RIGHT_TOP
+
+    def initInnerClasses(self):
+        self.content    = CodeContent(self)
+        self.grNode     = CodeGraphicsNode(self)
+        self.properties = NodeProperties(self)
+        #self.content.edit.returnPressed.connect(self.recalculateNode)
+        self.content.changed.connect(self.recalculateNode)
+
+    def evalImplementation(self, silent=False):
+        inputs = self.getInputs()
+        self.value = {}
+        if not inputs:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
+        else:
+            try:
+                expression = self.content.edit.toPlainText()
+                localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 
+                           'cos' : np.cos, 'sin': np.sin, 'abs':np.abs,
+                           'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
+
+                code = compile(expression, "<string>", "exec")
+                if len(inputs) > 0:      
+                    self.setDirty(False)
+                    self.setInvalid(False)
+                    self.e = ""
+                    self.value = {}
+                    self.filtered = {}
+                    for input in inputs[:-1]:
+                        for name in input.value:
+                            self.filtered[name] = np.nan_to_num(input.value[name])
+
+                    variables = []
+                    for l in iter(expression.splitlines()):
+                        if "=" in l:
+                            variables.append(l.split("=")[0].replace(" ",""))
+
+                    exec(code, self.filtered, localVars)
+
+                    for input in inputs[:-1]:
+                        for name in input.value: 
+                            self.value[name] = self.filtered[name]
+
+                    for sdfsdf in variables:
+                        self.value[sdfsdf] = localVars[sdfsdf]
+
+                    self.getOutput(0).value = self.value
+                    self.getOutput(0).type  = "df"
+                    return True
+
+                else:
+                    self.getOutput(0).value = {"error" : "something is wrong with your code"}
+                    self.getOutput(0).type  = "float"
+                    return True
+            
+            except Exception as e:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = e
+                self.getOutput(0).value = {"res" : 0.0}
                 self.getOutput(0).type = "float"
                 return False

@@ -1,3 +1,4 @@
+import re
 from PyQt5.QtWidgets import *
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.core.node_serializer import Serializer
@@ -99,6 +100,17 @@ class Socket(Serializer):
 
     def hasEdges(self):
         return len(self.edges) > 0
+
+    def hasValue(self):
+        if self.hasEdges():
+            if self.inout == SOCKET_INPUT:
+                if self.edges[0].getOtherSocket(self).value:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        return False
 
     def remove(self):
         if self.hasEdges() : self.clearEdges()

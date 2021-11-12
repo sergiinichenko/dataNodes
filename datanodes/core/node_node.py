@@ -301,6 +301,21 @@ class Node(Serializer):
             dumpException(e)
             return None
 
+    def hasValue(self, index=0):
+        try:
+            if self.inputs[index].hasEdges():
+                return self.inputs[index].hasValue()
+            else:
+                return None
+
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return None
+
+        except Exception as e: 
+            dumpException(e)
+            return None
+
 
     def getInputs(self):
         inputs = []
