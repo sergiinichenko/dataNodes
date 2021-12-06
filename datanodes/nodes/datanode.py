@@ -147,20 +147,12 @@ class DataNode(Node):
             if self.isMute():
                 if len(self.getInputs()) > 0:
                     val_label = list(self.getInput(0).value.keys())[0]
-                    value = self.getInput(0).value[val_label]
-                    type  = self.getInput(0).type
+                    value = self.getInput(0).value
                 else:
-                    value = 0.0
-                    type  = "float"
-                    val_label = "result"
+                    value = {"x" : 0.0}
                 
-                if hasattr(self.content, 'label'): label = self.content.label.text()
-                else:                  label = val_label
-
                 if len(self.getOutputs()) > 0:
-                    for output in self.getOutputs():
-                        output.value = {label : value}
-                        output.type  = type
+                    self.getOutput(0).value = value
                 self.setDescendentsDirty()
                 self.evalChildren()
                 return True
