@@ -70,6 +70,8 @@ class GraphicsView(QGraphicsView):
         self._drap_enter_listeners = []
         self._drop_listeners = []
         #self.setContextMenuPolicy(Qt.NoContextMenu)
+        
+        self._mouse_position = None
 
     def initUI(self):
         # set high quality of the view
@@ -366,6 +368,7 @@ class GraphicsView(QGraphicsView):
 
     def mouseMoveEvent(self, event):
         pos = self.mapToScene(event.pos())
+        self._mouse_position = event.pos()
         try:
             modified = self.setSocketHighlights(pos, highlighted=False, radius=EDGE_SNAPPING_RADIUS+50)
 

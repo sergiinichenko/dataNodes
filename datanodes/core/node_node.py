@@ -214,8 +214,7 @@ class Node(Serializer):
 
     def setDirty(self, value=True):
         self._is_dirty = value
-        if self._is_dirty:
-            self.onSetDirty()
+        self.onSetDirty()
 
     def setChildrenDirty(self, value=True):
         for child in self.getChildNodes():
@@ -234,8 +233,7 @@ class Node(Serializer):
 
     def setInvalid(self, value=True):
         self._is_invalid = value
-        if self._is_invalid:
-            self.onSetInvalid()
+        self.onSetInvalid()
 
     def onSetInvalid(self):
         self.grNode.update()

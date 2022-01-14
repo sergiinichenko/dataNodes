@@ -385,36 +385,122 @@ class NodeSubWindow(NodeWidget):
 
     def handleNodeContextMenu(self, event):
         context_menu = QMenu(self)
-        markDirtyAct     = context_menu.addAction("Mark Dirty")
-        markDirtyDescAct = context_menu.addAction("Mark Descendants Dirty")
-        unmarkDirtyAct   = context_menu.addAction("Unmark Dirty")
-        markInvalidAct   = context_menu.addAction("Mark Invalid")
-        markInvalidDescAct = context_menu.addAction("Mark Descendants Invalid")
-        unmarkInvalidAct = context_menu.addAction("Unmark Invalid")
-        muteAct          = context_menu.addAction("Mute")
-        unmuteAct        = context_menu.addAction("Unmute")
-        evalAct          = context_menu.addAction("Eval")
+        markDirty = QAction(self)
+        markDirty.setText("Mark Dirty")
+        markDirty.setShortcut("D")
+        markDirtyAct     = context_menu.addAction(markDirty)
+
+        markDirtyDesc = QAction(self)
+        markDirtyDesc.setText("Mark Descendants Dirty")
+        markDirtyDescAct     = context_menu.addAction(markDirtyDesc)
+
+        unmarkDirty = QAction(self)
+        unmarkDirty.setText("Unmark Dirty")
+        unmarkDirty.setShortcut("D")
+        unmarkDirtyAct     = context_menu.addAction(unmarkDirty)
+
+        markInvalid = QAction(self)
+        markInvalid.setText("Mark Invalid")
+        markInvalid.setShortcut("I")
+        markInvalidAct     = context_menu.addAction(markInvalid)
+
+        markInvalidDesc = QAction(self)
+        markInvalidDesc.setText("Mark Descendants Invalid")
+        markInvalidDescAct     = context_menu.addAction(markInvalidDesc)
+        
+        unmarkInvalid = QAction(self)
+        unmarkInvalid.setText("Unmark Invalid")
+        unmarkInvalid.setShortcut("I")
+        unmarkInvalidAct     = context_menu.addAction(unmarkInvalid)
+
+        mute = QAction(self)
+        mute.setText("Mute")
+        mute.setShortcut("M")
+        muteAct     = context_menu.addAction(mute)
+
+        unmute = QAction(self)
+        unmute.setText("Unmute")
+        unmute.setShortcut("M")
+        unmuteAct     = context_menu.addAction(unmute)
+
+        eval = QAction(self)
+        eval.setText("Eval")
+        eval.setShortcut("E")
+        evalAct     = context_menu.addAction(eval)
+
 
         action = context_menu.exec_(self.mapToGlobal(event.pos()))
         
         selected = None
         item = self.scene.getItemAtPos(event.pos())
         if type(item) == QGraphicsProxyWidget : item = item.widget()
-        if hasattr(item, 'node') : selected   = item.node
+        if hasattr(item, 'node')   : selected   = item.node
         if hasattr(item, 'socket') : selected = item.socket.node
 
-        if selected and action == markDirtyAct : selected.setDirty()
-        if selected and action == unmarkDirtyAct : selected.setDirty(False)
-        if selected and action == markDirtyDescAct : selected.setDescendentsDirty()
-        if selected and action == markInvalidAct : selected.setInvalid()
-        if selected and action == markInvalidDescAct : selected.setDescendentsInvalid()
-        if selected and action == unmarkInvalidAct : selected.setInvalid(False)
-        if selected and action == muteAct : selected.setMute()
-        if selected and action == unmuteAct : selected.setMute(False)
-        if selected and action == evalAct : selected.eval()
+        print(selected, item, action)
+
+        if selected and action == markDirty       : selected.setDirty()
+        if selected and action == unmarkDirty     : selected.setDirty(False)
+        if selected and action == markDirtyDesc   : selected.setDescendentsDirty()
+        if selected and action == markInvalid     : selected.setInvalid()
+        if selected and action == markInvalidDesc : selected.setDescendentsInvalid()
+        if selected and action == unmarkInvalid   : selected.setInvalid(False)
+        if selected and action == mute            : selected.setMute()
+        if selected and action == unmute          : selected.setMute(False)
+        if selected and action == eval            : selected.eval()
 
         if selected and action == evalAct:
             val = selected.eval()
+
+
+    def keyPressEvent(self, event):
+        try:
+            view      = self.scene.getView()
+            mouse_pos = view._mouse_position
+            item = self.scene.getItemAtPos(mouse_pos)
+
+            if type(item) == QGraphicsProxyWidget:
+                item = item.widget()
+
+            if hasattr(item, 'node') or hasattr(item, 'socket'):
+                self.handleHotKeys(event)
+
+            else:
+                self.handleHotKeys(event)
+                
+            return super().keyPressEvent(event)
+        except Exception as e : 
+            dumpException(e)
+            
+            
+    def handleHotKeys(self, event):
+        
+        view      = self.scene.getView()
+        mouse_pos = view._mouse_position
+        item = self.scene.getItemAtPos(mouse_pos)
+
+        selected = None
+        
+        if type(item) == QGraphicsProxyWidget : item = item.widget()
+        if hasattr(item, 'node') :   selected = item.node
+        if hasattr(item, 'socket') : selected = item.socket.node
+
+        if selected is None : return
+
+        if selected and event.key() == Qt.Key_D : 
+            if not selected.isDirty() : selected.setDirty()
+            else:                       selected.setDirty(False)
+
+        if selected and event.key() == Qt.Key_I : 
+            if not selected.isInvalid() : selected.setInvalid()
+            else:                         selected.setInvalid(False)
+
+        if selected and event.key() == Qt.Key_M : 
+            if not selected.isMute() : selected.setMute()
+            else:                      selected.setMute(False)
+
+        if selected and event.key() == Qt.Key_E : 
+            selected.eval()
 
 
     def handleEdgeContextMenu(self, event):

@@ -57,8 +57,9 @@ class GraphicsNode(QGraphicsItem):
 
         self._brush_title = QBrush(QColor("#FF313131"))
         self._brush_background = QBrush(QColor("#E3212121"))
-        self._brush_dirty = QBrush(QColor("#FFA4AC7B"))
+        self._brush_dirty   = QBrush(QColor("#FFA4AC7B"))
         self._brush_invalid = QBrush(QColor("#FF9A5B5B"))
+        self._brush_mute    = QBrush(QColor("#FFE2C563"))
 
         self._color_hov= QColor("#FF37A6FF")
         self._pen_hov  = QPen(self._color_hov)

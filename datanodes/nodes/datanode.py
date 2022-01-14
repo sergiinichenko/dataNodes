@@ -31,12 +31,18 @@ class DataGraphicsNode(GraphicsNode):
         super().paint(painter, QStyleOptionGraphicsItem, widget)
         offset = 24.0
         brush =  self._brush_title
+        
         if self.node.isDirty()   : 
             offset =  0.0
             brush = self._brush_dirty
+            
         if self.node.isInvalid() : 
             offset = 48.0
             brush  = self._brush_invalid
+
+        if self.node.isMute() : 
+            offset = 24.0
+            brush  = self._brush_mute
 
         self.paintTitle(painter, brush)
 
@@ -46,14 +52,6 @@ class DataGraphicsNode(GraphicsNode):
             QRectF(offset, 0.0, 24.0, 24.0)
             )
         
-        if self.node.isMute():
-            path_mute = QPainterPath()
-            path_mute.setFillRule(Qt.WindingFill)
-            path_mute.addRoundedRect(0,0,self.width, self.height,
-                    self.border_radius, self.border_radius)
-            painter.setPen(Qt.NoPen)
-            painter.setBrush(QBrush(QColor(117, 90, 88, 128)))
-            painter.drawPath(path_mute.simplified())
 
     def itemChange(self, change, value):
         if self.isSelected() and not self.is_selected:
