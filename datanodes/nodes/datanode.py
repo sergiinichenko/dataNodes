@@ -335,9 +335,12 @@ class ResizebleDataNode(DataGraphicsNode):
     def mouseMoveEvent(self, event):
         if self.mode == MODE_DRAG_RESIZE:
             scale = self.mapToScene(event.pos()) - self.init_pos
-            self.width  = self.init_size[0] + scale.x()
-            self.height = self.init_size[1] + scale.y()
+            width  = self.init_size[0] + scale.x()
+            height = self.init_size[1] + scale.y()
+            if width  > self.min_width  : self.width  = width
+            if height > self.min_height : self.height = height
             self.update()
+            self.node.updateOutputsPos()
             self.content.updateSize()
             return
 
@@ -711,6 +714,7 @@ class AdjustableOutputGraphicsNode(DataGraphicsNode):
         self.width  = 200.0
         self.height = 220.0
         self.min_height = 220.0
+        self.min_width  = 120.0
 
 class AdjustableOutputContent(DataContent):
     def initUI(self):

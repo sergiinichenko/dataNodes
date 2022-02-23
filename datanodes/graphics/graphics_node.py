@@ -39,6 +39,7 @@ class GraphicsNode(QGraphicsItem):
         self.width  = 180.0
         self.height = 240.0
         self.min_height = 0.0
+        self.min_width  = 0.0
         self.border_radius = 10.0
         self.padding       = 5.0
         self.title_height = 24.0

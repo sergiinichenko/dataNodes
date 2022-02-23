@@ -116,6 +116,144 @@ class ColorPicker(QWidget):
                 self.node.e = e
 
 
+class PlotProperties(NodeProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+        self.marginTop  = 10
+        self.marginRight= 10
+        self.marginBottom= 10
+        self.marginLeft = 10
+        self.labelsize  = 12.0
+        self.ticksize   = 10.0
+        self.legendsize = 12.0
+
+        label = QLabel("margins ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 1, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        self.marginTopW  = QLineEdit(str(self.marginTop), self)
+        self.marginTopW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginTopW, 2, 0, 1, 2)
+
+        self.marginRightW  = QLineEdit(str(self.marginRight), self)
+        self.marginRightW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginRightW, 3, 1)
+
+        self.marginLeftW  = QLineEdit(str(self.marginLeft), self)
+        self.marginLeftW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginLeftW, 3, 0)
+
+        self.marginBottomW  = QLineEdit(str(self.marginBottom), self)
+        self.marginBottomW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginBottomW, 4, 0, 1, 2)
+        self.marginBottomW.setStyleSheet("margin-bottom: 15px;")
+
+
+        label = QLabel("Font sizes ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 5, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("lebels  ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labelsizeW  = QLineEdit(str(self.labelsize), self)
+        self.labelsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 6, 0)
+        self.layout.addWidget(self.labelsizeW, 6, 1)
+
+        label = QLabel("ticks   ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
+        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 7, 0)
+        self.layout.addWidget(self.ticksizeW, 7, 1)
+
+        label = QLabel("legends ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
+        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 8, 0)
+        self.layout.addWidget(self.legendsizeW, 8, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.legendsizeW.setStyleSheet("margin-bottom: 15px;")
+
+        self.marginTopW.returnPressed.connect(self.updateData)
+        self.marginRightW.returnPressed.connect(self.updateData)
+        self.marginLeftW.returnPressed.connect(self.updateData)
+        self.marginBottomW.returnPressed.connect(self.updateData)
+        self.labelsizeW.returnPressed.connect(self.updateData)
+        self.ticksizeW.returnPressed.connect(self.updateData)
+        self.legendsizeW.returnPressed.connect(self.updateData)
+
+    def updateContent(self):
+        self.labelsize    = float(self.labelsizeW.text())
+        self.ticksize     = float(self.ticksizeW.text())
+        self.legendsize   = float(self.legendsizeW.text())
+        self.marginTop    = float(self.marginTopW.text())
+        self.marginRight  = float(self.marginRightW.text())
+        self.marginLeft   = float(self.marginLeftW.text())
+        self.marginBottom = float(self.marginBottomW.text())
+
+    def updateData(self):
+        self.updateContent()
+        self.node.drawPlot()
+
+    def fillWidgets(self):
+        self.marginTopW.setText(str(self.marginTop))
+        self.marginRightW.setText(str(self.marginRight))
+        self.marginLeftW.setText(str(self.marginLeft))
+        self.marginBottomW.setText(str(self.marginBottom))
+        self.labelsizeW.setText(str(self.labelsize))
+        self.ticksizeW.setText(str(self.ticksize))
+        self.legendsizeW.setText(str(self.legendsize))
+
+    def serialize(self):
+        res = super().serialize()
+        res['margintop']   = self.marginTop
+        res['marginright'] = self.marginRight
+        res['marginleft']  = self.marginLeft
+        res['marginbottom']= self.marginBottom
+        res['labelsize']   = self.labelsize
+        res['ticksize']    = self.ticksize
+        res['legendsize']  = self.legendsize
+
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'margintop'    in data : self.marginTop    = data['margintop']  
+                if 'marginright'  in data : self.marginRight  = data['marginright'] 
+                if 'marginleft'   in data : self.marginLeft   = data['marginleft'] 
+                if 'marginbottom' in data : self.marginBottom = data['marginbottom'] 
+                if 'labelsize'   in data : self.labelsize = data['labelsize']
+                if 'ticksize'    in data : self.ticksize  = data['ticksize']
+                if 'legendsize'  in data : self.legendsize  = data['legendsize']
+
+                self.fillWidgets()
+
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class GraphicsProperties(NodeProperties):
     def __init__(self, node, parent=None):
         super().__init__(node)
@@ -439,17 +577,10 @@ class GraphicsOutputNode(ResizableInputNode):
 class TernaryPlotCanvas(FigureCanvas):
 
     def __init__(self, parent=None, width=5, height=4, dpi=100):
-        self.fig = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
-        self.axes = self.fig.add_subplot(111)
-        # create an axes on the right side of ax. The width of cax will be 5%
-        # of ax and the padding between cax and ax will be fixed at 0.05 inch.
-        #divider = make_axes_locatable(self.axes)
-        #self.bar = divider.append_axes("right", size="5%", pad=0.1)
-        self.bar = self.fig.add_axes([0.90, 0.25, 0.05, 0.70])#divider.append_axes("right", size="5%", pad=0.2)
-
+        self.fig  = Figure(figsize=(width, height), dpi=dpi)
+        self.axes = self.fig.add_axes([0.1, 0.1,  0.75, 0.85])
+        self.bar  = self.fig.add_axes([0.9, 0.1,  0.05, 0.85])
         super(TernaryPlotCanvas, self).__init__(self.fig)
-
-
 
 class TernaryPlotGraphicsNode(ResizebleDataNode):
     def initSizes(self):
@@ -487,6 +618,116 @@ class TernaryPlotContent(DataContent):
         except Exception as e : dumpException(e)
         return res
 
+class TernaryPlotProperties(PlotProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+
+        self.levels     = 10
+        self.barfont    = 12
+        self.xtitle     = ""
+        self.ytitle     = ""
+        self.ztitle     = ""
+
+        label = QLabel("levels ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.levelsW  = QLineEdit(str(self.levels), self)
+        self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 9, 0)
+        self.layout.addWidget(self.levelsW, 9, 1)
+        label.setStyleSheet("margin-bottom: 5px;")
+        self.levelsW.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("bar font size ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.barfontW  = QLineEdit(str(self.barfont), self)
+        self.barfontW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 10, 0)
+        self.layout.addWidget(self.barfontW, 10, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.barfontW.setStyleSheet("margin-bottom: 15px;")
+
+
+        label = QLabel("Axis names ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 11, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("x name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.xlabelW  = QLineEdit(self.xtitle, self)
+        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 12, 0)
+        self.layout.addWidget(self.xlabelW, 12, 1)
+
+        label = QLabel("y name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ylabelW  = QLineEdit(self.ytitle, self)
+        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 13, 0)
+        self.layout.addWidget(self.ylabelW, 13, 1)
+
+        label = QLabel("z name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.zlabelW  = QLineEdit(self.ztitle, self)
+        self.zlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 14, 0)
+        self.layout.addWidget(self.zlabelW, 14, 1)
+
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.zlabelW.setStyleSheet("margin-bottom: 15px;")
+
+        self.levelsW.returnPressed.connect(self.updateData)
+        self.barfontW.returnPressed.connect(self.updateData)
+        self.xlabelW.returnPressed.connect(self.updateData)
+        self.ylabelW.returnPressed.connect(self.updateData)
+        self.zlabelW.returnPressed.connect(self.updateData)
+
+
+    def updateContent(self):
+        super().updateContent()
+        self.levels       = int(self.levelsW.text())
+        self.barfont      = float(self.barfontW.text())
+        self.xtitle       = self.xlabelW.text()
+        self.ytitle       = self.ylabelW.text()
+        self.ztitle       = self.zlabelW.text()
+
+    def fillWidgets(self):
+        super().fillWidgets()
+        self.levelsW.setText(str(self.levels))
+        self.xlabelW.setText(self.xtitle)
+        self.ylabelW.setText(self.ytitle)
+        self.zlabelW.setText(self.ztitle)
+        self.barfontW.setText(str(self.barfont))
+
+    def serialize(self):
+        res = super().serialize()
+        res['barfont']    = self.barfont
+        res['levels']     = self.levels
+        res['xtitle']     = self.xtitle
+        res['ytitle']     = self.ytitle
+        res['ztitle']     = self.ztitle
+
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'levels'      in data : self.levels  = data['levels']
+                if 'xtitle'      in data : self.xtitle  = data['xtitle']
+                if 'ytitle'      in data : self.ytitle  = data['ytitle']
+                if 'ztitle'      in data : self.ztitle  = data['ztitle']
+                if 'barfont'     in data : self.barfont = data['barfont']
+
+                self.fillWidgets()
+
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
 @register_node(OP_MODE_PLOT_TERNARY)
 class TernaryPlotNode(ResizableInputNode):
     icon = "icons/valoutput.png"
@@ -503,16 +744,8 @@ class TernaryPlotNode(ResizableInputNode):
     def initInnerClasses(self):
         self.content = TernaryPlotContent(self)
         self.grNode  = TernaryPlotGraphicsNode(self)
-        self.properties = NodeProperties(self)
+        self.properties = TernaryPlotProperties(self)
         self.content.changed.connect(self.recalculateNode)
-
-    def prepareSettings(self):
-        """
-        self.properties.resetProperties()
-        self.properties.cleanProperties()
-        self.properties.fillWidgets()
-        """
-        return True
 
     def prepareSettings(self):
         return True
@@ -538,7 +771,7 @@ class TernaryPlotNode(ResizableInputNode):
             ax.text(xt + 1.75*x2, yt + 1.75*y2, i/10,
                     horizontalalignment='center',
                     verticalalignment='center',
-                    color='black', fontsize=15)
+                    color='black', fontsize=self.properties.ticksize)
             xt = xt + dx
             yt = yt + dy
         
@@ -589,13 +822,16 @@ class TernaryPlotNode(ResizableInputNode):
         
         # plot the contour
         im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
+        self.content.canvas.bar.set
+        self.content.canvas.bar.set_title(names[-1], fontsize = self.properties.barfont)
+        self.content.canvas.bar.tick_params(labelsize = self.properties.barfont)
         plt.colorbar(im, cax=self.content.canvas.bar)
-        self.content.canvas.bar.set_label(names[-1])
+        
         
         #position the axis labels
-        self.content.canvas.axes.text(1.05, -0.05,  names[1], fontsize=24, ha="left")
-        self.content.canvas.axes.text(0.50,  0.92,  names[2], fontsize=24, ha="center")
-        self.content.canvas.axes.text(-0.05,-0.05,  names[0], fontsize=24, ha="right")
+        self.content.canvas.axes.text(1.05, -0.05,  self.properties.ytitle, fontsize=self.properties.labelsize, ha="left")
+        self.content.canvas.axes.text(0.50,  0.92,  self.properties.ztitle, fontsize=self.properties.labelsize, ha="center")
+        self.content.canvas.axes.text(-0.05,-0.05,  self.properties.xtitle, fontsize=self.properties.labelsize, ha="right")
 
     def addScatter(self, value):
         names = list(value.keys())
@@ -624,6 +860,24 @@ class TernaryPlotNode(ResizableInputNode):
             for input in self.insockets[1:]:
                 if input.value:
                     self.addScatter(input.value)
+
+        self.content.canvas.axes.axes.tick_params(labelsize= self.properties.ticksize)
+
+        sc_w = (1.0 - self.properties.marginRight  * 0.01 - self.properties.marginLeft * 0.01)
+        sc_h = (1.0 - self.properties.marginBottom * 0.01 - self.properties.marginTop  * 0.01)
+
+        self.content.canvas.bar.set_position([
+                            self.properties.marginLeft * 0.01 + sc_w * 0.95, 
+                            self.properties.marginBottom * 0.01 + 0.10, 
+                            sc_w * 0.05,
+                            sc_h * 0.85])
+
+        self.content.canvas.axes.set_position([
+                            self.properties.marginLeft * 0.01, 
+                            self.properties.marginBottom * 0.01, 
+                            sc_w * 0.9, 
+                            sc_h])
+                    
         self.content.canvas.axes.set_axis_off()
         self.content.canvas.draw()
 
@@ -703,145 +957,67 @@ class HeatMapContent(DataContent):
         except Exception as e : dumpException(e)
         return res
 
-class HeatMapProperties(NodeProperties):
+class HeatMapProperties(PlotProperties):
     def __init__(self, node, parent=None):
         super().__init__(node)
+
         self.levels     = 10
         self.xtitle     = ""
-        self.xsize      = 12.0
         self.ytitle     = ""
-        self.ysize      = 12.0
-        self.ticksize   = 10.0
-        self.legendsize = 12.0
-        self.marginTop  = 10
-        self.marginRight= 10
-        self.marginBottom= 10
-        self.marginLeft = 10
-
-        label = QLabel("margins ", self)        
-        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 1, 0, 1, 2)
-        label.setStyleSheet("margin-bottom: 5px;")
-
-        self.marginTopW  = QLineEdit(str(self.marginTop), self)
-        self.marginTopW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginTopW, 2, 0, 1, 2)
-
-        self.marginRightW  = QLineEdit(str(self.marginRight), self)
-        self.marginRightW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginRightW, 3, 1)
-
-        self.marginLeftW  = QLineEdit(str(self.marginLeft), self)
-        self.marginLeftW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginLeftW, 3, 0)
-
-        self.marginBottomW  = QLineEdit(str(self.marginBottom), self)
-        self.marginBottomW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginBottomW, 4, 0, 1, 2)
-        self.marginBottomW.setStyleSheet("margin-bottom: 15px;")
-
 
         label = QLabel("levels ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.levelsW  = QLineEdit(str(self.levels), self)
         self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 5, 0)
-        self.layout.addWidget(self.levelsW, 5, 1)
-        label.setStyleSheet("margin-bottom: 10px;")
-        self.levelsW.setStyleSheet("margin-bottom: 10px;")
+        self.layout.addWidget(label, 9, 0)
+        self.layout.addWidget(self.levelsW, 9, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.levelsW.setStyleSheet("margin-bottom: 15px;")
+
+        label = QLabel("Axis names ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 10, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
 
         label = QLabel("x name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.xsizeW  = QLineEdit(str(self.xsize), self)
-        self.xsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 6, 0)
-        self.layout.addWidget(self.xsizeW, 6, 1)
-
         self.xlabelW  = QLineEdit(self.xtitle, self)
         self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.xlabelW.setStyleSheet("margin-bottom: 5px;")
-        self.layout.addWidget(self.xlabelW, 7, 0, 1, 2)
+        self.layout.addWidget(label, 11, 0)
+        self.layout.addWidget(self.xlabelW, 11, 1)
 
         label = QLabel("y name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.ysizeW  = QLineEdit(str(self.ysize), self)
-        self.ysizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 8, 0)
-        self.layout.addWidget(self.ysizeW, 8, 1)
-
         self.ylabelW  = QLineEdit(self.ytitle, self)
         self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 12, 0)
+        self.layout.addWidget(self.ylabelW, 12, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
-        self.layout.addWidget(self.ylabelW, 9, 0, 1, 2)
 
-        label = QLabel("tick", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
-        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 10, 0)
-        self.layout.addWidget(self.ticksizeW, 10, 1)
-
-        label = QLabel("legend", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
-        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 11, 0)
-        self.layout.addWidget(self.legendsizeW, 11, 1)
-
-        self.marginTopW.returnPressed.connect(self.updateData)
-        self.marginRightW.returnPressed.connect(self.updateData)
-        self.marginLeftW.returnPressed.connect(self.updateData)
-        self.marginBottomW.returnPressed.connect(self.updateData)
         self.levelsW.returnPressed.connect(self.updateData)
         self.xlabelW.returnPressed.connect(self.updateData)
         self.ylabelW.returnPressed.connect(self.updateData)
-        self.xsizeW.returnPressed.connect(self.updateData)
-        self.ysizeW.returnPressed.connect(self.updateData)
-        self.ticksizeW.returnPressed.connect(self.updateData)
-        self.legendsizeW.returnPressed.connect(self.updateData)
 
 
-    def updateData(self):
-        self.levels     = int(self.levelsW.text())
-        self.xtitle     = self.xlabelW.text()
-        self.xsize      = float(self.xsizeW.text())
-        self.ytitle     = self.ylabelW.text()
-        self.ysize      = float(self.ysizeW.text())
-        self.ticksize   = float(self.ticksizeW.text())
-        self.legendsize = float(self.legendsizeW.text())
-        self.marginTop  = float(self.marginTopW.text())
-        self.marginRight  = float(self.marginRightW.text())
-        self.marginLeft = float(self.marginLeftW.text())
-        self.marginBottom = float(self.marginBottomW.text())
-        self.node.drawPlot()
+    def updateContent(self):
+        super().updateContent()
+        self.levels       = int(self.levelsW.text())
+        self.xtitle       = self.xlabelW.text()
+        self.ytitle       = self.ylabelW.text()
 
     def fillWidgets(self):
+        super().fillWidgets()
         self.levelsW.setText(str(self.levels))
         self.xlabelW.setText(self.xtitle)
-        self.xsizeW.setText(str(self.xsize))
         self.ylabelW.setText(self.ytitle)
-        self.ysizeW.setText(str(self.ysize))
-        self.ticksizeW.setText(str(self.ticksize))
-        self.legendsizeW.setText(str(self.legendsize))
-        self.marginTopW.setText(str(self.marginTop))
-        self.marginRightW.setText(str(self.marginRight))
-        self.marginLeftW.setText(str(self.marginLeft))
-        self.marginBottomW.setText(str(self.marginBottom))
 
     def serialize(self):
         res = super().serialize()
 
         res['levels']     = self.levels
         res['xtitle']     = self.xtitle
-        res['xsize']      = self.xsize
         res['ytitle']     = self.ytitle
-        res['ysize']      = self.ysize
-        res['ticksize']   = self.ticksize
-        res['legendsize'] = self.legendsize
-        res['margintop']  = self.marginTop
-        res['marginright'] = self.marginRight
-        res['marginleft'] = self.marginLeft
-        res['marginbottom'] = self.marginBottom
 
         return res
 
@@ -851,15 +1027,7 @@ class HeatMapProperties(NodeProperties):
             try:
                 if 'levels'      in data : self.levels = data['levels']
                 if 'xtitle'      in data : self.xtitle = data['xtitle']
-                if 'xsize'       in data : self.xsize  = data['xsize']
                 if 'ytitle'      in data : self.ytitle = data['ytitle']
-                if 'ysize'       in data : self.ysize  = data['ysize']
-                if 'ticksize'    in data : self.ticksize  = data['ticksize']
-                if 'legendsize'  in data : self.legendsize  = data['legendsize']
-                if 'margintop'    in data : self.marginTop    = data['margintop']  
-                if 'marginright'  in data : self.marginRight  = data['marginright'] 
-                if 'marginleft'   in data : self.marginLeft   = data['marginleft'] 
-                if 'marginbottom' in data : self.marginBottom = data['marginbottom'] 
 
                 self.fillWidgets()
 
@@ -924,8 +1092,8 @@ class HeatMapNode(ResizableInputNode):
                                                   levels=self.properties.levels)
         self.content.canvas.bar.set_title(names[-1])
         plt.colorbar(im, cax=self.content.canvas.bar)
-        self.content.canvas.axes.set_xlabel(self.properties.xtitle, fontsize=self.properties.xsize)
-        self.content.canvas.axes.set_ylabel(self.properties.ytitle, fontsize=self.properties.ysize)
+        self.content.canvas.axes.set_xlabel(self.properties.xtitle, fontsize=self.properties.labelsize)
+        self.content.canvas.axes.set_ylabel(self.properties.ytitle, fontsize=self.properties.labelsize)
         
         self.content.canvas.axes.axes.tick_params(labelsize= self.properties.ticksize)
         self.content.canvas.axes.axes.tick_params(labelsize= self.properties.ticksize)

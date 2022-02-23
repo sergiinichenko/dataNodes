@@ -553,15 +553,17 @@ class TextField(QPlainTextEdit):
         super().keyPressEvent(qKeyEvent)
 
 
-class CodeGraphicsNode(ResizableGraphicsNode):
+class CodeGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.min_height = 260.0
+        self.min_height = 200.0
+        self.min_width  = 160.0
         self.width   = 350.0
         self.height  = 260.0
-
-class CodeContent(ResizableContent):
+        
+class CodeContent(DataContent):
     def initUI(self):
+
         self.mainlayout = QVBoxLayout()
         self.mainlayout.setContentsMargins(40,5,5,5)
 
@@ -570,21 +572,25 @@ class CodeContent(ResizableContent):
         self.mainlayout.addLayout(self.hlayout)
         self.mainlayout.addLayout(self.vlayout)
 
-        self.edit = TextField(self)
+        self.edit = QPlainTextEdit(self)
         self.vlayout.addWidget(self.edit)
-        self.mainlayout.addStretch()
-
+        
         self.setLayout(self.mainlayout)
+
 
     def serialize(self):
         res = super().serialize()
         res['value'] = self.edit.toPlainText()
+        res['width'] = self.node.grNode.width
+        res['height'] = self.node.grNode.height
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             self.edit.setPlainText( data['value'])
+            if 'height' in data: self.node.grNode.height = data['height']
+            if 'width' in data: self.node.grNode.width   = data['width']
             return True & res
         except Exception as e : dumpException(e)
         return res
