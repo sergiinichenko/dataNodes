@@ -93,7 +93,7 @@ class FilterNode(DataNode):
         self.grNode     = FilterGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
-        self.content.value.textChanged.connect(self.recalculateNode)
+        self.content.value.returnPressed.connect(self.recalculateNode)
 
     def initSettings(self):
         super().initSettings()

@@ -59,8 +59,8 @@ class ValueInputNode(DataNode):
         self.content = ValueInputContent(self)
         self.grNode  = ValueInputGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.value.textChanged.connect(self.onInputChanged)
-        self.content.label.textChanged.connect(self.onInputChanged)
+        self.content.value.returnPressed.connect(self.onInputChanged)
+        self.content.label.returnPressed.connect(self.onInputChanged)
         self.content.changed.connect(self.recalculateNode)    
         
     def evalImplementation(self, silent=False):
@@ -119,8 +119,8 @@ class MultiValueInputContent(AdjustableOutputContent):
         self.mainlayout.addWidget(self.labels[id], i, 1)
         self.mainlayout.addWidget(self.values[id], i, 2)
 
-        self.labels[id].textChanged.connect(self.node.recalculateNode)
-        self.values[id].textChanged.connect(self.node.recalculateNode)
+        self.labels[id].returnPressed.connect(self.node.recalculateNode)
+        self.values[id].returnPressed.connect(self.node.recalculateNode)
         self.remove[id].clicked.connect(self.remove[id].removePair)
 
 
@@ -164,8 +164,8 @@ class MultiValueInputContent(AdjustableOutputContent):
                 self.mainlayout.addWidget(self.labels[id], i, 1)
                 self.mainlayout.addWidget(self.values[id], i, 2)
                 self.remove[id].clicked.connect(self.remove[id].removePair)
-                self.labels[id].textChanged.connect(self.node.recalculateNode)
-                self.values[id].textChanged.connect(self.node.recalculateNode)
+                self.labels[id].returnPressed.connect(self.node.recalculateNode)
+                self.values[id].returnPressed.connect(self.node.recalculateNode)
             return True & res
         except Exception as e : dumpException(e)
         return res

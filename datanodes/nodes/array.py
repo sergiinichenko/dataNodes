@@ -79,10 +79,10 @@ class StepRangeNode(DataNode):
         self.content = StepRangeContent(self)
         self.grNode  = StepRangeGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.name.textChanged.connect(self.onReturnPressed)
-        self.content.start.textChanged.connect(self.onReturnPressed)
-        self.content.step.textChanged.connect(self.onReturnPressed)
-        self.content.stop.textChanged.connect(self.onReturnPressed)
+        self.content.name.returnPressed.connect(self.onReturnPressed)
+        self.content.start.returnPressed.connect(self.onReturnPressed)
+        self.content.step.returnPressed.connect(self.onReturnPressed)
+        self.content.stop.returnPressed.connect(self.onReturnPressed)
 
     def onReturnPressed(self):
         self.recalculate = True
@@ -196,10 +196,10 @@ class NumRangeNode(DataNode):
         self.content = NumRangeContent(self)
         self.grNode  = NumRangeGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.name.textChanged.connect(self.onContentChanged)
-        self.content.start.textChanged.connect(self.onContentChanged)
-        self.content.number.textChanged.connect(self.onContentChanged)
-        self.content.stop.textChanged.connect(self.onContentChanged)
+        self.content.name.returnPressed.connect(self.onContentChanged)
+        self.content.start.returnPressed.connect(self.onContentChanged)
+        self.content.number.returnPressed.connect(self.onContentChanged)
+        self.content.stop.returnPressed.connect(self.onContentChanged)
         self.content.changed.connect(self.onContentChanged)
 
     def onContentChanged(self):
@@ -334,9 +334,9 @@ class FilledArrayNode(DataNode):
         self.content = FilledArrayContent(self)
         self.grNode  = FilledArrayGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.name.textChanged.connect(self.onReturnPressed)
-        self.content.number.textChanged.connect(self.onReturnPressed)
-        self.content.value.textChanged.connect(self.onReturnPressed)
+        self.content.name.returnPressed.connect(self.onReturnPressed)
+        self.content.number.returnPressed.connect(self.onReturnPressed)
+        self.content.value.returnPressed.connect(self.onReturnPressed)
 
     def onReturnPressed(self):
         self.recalculate = True
@@ -469,10 +469,10 @@ class Mesh2DNode(DataNode):
         self.content = Mesh2DContent(self)
         self.grNode  = Mesh2DGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.sizex.textChanged.connect(self.recalculateNode)
-        self.content.sizey.textChanged.connect(self.recalculateNode)
-        self.content.numx.textChanged.connect(self.recalculateNode)
-        self.content.numy.textChanged.connect(self.recalculateNode)
+        self.content.sizex.returnPressed.connect(self.recalculateNode)
+        self.content.sizey.returnPressed.connect(self.recalculateNode)
+        self.content.numx.returnPressed.connect(self.recalculateNode)
+        self.content.numy.returnPressed.connect(self.recalculateNode)
 
     def checkTheInputs(self):
         if self.getInput(0) is not None:
@@ -598,7 +598,7 @@ class TernaryGridNode(DataNode):
         self.content = TernaryGridContent(self)
         self.grNode  = TernaryGridGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.size.textChanged.connect(self.recalculateNode)
+        self.content.size.returnPressed.connect(self.recalculateNode)
 
 
     def checkTheInputs(self):
@@ -625,7 +625,7 @@ class TernaryGridNode(DataNode):
             z = np.empty((0))
 
             for i in range(size):
-                x = np.append(x, np.arange(0, 1.0 + step * (1.0 - i), step))
+                x = np.append(x, np.linspace(0, 1.0 - step * i, size + 1 - i))
                 y = np.append(y, np.full(size + 1 - i, i * step))
             x = np.append(x, [0.0])
             y = np.append(y, [1.0])

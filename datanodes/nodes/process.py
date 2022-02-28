@@ -323,7 +323,7 @@ class RenameContent(ResizableContent):
         self.labels_out[str(id)][namein].setAlignment(Qt.AlignLeft)
         self.mainlayout.addWidget(self.labels_in[str(id)][namein], i, 0)
         self.mainlayout.addWidget(self.labels_out[str(id)][namein], i, 1)
-        self.labels_out[str(id)][namein].textChanged.connect(self.node.recalculateNode)
+        self.labels_out[str(id)][namein].returnPressed.connect(self.node.recalculateNode)
 
     def clearContent(self):
         while self.mainlayout.count():

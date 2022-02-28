@@ -821,7 +821,10 @@ class TernaryPlotNode(ResizableInputNode):
         self.cAxes(self.content.canvas.axes, [0.5, 1.0], [ylim, 0])
         
         # plot the contour
-        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, 
+                                                  cmap=self.cmap, 
+                                                  vmin=self.vmin, vmax=self.vmax,
+                                                  levels=self.properties.levels)
         self.content.canvas.bar.set
         self.content.canvas.bar.set_title(names[-1], fontsize = self.properties.barfont)
         self.content.canvas.bar.tick_params(labelsize = self.properties.barfont)

@@ -98,9 +98,9 @@ class MathNode(DataNode):
         self.grNode  = MathGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.recalculateNode)
-        self.content.label.textChanged.connect(self.recalculateNode)
-        self.content.valuex.textChanged.connect(self.recalculateNode)
-        self.content.valuey.textChanged.connect(self.recalculateNode)
+        self.content.label.returnPressed.connect(self.recalculateNode)
+        self.content.valuex.returnPressed.connect(self.recalculateNode)
+        self.content.valuey.returnPressed.connect(self.recalculateNode)
 
     def initSettings(self):
         super().initSettings()
@@ -468,7 +468,7 @@ class ExpressionNode(ResizableInputNode):
         self.properties = NodeProperties(self)
         self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.label.returnPressed.connect(self.recalculateNode)
-        self.content.label.textChanged.connect(self.recalculateNode)
+        self.content.label.returnPressed.connect(self.recalculateNode)
         self.content.changed.connect(self.recalculateNode)
 
     def evalImplementation(self, silent=False):
