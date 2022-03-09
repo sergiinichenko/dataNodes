@@ -539,7 +539,6 @@ class TextField(QPlainTextEdit):
     def __init__(self, content = None):
         super().__init__()
         self.content = content
-        self.setFixedHeight(215)
         #self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
         self.setPlainText("x = 2 + 2")
 
@@ -572,7 +571,7 @@ class CodeContent(DataContent):
         self.mainlayout.addLayout(self.hlayout)
         self.mainlayout.addLayout(self.vlayout)
 
-        self.edit = QPlainTextEdit(self)
+        self.edit = TextField(self)
         self.vlayout.addWidget(self.edit)
         
         self.setLayout(self.mainlayout)
@@ -590,7 +589,7 @@ class CodeContent(DataContent):
         try:
             self.edit.setPlainText( data['value'])
             if 'height' in data: self.node.grNode.height = data['height']
-            if 'width' in data: self.node.grNode.width   = data['width']
+            if 'width'  in data: self.node.grNode.width  = data['width']
             return True & res
         except Exception as e : dumpException(e)
         return res

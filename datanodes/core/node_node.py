@@ -543,7 +543,6 @@ class Node(Serializer):
         if 'properties' in data:
             props= self.properties.deserialize(data['properties'], hashmap)
 
-
         self.inputs = []
         for socket_data in data["inputs"]:
             soket = Socket(node=self, 
@@ -555,7 +554,8 @@ class Node(Serializer):
             soket.deserialize(socket_data, hashmap, restore_id)
             self.inputs.append(soket)
 
-        self.outputs = []
+        self.clearOutputs()
+        #self.outputs = []
         for socket_data in data["outputs"]:
             soket = Socket(node=self, 
                            inout=socket_data['inout'], 
