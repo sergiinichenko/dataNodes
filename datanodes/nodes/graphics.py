@@ -254,21 +254,48 @@ class PlotProperties(NodeProperties):
 
 
 
-class GraphicsProperties(NodeProperties):
+class GraphicsProperties(PlotProperties):
     def __init__(self, node, parent=None):
         super().__init__(node)
+        self.xtitle    = ""
+        self.ytitle    = ""
         self.names     = {}
         self.linesize  = {}
         self.linecolor = {}
         self.linestyle = {}
         self.graphtype = {}
         self.c = 0
-        self.xtitle    = ""
-        self.xsize     = 12.0
-        self.ytitle    = ""
-        self.ysize     = 12.0
-        self.ticksize  = 10.0
-        self.legendsize = 12.0
+
+
+        label = QLabel("Axis names ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 9, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("x name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.xlabelW  = QLineEdit(self.xtitle, self)
+        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 10, 0)
+        self.layout.addWidget(self.xlabelW, 10, 1)
+
+        label = QLabel("y name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ylabelW  = QLineEdit(self.ytitle, self)
+        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 11, 0)
+        self.layout.addWidget(self.ylabelW, 11, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.ylabelW.setStyleSheet("margin-bottom: 15px;")
+
+        self.xlabelW.returnPressed.connect(self.updateData)
+        self.ylabelW.returnPressed.connect(self.updateData)
+
+    def updateContent(self):
+        super().updateContent()
+        self.xtitle       = self.xlabelW.text()
+        self.ytitle       = self.ylabelW.text()
+
 
     def resetWidgets(self):
         self.resetProperties()
@@ -309,72 +336,13 @@ class GraphicsProperties(NodeProperties):
                 del self.graphtype[name]
                 del self.linesize[name]
 
-    def adjustAxes(self):
-        self.xtitle = self.xlabelW.text()
-        self.xsize  = float(self.xsizeW.text())
-        self.ytitle = self.ylabelW.text()
-        self.ysize  = float(self.ysizeW.text())
-        self.ticksize = float(self.ticksizeW.text())
-        self.legendsize = float(self.legendsizeW.text())
-        self.node.drawPlot()
-
 
     def fillWidgets(self):
-        
-        label = QLabel("x name ", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.xsizeW  = QLineEdit(str(self.xsize), self)
-        self.xsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, self.i, 0)
-        self.layout.addWidget(self.xsizeW, self.i, 1)
-        self.i += 1
+        super().fillWidgets()
+        self.xlabelW.setText(self.xtitle)
+        self.ylabelW.setText(self.ytitle)
 
-        self.xlabelW  = QLineEdit(self.xtitle, self)
-        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.xlabelW.setStyleSheet("margin-bottom: 5px;")
-        self.layout.addWidget(self.xlabelW, self.i, 0, 1, 2)
-        self.i += 1
-
-
-        label = QLabel("y name ", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.ysizeW  = QLineEdit(str(self.ysize), self)
-        self.ysizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, self.i, 0)
-        self.layout.addWidget(self.ysizeW, self.i, 1)
-        self.i += 1
-
-        self.ylabelW  = QLineEdit(self.ytitle, self)
-        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.ylabelW.setStyleSheet("margin-bottom: 15px;")
-        self.layout.addWidget(self.ylabelW, self.i, 0, 1, 2)
-        self.i += 1
-
-
-        label = QLabel("tick", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
-        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, self.i, 0)
-        self.layout.addWidget(self.ticksizeW, self.i, 1)
-        self.i += 1
-
-        label = QLabel("legend", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
-        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, self.i, 0)
-        self.layout.addWidget(self.legendsizeW, self.i, 1)
-        self.i += 1
-
-
-        self.xlabelW.returnPressed.connect(self.adjustAxes)
-        self.ylabelW.returnPressed.connect(self.adjustAxes)
-        self.xsizeW.returnPressed.connect(self.adjustAxes)
-        self.ysizeW.returnPressed.connect(self.adjustAxes)
-        self.ticksizeW.returnPressed.connect(self.adjustAxes)
-        self.legendsizeW.returnPressed.connect(self.adjustAxes)
-
+        self.i = 9
         for name in self.names : 
 
             label = QLabel(name + " ", self)        
@@ -403,6 +371,9 @@ class GraphicsProperties(NodeProperties):
 
     def serialize(self):
         res = super().serialize()
+        res['xtitle']     = self.xtitle
+        res['ytitle']     = self.ytitle
+        """
         styles  = []
         colors  = []
         types   = []
@@ -421,33 +392,26 @@ class GraphicsProperties(NodeProperties):
         res['types']  = types
         res['sizes']  = sizes
         res['names']  = names
-        res['xtitle'] = self.xtitle
-        res['xsize']  = self.xsize
-        res['ytitle'] = self.ytitle
-        res['ysize']  = self.ysize
-        res['ticksize'] = self.ticksize
-        res['legendsize'] = self.legendsize
+        """
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             try:
-                self.resetWidgets()
+                #self.resetWidgets()
+                if 'xtitle'      in data : self.xtitle = data['xtitle']
+                if 'ytitle'      in data : self.ytitle = data['ytitle']
+                """
                 for i, name in enumerate(data['names']):
                     self.names[name]     = name
                     self.linecolor[name] = data['colors'][i]
                     self.linestyle[name] = data['styles'][i]
                     self.graphtype[name] = data['types'][i]
                     self.linesize[name]  = data['sizes'][i]
-                    if 'xtitle' in data : self.xtitle = data['xtitle']
-                    if 'xsize'  in data : self.xsize  = data['xsize']
-                    if 'ytitle' in data : self.ytitle = data['ytitle']
-                    if 'ysize'  in data : self.ysize  = data['ysize']
-                    if 'ticksize'  in data : self.ticksize  = data['ticksize']
-                    if 'legendsize'  in data : self.legendsize  = data['legendsize']
 
                     self.c += 1
+                """
                 self.fillWidgets()
             except Exception as e: 
                 dumpException(e)
@@ -487,9 +451,9 @@ class GraphicsOutputNode(ResizableInputNode):
 
 
     def prepareSettings(self):
-        self.properties.resetProperties()
-        self.properties.cleanProperties()
-        self.properties.fillWidgets()
+        #self.properties.resetProperties()
+        #self.properties.cleanProperties()
+        #self.properties.fillWidgets()
         return True
 
     def prepareCanvas(self):
@@ -506,8 +470,8 @@ class GraphicsOutputNode(ResizableInputNode):
             self.content.axes.set_xlabel(self.properties.xtitle)
 
         self.content.axes.set_ylabel(self.properties.ytitle)
-        self.content.axes.xaxis.label.set_size( self.properties.xsize )
-        self.content.axes.yaxis.label.set_size( self.properties.ysize )
+        self.content.axes.xaxis.label.set_size( self.properties.labelsize )
+        self.content.axes.yaxis.label.set_size( self.properties.labelsize )
 
         self.content.axes.tick_params(labelsize= self.properties.ticksize)
         self.content.axes.tick_params(labelsize= self.properties.ticksize)
