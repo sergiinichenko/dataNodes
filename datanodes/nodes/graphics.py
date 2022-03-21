@@ -266,6 +266,10 @@ class GraphicsProperties(PlotProperties):
         self.graphtype = {}
         self.c = 0
 
+        self.labels    = {}
+        self.styles    = {}
+        self.sizes     = {}
+        self.colors    = {}
 
         label = QLabel("Axis names ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
@@ -291,11 +295,45 @@ class GraphicsProperties(PlotProperties):
         self.xlabelW.returnPressed.connect(self.updateData)
         self.ylabelW.returnPressed.connect(self.updateData)
 
+
     def updateContent(self):
         super().updateContent()
         self.xtitle       = self.xlabelW.text()
         self.ytitle       = self.ylabelW.text()
 
+
+    def fillWidgets(self):
+        super().fillWidgets()
+        self.xlabelW.setText(self.xtitle)
+        self.ylabelW.setText(self.ytitle)
+        self.appendDataWidgets()
+
+    def appendDataWidgets(self):
+        self.i = 12
+        for name in self.names : 
+
+            self.labels[name] = QLabel(name + " ", self)        
+            self.labels[name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+            self.styles[name] = LineStylePicker(self.node, name, self.linestyle[name])
+
+            self.labels[name].setStyleSheet("margin-top: 15px;")
+            self.styles[name].setStyleSheet("margin-top: 15px;")
+
+            self.layout.addWidget(self.labels[name], self.i, 0)
+            self.layout.addWidget(self.styles[name], self.i, 1)
+            self.i += 1
+
+
+            self.sizes[name]  = LineSizePicker(self.node, name, self.linesize[name])
+            self.sizes[name].setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+            self.colors[name] = ColorPicker(self.node, name, color=self.linecolor[name])
+
+
+            self.layout.addWidget(self.sizes[name],  self.i, 0)
+            self.layout.addWidget(self.colors[name], self.i, 1)
+            self.i += 1
 
     def resetWidgets(self):
         self.resetProperties()
@@ -308,7 +346,7 @@ class GraphicsProperties(PlotProperties):
 
     def cleanProperties(self):
         for input in self.node.inputs:
-            if not input.value : return 
+            if not input.value : continue
 
             value  = input.value
             x_name = list(value.keys())[0]
@@ -323,50 +361,39 @@ class GraphicsProperties(PlotProperties):
                         self.linesize[name]  = 2.0
                         self.c += 1
 
+        for name in self.names:
+            if name != x_name:
+                if name in self.labels:
+                    self.layout.removeWidget(self.labels[name])
+                    self.layout.removeWidget(self.styles[name])
+                    self.layout.removeWidget(self.sizes[name])
+                    self.layout.removeWidget(self.colors[name])
+
+                    self.labels[name].setParent(None)
+                    self.styles[name].setParent(None)
+                    self.sizes[name].setParent(None)
+                    self.colors[name].setParent(None)
+                    
+                    del self.labels[name]
+                    del self.styles[name]
+                    del self.sizes[name]
+                    del self.colors[name]
+
+
+        remove = []
         for name in reversed(self.names):
             to_remove = True
             for input in self.node.inputs:
                 if name in input.value: 
                     to_remove = False
+            if to_remove: remove.append(name)
 
-            if to_remove:
-                del self.names[name]
-                del self.linecolor[name]
-                del self.linestyle[name]
-                del self.graphtype[name]
-                del self.linesize[name]
-
-
-    def fillWidgets(self):
-        super().fillWidgets()
-        self.xlabelW.setText(self.xtitle)
-        self.ylabelW.setText(self.ytitle)
-
-        self.i = 9
-        for name in self.names : 
-
-            label = QLabel(name + " ", self)        
-            label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-
-            style = LineStylePicker(self.node, name, self.linestyle[name])
-
-            label.setStyleSheet("margin-top: 15px;")
-            style.setStyleSheet("margin-top: 15px;")
-
-            self.layout.addWidget(label, self.i, 0)
-            self.layout.addWidget(style, self.i, 1)
-            self.i += 1
-
-
-            size  = LineSizePicker(self.node, name, self.linesize[name])
-            size.setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-
-            color = ColorPicker(self.node, name, color=self.linecolor[name])
-
-
-            self.layout.addWidget(size, self.i, 0)
-            self.layout.addWidget(color, self.i, 1)
-            self.i += 1
+        for name in remove:
+            del self.names[name]
+            del self.linecolor[name]
+            del self.linestyle[name]
+            del self.graphtype[name]
+            del self.linesize[name]
 
 
     def serialize(self):
@@ -452,8 +479,8 @@ class GraphicsOutputNode(ResizableInputNode):
 
     def prepareSettings(self):
         #self.properties.resetProperties()
-        #self.properties.cleanProperties()
-        #self.properties.fillWidgets()
+        self.properties.cleanProperties()
+        self.properties.fillWidgets()
         return True
 
     def prepareCanvas(self):

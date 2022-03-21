@@ -90,92 +90,6 @@
   <section id="module-datanodes.nodes.outputs">
 <span id="datanodes-nodes-outputs-module"></span><h1>datanodes.nodes.outputs module<a class="headerlink" href="#module-datanodes.nodes.outputs" title="Permalink to this headline"></a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputGraphicsNode">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.outputs.</span></span><span class="sig-name descname"><span class="pre">ValueOutputGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputGraphicsNode" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataGraphicsNode" title="datanodes.nodes.datanode.DataGraphicsNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataGraphicsNode</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputGraphicsNode.initSizes">
-<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputContent">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.outputs.</span></span><span class="sig-name descname"><span class="pre">ValueOutputContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputContent" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputContent.initUI">
-<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputContent.initUI" title="Permalink to this definition"></a></dt>
-<dd><p>Setting up default layout</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputContent.serialize">
-<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputContent.serialize" title="Permalink to this definition"></a></dt>
-<dd><dl class="field-list simple">
-<dt class="field-odd">Returns</dt>
-<dd class="field-odd"><p></p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputContent.deserialize">
-<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputContent.deserialize" title="Permalink to this definition"></a></dt>
-<dd><p>The default deserialize method. Has to be overwritten in the inherited class
-Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
-<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
-</dd>
-<dt class="field-odd">Return type</dt>
-<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode">
-<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.outputs.</span></span><span class="sig-name descname"><span class="pre">ValueOutputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode.icon">
-<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/valoutput.png'</span></em><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode.icon" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode.op_code">
-<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">200</span></em><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode.op_code" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode.op_title">
-<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Value'</span></em><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode.op_title" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode.initInnerClasses">
-<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
-<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="datanodes.nodes.outputs.ValueOutputNode.evalImplementation">
-<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.ValueOutputNode.evalImplementation" title="Permalink to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
 <dt class="sig sig-object py" id="datanodes.nodes.outputs.TableOutputGraphicsNode">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.outputs.</span></span><span class="sig-name descname"><span class="pre">TableOutputGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.TableOutputGraphicsNode" title="Permalink to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizebleDataNode" title="datanodes.nodes.datanode.ResizebleDataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizebleDataNode</span></code></a></p>
@@ -249,10 +163,20 @@ Returns <code class="docutils literal notranslate"><span class="pre">True</span>
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.outputs.TableOutputNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.TableOutputNode.initSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="datanodes.nodes.outputs.TableOutputNode.initInnerClasses">
 <span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.TableOutputNode.initInnerClasses" title="Permalink to this definition"></a></dt>
 <dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
 </dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.outputs.TableOutputNode.isString">
+<span class="sig-name descname"><span class="pre">isString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.TableOutputNode.isString" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="datanodes.nodes.outputs.TableOutputNode.getFormatedValue">
@@ -342,6 +266,11 @@ Returns <code class="docutils literal notranslate"><span class="pre">True</span>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datanodes.nodes.outputs.TextOutputNode.op_title">
 <span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Text'</span></em><a class="headerlink" href="#datanodes.nodes.outputs.TextOutputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.outputs.TextOutputNode.initSettings">
+<span class="sig-name descname"><span class="pre">initSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.outputs.TextOutputNode.initSettings" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">

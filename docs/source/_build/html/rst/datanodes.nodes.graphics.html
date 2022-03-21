@@ -146,9 +146,56 @@
 </dd></dl>
 
 <dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.ColorPicker">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">ColorPicker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.ColorPicker" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">PyQt5.QtWidgets.QWidget</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.ColorPicker.mouseReleaseEvent">
+<span class="sig-name descname"><span class="pre">mouseReleaseEvent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">QMouseEvent</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.ColorPicker.mouseReleaseEvent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">PlotProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.core.node_properties.html#datanodes.core.node_properties.NodeProperties" title="datanodes.core.node_properties.NodeProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.core.node_properties.NodeProperties</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties.updateContent">
+<span class="sig-name descname"><span class="pre">updateContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties.updateContent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties.updateData">
+<span class="sig-name descname"><span class="pre">updateData</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties.updateData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties.fillWidgets">
+<span class="sig-name descname"><span class="pre">fillWidgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties.fillWidgets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.PlotProperties.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.PlotProperties.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsProperties">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">GraphicsProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsProperties" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="datanodes.core.node_properties.html#datanodes.core.node_properties.NodeProperties" title="datanodes.core.node_properties.NodeProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.core.node_properties.NodeProperties</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.graphics.PlotProperties" title="datanodes.nodes.graphics.PlotProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.graphics.PlotProperties</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsProperties.updateContent">
+<span class="sig-name descname"><span class="pre">updateContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsProperties.updateContent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsProperties.resetWidgets">
 <span class="sig-name descname"><span class="pre">resetWidgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsProperties.resetWidgets" title="Permalink to this definition"></a></dt>
@@ -179,7 +226,7 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode">
 <em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">GraphicsOutputNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode" title="Permalink to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataNode" title="datanodes.nodes.datanode.DataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataNode</span></code></a></p>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizableInputNode" title="datanodes.nodes.datanode.ResizableInputNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizableInputNode</span></code></a></p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.icon">
 <span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/valoutput.png'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.icon" title="Permalink to this definition"></a></dt>
@@ -187,12 +234,22 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.op_code">
-<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">203</span></em><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.op_code" title="Permalink to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">250</span></em><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.op_code" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.op_title">
 <span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Plot'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.onInputChange">
+<span class="sig-name descname"><span class="pre">onInputChange</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">new_edge</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.onInputChange" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.resize">
+<span class="sig-name descname"><span class="pre">resize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.resize" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
@@ -207,6 +264,16 @@
 <dd></dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.prepareCanvas">
+<span class="sig-name descname"><span class="pre">prepareCanvas</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.prepareCanvas" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.addData">
+<span class="sig-name descname"><span class="pre">addData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.addData" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.drawPlot">
 <span class="sig-name descname"><span class="pre">drawPlot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.drawPlot" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
@@ -214,6 +281,297 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="datanodes.nodes.graphics.GraphicsOutputNode.evalImplementation">
 <span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.GraphicsOutputNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotCanvas">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">TernaryPlotCanvas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotCanvas" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.backends.backend_qt5agg.FigureCanvasQTAgg</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">TernaryPlotGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizebleDataNode" title="datanodes.nodes.datanode.ResizebleDataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizebleDataNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">TernaryPlotContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotContent.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotContent.serialize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotContent.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotContent.deserialize" title="Permalink to this definition"></a></dt>
+<dd><p>The default deserialize method. Has to be overwritten in the inherited class
+Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
+<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotProperties">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">TernaryPlotProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.graphics.PlotProperties" title="datanodes.nodes.graphics.PlotProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.graphics.PlotProperties</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotProperties.updateContent">
+<span class="sig-name descname"><span class="pre">updateContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotProperties.updateContent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotProperties.fillWidgets">
+<span class="sig-name descname"><span class="pre">fillWidgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotProperties.fillWidgets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotProperties.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotProperties.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotProperties.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotProperties.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">TernaryPlotNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizableInputNode" title="datanodes.nodes.datanode.ResizableInputNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizableInputNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/valoutput.png'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">251</span></em><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Ternary</span> <span class="pre">Diagram'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.prepareSettings">
+<span class="sig-name descname"><span class="pre">prepareSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.prepareSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.resize">
+<span class="sig-name descname"><span class="pre">resize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.resize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.cAxes">
+<span class="sig-name descname"><span class="pre">cAxes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">ax</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pos</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'x'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.cAxes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.mesh">
+<span class="sig-name descname"><span class="pre">mesh</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">num</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.mesh" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.drawTernary">
+<span class="sig-name descname"><span class="pre">drawTernary</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.drawTernary" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.addScatter">
+<span class="sig-name descname"><span class="pre">addScatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.addScatter" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.drawPlot">
+<span class="sig-name descname"><span class="pre">drawPlot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.drawPlot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.TernaryPlotNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.TernaryPlotNode.evalImplementation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapCanvas">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">HeatMapCanvas</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapCanvas" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.backends.backend_qt5agg.FigureCanvasQTAgg</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapGraphicsNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">HeatMapGraphicsNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapGraphicsNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizebleDataNode" title="datanodes.nodes.datanode.ResizebleDataNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizebleDataNode</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapGraphicsNode.initSizes">
+<span class="sig-name descname"><span class="pre">initSizes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapGraphicsNode.initSizes" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapContent">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">HeatMapContent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">Node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="p"><span class="pre">:</span></span> <span class="n"><span class="pre">QWidget</span></span> <span class="o"><span class="pre">=</span></span> <span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapContent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.DataContent" title="datanodes.nodes.datanode.DataContent"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.DataContent</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapContent.initUI">
+<span class="sig-name descname"><span class="pre">initUI</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapContent.initUI" title="Permalink to this definition"></a></dt>
+<dd><p>Setting up default layout</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapContent.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapContent.serialize" title="Permalink to this definition"></a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapContent.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapContent.deserialize" title="Permalink to this definition"></a></dt>
+<dd><p>The default deserialize method. Has to be overwritten in the inherited class
+Returns <code class="docutils literal notranslate"><span class="pre">True</span></code> if the element has been successfuly deserialized</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>data</strong> (<code class="docutils literal notranslate"><span class="pre">dict</span></code>) – input data to be deserialized</p></li>
+<li><p><strong>hashmap</strong> (<code class="docutils literal notranslate"><span class="pre">list</span></code>) – the [optional] hashmap of the data, stores id of the elements in the scene</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><code class="docutils literal notranslate"><span class="pre">True</span></code> if deserialized</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><code class="docutils literal notranslate"><span class="pre">boot</span></code></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapProperties">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">HeatMapProperties</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">node</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapProperties" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#datanodes.nodes.graphics.PlotProperties" title="datanodes.nodes.graphics.PlotProperties"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.graphics.PlotProperties</span></code></a></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapProperties.updateContent">
+<span class="sig-name descname"><span class="pre">updateContent</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapProperties.updateContent" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapProperties.fillWidgets">
+<span class="sig-name descname"><span class="pre">fillWidgets</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapProperties.fillWidgets" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapProperties.serialize">
+<span class="sig-name descname"><span class="pre">serialize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapProperties.serialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapProperties.deserialize">
+<span class="sig-name descname"><span class="pre">deserialize</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hashmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapProperties.deserialize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode">
+<em class="property"><span class="pre">class</span> </em><span class="sig-prename descclassname"><span class="pre">datanodes.nodes.graphics.</span></span><span class="sig-name descname"><span class="pre">HeatMapNode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scene</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">inputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">outputs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="datanodes.nodes.datanode.html#datanodes.nodes.datanode.ResizableInputNode" title="datanodes.nodes.datanode.ResizableInputNode"><code class="xref py py-class docutils literal notranslate"><span class="pre">datanodes.nodes.datanode.ResizableInputNode</span></code></a></p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.icon">
+<span class="sig-name descname"><span class="pre">icon</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'icons/valoutput.png'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.icon" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.op_code">
+<span class="sig-name descname"><span class="pre">op_code</span></span><em class="property"> <span class="pre">=</span> <span class="pre">252</span></em><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.op_code" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.op_title">
+<span class="sig-name descname"><span class="pre">op_title</span></span><em class="property"> <span class="pre">=</span> <span class="pre">'Heat</span> <span class="pre">Map'</span></em><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.op_title" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.initInnerClasses">
+<span class="sig-name descname"><span class="pre">initInnerClasses</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.initInnerClasses" title="Permalink to this definition"></a></dt>
+<dd><p>Sets up graphics Node (PyQt) and Content Widget</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.prepareSettings">
+<span class="sig-name descname"><span class="pre">prepareSettings</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.prepareSettings" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.resize">
+<span class="sig-name descname"><span class="pre">resize</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.resize" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.addMap">
+<span class="sig-name descname"><span class="pre">addMap</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.addMap" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.drawPlot">
+<span class="sig-name descname"><span class="pre">drawPlot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.drawPlot" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="datanodes.nodes.graphics.HeatMapNode.evalImplementation">
+<span class="sig-name descname"><span class="pre">evalImplementation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">silent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#datanodes.nodes.graphics.HeatMapNode.evalImplementation" title="Permalink to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
