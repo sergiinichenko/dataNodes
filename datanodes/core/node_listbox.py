@@ -76,4 +76,5 @@ class NodesDock(QDockWidget):
         self.nodesListWidget = NodeListBox()
         self.setWidget(self.nodesListWidget)
         self.setFloating(False)
+        self.setMinimumWidth(200)
         self.hide()

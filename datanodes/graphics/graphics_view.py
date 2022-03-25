@@ -444,3 +444,21 @@ class GraphicsView(QGraphicsView):
         if not clamped or self.zoomClamp is False:
             self.scale(zoomScale, zoomScale)
 
+
+    def centerContent(self):
+        count = 0
+
+        # Get bounding rect of all selected Items
+        for item in self.grScene.selectedItems():
+            if count == 0:
+                rect = item.mapRectToScene(item.boundingRect())
+            else:
+                rect = rect.united(item.mapRectToScene(item.boundingRect()))
+            count += 1
+        if count == 0:
+            self.fitInView(self.grScene.itemsBoundingRect(), Qt.KeepAspectRatio)
+            self.zoom = 20
+        else:
+            self.fitInView(rect, Qt.KeepAspectRatio)
+            self.zoom = 20
+        

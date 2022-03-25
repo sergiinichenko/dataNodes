@@ -67,6 +67,7 @@ class NodeWindow(QMainWindow):
         self.actDublicate = QAction('Du&blicate',   self, shortcut=QKeySequence('Ctrl+D'), statusTip='Dublicate the Item(s)',  triggered=self.onEditDublicate)
         self.actDel       = QAction('&Delete',  self, shortcut=QKeySequence(Qt.Key_Delete),    statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
         self.actDelX      = QAction('Del&X',    self, shortcut=QKeySequence(Qt.Key_X),      statusTip='Delete selected Item(s)',  triggered=self.onEditDelete)
+        self.actCenter    = QAction('&Center',  self, shortcut=QKeySequence(Qt.Key_Home),    statusTip='Center selected Item(s)',  triggered=self.onEditCenter)
         self.actSeparator = QAction(self)
         self.actSeparator.setSeparator(True)
 
@@ -95,6 +96,8 @@ class NodeWindow(QMainWindow):
         self.editMenu.addAction(self.actDublicate)
         self.editMenu.addSeparator()
         self.editMenu.addAction(self.actDel)
+        self.editMenu.addSeparator()
+        self.editMenu.addAction(self.actCenter)
 
     def createStatusBar(self):
         self.statusBar().showMessage('Ready ...')
@@ -221,6 +224,12 @@ class NodeWindow(QMainWindow):
     def onEditDelete(self):
         if self.getCurrentNodeEditorWidget():
             self.getCurrentNodeEditorWidget().scene.getView().deleteSelectedItem()
+
+
+    def onEditCenter(self):
+        if self.getCurrentNodeEditorWidget():
+            self.getCurrentNodeEditorWidget().scene.getView().centerContent()
+
 
     def onEditCopy(self):
         if self.getCurrentNodeEditorWidget():
