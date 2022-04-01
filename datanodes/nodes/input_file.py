@@ -13,7 +13,8 @@ class FileInputContent(DataContent):
     def initUI(self):
         super().initUI()
 
-        self.separator = "Add"
+        self.separator  = "Add"
+        self.whitespace = False
 
         self.layout = QGridLayout()
         self.layout.setContentsMargins(5,5,5,5)
@@ -29,6 +30,7 @@ class FileInputContent(DataContent):
         self.cb.addItem(".")
         self.cb.addItem(";")
         self.cb.addItem("tab")
+        self.cb.addItem("space")
 
         label = QLabel("Sep:  ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
@@ -53,17 +55,24 @@ class FileInputContent(DataContent):
     def setSeparator(self):
         sep = self.cb.currentText()
         if sep == "," or sep == "." or sep == ";":
-            self.node.separator = sep
+            self.node.separator  = sep
+            self.node.whitespace = False    
             return
         if sep == "tab":
             self.node.separator = "\t"
+            self.node.whitespace = False    
             return
-        self.node.separator = ""        
+        if sep == "space":
+            self.node.separator = None
+            self.node.whitespace = True    
+            return
+        self.node.separator  = ""        
+        self.node.whitespace = False    
 
     def serialize(self):
         res = super().serialize()
         res['sel_ind'] = self.cb.currentIndex()
-        res['file'] = self.node.file
+        res['file']    = self.node.file
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -89,6 +98,7 @@ class FileInputNode(DataNode):
         #self.value = None
         self.can_read = True
         self.separator = ","
+        self.whitespace = False
         self.file = ""
         self.setDirty()
 
@@ -122,7 +132,10 @@ class FileInputNode(DataNode):
 
     def readDFFile(self, file):
         try:
-            df = pd.read_csv(file, sep=self.separator).to_dict('list')
+            if self.separator is not None:
+                df = pd.read_csv(file, sep=self.separator, delim_whitespace=self.whitespace).to_dict('list')
+            else:
+                df = pd.read_csv(file, delim_whitespace=self.whitespace).to_dict('list')
             res = {}
             for name in df:
                 res[name] = np.array(df[name])
