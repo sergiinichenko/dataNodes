@@ -444,9 +444,8 @@ class NodeSubWindow(NodeWidget):
         item = self.scene.getItemAtPos(event.pos())
         if type(item) == QGraphicsProxyWidget : item = item.widget()
         if hasattr(item, 'node')   : selected   = item.node
-        if hasattr(item, 'socket') : selected = item.socket.node
+        if hasattr(item, 'socket') : selected   = item.socket.node
 
-        print(selected, item, action)
 
         if selected and action == markDirty       : selected.setDirty()
         if selected and action == unmarkDirty     : selected.setDirty(False)
@@ -456,10 +455,7 @@ class NodeSubWindow(NodeWidget):
         if selected and action == unmarkInvalid   : selected.setInvalid(False)
         if selected and action == mute            : selected.setMute()
         if selected and action == unmute          : selected.setMute(False)
-        if selected and action == eval            : selected.eval()
-
-        if selected and action == evalAct:
-            val = selected.eval()
+        if selected and action == eval            : selected.update()
 
 
     def keyPressEvent(self, event):
@@ -509,7 +505,7 @@ class NodeSubWindow(NodeWidget):
             else:                      selected.setMute(False)
 
         if selected and event.key() == Qt.Key_E : 
-            selected.eval()
+            selected.update()
 
 
     def handleEdgeContextMenu(self, event):
