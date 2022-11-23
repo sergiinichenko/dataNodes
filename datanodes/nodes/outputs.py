@@ -4,7 +4,7 @@ from pandas.core.frame import DataFrame
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
-
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPlainTextEdit, QSizePolicy
 
 class TableOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):

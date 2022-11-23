@@ -1,5 +1,5 @@
 import re
-from PyQt5.QtWidgets import *
+#from PyQt5.QtWidgets import *
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.core.node_serializer import Serializer
 from collections import OrderedDict

@@ -63,7 +63,7 @@ To be able to run the DataNodes you have to create a minimal python script and r
 
     # the datanodes.py file 
     import sys, os
-    from PyQt5.QtWidgets import *
+    from PyQt5.QtWidgets import QApplication
     from datanodes.core.main_window import MainWindow
 
     if __name__ == '__main__':

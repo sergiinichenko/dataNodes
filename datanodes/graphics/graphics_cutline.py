@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtGui import QPen, QPolygonF, QPainterPath, QPainter
+from PyQt5.QtCore import Qt, QPointF
 
 
 class GraphicsCutLine(QGraphicsItem):

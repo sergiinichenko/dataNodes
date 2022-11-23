@@ -5,9 +5,9 @@ from datanodes.core.utils import dumpException
 from datanodes.core.node_node import Node
 from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.graphics.graphics_node import GraphicsNode
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QGridLayout, QToolButton, QVBoxLayout, QPushButton
+from PyQt5.QtCore import pyqtSignal, QRectF, QRect, QSize, Qt
+from PyQt5.QtGui import QIcon, QImage
 from datanodes.core.node_socket import *
 import os
 import pandas as pd

@@ -1,9 +1,11 @@
 from datanodes.graphics.graphics_view import MODE_EDGE_DRAG
 from datanodes.core.node_edge import EDGE_BEZIER, EDGE_DIRECT
 from datanodes.core.node_widget import NodeWidget
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QMainWindow, QAction, QLabel, QMessageBox, QFileDialog, QMenu, QGraphicsProxyWidget
+from PyQt5.QtGui import QKeySequence, QPixmap
+from PyQt5.QtCore import QSettings, QPoint, QDataStream, QIODevice
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
 import os, json
 from datanodes.core.utils import *
 from datanodes.core.main_conf import *

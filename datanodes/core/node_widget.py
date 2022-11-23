@@ -4,11 +4,10 @@ from datanodes.core.node_socket import Socket
 from datanodes.core.node_edge import EDGE_BEZIER, Edge
 import os
 
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import QApplication, QGraphicsItem, QGraphicsScene, QGraphicsView, QMessageBox, QVBoxLayout, QWidget
-from datanodes.graphics.graphics_scene import GraphicsScene
+from PyQt5.QtGui import QBrush, QPen, QColor
+from PyQt5.QtWidgets import QApplication, QGraphicsItem, QMessageBox, QVBoxLayout, QWidget
 from datanodes.graphics.graphics_view import GraphicsView
-from PyQt5.QtCore import *
+from PyQt5.QtCore import Qt
 
 class NodeWidget(QWidget):
     def __init__(self, parent=None):

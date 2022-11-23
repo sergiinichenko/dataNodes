@@ -1,7 +1,7 @@
 from datanodes.core.node_settings import SOCKET_OUTPUT, SOCKET_INPUT
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QGraphicsItem
+from PyQt5.QtCore import QRect, QRectF, Qt
+from PyQt5.QtGui import QColor, QPen, QBrush
 
 class GraphicsSocket(QGraphicsItem):
     def __init__(self, socket, socket_type=1, label=None):

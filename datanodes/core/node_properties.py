@@ -1,6 +1,7 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QLineEdit
+from PyQt5.QtCore import pyqtSignal, Qt
+#from PyQt5 import Qt
+#from PyQt5.QtGui import *
 from datanodes.core.node_socket import *
 
 

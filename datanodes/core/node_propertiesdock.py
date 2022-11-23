@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QDockWidget
+#from PyQt5.QtCore import *
+#from PyQt5.QtGui import *
 from datanodes.core.utils import *
 from datanodes.core.main_conf import *
 

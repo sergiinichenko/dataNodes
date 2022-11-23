@@ -1,7 +1,7 @@
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QGraphicsItem, QGraphicsTextItem, QGraphicsProxyWidget, QGraphicsSceneHoverEvent
+from PyQt5.QtCore import Qt, QRectF
+from PyQt5.QtGui import QFont, QPen, QBrush, QColor, QPainterPath
 
 class GraphicsGroup(QGraphicsItem):
     def __init__(self, node, parent=None):

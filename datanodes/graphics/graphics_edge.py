@@ -1,8 +1,8 @@
 from datanodes.core.node_settings import LEFT_CENTER
 from datanodes.core.node_socket import LEFT_BOTTOM, RIGHT_BOTTOM, RIGHT_TOP, LEFT_TOP
-from PyQt5.QtGui import *
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore    import *
+from PyQt5.QtGui import QColor, QPen, QPainterPath
+from PyQt5.QtWidgets import QGraphicsPathItem, QGraphicsItem, QGraphicsSceneHoverEvent
+from PyQt5.QtCore    import Qt, QPoint, QPointF
 
 class GraphicsEdge(QGraphicsPathItem):
     def __init__(self, edge, parent=None):

@@ -10,9 +10,9 @@ from datanodes.graphics.graphics_edge import GraphicsEdge
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.graphics.graphics_node import GraphicsNode
 from typing import FrozenSet
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QGraphicsView, QApplication
+from PyQt5.QtCore import pyqtSignal, QRectF, QPointF, QEvent, Qt
+from PyQt5.QtGui import QPainter, QMouseEvent, QInputEvent
 
 MODE_NONE        = 1
 MODE_EDGE_DRAG   = 2

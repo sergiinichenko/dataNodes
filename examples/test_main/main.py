@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import *
+from PyQt5.QtWidgets import QApplication
 from datanodes.core.main_window import MainWindow
 from datanodes.core.utils import *
 import os, inspect

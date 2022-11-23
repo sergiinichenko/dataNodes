@@ -1,7 +1,7 @@
 
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QGraphicsItem, QGraphicsProxyWidget, QGraphicsTextItem, QGraphicsSceneHoverEvent
+from PyQt5.QtCore import QRectF, Qt
+from PyQt5.QtGui import QFont, QPen, QBrush, QColor, QPainterPath
 
 class GraphicsNode(QGraphicsItem):
     def __init__(self, node, parent=None):

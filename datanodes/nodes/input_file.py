@@ -1,7 +1,7 @@
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
-
+from PyQt5.QtWidgets import QComboBox, QLabel, QLineEdit, QFileDialog
 
 class FileInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):

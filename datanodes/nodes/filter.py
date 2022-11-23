@@ -4,8 +4,9 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import numpy as np
 import re
-from math import *
+#from math import *
 import copy
+from PyQt5.QtWidgets import QComboBox, QLineEdit
 
 class FilterGraphicsNode(DataGraphicsNode):
     def initSizes(self):

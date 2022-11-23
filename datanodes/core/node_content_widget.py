@@ -1,8 +1,8 @@
 # -*- encoding:utf8 -*-
 """Module docs"""
 from datanodes.core.node_serializer import Serializer
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QWidget, QVBoxLayout, QTextEdit
+#from PyQt5.QtCore import *
 from collections import OrderedDict
 
 DEBUG = False

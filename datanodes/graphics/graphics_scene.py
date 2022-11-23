@@ -1,6 +1,6 @@
-from PyQt5.QtWidgets import *
-from PyQt5.QtGui import *
-from PyQt5.QtCore import *
+from PyQt5.QtWidgets import QGraphicsScene
+from PyQt5.QtGui import QColor, QPen
+from PyQt5.QtCore import pyqtSignal, QLine
 import math
 
 class GraphicsScene(QGraphicsScene):

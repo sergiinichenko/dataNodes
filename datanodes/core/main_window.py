@@ -2,9 +2,9 @@ from datanodes.core.node_window import NodeWindow, NodeSubWindow
 from datanodes.core.node_widget import NodeWidget
 from datanodes.core.node_listbox import NodeListBox, NodesDock
 from datanodes.core.node_propertiesdock import PropertiesDock
-from PyQt5.QtWidgets import *
-from PyQt5.QtCore import *
-from PyQt5.QtGui import *
+from PyQt5.QtWidgets import QMdiArea, QAction
+from PyQt5.QtCore import QSettings, QPoint
+from PyQt5.QtGui import QIcon, QKeySequence
 import os, json, inspect
 from datanodes.core.utils import *
 from datanodes.core.main_conf import *
@@ -33,8 +33,8 @@ class MainWindow(NodeWindow):
 
         self.stylesheet_filename = os.path.join(os.path.dirname(__file__), "qss/datanodes.qss")
         loadStyleSheets(
-            os.path.join(os.path.dirname(__file__), "../qss/nodestyle-dark.qss"),
-            os.path.join(os.path.dirname(__file__), "../qss/nodestyle.qss")
+            os.path.join(os.path.dirname(__file__), "qss/nodestyle-dark.qss"),
+            os.path.join(os.path.dirname(__file__), "qss/nodestyle.qss")
         )
 
         self.empty_icon = QIcon(".")

@@ -2,9 +2,10 @@
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+from PyQt5.QtWidgets import QPlainTextEdit, QLineEdit, QLabel, QComboBox, QHBoxLayout
 import numpy as np
 import re
-from math import *
+#from math import *
 import copy
 
 class MathGraphicsNode(DataGraphicsNode):

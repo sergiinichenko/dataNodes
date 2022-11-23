@@ -1,6 +1,6 @@
 import traceback
-from PyQt5.QtCore import *
-from PyQt5.QtWidgets import *
+from PyQt5.QtCore import QFile, Qt, QSignalMapper, QSize
+from PyQt5.QtWidgets import QApplication, QDockWidget, QWidget
 import numpy as np
 
 def dumpException(e):
