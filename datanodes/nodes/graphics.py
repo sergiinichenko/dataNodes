@@ -261,6 +261,10 @@ class GraphicsProperties(PlotProperties):
         super().__init__(node)
         self.xtitle    = ""
         self.ytitle    = ""
+        self.x_limit_min = 0.0
+        self.x_limit_max = 1.0
+        self.y_limit_min = 0.0
+        self.y_limit_max = 1.0
         self.names     = {}
         self.linesize  = {}
         self.linecolor = {}
@@ -294,24 +298,66 @@ class GraphicsProperties(PlotProperties):
         label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
 
+
+        label = QLabel("Axis limits ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 12, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("x", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 13, 0)
+
+        label = QLabel("y", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 13, 1)
+
+        self.x_limit_minW  = QLineEdit(str(self.x_limit_min), self)
+        self.x_limit_minW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.x_limit_minW, 14, 0)
+
+        self.y_limit_minW  = QLineEdit(str(self.y_limit_min), self)
+        self.y_limit_minW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.y_limit_minW, 14, 1)
+
+        self.x_limit_maxW  = QLineEdit(str(self.x_limit_max), self)
+        self.x_limit_maxW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.x_limit_maxW, 15, 0)
+
+        self.y_limit_maxW  = QLineEdit(str(self.y_limit_max), self)
+        self.y_limit_maxW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.y_limit_maxW, 15, 1)
+
+
         self.xlabelW.returnPressed.connect(self.updateData)
         self.ylabelW.returnPressed.connect(self.updateData)
+        self.x_limit_minW.returnPressed.connect(self.updateData)
+        self.x_limit_maxW.returnPressed.connect(self.updateData)
+        self.y_limit_minW.returnPressed.connect(self.updateData)
+        self.y_limit_maxW.returnPressed.connect(self.updateData)
 
 
     def updateContent(self):
         super().updateContent()
         self.xtitle       = self.xlabelW.text()
         self.ytitle       = self.ylabelW.text()
-
+        self.x_limit_min    = float(self.x_limit_minW.text())
+        self.x_limit_max    = float(self.x_limit_maxW.text())
+        self.y_limit_min    = float(self.y_limit_minW.text())
+        self.y_limit_max    = float(self.y_limit_maxW.text())
 
     def fillWidgets(self):
         super().fillWidgets()
         self.xlabelW.setText(self.xtitle)
         self.ylabelW.setText(self.ytitle)
+        self.x_limit_minW.setText(str(self.x_limit_min))
+        self.x_limit_maxW.setText(str(self.x_limit_max))
+        self.y_limit_minW.setText(str(self.y_limit_min))
+        self.y_limit_maxW.setText(str(self.y_limit_max))
         self.appendDataWidgets()
 
     def appendDataWidgets(self):
-        self.i = 12
+        self.i = 16
         for name in self.names : 
 
             self.labels[name] = QLabel(name + " ", self)        
@@ -402,26 +448,11 @@ class GraphicsProperties(PlotProperties):
         res = super().serialize()
         res['xtitle']     = self.xtitle
         res['ytitle']     = self.ytitle
-        """
-        styles  = []
-        colors  = []
-        types   = []
-        names   = []
-        sizes   = []
+        res['x_limit_min']  = self.x_limit_min
+        res['x_limit_max']  = self.x_limit_max
+        res['y_limit_min']  = self.y_limit_min
+        res['y_limit_max']  = self.y_limit_max
 
-        for name in self.names:
-            styles.append(self.linestyle[name])
-            colors.append(self.linecolor[name])
-            types.append( self.graphtype[name])
-            sizes.append( self.linesize[name])
-            names.append(name)
-
-        res['styles'] = styles
-        res['colors'] = colors
-        res['types']  = types
-        res['sizes']  = sizes
-        res['names']  = names
-        """
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -431,16 +462,12 @@ class GraphicsProperties(PlotProperties):
                 #self.resetWidgets()
                 if 'xtitle'      in data : self.xtitle = data['xtitle']
                 if 'ytitle'      in data : self.ytitle = data['ytitle']
-                """
-                for i, name in enumerate(data['names']):
-                    self.names[name]     = name
-                    self.linecolor[name] = data['colors'][i]
-                    self.linestyle[name] = data['styles'][i]
-                    self.graphtype[name] = data['types'][i]
-                    self.linesize[name]  = data['sizes'][i]
 
-                    self.c += 1
-                """
+                if 'x_limit_min'   in data : self.x_limit_min = data['x_limit_min']
+                if 'x_limit_max'   in data : self.x_limit_max = data['x_limit_max']
+                if 'y_limit_min'   in data : self.y_limit_min = data['y_limit_min']
+                if 'y_limit_max'   in data : self.y_limit_max = data['y_limit_max']
+
                 self.fillWidgets()
             except Exception as e: 
                 dumpException(e)
@@ -504,6 +531,9 @@ class GraphicsOutputNode(ResizableInputNode):
 
         self.content.axes.tick_params(labelsize= self.properties.ticksize)
         self.content.axes.tick_params(labelsize= self.properties.ticksize)
+
+        self.content.axes.set_xlim(self.properties.x_limit_min, self.properties.x_limit_max)
+        self.content.axes.set_ylim(self.properties.y_limit_min, self.properties.y_limit_max)
 
     def addData(self, value):
         if not value : return 

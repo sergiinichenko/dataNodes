@@ -53,6 +53,11 @@ class MathContent(DataContent):
         self.cb.addItem("Differentiate")
         self.cb.addItem("Integrate")
 
+        self.cb.insertSeparator(10)
+        self.cb.addItem("log")
+        self.cb.addItem("log10")
+        self.cb.addItem("exp")
+
         self.cb.setStyleSheet("margin-bottom: 10px;")
         self.layout.addWidget(self.cb, 1, 0, 1, 2)
         self.cb.currentIndexChanged.connect(self.selectionchange)
@@ -110,6 +115,9 @@ class MathNode(DataNode):
         self.socket_bottom_margin   = 24
         self.socket_spacing         = 23
 
+    def updateInputSockets(self):
+        pass
+
     def checkTheInputs(self):
         if self.getInput(0) is not None:
             self.content.valuey.setReadOnly(True)
@@ -134,10 +142,10 @@ class MathNode(DataNode):
             self.e = ""
 
             if self.getInput(1): valuex = self.getInput(1).value
-            else:                valuex = float(self.content.valuex.text())
+            else:                valuex = {"x" : float(self.content.valuex.text())}
 
             if self.getInput(0): valuey = self.getInput(0).value
-            else:                valuey = float(self.content.valuey.text())
+            else:                valuey = {"y" : float(self.content.valuey.text())}
 
             res = {}
             if self.content.operation == "Add"           : res = self.add(valuex, valuey)
@@ -146,6 +154,11 @@ class MathNode(DataNode):
             if self.content.operation == "Divide"        : res = self.devide(valuex, valuey)
             if self.content.operation == "Power"         : res = self.power(valuex, valuey)
             if self.content.operation == "Distance"      : res = self.distance(valuex, valuey)
+
+            if self.content.operation == "log"           : res = self.log(valuex, valuey)
+            if self.content.operation == "log10"         : res = self.log10(valuex, valuey)
+            if self.content.operation == "exp"           : res = self.exp(valuex, valuey)
+
             """
             if self.content.operation == "Sum"           : res = self.sum(values)
             if self.content.operation == "Absolute"      : res = self.absolute(values)
@@ -386,7 +399,39 @@ class MathNode(DataNode):
             res[i] = np.trapz(y=self.drop_nan(input_values[1][j]), x=self.drop_nan(input_values[0][i]))
         return res
 
+    def log(self, valuex, valuey):
+        res = {}
 
+        for name in valuex:
+            res[name] = np.log(self.drop_nan(valuex[name]))
+
+        for name in valuey:
+            res[name] = np.log(self.drop_nan(valuey[name]))
+
+        return res
+
+
+    def log10(self, valuex, valuey):
+        res = {}
+
+        for name in valuex:
+            res[name] = np.log10(self.drop_nan(valuex[name]))
+
+        for name in valuey:
+            res[name] = np.log10(self.drop_nan(valuey[name]))
+
+        return res
+
+    def exp(self, valuex, valuey):
+        res = {}
+
+        for name in valuex:
+            res[name] = np.exp(self.drop_nan(valuex[name]))
+
+        for name in valuey:
+            res[name] = np.exp(self.drop_nan(valuey[name]))
+
+        return res
 
 
 
@@ -631,7 +676,7 @@ class CodeNode(ResizableInputNode):
         else:
             try:
                 expression = self.content.edit.toPlainText()
-                localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 
+                localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 'log10':np.log10,  
                            'cos' : np.cos, 'sin': np.sin, 'abs':np.abs,
                            'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
 

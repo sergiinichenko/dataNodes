@@ -429,6 +429,7 @@ class Node(Serializer):
             node.eval(silent)
 
     def update(self, silent=False):
+        print("Update")
         self.setDirty()
         self.setDescendentsDirty()
         self.eval(silent)
