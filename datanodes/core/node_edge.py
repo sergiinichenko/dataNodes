@@ -242,7 +242,7 @@ class Edge(Serializer):
 
                     # notify Socket's Node
                     socket.node.onEdgeConnectionChanged(self)
-                    if socket.is_input:  socket.node.onInputChanged(socket)
+                    if socket.is_input:  socket.node.onInputRemoved(socket)
                     if socket.is_output: socket.node.onOutputChanged(socket)
 
         except Exception as e: dumpException(e)

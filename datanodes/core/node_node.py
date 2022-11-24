@@ -206,7 +206,14 @@ class Node(Serializer):
         self.setDirty()
         self.setDescendentsDirty()
 
+    def onInputRemoved(self, new_edge=None):
+        self.setDirty()
+        self.setDescendentsDirty()
+
     def onOutputChanged(self, new_edge=None):
+        pass
+
+    def onOutputRemoved(self, new_edge=None):
         pass
 
     def isDirty(self):

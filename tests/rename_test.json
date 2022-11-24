@@ -1,0 +1,274 @@
+{
+    "id": 0,
+    "scene_widht": 64000,
+    "scene_height": 64000,
+    "view_x": 4.0,
+    "view_y": 16.0,
+    "view_scale": 20.0,
+    "nodes": [
+        {
+            "id": 2566773014736,
+            "title": "Value",
+            "pos_x": -181.0,
+            "pos_y": -223.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2566773014688,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 1907568552848,
+                "content": "",
+                "value": "1.0",
+                "label": "x"
+            },
+            "properties": {
+                "id": 2566773240544,
+                "title": "Value",
+                "width": 140,
+                "height": 70
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 2566772820624,
+            "title": "Rename",
+            "pos_x": 112.0,
+            "pos_y": -189.0,
+            "inputs": [
+                {
+                    "id": 1907569129264,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 45.0,
+                    "label": null
+                },
+                {
+                    "id": 1907569130224,
+                    "index": 1,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 69.0,
+                    "label": null
+                },
+                {
+                    "id": 1907569130416,
+                    "index": 2,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 93.0,
+                    "label": null
+                },
+                {
+                    "id": 1907569130608,
+                    "index": 3,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 117.0,
+                    "label": null
+                }
+            ],
+            "outputs": [
+                {
+                    "id": 2566772820384,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 1,
+                    "inout": 2,
+                    "x": 201.0,
+                    "y": 45.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 1907568554720,
+                "content": "",
+                "width": 200,
+                "height": 137.0,
+                "map": {
+                    "2566772820576": {},
+                    "2566773261696": {},
+                    "2566773265296": {},
+                    "2566773265728": {},
+                    "1907569125280": {},
+                    "1907569125472": {},
+                    "1907569126432": {},
+                    "1907569126528": {},
+                    "1907569125616": {},
+                    "1907569127680": {},
+                    "1907569125568": {},
+                    "1907569129312": {},
+                    "1907569126576": {},
+                    "1907569126288": {},
+                    "1907569129360": {},
+                    "1907569129600": {},
+                    "1907569129792": {},
+                    "1907569129264": {
+                        "x": "x"
+                    },
+                    "1907569129168": {},
+                    "1907569129456": {},
+                    "1907569130032": {},
+                    "1907569130224": {
+                        "x1": "x1"
+                    },
+                    "1907569130416": {
+                        "y25": "y25"
+                    },
+                    "1907569130608": {}
+                }
+            },
+            "properties": {
+                "id": 2566773243136,
+                "title": "Rename",
+                "width": 200,
+                "height": 137.0
+            },
+            "op_code": 405,
+            "op_title": "Rename"
+        },
+        {
+            "id": 2566773264576,
+            "title": "Value",
+            "pos_x": -187.0,
+            "pos_y": -138.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2566773264912,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 1907568557888,
+                "content": "",
+                "value": "1.0",
+                "label": "x1"
+            },
+            "properties": {
+                "id": 2566773240544,
+                "title": "Value",
+                "width": 140,
+                "height": 70
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 2566773266064,
+            "title": "Value",
+            "pos_x": -209.0,
+            "pos_y": -55.0,
+            "inputs": [],
+            "outputs": [
+                {
+                    "id": 2566773266400,
+                    "index": 0,
+                    "position": 4,
+                    "socket_type": 2,
+                    "inout": 2,
+                    "x": 141.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "content": {
+                "id": 1907569313536,
+                "content": "",
+                "value": "5",
+                "label": "y25"
+            },
+            "properties": {
+                "id": 2566773240544,
+                "title": "Value",
+                "width": 140,
+                "height": 70
+            },
+            "op_code": 102,
+            "op_title": "Value"
+        },
+        {
+            "id": 2566773265680,
+            "title": "Text",
+            "pos_x": 417.0,
+            "pos_y": -209.0,
+            "inputs": [
+                {
+                    "id": 2566773265248,
+                    "index": 0,
+                    "position": 1,
+                    "socket_type": 1,
+                    "inout": 1,
+                    "x": -1.0,
+                    "y": 40.0,
+                    "label": null
+                }
+            ],
+            "outputs": [],
+            "content": {
+                "id": 1907569314256,
+                "content": "",
+                "width": 200,
+                "height": 200
+            },
+            "properties": {
+                "id": 2566773252176,
+                "title": "Text",
+                "width": 200,
+                "height": 200
+            },
+            "op_code": 202,
+            "op_title": "Text"
+        }
+    ],
+    "edges": [
+        {
+            "id": 2566773272064,
+            "edge_type": 2,
+            "start": 2566772820384,
+            "end": 2566773265248
+        },
+        {
+            "id": 1907569129216,
+            "edge_type": 2,
+            "start": 2566773014688,
+            "end": 1907569129264
+        },
+        {
+            "id": 1907569129360,
+            "edge_type": 2,
+            "start": 2566773264912,
+            "end": 1907569130224
+        },
+        {
+            "id": 1907569130464,
+            "edge_type": 2,
+            "start": 2566773266400,
+            "end": 1907569130416
+        }
+    ]
+}

@@ -303,7 +303,9 @@ class RenameContent(ResizableContent):
         super().initUI()
         self.labels_in  = {}
         self.labels_out = {}
-        self.mainlayout.setSpacing(2)
+        self.mainlayout.setContentsMargins(5,5,5,5)
+        self.mainlayout.setSpacing(0)
+        self.map       = {}
 
     def getSize(self, dic):
         size = 0
@@ -325,17 +327,37 @@ class RenameContent(ResizableContent):
         self.mainlayout.addWidget(self.labels_out[str(id)][namein], i, 1)
         self.labels_out[str(id)][namein].returnPressed.connect(self.node.recalculateNode)
 
+
+    def removePair(self, socket):
+
+        print("The socket to be removed", socket.id)
+        print("the map content", self.map)
+
+        if str(socket.id) in self.map:
+            print("Remove socket from the content", socket.id)
+            for name in list(self.map[str(socket.id)]):
+                self.mainlayout.removeWidget(self.labels_in[ str(socket.id)][name])
+                self.mainlayout.removeWidget(self.labels_out[str(socket.id)][name])
+                self.labels_in[ str(socket.id)][name].setParent(None)
+                self.labels_out[str(socket.id)][name].setParent(None)
+                del self.labels_in[ str(socket.id)][name]
+                del self.labels_out[str(socket.id)][name]
+                del self.map[str(socket.id)][name]
+
+        self.node.resize()
+
+
     def clearContent(self):
         while self.mainlayout.count():
             child = self.mainlayout.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-        self.labels_in  = []
-        self.labels_out = []
+        self.labels_in  = {}
+        self.labels_out = {}
 
     def serialize(self):
         res = super().serialize()
-        res['map']            = self.node.map
+        res['map']            = self.map
         res['width']          = self.node.grNode.width
         res['height']         = self.node.grNode.height
         return res
@@ -343,12 +365,13 @@ class RenameContent(ResizableContent):
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
-            self.node.map           = data['map']
+            self.map                = data['map']
             self.node.grNode.height = data['height']
             self.node.grNode.width  = data['width']
             self.updateSize()
-            for name in self.node.map:
-                self.appendPair(name, self.node.map[name])
+            for id in self.map:
+                for namein in self.map[id]:
+                    self.appendPair(id, namein, self.map[id][namein])
             return True & res
         except Exception as e: 
             dumpException(e)
@@ -364,23 +387,31 @@ class RenameNode(ResizableInputNode):
     def __init__(self, scene, inputs=[1], outputs=[1]):
         super().__init__(scene, inputs=inputs, outputs=outputs)
         self.value = {}
-        self.map   = {}
         self.out   = {}
 
     def initSettings(self):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
+        self.socket_top_margin      = 45
 
     def initInnerClasses(self):
         self.content    = RenameContent(self)
         self.grNode     = RenameGraphicsNode(self)
         self.properties = NodeProperties(self)
+        self.content.removed.connect(self.removeInnput)
         self.content.changed.connect(self.recalculateNode)
+
+    def removeInnput(self, socket=None):
+        self.content.removePair(socket)
+        self.recalculateNode()
 
     def onInputChange(self, new_edge=None):
         self.content.changed.emit()
 
+    def getSocketsNames(self):
+        #need to remove the sockets labels
+        pass
     def resize(self):
         size = self.content.getSize(self.content.labels_in)
         current_size = (size) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
@@ -406,19 +437,19 @@ class RenameNode(ResizableInputNode):
                 self.value = {}
                 try:
                     for input in input_edges:
-                        if str(input.id) not in self.map : self.map[str(input.id)] = {}
+                        if str(input.id) not in self.content.map : self.content.map[str(input.id)] = {}
 
                         if isinstance(input.value, dict):
                             for name in input.value:
-                                if name not in self.map[str(input.id)]:
-                                    self.map[str(input.id)][name] = name
+                                if name not in self.content.map[str(input.id)]:
+                                    self.content.map[str(input.id)][name] = name
                                     self.content.appendPair(input.id, name, name)
 
-                            for name in self.map[str(input.id)]:
-                                self.map[str(input.id)][name] = self.content.labels_out[str(input.id)][name].text()
+                            for name in self.content.map[str(input.id)]:
+                                self.content.map[str(input.id)][name] = self.content.labels_out[str(input.id)][name].text()
 
                             for name in input.value:
-                                self.value[self.map[str(input.id)][name]] = input.value[name]
+                                self.value[self.content.map[str(input.id)][name]] = input.value[name]
 
                         self.resize()
                                 

@@ -62,6 +62,7 @@ class DataGraphicsNode(GraphicsNode):
 
 class DataContent(NodeContentWidget):
     changed    = pyqtSignal()
+    removed    = pyqtSignal(Socket)
     outchanged = pyqtSignal()
     def initUI(self):
         pass
@@ -218,7 +219,15 @@ class DataNode(Node):
         if DEBUG : print("DATANODE : the eval is done")
         self.content.changed.emit()
 
+    def onInputRemoved(self, socket=None):
+        if DEBUG : print("DATANODE : oninputRemoved")
+        self.content.removed.emit(socket)
+
+
     def onOutputChanged(self, new_edge=None):
+        pass
+
+    def onOutputRemoved(self, new_edge=None):
         pass
 
     def getInputVaue(self, value, default=0):

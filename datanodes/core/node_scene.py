@@ -179,7 +179,7 @@ class Scene(Serializer):
         with open(filename, "r") as file:
             raw = file.read()
             try:
-                data = json.loads(raw, encoding="utf-8")
+                data = json.loads(raw)
                 self.deserialize(data)
                 self.has_been_modified = False
 

@@ -544,13 +544,16 @@ class GraphicsOutputNode(ResizableInputNode):
 
         for i, name in enumerate(value):
             if name != x_name:
+                #define the min length of the data to avoin error caused by size difference
+                ln = min(len(x_val), len(value[name]))
+
                 if self.properties.graphtype[name] == 'line':
-                    self.content.axes.plot(x_val, value[name], label=name, 
+                    self.content.axes.plot(x_val[0:ln], value[name][0:ln], label=name, 
                                             color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
                                             linewidth=self.properties.linesize[name])
 
                 if self.properties.graphtype[name] == 'scatter':
-                    self.content.axes.scatter(x_val, value[name], label=name, 
+                    self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
                                             color=self.properties.linecolor[name], marker=self.properties.linestyle[name],
                                             s=self.properties.linesize[name]*10)
 
