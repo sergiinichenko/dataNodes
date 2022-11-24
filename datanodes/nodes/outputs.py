@@ -9,8 +9,8 @@ from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPlainTextEdit, QSiz
 class TableOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 200.0
+        self.width  = 200
+        self.height = 200
 
 class TableOutputContent(DataContent):
     def initUI(self):
@@ -140,8 +140,8 @@ class TableOutputNode(DataNode):
 class TextOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 200.0
+        self.width  = 200
+        self.height = 200
 
 class TextOutputContent(DataContent):
     def initUI(self):

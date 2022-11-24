@@ -26,8 +26,8 @@ class MplCanvas(FigureCanvas):
 class GraphicsOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 300.0
-        self.height = 300.0
+        self.width  = 300
+        self.height = 300
 
 class GraphicsOutputContent(DataContent):
     def initUI(self):
@@ -608,8 +608,8 @@ class TernaryPlotCanvas(FigureCanvas):
 class TernaryPlotGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 300.0
-        self.height = 300.0
+        self.width  = 300
+        self.height = 300
 
 class TernaryPlotContent(DataContent):
     def initUI(self):
@@ -950,8 +950,8 @@ class HeatMapCanvas(FigureCanvas):
 class HeatMapGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 300.0
-        self.height = 300.0
+        self.width  = 300
+        self.height = 300
 
 class HeatMapContent(DataContent):
     def initUI(self):

@@ -10,8 +10,8 @@ class GraphicsSocket(QGraphicsItem):
         self.socket = socket
 
         # geometry settings of the socket
-        self.radius = 7.0
-        self.outline_width = 1.0
+        self.radius = 7
+        self.outline_width = 1
 
         self.initAssets()
         

@@ -5,8 +5,8 @@ from datanodes.nodes.datanode import *
 class CommentGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 300.0
-        self.height = 300.0
+        self.width  = 300
+        self.height = 300
 
 class CommentContent(DataContent):
     def initUI(self):

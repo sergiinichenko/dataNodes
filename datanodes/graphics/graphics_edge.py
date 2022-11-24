@@ -19,17 +19,17 @@ class GraphicsEdge(QGraphicsPathItem):
     def initUI(self):
         self.setFlag(QGraphicsItem.ItemIsSelectable)
         self.setAcceptHoverEvents(True)
-        self.setZValue(-2.0)
+        self.setZValue(-2)
 
         if self.edge.start_socket is not None:
             self.destination = [self.edge.start_socket.pos.x(), self.edge.start_socket.pos.y()]
         else:
-            self.destination = [0.0, 0.0]
+            self.destination = [0, 0]
         self.source = QPointF(0,0)
 
 
     def initAssets(self):
-        self._widht    = 4.0
+        self._widht    = 4
         self._color    = QColor("#001000")
         self._color_hov= QColor("#FF37A6FF")
         self._selected = QColor("#00ff00")
@@ -158,7 +158,7 @@ class GraphicsEdgeBezier(GraphicsEdge):
                 cpx_fr *= -1
                 cpx_to *= -1
 
-        path = QPainterPath(QPoint(fr[0], fr[1]))
+        path = QPainterPath(QPoint(int(fr[0]), int(fr[1])))
         path.cubicTo(fr[0] + cpx_fr, fr[1] + cpy_fr, 
                      to[0] + cpx_to, to[1] + cpy_to, 
                      to[0], to[1])

@@ -12,8 +12,8 @@ import matplotlib.pyplot as plt
 class DescribeGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 200.0
+        self.width  = 200
+        self.height = 200
 
 class DescribeContent(DataContent):
     def initUI(self):
@@ -209,8 +209,8 @@ class MplCanvas(FigureCanvas):
 class CrossCorrelationGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 300.0
-        self.height = 300.0
+        self.width  = 300
+        self.height = 300
 
 class CrossCorrelationContent(DataContent):
     def initUI(self):

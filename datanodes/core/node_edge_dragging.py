@@ -4,7 +4,7 @@ from datanodes.core.node_edge import Edge, EDGE_BEZIER, EDGE_DIRECT
 from datanodes.graphics.graphics_socket import GraphicsSocket
 from datanodes.core.node_node import SOCKET_INPUT, SOCKET_OUTPUT
 
-DEBUG = False
+DEBUG = True
 
 class EdgeDragging:
     def __init__(self, grView:'QGraphicsView'):

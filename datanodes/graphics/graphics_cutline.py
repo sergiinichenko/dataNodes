@@ -10,7 +10,7 @@ class GraphicsCutLine(QGraphicsItem):
         self.points = []
 
         self._pen  = QPen(Qt.white)
-        self._pen.setWidth(2.0)
+        self._pen.setWidth(2)
         self._pen.setDashPattern([3,3])
 
         self.setZValue(2)

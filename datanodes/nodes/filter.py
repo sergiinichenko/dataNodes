@@ -11,8 +11,8 @@ from PyQt5.QtWidgets import QComboBox, QLineEdit
 class FilterGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 160.0
-        self.height = 150.0
+        self.width  = 160
+        self.height = 150
         self.setZValue(5)
 
 class FilterContent(DataContent):

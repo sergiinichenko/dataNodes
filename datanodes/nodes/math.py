@@ -11,8 +11,8 @@ import copy
 class MathGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 160.0
-        self.height = 150.0
+        self.width  = 160
+        self.height = 150
         self.setZValue(5)
 
 class MathContent(DataContent):
@@ -444,9 +444,9 @@ class MathNode(DataNode):
 class ExpressionGraphicsNode(ResizableGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.min_height = 100.0
-        self.width  = 260.0
-        self.height = 100.0
+        self.min_height = 100
+        self.width  = 260
+        self.height = 100
 
 class ExpressionContent(ResizableContent):
     def initUI(self):
@@ -601,10 +601,10 @@ class TextField(QPlainTextEdit):
 class CodeGraphicsNode(ResizebleDataNode):
     def initSizes(self):
         super().initSizes()
-        self.min_height = 200.0
-        self.min_width  = 160.0
-        self.width   = 350.0
-        self.height  = 260.0
+        self.min_height = 200
+        self.min_width  = 160
+        self.width   = 350
+        self.height  = 260
         
 class CodeContent(DataContent):
     def initUI(self):

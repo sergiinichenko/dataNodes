@@ -7,8 +7,8 @@ from datanodes.core.utils import *
 class StepRangeGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
-        self.height = 160.0
+        self.width  = 140
+        self.height = 160
 
 class StepRangeContent(DataContent):
     def initUI(self):

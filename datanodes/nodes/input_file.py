@@ -6,8 +6,8 @@ from PyQt5.QtWidgets import QComboBox, QLabel, QLineEdit, QFileDialog
 class FileInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 180.0
-        self.height = 140.0
+        self.width  = 180
+        self.height = 140
 
 class FileInputContent(DataContent):
     def initUI(self):

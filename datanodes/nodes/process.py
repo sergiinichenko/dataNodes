@@ -4,7 +4,7 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 import re
 import copy
-
+from PyQt5.QtWidgets import QCheckBox, QLabel, QLineEdit
 
 @register_node(OP_MODE_DATA_SEP)
 class SeparateNode(ResizableOutputNode):
@@ -56,11 +56,11 @@ class SeparateNode(ResizableOutputNode):
         self.grNode.height = (size+1) * self.socket_spacing + 2.0 * self.socket_spacing
         self.grNode.update()
 
-        self.border_radius = 10.0
-        self.padding       = 10.0
-        self.title_height = 24.0
-        self._hpadding     = 5.0
-        self._vpadding     = 5.0
+        self.border_radius = 10
+        self.padding       = 10
+        self.title_height = 24
+        self._hpadding     = 5
+        self._vpadding     = 5
         self.content.updateSize()
 
 
@@ -194,9 +194,9 @@ class CombineNode(ResizableInputNode):
 class UpdateGraphicsNode(ResizableGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 160.0
-        self.height = 80.0
-        self.min_height = 80.0
+        self.width  = 160
+        self.height = 80
+        self.min_height = 80
 
 class UpdateContent(ResizableContent):
     def serialize(self):
@@ -293,9 +293,9 @@ class UpdateNode(ResizableInputNode):
 class RenameGraphicsNode(ResizableGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 80.0
-        self.min_height = 80.0
+        self.width  = 200
+        self.height = 80
+        self.min_height = 80
 
 
 class RenameContent(ResizableContent):
@@ -448,8 +448,8 @@ class RenameNode(ResizableInputNode):
 class CleanGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 240.0
+        self.width  = 200
+        self.height = 240
 
 class CleanContent(DataContent):
     def initUI(self):

@@ -3,13 +3,14 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.core.node_settings import *
 from datanodes.nodes.datanode import *
-
+from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtCore import QTimer
 
 class ValueInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 140.0
-        self.height = 70.0
+        self.width  = 140
+        self.height = 70
 
 class ValueInputContent(DataContent):
     def initUI(self):
@@ -87,9 +88,9 @@ class ValueInputNode(DataNode):
 class MultiValueInputGraphicsNode(AdjustableOutputGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 100.0
-        self.min_height = 100.0
+        self.width  = 200
+        self.height = 100
+        self.min_height = 100
 
 class MultiValueInputContent(AdjustableOutputContent):
     def initUI(self):

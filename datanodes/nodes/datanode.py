@@ -18,8 +18,8 @@ DEBUG = False
 class DataGraphicsNode(GraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 180.0
-        self.height = 100.0
+        self.width  = 180
+        self.height = 100
     
     def initAssets(self):
         super().initAssets()
@@ -69,7 +69,7 @@ class DataContent(NodeContentWidget):
     def updateSize(self):
         x, y = (self.node.grNode.width - 2.0 * self.node.grNode.padding, 
                 self.node.grNode.height - (self.node.grNode.title_height + 2.0 * self.node.grNode.padding + 1))
-        self.resize(x, y)
+        self.resize(int(x), int(y))
 
 class DataNode(Node):
     op_code  = 0
@@ -374,9 +374,9 @@ class ResizebleDataNode(DataGraphicsNode):
 class ResizableGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 160.0
-        self.height = 80.0
-        self.min_height = 80.0
+        self.width  = 160
+        self.height = 80
+        self.min_height = 80
 
 class ResizableContent(DataContent):
     def initUI(self):
@@ -517,7 +517,7 @@ class ResizableOutputNode(DataNode):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
-        self.socket_bottom_margin = 20.0
+        self.socket_bottom_margin = 20
 
     def initInnerClasses(self):
         self.content = ResizableContent(self)
@@ -594,7 +594,7 @@ class ResizableInOutNode(DataNode):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
-        self.socket_bottom_margin = 20.0
+        self.socket_bottom_margin = 20
 
     def initInnerClasses(self):
         self.content = ResizableContent(self)
@@ -711,10 +711,10 @@ class RemoveButton(QToolButton):
 class AdjustableOutputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 200.0
-        self.height = 220.0
-        self.min_height = 220.0
-        self.min_width  = 120.0
+        self.width  = 200
+        self.height = 220
+        self.min_height = 220
+        self.min_width  = 120
 
 class AdjustableOutputContent(DataContent):
     def initUI(self):
