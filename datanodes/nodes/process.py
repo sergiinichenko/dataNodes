@@ -304,7 +304,8 @@ class RenameContent(ResizableContent):
         self.labels_in  = {}
         self.labels_out = {}
         self.mainlayout.setContentsMargins(5,5,5,5)
-        self.mainlayout.setSpacing(0)
+        self.mainlayout.setAlignment(Qt.AlignTop)
+        #self.mainlayout.setSpacing(0)
         self.map       = {}
 
     def getSize(self, dic):
@@ -330,11 +331,7 @@ class RenameContent(ResizableContent):
 
     def removePair(self, socket):
 
-        print("The socket to be removed", socket.id)
-        print("the map content", self.map)
-
         if str(socket.id) in self.map:
-            print("Remove socket from the content", socket.id)
             for name in list(self.map[str(socket.id)]):
                 self.mainlayout.removeWidget(self.labels_in[ str(socket.id)][name])
                 self.mainlayout.removeWidget(self.labels_out[str(socket.id)][name])
@@ -343,6 +340,25 @@ class RenameContent(ResizableContent):
                 del self.labels_in[ str(socket.id)][name]
                 del self.labels_out[str(socket.id)][name]
                 del self.map[str(socket.id)][name]
+
+        if self.labels_in[str(socket.id)]   == {} : del self.labels_in[str(socket.id)]
+        if self.labels_out[str(socket.id)]  == {} : del self.labels_out[str(socket.id)]
+        if self.map[str(socket.id)]         == {} : del self.map[str(socket.id)]
+
+        self.sortWidgets()
+
+    def sortWidgets(self):
+        for key in self.labels_in:
+            for i, name in enumerate(self.labels_in[key]):
+                self.labels_in[key][name].setParent(None)
+                self.labels_out[key][name].setParent(None)
+
+        i = 0
+        for key in self.labels_in:
+            for name in self.labels_in[key]:
+                self.mainlayout.addWidget(self.labels_in[key][name],   i, 0)
+                self.mainlayout.addWidget(self.labels_out[key][name], i, 1)
+                i = i + 1
 
         self.node.resize()
 
@@ -393,7 +409,8 @@ class RenameNode(ResizableInputNode):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
-        self.socket_top_margin      = 45
+        self.socket_top_margin      = 44
+        self.socket_spacing         = 27
 
     def initInnerClasses(self):
         self.content    = RenameContent(self)
