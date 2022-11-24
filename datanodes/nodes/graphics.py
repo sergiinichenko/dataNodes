@@ -8,7 +8,7 @@ from sklearn.linear_model import LinearRegression
 import matplotlib.tri as tri
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
-from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel
+from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox
 
 
 LINE_STYLES = ['solid',   'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'dotted', 'dashed','dashdot']
@@ -298,35 +298,45 @@ class GraphicsProperties(PlotProperties):
         label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
 
+        self.limits_grid = QGridLayout()
+        self.limits      = QGroupBox()
+        self.limits.setLayout(self.limits_grid)
+        self.layout.addWidget(self.limits, 12, 0, 3, 2)
+        
 
         label = QLabel("Axis limits ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 12, 0, 1, 2)
-        label.setStyleSheet("margin-bottom: 5px;")
+        self.limits_grid.addWidget(label, 0, 0, 1, 2)
 
         label = QLabel("x", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 13, 0)
-
-        label = QLabel("y", self)        
-        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 13, 1)
+        self.limits_grid.addWidget(label, 1, 0)
 
         self.x_limit_minW  = QLineEdit(str(self.x_limit_min), self)
         self.x_limit_minW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.x_limit_minW, 14, 0)
-
-        self.y_limit_minW  = QLineEdit(str(self.y_limit_min), self)
-        self.y_limit_minW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.y_limit_minW, 14, 1)
+        self.limits_grid.addWidget(self.x_limit_minW, 1, 1)
 
         self.x_limit_maxW  = QLineEdit(str(self.x_limit_max), self)
         self.x_limit_maxW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.x_limit_maxW, 15, 0)
+        self.limits_grid.addWidget(self.x_limit_maxW, 1, 2)
+
+
+        label = QLabel("y", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.limits_grid.addWidget(label, 2, 0)
+
+        self.y_limit_minW  = QLineEdit(str(self.y_limit_min), self)
+        self.y_limit_minW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.limits_grid.addWidget(self.y_limit_minW, 2, 1)
 
         self.y_limit_maxW  = QLineEdit(str(self.y_limit_max), self)
         self.y_limit_maxW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.y_limit_maxW, 15, 1)
+        self.limits_grid.addWidget(self.y_limit_maxW, 2, 2)
+
+
+        self.limits_reset = QPushButton("Reset")
+        self.limits_reset.clicked.connect(self.resetLimits)
+        self.limits_grid.addWidget(self.limits_reset, 3, 0, 1, 3)
 
 
         self.xlabelW.returnPressed.connect(self.updateData)
@@ -336,6 +346,14 @@ class GraphicsProperties(PlotProperties):
         self.y_limit_minW.returnPressed.connect(self.updateData)
         self.y_limit_maxW.returnPressed.connect(self.updateData)
 
+
+    def resetLimits(self):
+        xmin, xmax, ymin, ymax = self.node.getDataLimits()
+        self.x_limit_minW.setText(str(xmin))
+        self.x_limit_maxW.setText(str(xmax))
+        self.y_limit_minW.setText(str(ymin))
+        self.y_limit_maxW.setText(str(ymax))
+        self.updateData()
 
     def updateContent(self):
         super().updateContent()
@@ -534,6 +552,41 @@ class GraphicsOutputNode(ResizableInputNode):
 
         self.content.axes.set_xlim(self.properties.x_limit_min, self.properties.x_limit_max)
         self.content.axes.set_ylim(self.properties.y_limit_min, self.properties.y_limit_max)
+
+    def getDataLimits(self):
+        xmin  = 1.0e20
+        xmax  =-1.0e20
+        ymin  = 1.0e20
+        ymax  =-1.0e20
+        sxmin = 0.0
+        sxmax = 0.0
+        symin = 0.0
+        symax = 0.0
+        
+        for input in self.insockets:
+            if not input.value : return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
+
+            x_name = list(input.value.keys())[0]
+            x_val  = input.value[x_name]
+            if min(x_val) < xmin : 
+                xmin  = min(x_val)
+                sxmin = 1.0
+            if max(x_val) > xmax : 
+                xmax  = max(x_val)
+                sxmax = 1.0
+
+            for name in list(input.value)[1:]:
+                y_val  = input.value[name]
+            
+                if min(y_val) < ymin : 
+                    ymin  = min(y_val)
+                    symin = 1.0
+                
+                if max(y_val) > ymax : 
+                    ymax  = max(y_val)
+                    symax = 1.0
+        
+        return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
 
     def addData(self, value):
         if not value : return 
