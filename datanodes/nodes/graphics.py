@@ -5,6 +5,7 @@ from datanodes.nodes.datanode import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 from sklearn.linear_model import LinearRegression
+from scipy.interpolate import griddata
 import matplotlib.tri as tri
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
@@ -1155,13 +1156,15 @@ class HeatMapNode(ResizableInputNode):
         pass
 
     def addMap(self, value):
+        ngridx = 50
+        ngridy = 50
         self.content.canvas.axes.clear()
         if not value : return
         names = list(value.keys())
 
         # barycentric coords: (a,b,c)
-        self.x = np.array( value[names[0]] )
-        self.y = np.array( value[names[1]] )
+        self.x = value[names[0]] # np.unique( )
+        self.y = value[names[1]] # np.unique( )
     
         # values is stored in the last column
         self.z = np.array( value[names[-1]] )
@@ -1169,9 +1172,32 @@ class HeatMapNode(ResizableInputNode):
         self.vmax = self.z.max()
 
         # plot the contour
+        """
         im = self.content.canvas.axes.tricontourf(self.x, self.y, self.z, 
                                                   cmap=self.cmap, vmin=self.vmin, vmax=self.vmax,
                                                   levels=self.properties.levels)
+        """
+
+        # Create grid values first.
+        xi = np.linspace(np.min(self.x), np.max(self.x), ngridx)
+        yi = np.linspace(np.min(self.y), np.max(self.y), ngridy)
+
+        # Linearly interpolate the data (x, y) on a grid defined by (xi, yi).
+        triang = tri.Triangulation(self.x, self.y)
+        interpolator = tri.LinearTriInterpolator(triang, self.z)
+        Xi, Yi = np.meshgrid(xi, yi)
+        zi = griddata((self.x, self.y), self.z, (xi[None,:], yi[:,None]), method='linear')
+
+        #zi = interpolator(Xi, Yi)
+
+        # Note that scipy.interpolate provides means to interpolate data on a grid
+        # as well. The following would be an alternative to the four lines above:
+        # from scipy.interpolate import griddata
+        # zi = griddata((x, y), z, (xi[None, :], yi[:, None]), method='linear')
+
+        im = self.content.canvas.axes.contourf(xi, yi, zi, levels=self.properties.levels, 
+                                               cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
+
         self.content.canvas.bar.set_title(names[-1])
         plt.colorbar(im, cax=self.content.canvas.bar)
         self.content.canvas.axes.set_xlabel(self.properties.xtitle, fontsize=self.properties.labelsize)
