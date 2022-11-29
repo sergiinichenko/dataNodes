@@ -569,15 +569,19 @@ class GraphicsOutputNode(ResizableInputNode):
 
             x_name = list(input.value.keys())[0]
             x_val  = input.value[x_name]
-            if min(x_val) < xmin : 
-                xmin  = min(x_val)
-                sxmin = 1.0
-            if max(x_val) > xmax : 
-                xmax  = max(x_val)
-                sxmax = 1.0
+
+            if np.any(x_val):
+                if min(x_val) < xmin : 
+                    xmin  = min(x_val)
+                    sxmin = 1.0
+                if max(x_val) > xmax : 
+                    xmax  = max(x_val)
+                    sxmax = 1.0
 
             for name in list(input.value)[1:]:
                 y_val  = input.value[name]
+                
+                if not np.any(y_val): continue
             
                 if min(y_val) < ymin : 
                     ymin  = min(y_val)
