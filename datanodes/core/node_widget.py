@@ -14,6 +14,7 @@ class NodeWidget(QWidget):
         super().__init__(parent)
 
         self.filename = None
+        self.path     = None
         self.window   = parent
 
         self.initUI()
@@ -87,6 +88,7 @@ class NodeWidget(QWidget):
         """Empty the scene (create new file)"""
         self.scene.clear()
         self.filename = None
+        self.path     = None
         self.scene.history.clear()
         self.scene.history.storeInitialHistoryStamp()
 
@@ -96,6 +98,7 @@ class NodeWidget(QWidget):
         try:
             self.scene.loadFromFile(file)
             self.filename = file
+            self.path     = os.path.dirname(file)
             self.scene.history.clear()
             self.scene.history.storeInitialHistoryStamp()
             return True
@@ -115,6 +118,7 @@ class NodeWidget(QWidget):
         
         if filename is not None:
             self.filename = filename
+            self.path     = os.path.dirname(filename)
         QApplication.setOverrideCursor(Qt.WaitCursor)
         self.scene.saveToFile(self.filename)
         QApplication.restoreOverrideCursor()
