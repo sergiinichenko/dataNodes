@@ -14,12 +14,19 @@ from datanodes.nodes.datanode import *
 
 DEBUG = False
 
+class ProjectSettings:
+    def __init__(self) -> None:
+        self.path   = ""
+
+
+
 class NodeWindow(QMainWindow):
     def __init__(self, parent=None):
         super().__init__(parent)
 
         self.name_company = "SergiiCompany"
         self.name_product = "DataNodes editor"
+        self.settings     = ProjectSettings()
 
         self.initUI()
 
@@ -183,6 +190,7 @@ class NodeWindow(QMainWindow):
             if file == '':
                 return
             if os.path.isfile(file):
+                self.settings.path = os.path.dirname(file)
                 self.getCurrentNodeEditorWidget().fileLoad(file)
                 self.setTitle()
 
@@ -205,6 +213,8 @@ class NodeWindow(QMainWindow):
 
         file, filter = QFileDialog.getSaveFileName(self, 'Save Node-Tree to File')
         if file == '' : return False
+
+        self.settings.path = os.path.dirname(file)
 
         current_editor.fileSave(file)
 

@@ -30,6 +30,7 @@ EDGE_SNAPPING        = True
 
 DEBUG                = False
 
+
 class GraphicsView(QGraphicsView):
     scenePosChanged = pyqtSignal(int, int)
 
