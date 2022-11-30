@@ -3,6 +3,7 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from datanodes.core.utils import *
+from PyQt5.QtWidgets import QLabel, QGridLayout, QLineEdit
 
 class StepRangeGraphicsNode(DataGraphicsNode):
     def initSizes(self):
