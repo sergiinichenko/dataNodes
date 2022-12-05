@@ -71,6 +71,7 @@ class FileInputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
+        self.node.checkFilePath(self.node.file)
         res['sel_ind'] = self.cb.currentIndex()
         res['file']    = self.node.file
         return res
@@ -80,8 +81,8 @@ class FileInputContent(DataContent):
         try:
             self.cb.setCurrentIndex(data['sel_ind'])
             self.setSeparator()
-
             self.node.file = data['file']
+            self.node.path = self.node.scene.path
             self.edit.setText(os.path.basename(self.node.file))
             return True & res
         except Exception as e : dumpException(e)
@@ -100,8 +101,15 @@ class FileInputNode(DataNode):
         self.separator = ","
         self.whitespace = False
         self.file = ""
+        self.path = ""
         self.setDirty()
 
+    def checkFilePath(self, file):
+        if self.scene._saved_to_new_file:
+            self.file = os.path.relpath(self.path + file, self.scene.path)
+            self.path = self.scene.path
+        else:
+            self.file = file
 
     def initInnerClasses(self):
         self.content = FileInputContent(self)
@@ -112,7 +120,7 @@ class FileInputNode(DataNode):
         self.content.changed.connect(self.rereadFile)
 
     def rereadFile(self):
-        self.readDFFile(self.file)
+        self.readDFFile(self.path + self.file)
         self.recalculateNode()
 
     def openInputFile(self):
@@ -121,9 +129,10 @@ class FileInputNode(DataNode):
         if file == '':
             return
         if os.path.isfile(file):
-            self.file = file
+            self.path = ""
+            self.checkFilePath(file)
             self.content.edit.setText(os.path.basename(self.file))
-            self.readDFFile(self.file)
+            self.readDFFile(self.path + self.file)
         else:
             self.getOutput(0).value = "NaN"
             self.getOutput(0).type  = 'none'
@@ -150,6 +159,7 @@ class FileInputNode(DataNode):
 
 
     def evalImplementation(self, silent=False):
-        self.readDFFile(self.file)
+        self.checkFilePath(self.file)
+        self.readDFFile(self.path + self.file)
         if self.can_read : return True
         else: return False

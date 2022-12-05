@@ -23,8 +23,9 @@ class Scene(Serializer):
 
         self.scene_width  = 64000
         self.scene_height = 64000
-
+        
         self._has_been_modified = False
+        self._saved_to_new_file = False
         
         # initialize all listeners
         self._last_selected_items = None
@@ -37,6 +38,7 @@ class Scene(Serializer):
 
         self.initUI()
 
+        self.path      = ""
         self.history   = SceneHistory(self)
         self.clipboard = SceneClipboard(self)
         self.grScene.itemSelected.connect(self.onItemSelected)
@@ -170,13 +172,20 @@ class Scene(Serializer):
 
     def saveToFile(self, filename):
         with open(filename, "w") as file:
+            tmp = os.path.dirname(filename) + "/"
+            if tmp != self.path : self._saved_to_new_file = True            
+            self.path  = tmp
+
             file.write(json.dumps(self.serialize(), indent=4))
             print("Successful saving to a file:", filename)
 
-            self.has_been_modified = False
+            self.has_been_modified  = False
+            self._saved_to_new_file = False            
 
     def loadFromFile(self, filename):
         with open(filename, "r") as file:
+            self.path  = os.path.dirname(filename) + "/"
+
             raw = file.read()
             try:
                 data = json.loads(raw)

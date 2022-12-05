@@ -2,6 +2,7 @@ from stat import filemode
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
+from PyQt5.QtWidgets import QComboBox, QLabel, QLineEdit, QFileDialog
 
 
 class FileOutputGraphicsNode(DataGraphicsNode):
@@ -62,6 +63,7 @@ class FileOutputContent(DataContent):
 
     def serialize(self):
         res = super().serialize()
+        self.node.checkFilePath(self.node.file)
         res['sel_ind'] = self.cb.currentIndex()
         res['file'] = self.node.file
         return res
@@ -90,7 +92,15 @@ class FileOutputNode(DataNode):
         self.can_write = True
         self.separator = ","
         self.file = ""
+        self.path = ""
         self.setDirty()
+
+    def checkFilePath(self, file):
+        if self.scene._saved_to_new_file:
+            self.file = os.path.relpath(self.path + file, self.scene.path)
+            self.path = self.scene.path
+        else:
+            self.file = file
 
 
     def initInnerClasses(self):
@@ -110,7 +120,8 @@ class FileOutputNode(DataNode):
         if file == '':
             return
         else:
-            self.file = file
+            self.path = ""
+            self.checkFilePath(file)
             self.content.edit.setText(os.path.basename(self.file))
             self.can_write = True
 
@@ -128,6 +139,7 @@ class FileOutputNode(DataNode):
             self.can_write = False
             
     def evalImplementation(self, silent=False):
+        self.checkFilePath(self.file)
         self.writeDFFile(self.file)
         if self.can_write : return True
         else: return True
