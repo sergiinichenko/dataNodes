@@ -11,6 +11,7 @@ from datanodes.core.utils import *
 from datanodes.core.main_conf import *
 from datanodes.core.node_node import *
 from datanodes.nodes.datanode import *
+from datanodes.nodes import *
 
 DEBUG = False
 
@@ -42,7 +43,7 @@ class NodeWindow(QMainWindow):
         self.setCentralWidget(self.nodeEditor)
 
         # Define the window properties
-        self.setGeometry(200, 100, 1000, 800)
+        self.setGeometry(200, 100, 800, 600)
 
         self.setWindowTitle("DataNodes")
         self.setTitle()
@@ -544,7 +545,7 @@ class NodeSubWindow(NodeWidget):
     def handleNewNodeContextMenu(self, event):
         context_menu = self.initNodesContextMenu()
         action       = context_menu.exec_(self.mapToGlobal(event.pos()))
-
+        
         if action is not None:
             new_data_node = getClassFromOpCode(action.data())(self.scene)
             scene_pos = self.scene.getView().mapToScene(event.pos())

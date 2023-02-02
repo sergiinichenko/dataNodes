@@ -57,7 +57,7 @@ class GraphicsNode(QGraphicsItem):
         self._pen_selected.setWidthF(self._widht)
 
         self._brush_title = QBrush(QColor("#FF313131"))
-        self._brush_background = QBrush(QColor("#E3212121"))
+        self._brush_background = QBrush(QColor("#E3323232"))
         self._brush_dirty   = QBrush(QColor("#FFA4AC7B"))
         self._brush_invalid = QBrush(QColor("#FF9A5B5B"))
         self._brush_mute    = QBrush(QColor("#FFE2C563"))
@@ -144,8 +144,8 @@ class GraphicsNode(QGraphicsItem):
 
     def initContent(self):
         self.grContent = QGraphicsProxyWidget(self)
-        self.content.setGeometry(self.padding, self.title_height + self.padding, 
-                                 self.width - 2 * self.padding, self.height - 2 * self.padding - self.title_height)
+        self.content.setGeometry(int(self.padding), int(self.title_height + self.padding), 
+                                 int(self.width - 2 * self.padding), int(self.height - 2 * self.padding - self.title_height))
         self.grContent.setWidget(self.content)
 
     def hoverEnterEvent(self, event: 'QGraphicsSceneHoverEvent') -> None:

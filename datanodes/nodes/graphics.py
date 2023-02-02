@@ -4,10 +4,6 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
-from sklearn.linear_model import LinearRegression
-from scipy.interpolate import griddata
-import matplotlib.tri as tri
-from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox
 
@@ -1158,6 +1154,9 @@ class HeatMapNode(ResizableInputNode):
 
     def resize(self):
         pass
+    
+    def interpolate(self, x, y, z, xi, yi):
+        return z
 
     def addMap(self, value):
         ngridx = 50
@@ -1187,19 +1186,9 @@ class HeatMapNode(ResizableInputNode):
         yi = np.linspace(np.min(self.y), np.max(self.y), ngridy)
 
         # Linearly interpolate the data (x, y) on a grid defined by (xi, yi).
-        triang = tri.Triangulation(self.x, self.y)
-        interpolator = tri.LinearTriInterpolator(triang, self.z)
-        Xi, Yi = np.meshgrid(xi, yi)
-        zi = griddata((self.x, self.y), self.z, (xi[None,:], yi[:,None]), method='linear')
+        #zi = griddata((self.x, self.y), self.z, (xi[None,:], yi[:,None]), method='linear')
 
-        #zi = interpolator(Xi, Yi)
-
-        # Note that scipy.interpolate provides means to interpolate data on a grid
-        # as well. The following would be an alternative to the four lines above:
-        # from scipy.interpolate import griddata
-        # zi = griddata((x, y), z, (xi[None, :], yi[:, None]), method='linear')
-
-        im = self.content.canvas.axes.contourf(xi, yi, zi, levels=self.properties.levels, 
+        im = self.content.canvas.axes.contourf(self.x, self.y, self.z, levels=self.properties.levels, 
                                                cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
 
         self.content.canvas.bar.set_title(names[-1])

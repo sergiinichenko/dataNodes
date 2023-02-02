@@ -19,9 +19,9 @@ class GraphicsScene(QGraphicsScene):
         self.gridSize = 20
         self.gridSquares = 5
 
-        self._color_background = QColor("#393939")
-        self._color_light = QColor("#343434")
-        self._color_dark  = QColor("#313131")
+        self._color_background = QColor("#212121")
+        self._color_light = QColor("#1E1E1E")
+        self._color_dark  = QColor("#1A1A1A")
 
         self.pen_light = QPen(self._color_light)
         self.pen_light.setWidth(2)

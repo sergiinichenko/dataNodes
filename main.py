@@ -1,8 +1,8 @@
 import sys, os
 from PyQt5.QtWidgets import QApplication
 sys.path.insert(0, os.path.join( os.path.dirname(__file__), '..', '..'))
-import faulthandler 
-faulthandler.enable()
+#import faulthandler 
+#faulthandler.enable()
 
 from datanodes.core.main_window import MainWindow
 import os

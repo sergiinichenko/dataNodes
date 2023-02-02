@@ -1,5 +1,3 @@
-from pandas.core.algorithms import isin
-from pandas.core.frame import DataFrame
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
@@ -7,6 +5,7 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
 
 
 class DescribeGraphicsNode(ResizebleDataNode):

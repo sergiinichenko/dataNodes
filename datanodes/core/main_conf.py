@@ -54,11 +54,13 @@ def registerNode(op_code, class_reference):
         ))  
     DATA_NODES[op_code] = class_reference
 
+
 def register_node(op_code):
     def decorator(originar_class):
         registerNode(op_code, originar_class)
         return originar_class
     return decorator
+
 
 def getClassFromOpCode(op_code):
     if op_code not in DATA_NODES: raise OpCodeNotRegistered("OpCode '%d' is not registered" % op_code)

@@ -51,6 +51,11 @@ class MainWindow(NodeWindow):
 
         self.setWindowTitle("DataNodes Editor")
         self.show()
+    
+    """
+    def registerNodes(self):
+        registerNode(OP_MODE_FILEINPUT, FileInputNode)
+    """        
 
     def setActiveSubWindow(self, window):
         if window:

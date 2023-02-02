@@ -39,7 +39,7 @@ setup(
     name='datanodes',
     #packages=find_packages(include=['template', 'template.*']),
     packages=find_packages(include=['datanodes*'], exclude=['examples*', 'tests*']),
-    package_data={'': ['qss/*']},
+    package_data={'': ['datanodes/core/qss/*']},
     setup_requires=setup_requirements,
     test_suite='tests',
     tests_require=test_requirements,
