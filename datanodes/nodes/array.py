@@ -119,7 +119,6 @@ class NumRangeGraphicsNode(DataGraphicsNode):
         self.height = 140.0
 
 class NumRangeContent(DataContent):
-
     def initUI(self):
         super().initUI()
         self.layout = QGridLayout()
@@ -197,6 +196,7 @@ class NumRangeNode(DataNode):
         self.content = NumRangeContent(self)
         self.grNode  = NumRangeGraphicsNode(self)
         self.properties = NodeProperties(self)
+        
         self.content.name.returnPressed.connect(self.onContentChanged)
         self.content.start.returnPressed.connect(self.onContentChanged)
         self.content.number.returnPressed.connect(self.onContentChanged)

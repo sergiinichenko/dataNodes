@@ -13,6 +13,7 @@ class NodeContentWidget(QWidget, Serializer):
     def __init__(self, node:'Node', parent:'QWidget'=None):
         """default constructor"""
         self.node = node
+        
         super().__init__(parent)
         self.initUI()
 
