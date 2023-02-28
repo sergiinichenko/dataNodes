@@ -14,6 +14,7 @@ from datanodes.nodes.graphics import *
 from datanodes.nodes.input_file import *
 from datanodes.nodes.inputs import *
 from datanodes.nodes.math import *
+from datanodes.nodes.fit import *
 from datanodes.nodes.output_file import *
 from datanodes.nodes.outputs import *
 from datanodes.nodes.process import *

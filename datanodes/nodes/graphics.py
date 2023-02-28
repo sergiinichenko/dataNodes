@@ -5,8 +5,7 @@ from datanodes.nodes.datanode import *
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox
-
+from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox, QCheckBox
 
 LINE_STYLES = ['solid',   'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'dotted', 'dashed','dashdot']
 COLORS      = ['#D98880', '#AF7AC5', '#85C1E9', '#6C3483', '#196F3D', '#CB4335', '#58D68D', '#2874A6', '#A2D9CE', '#935116', '#DC7633', '#E59866', '#154360', '#16A085', '#7D6608', '#313131']
@@ -177,6 +176,7 @@ class PlotProperties(NodeProperties):
         label.setStyleSheet("margin-bottom: 15px;")
         self.legendsizeW.setStyleSheet("margin-bottom: 15px;")
 
+        # Return Pressed event listeners
         self.marginTopW.returnPressed.connect(self.updateData)
         self.marginRightW.returnPressed.connect(self.updateData)
         self.marginLeftW.returnPressed.connect(self.updateData)
@@ -268,6 +268,8 @@ class GraphicsProperties(PlotProperties):
         self.linestyle = {}
         self.graphtype = {}
         self.c = 0
+        self.grid_main = False
+        self.grid_minor = False
 
         self.labels    = {}
         self.styles    = {}
@@ -334,6 +336,31 @@ class GraphicsProperties(PlotProperties):
         self.limits_reset = QPushButton("Reset")
         self.limits_reset.clicked.connect(self.resetLimits)
         self.limits_grid.addWidget(self.limits_reset, 3, 0, 1, 3)
+        self.limits.setStyleSheet("margin-bottom: 15px;")
+
+
+        # Part related to Grid settings
+        # General container
+
+        label = QLabel("Main grid", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        label.setStyleSheet("margin-right: 10px;")
+        self.layout.addWidget(label, 16, 0)
+
+        self.main_grid_swith = QCheckBox("Grid main")
+        self.main_grid_swith.setChecked(False)
+        self.layout.addWidget(self.main_grid_swith, 16, 1)
+
+
+        label = QLabel("Minor grid", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        label.setStyleSheet("margin-right: 10px;")
+        self.layout.addWidget(label, 17, 0)
+
+        self.minor_grid_swith = QCheckBox("Grid minor")
+        self.minor_grid_swith.setChecked(False)
+        self.layout.addWidget(self.minor_grid_swith, 17, 1)
+
 
 
         self.xlabelW.returnPressed.connect(self.updateData)
@@ -342,6 +369,8 @@ class GraphicsProperties(PlotProperties):
         self.x_limit_maxW.returnPressed.connect(self.updateData)
         self.y_limit_minW.returnPressed.connect(self.updateData)
         self.y_limit_maxW.returnPressed.connect(self.updateData)
+        self.main_grid_swith.stateChanged.connect(self.updateData)
+        self.minor_grid_swith.stateChanged.connect(self.updateData)
 
 
     def resetLimits(self):
@@ -360,6 +389,8 @@ class GraphicsProperties(PlotProperties):
         self.x_limit_max    = float(self.x_limit_maxW.text())
         self.y_limit_min    = float(self.y_limit_minW.text())
         self.y_limit_max    = float(self.y_limit_maxW.text())
+        self.grid_main      = self.main_grid_swith.isChecked()
+        self.grid_minor     = self.minor_grid_swith.isChecked()
 
     def fillWidgets(self):
         super().fillWidgets()
@@ -372,7 +403,7 @@ class GraphicsProperties(PlotProperties):
         self.appendDataWidgets()
 
     def appendDataWidgets(self):
-        self.i = 16
+        self.i = 18
         for name in self.names : 
 
             self.labels[name] = QLabel(name + " ", self)        
@@ -467,6 +498,8 @@ class GraphicsProperties(PlotProperties):
         res['x_limit_max']  = self.x_limit_max
         res['y_limit_min']  = self.y_limit_min
         res['y_limit_max']  = self.y_limit_max
+        res['grid_main']   = self.grid_main
+        res['grid_minor']  = self.grid_minor
 
         return res
 
@@ -483,6 +516,11 @@ class GraphicsProperties(PlotProperties):
                 if 'y_limit_min'   in data : self.y_limit_min = data['y_limit_min']
                 if 'y_limit_max'   in data : self.y_limit_max = data['y_limit_max']
 
+                if 'grid_main'     in data : self.grid_main  = data['grid_main'] 
+                if 'grid_minor'    in data : self.grid_minor = data['grid_minor']
+
+                self.main_grid_swith.setChecked(self.grid_main)
+                self.minor_grid_swith.setChecked(self.grid_minor)
                 self.fillWidgets()
             except Exception as e: 
                 dumpException(e)
@@ -539,6 +577,16 @@ class GraphicsOutputNode(ResizableInputNode):
             self.content.axes.set_xlabel(x_name)
         else:
             self.content.axes.set_xlabel(self.properties.xtitle)
+
+        if self.properties.grid_main:
+            self.content.axes.grid(visible=True, which="major")
+        else:
+            self.content.axes.grid(visible=False, which="major")
+
+        if self.properties.grid_minor:
+            self.content.axes.grid(visible=True, which="minor")
+        else:
+            self.content.axes.grid(visible=False, which="minor")
 
         self.content.axes.set_ylabel(self.properties.ytitle)
         self.content.axes.xaxis.label.set_size( self.properties.labelsize )

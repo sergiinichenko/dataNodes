@@ -6,7 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem
-
+from PyQt5.QtGui import QFont
 
 class DescribeGraphicsNode(ResizebleDataNode):
     def initSizes(self):
@@ -64,23 +64,6 @@ class DescribeOutputNode(DataNode):
         self.content = DescribeContent(self)
         self.grNode  = DescribeGraphicsNode(self)
         self.properties = NodeProperties(self)
-
-    def getFormatedValue(self, value):
-        if np.abs(value) > 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 100.0 and np.abs(value) <= 1000.0:
-            return "{:.2f}".format(value)
-        if np.abs(value) > 1.0 and np.abs(value) <= 100.0:
-            return "{:.3f}".format(value)
-        if np.abs(value) > 0.01 and np.abs(value) <= 1.0:
-            return "{:.4f}".format(value)
-        if np.abs(value) > 0.00 and np.abs(value) <= 0.01:
-            return "{:.3e}".format(value)
-        else:
-            return "{:.1f}".format(value)
-
 
     def fillTable(self):
         self.content.table.clear()
@@ -179,8 +162,6 @@ class DescribeOutputNode(DataNode):
                 self.setDirty(False)
                 self.setInvalid(False)
                 self.e = e
-                self.getOutput(0).value = {}
-                self.getOutput(0).type = "float"
                 return False
 
 
