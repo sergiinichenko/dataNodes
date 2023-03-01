@@ -13,6 +13,15 @@ import os
 import pandas as pd
 import numpy as np
 
+class Pair():
+    old = ""
+    new = ""
+    len = 0
+    def __init__(self, old="", new="", len=0):
+        self.old = old
+        self.new = new
+        self.len = len
+
 DEBUG = False
 
 class DataGraphicsNode(GraphicsNode):
@@ -61,9 +70,10 @@ class DataGraphicsNode(GraphicsNode):
         return super().itemChange(change, value)
 
 class DataContent(NodeContentWidget):
-    changed    = pyqtSignal()
-    removed    = pyqtSignal(Socket)
-    outchanged = pyqtSignal()
+    changed      = pyqtSignal()
+    removed      = pyqtSignal(Socket)
+    outchanged   = pyqtSignal()
+    renamed      = pyqtSignal(Pair)
     def initUI(self):
         pass
 
@@ -154,6 +164,41 @@ class DataNode(Node):
         self.setDirty()
         self.eval()
 
+    def rename(self, dict):
+        print(self._title)
+        print("dict : ", dict.old, dict.new)
+        print("before", self.value)
+
+        if dict.new != dict.old and dict.new in self.value:
+            self.setDirty()
+            self.setDescendentsDirty()
+            self.eval(False)
+            self.evalChildren(False)
+            return
+
+        if dict.len != len(self.value):
+            self.setDirty()
+            self.setDescendentsDirty()
+            self.eval(False)
+            self.evalChildren(False)
+            return
+
+        if dict.old in self.value:
+            self.value = {dict.new if k == dict.old else k : v for k, v in self.value.items()}
+        """
+        if dict.old in self.value:
+            self.value[dict.new] = self.value.pop(dict.old)
+        """
+        print("after", self.value)
+
+        self.updateNames(dict)
+        for other_node in self.getChildNodes():
+            other_node.rename(dict)
+            
+            
+    def updateNames(self, dict):
+        pass
+
     def eval(self, silent=False):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:
             #return self.value
@@ -238,7 +283,6 @@ class DataNode(Node):
     def onInputRemoved(self, socket=None):
         if DEBUG : print("DATANODE : oninputRemoved")
         self.content.removed.emit(socket)
-
 
     def onOutputChanged(self, new_edge=None):
         pass

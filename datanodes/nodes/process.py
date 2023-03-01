@@ -307,6 +307,7 @@ class RenameContent(ResizableContent):
         self.mainlayout.setAlignment(Qt.AlignTop)
         #self.mainlayout.setSpacing(0)
         self.map       = {}
+        self.history   = {}
 
     def getSize(self, dic):
         size = 0
@@ -319,14 +320,24 @@ class RenameContent(ResizableContent):
         
         if str(id) not in self.labels_in  : self.labels_in[str(id)]  = {}
         if str(id) not in self.labels_out : self.labels_out[str(id)] = {}
-
+        if str(id) not in self.map        : self.map[str(id)]        = {}
+        
         self.labels_in[str(id)][namein]  = QLabel(namein, self)
         self.labels_out[str(id)][namein] = QLineEdit(nameout, self)
         self.labels_in[str(id)][namein].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.labels_out[str(id)][namein].setAlignment(Qt.AlignLeft)
         self.mainlayout.addWidget(self.labels_in[str(id)][namein], i, 0)
         self.mainlayout.addWidget(self.labels_out[str(id)][namein], i, 1)
-        self.labels_out[str(id)][namein].returnPressed.connect(self.node.recalculateNode)
+        self.map[str(id)][namein] = nameout
+
+        self.labels_out[str(id)][namein].returnPressed.connect(lambda: self.renameData(str(id), namein, self.labels_out[str(id)][namein] ) )
+        
+    def renameData(self, id_str, namein, nameout):
+        pair = Pair(self.map[id_str][namein], nameout.text(), self.getSize(self.map))
+        print("Initial ", self.node._title)
+        print("id_str  ", id_str)
+        self.map[id_str][namein] = nameout.text()
+        self.renamed.emit(pair)
 
 
     def removePair(self, socket):
@@ -418,7 +429,8 @@ class RenameNode(ResizableInputNode):
         self.properties = NodeProperties(self)
         self.content.removed.connect(self.removeInnput)
         self.content.changed.connect(self.recalculateNode)
-
+        self.content.renamed.connect(self.rename)
+        
     def removeInnput(self, socket=None):
         self.content.removePair(socket)
         self.recalculateNode()
@@ -430,14 +442,13 @@ class RenameNode(ResizableInputNode):
         #need to remove the sockets labels
         pass
     def resize(self):
-        size = self.content.getSize(self.content.labels_in)
+        size  = self.content.getSize(self.content.labels_in)
         current_size = (size) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
 
         if current_size > self.grNode.min_height:
             self.grNode.height = current_size
             self.grNode.update()
             self.content.updateSize()
-
         
     def evalImplementation(self, silent=False):
         input_edges = self.getInputs()
@@ -455,18 +466,18 @@ class RenameNode(ResizableInputNode):
                 try:
                     for input in input_edges:
                         if str(input.id) not in self.content.map : self.content.map[str(input.id)] = {}
+                        
+                        for name in input.value:
+                            if name not in self.content.map[str(input.id)]:
+                                self.content.appendPair(input.id, name, name)
 
-                        if isinstance(input.value, dict):
-                            for name in input.value:
-                                if name not in self.content.map[str(input.id)]:
-                                    self.content.map[str(input.id)][name] = name
-                                    self.content.appendPair(input.id, name, name)
+                        """
+                        for name in self.content.map[str(input.id)]:
+                            self.content.map[str(input.id)][name] = self.content.labels_out[str(input.id)][name].text()
+                        """
 
-                            for name in self.content.map[str(input.id)]:
-                                self.content.map[str(input.id)][name] = self.content.labels_out[str(input.id)][name].text()
-
-                            for name in input.value:
-                                self.value[self.content.map[str(input.id)][name]] = input.value[name]
+                        for name in input.value:
+                            self.value[self.content.map[str(input.id)][name]] = input.value[name]
 
                         self.resize()
                                 
@@ -484,6 +495,11 @@ class RenameNode(ResizableInputNode):
                 self.getOutput(0).value = 0
                 self.getOutput(0).type = "float"
                 return False
+
+
+
+
+
 
 
 
@@ -733,5 +749,241 @@ class CleanNode(DataNode):
                 self.setInvalid(False)
                 self.e = e
                 self.getOutput(0).value = {0.0}
+                self.getOutput(0).type = "float"
+                return False
+
+
+
+
+
+
+
+class SelectGraphicsNode(ResizableGraphicsNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 160
+        self.height = 80
+        self.min_height = 80
+
+class SelectContent(ResizableContent):
+    def initUI(self):
+        super().initUI()
+        self.mainlayout.setContentsMargins(5,5,5,5)
+        self.mainlayout.setAlignment(Qt.AlignTop)
+        self.select_map    = {}
+        self.checkbox_map  = {}
+        self.labels_map    = {}
+        self.position      = 0
+
+    def getSize(self, dic):
+        size = 0
+        for name in dic:
+            size += len(dic[name])
+        return size
+
+    def if_contains(self, name):
+        for id in self.select_map:
+            if name in self.select_map[id]:
+                return True
+        return False
+        
+
+    def appendPair(self, id, name, value=True):
+        i = self.getSize(self.labels_map)
+        
+        if str(id) not in self.labels_map   : self.labels_map[str(id)]   = {}
+        if str(id) not in self.checkbox_map : self.checkbox_map[str(id)] = {}
+        if str(id) not in self.select_map   : self.select_map[str(id)]   = {}
+
+        self.labels_map[str(id)][name]   = QLabel(name, self)
+        self.labels_map[str(id)][name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labels_map[str(id)][name].setStyleSheet("margin-right: 10px;")
+        self.mainlayout.addWidget(self.labels_map[str(id)][name], i, 0, 1, 4)
+
+        self.checkbox_map[str(id)][name] = QCheckBox("")
+        self.checkbox_map[str(id)][name].setChecked(value)
+        self.mainlayout.addWidget(self.checkbox_map[str(id)][name], i, 5, 1, 1)
+
+        self.checkbox_map[str(id)][name].stateChanged.connect(self.updateMaps)
+        self.select_map[str(id)][name] = value
+
+
+    def updateMaps(self):
+        for id in self.select_map:
+            for name in self.select_map[id]:
+                self.select_map[id][name] = self.checkbox_map[id][name].isChecked()
+        self.node.recalculateNode()
+
+    def removePair(self, id, name):
+        if id == None : return
+        if str(id) in self.select_map:
+            self.mainlayout.removeWidget(self.labels_map[ str(id)][name])
+            self.mainlayout.removeWidget(self.checkbox_map[str(id)][name])
+            self.labels_map[ str(id)][name].setParent(None)
+            self.checkbox_map[str(id)][name].setParent(None)
+            del self.labels_map[ str(id)][name]
+            del self.checkbox_map[str(id)][name]
+            del self.select_map[str(id)][name]
+
+            if self.labels_map[str(id)]   == {} : del self.labels_map[str(id)]
+            if self.checkbox_map[str(id)] == {} : del self.checkbox_map[str(id)]
+            if self.select_map[str(id)]   == {} : del self.select_map[str(id)]
+
+        self.sortWidgets()
+
+    def sortWidgets(self):
+        for key in self.labels_map:
+            for i, name in enumerate(self.labels_map[key]):
+                self.labels_map[key][name].setParent(None)
+                self.checkbox_map[key][name].setParent(None)
+
+        i = 0
+        for key in self.labels_map:
+            for name in self.labels_map[key]:
+                self.mainlayout.addWidget(self.labels_map[key][name],   i, 0, 1, 4)
+                self.mainlayout.addWidget(self.checkbox_map[key][name], i, 5, 1, 1)
+                i = i + 1
+        self.node.resize()
+
+
+    def clearContent(self):
+        while self.mainlayout.count():
+            child = self.mainlayout.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+        self.labels_map   = {}
+        self.checkbox_map = {}
+
+    def serialize(self):
+        res = super().serialize()
+        res['map']            = self.select_map
+        res['width']          = self.node.grNode.width
+        res['height']         = self.node.grNode.height
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            self.select_map         = data['map']
+            self.node.grNode.height = data['height']
+            self.node.grNode.width  = data['width']
+            self.updateSize()
+            for id in self.select_map:
+                for name in self.select_map[id]:
+                    self.appendPair(id, name, self.select_map[id][name])
+                    
+            return True & res
+        except Exception as e: 
+            dumpException(e)
+        return True & res
+
+
+@register_node(OP_MODE_DATA_SELECT)
+class SelectNode(ResizableInputNode):
+    icon     = "icons/math.png"
+    op_code  = OP_MODE_DATA_SELECT
+    op_title = "Select"
+
+    def __init__(self, scene, inputs=[1], outputs=[1]):
+        super().__init__(scene, inputs=inputs, outputs=outputs)
+        self.value = {}
+        self.out   = {}
+
+    def initSettings(self):
+        super().initSettings()
+        self.input_socket_position  = LEFT_TOP
+        self.output_socket_position = RIGHT_TOP
+        self.socket_top_margin      = 44
+        self.socket_spacing         = 25
+
+    def initInnerClasses(self):
+        self.content    = SelectContent(self)
+        self.grNode     = SelectGraphicsNode(self)
+        self.properties = NodeProperties(self)
+        self.content.removed.connect(self.removeInnput)
+        self.content.changed.connect(self.recalculateNode)
+
+    def removeInnput(self, socket=None):
+        if str(socket.id) in self.content.select_map:
+            for name in list(self.content.select_map[str(socket.id)]):
+                self.content.removePair(socket.id, name)
+        self.recalculateNode()
+
+    def onInputChange(self, new_edge=None):
+        self.content.changed.emit()
+
+    def getSocketsNames(self):
+        #need to remove the sockets labels
+        pass
+    
+    def resize(self):
+        values  = self.content.getSize(self.content.labels_map)
+        sockets = len(self.getInputs()) - 1
+        size    = max(values, sockets)
+        current_size = (size) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
+
+        if current_size > self.grNode.min_height:
+            self.grNode.height = current_size
+            self.grNode.update()
+            self.content.updateSize()
+
+        
+    def evalImplementation(self, silent=False):
+        input_edges = self.getInputs()
+        if not input_edges:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
+        else:
+            self.sortSockets()
+            if len(input_edges) > 0:      
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e     = ""
+                self.value = {}
+                self.input_names = []
+                
+                try:
+                    for input in input_edges:
+                        if input.value == None : continue
+                        self.input_names.extend(list(input.value))
+                        
+
+                    for input in input_edges:
+                        if input.value == None : continue
+                        
+                        # Append pair if not there yet                        
+                        for name in input.value:
+                            # if name not in self.content.select_map[str(input.id)]:
+                            if not self.content.if_contains(name):
+                                self.content.appendPair(input.id, name, True)
+                                self.value[name] = input.value[name]
+
+                        # Remove the pair if it is not in the input or renamed
+                        if str(input.id) in self.content.select_map:
+                            for name in list(self.content.select_map[str(input.id)]):
+                                # if name not in self.content.select_map[str(input.id)]:
+                                if name not in self.input_names:
+                                    self.content.removePair(input.id, name)
+                        
+                        for name in input.value:
+                            if str(input.id) in self.content.select_map:
+                                if self.content.select_map[str(input.id)][name]:
+                                    self.value[name] = input.value[name]
+
+                        self.resize()
+                                
+                    self.getOutput(0).value = self.value
+                    self.getOutput(0).type = "df"
+                    return True
+                except Exception as e:
+                    self.e = e
+                    dumpException(e)
+                    return False
+            else:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = "Not enough input data"
+                self.getOutput(0).value = 0
                 self.getOutput(0).type = "float"
                 return False

@@ -82,6 +82,12 @@ class TableOutputNode(DataNode):
         else:
             return value
 
+    def updateNames(self, dict):
+        for c, key in enumerate(self.value):
+            print(c, key)
+            item = QTableWidgetItem(key)
+            self.content.table.setItem(0, c, item)
+
     def fillTable(self):
         self.content.table.clear()
         self.content.table.setRowCount(0)

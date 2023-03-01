@@ -39,6 +39,15 @@ class Socket(Serializer):
                 return self.edges[0].getOtherSocket(self).value
             return {}
 
+    @property
+    def innodeid(self):
+        if self.inout == SOCKET_OUTPUT:
+            return self.node.id
+        else:
+            if len(self.edges) > 0:
+                return self.edges[0].getOtherSocket(self).node.id
+            return None
+
     @value.setter
     def value(self, new_value):
         if self.inout == SOCKET_OUTPUT:

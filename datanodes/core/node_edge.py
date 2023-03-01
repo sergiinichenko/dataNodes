@@ -89,6 +89,9 @@ class Edge(Serializer):
         self.grEdge = self.createEdgeClassInstance(self.edge_type)
         self.scene.grScene.addItem(self.grEdge)
 
+    @property
+    def innodeid(self):
+        return self._start_socket.node.id
 
     @classmethod
     def getEdgeValidators(cls):
