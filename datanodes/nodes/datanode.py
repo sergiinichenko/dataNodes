@@ -176,7 +176,7 @@ class DataNode(Node):
             self.evalChildren(False)
             return
 
-        if dict.len != len(self.value):
+        if dict.len != self.getValueSize():
             self.setDirty()
             self.setDescendentsDirty()
             self.eval(False)
@@ -185,19 +185,24 @@ class DataNode(Node):
 
         if dict.old in self.value:
             self.value = {dict.new if k == dict.old else k : v for k, v in self.value.items()}
-        """
-        if dict.old in self.value:
-            self.value[dict.new] = self.value.pop(dict.old)
-        """
+
         print("after", self.value)
 
         self.updateNames(dict)
+        self.updateOutputs()
+        
         for other_node in self.getChildNodes():
             other_node.rename(dict)
-            
-            
+
+    def getValueSize(self):
+        return len(self.value)       
+
     def updateNames(self, dict):
         pass
+
+    def updateOutputs(self):
+        if self.hasOutput() : self.getOutput(0).value = self.value
+        
 
     def eval(self, silent=False):
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:

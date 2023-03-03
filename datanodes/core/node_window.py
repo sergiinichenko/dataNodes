@@ -267,6 +267,9 @@ class NodeWindow(QMainWindow):
         self.getCurrentNodeEditorWidget().scene.deselectAll()
         self.onEditPaste(setSelected=True)
 
+    def getNodeClassFromOpCode(self, op_code):
+        return getClassFromOpCode(op_code)
+
 
 
 

@@ -336,6 +336,15 @@ class Node(Serializer):
             dumpException(e)
             return None
 
+    def hasOutput(self):
+        if self.outputs is not None:
+            if len(self.outputs) > 0:
+                return True
+            else:
+                return False
+        else:
+            return False
+        
 
     def getOutput(self, index=0):
         try:

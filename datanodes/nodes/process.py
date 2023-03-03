@@ -441,6 +441,7 @@ class RenameNode(ResizableInputNode):
     def getSocketsNames(self):
         #need to remove the sockets labels
         pass
+    
     def resize(self):
         size  = self.content.getSize(self.content.labels_in)
         current_size = (size) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin
@@ -888,6 +889,17 @@ class SelectNode(ResizableInputNode):
         super().__init__(scene, inputs=inputs, outputs=outputs)
         self.value = {}
         self.out   = {}
+
+    def getValueSize(self):
+        return len(self.input_names)
+
+    def updateNames(self, dict):
+        for id in self.content.select_map:
+            if dict.old in self.content.select_map[id]:
+                self.content.labels_map[id]   = {dict.new if k == dict.old else k : v for k, v in self.content.labels_map[id].items()}
+                self.content.checkbox_map[id] = {dict.new if k == dict.old else k : v for k, v in self.content.checkbox_map[id].items()}
+                self.content.select_map[id]   = {dict.new if k == dict.old else k : v for k, v in self.content.select_map[id].items()}
+                self.content.labels_map[id][dict.new].setText(dict.new)
 
     def initSettings(self):
         super().initSettings()

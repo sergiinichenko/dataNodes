@@ -194,6 +194,9 @@ class TextOutputNode(DataNode):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
 
+    def updateNames(self, dict):
+        self.content.textOut.clear()
+        self.content.textOut.insertPlainText(str(self.value))
 
     def initInnerClasses(self):
         self.content = TextOutputContent(self)

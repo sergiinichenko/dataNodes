@@ -77,6 +77,7 @@ class EdgeDragging:
                     
                 self.getScene().history.storeHistory("created new edge")
                 return True 
+        
         except Exception as e : dumpException(e)
 
         if DEBUG : print("View:edgeDragEnd ~ The socket was not assigned and is removed")

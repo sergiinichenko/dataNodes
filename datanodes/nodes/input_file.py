@@ -105,11 +105,11 @@ class FileInputNode(DataNode):
         self.setDirty()
 
     def checkFilePath(self, file):
-        if self.scene._saved_to_new_file:
-            self.file = os.path.relpath(self.path + file, self.scene.path)
-            self.path = self.scene.path
-        else:
-            self.file = file
+        #if self.scene._saved_to_new_file:
+        self.file = os.path.relpath(self.path + file, self.scene.path)
+        self.path = self.scene.path
+        #else:
+        #    self.file = file
 
     def initInnerClasses(self):
         self.content = FileInputContent(self)

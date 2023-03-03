@@ -14,6 +14,7 @@ from PyQt5.QtWidgets import QGraphicsView, QApplication
 from PyQt5.QtCore import pyqtSignal, QRectF, QPointF, QEvent, Qt
 from PyQt5.QtGui import QPainter, QMouseEvent, QInputEvent
 
+
 MODE_NONE        = 1
 MODE_EDGE_DRAG   = 2
 MODE_DRAG_RESIZE = 3
@@ -288,10 +289,35 @@ class GraphicsView(QGraphicsView):
                     if self.isSnappingEnabled(event):
                         item = self.snapping.getSnappedSocketItem(event)
 
-                    res = self.dragging.edgeDragEnd(item)
-                    if res: return
+                    if type(item) is not GraphicsSocket:
+                        # If no node is being targeted then open context menu and pick a node to connect
+                        print("Open context menu")
+                        context_menu = self.grScene.scene.window.getCurrentNodeEditorWidget().initNodesContextMenu()
+                        action       = context_menu.exec_(self.mapToGlobal(event.pos()))
+                                                                    
+                        if action is not None:
+                            new_data_node = self.grScene.scene.window.getNodeClassFromOpCode(action.data())(self.grScene.scene)
+                            scene_pos = self.grScene.scene.getView().mapToScene(event.pos())
+                            
+                            new_data_node.setPos(scene_pos.x(), scene_pos.y())
+
+                            if self.grScene.scene.getView().mode == MODE_EDGE_DRAG:
+                                # if we were dragging an edge...
+                                target_socket = self.grScene.scene.window.getCurrentNodeEditorWidget().determine_target_socket_of_node(self.grScene.scene.getView().dragging.drag_start_socket.is_output, new_data_node)
+                                if target_socket is not None:
+                                    self.grScene.scene.getView().dragging.edgeDragEnd(target_socket.grSocket)
+                                    self.grScene.scene.window.getCurrentNodeEditorWidget().finish_new_node_state(new_data_node)
+
+                            else:
+                                self.grScene.scene.history.storeHistory("Created %s" % new_data_node.__class__.__name__)
+
+                    else:
+                        res = self.dragging.edgeDragEnd(item)
+                        if res: 
+                            return
 
 
+                        
             if self.mode == MODE_EDGE_REROUT:
                 # defines if the snapping is enabled and returs the closest
                 # socket item
@@ -319,6 +345,7 @@ class GraphicsView(QGraphicsView):
                 self.edgeIntersect.leaveState(scenepos.x(), scenepos.y())
                 self.mode = MODE_NONE
                 self.update()
+                print("Released the drag")
 
 
             if self.rubberBandDraggingRect:
