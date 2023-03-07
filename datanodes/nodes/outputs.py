@@ -66,22 +66,6 @@ class TableOutputNode(DataNode):
         except:
             return True
 
-    def getFormatedValue(self, value):
-        if not self.isString(value):
-            if str(value) == ""           : return ""
-            if np.isnan(value)            : return "nan"
-            if np.isinf(value)            : return "inf"
-
-            if np.abs(value) > 1000000.0                            : return "{:.3e}".format(value)
-            if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0: return "{:.3e}".format(value)
-            if np.abs(value) > 100.0 and np.abs(value) <= 1000.0    : return "{:.2f}".format(value)
-            if np.abs(value) > 1.0 and np.abs(value) <= 100.0       : return "{:.3f}".format(value)
-            if np.abs(value) > 0.01 and np.abs(value) <= 1.0        : return "{:.4f}".format(value)
-            if np.abs(value) > 0.00 and np.abs(value) <= 0.01       : return "{:.3e}".format(value)
-            else                                                    : return "{:.1f}".format(value)
-        else:
-            return value
-
     def updateNames(self, dict):
         for c, key in enumerate(self.value):
             print(c, key)

@@ -142,9 +142,9 @@ class FileInputNode(DataNode):
     def readDFFile(self, file):
         try:
             if self.separator is not None:
-                df = pd.read_csv(file, sep=self.separator, delim_whitespace=self.whitespace).to_dict('list')
+                df = pd.read_csv(file, sep=self.separator, delim_whitespace=self.whitespace, keep_default_na=False).to_dict('list')
             else:
-                df = pd.read_csv(file, delim_whitespace=self.whitespace).to_dict('list')
+                df = pd.read_csv(file, delim_whitespace=self.whitespace, keep_default_na=False).to_dict('list')
             res = {}
             for name in df:
                 res[name] = np.array(df[name])

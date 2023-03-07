@@ -119,21 +119,29 @@ class DataNode(Node):
         self.input_socket_position  = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
+
     def getFormatedValue(self, value):
-        if np.abs(value) > 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0:
-            return "{:.3e}".format(value)
-        if np.abs(value) > 100.0 and np.abs(value) <= 1000.0:
-            return "{:.2f}".format(value)
-        if np.abs(value) > 1.0 and np.abs(value) <= 100.0:
-            return "{:.3f}".format(value)
-        if np.abs(value) > 0.01 and np.abs(value) <= 1.0:
-            return "{:.4f}".format(value)
-        if np.abs(value) > 0.00 and np.abs(value) <= 0.01:
-            return "{:.3e}".format(value)
+        # check if value is string
+        if isinstance(value, str) : return value
+        
+        # format the int value
+        if isinstance(value, int) : return value
+        
+        # format the double value
+        if not self.isString(value):
+            if str(value) == ""           : return ""
+            if np.isnan(value)            : return "nan"
+            if np.isinf(value)            : return "inf"
+
+            if np.abs(value) > 1000000.0                            : return "{:.3e}".format(value)
+            if np.abs(value) > 1000.0 and np.abs(value) <= 1000000.0: return "{:.3e}".format(value)
+            if np.abs(value) > 100.0 and np.abs(value) <= 1000.0    : return "{:.2f}".format(value)
+            if np.abs(value) > 1.0 and np.abs(value) <= 100.0       : return "{:.3f}".format(value)
+            if np.abs(value) > 0.01 and np.abs(value) <= 1.0        : return "{:.4f}".format(value)
+            if np.abs(value) > 0.00 and np.abs(value) <= 0.01       : return "{:.3e}".format(value)
+            else                                                    : return "{:.1f}".format(value)
         else:
-            return "{:.1f}".format(value)
+            return value
 
 
     def evalImplementation(self, silent=False):
