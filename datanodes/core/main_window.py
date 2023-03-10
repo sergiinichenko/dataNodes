@@ -127,7 +127,7 @@ class MainWindow(NodeWindow):
             self.actPaste.setEnabled(hasMdiChild)
 
             self.actCut.setEnabled(hasMdiChild and active.hasSelectedItems())
-            self.actCopy.setEnabled(hasMdiChild and active.hasSelectedItems())
+            self.actCopy.setEnabled(hasMdiChild)# and active.hasSelectedItems())
             self.actDel.setEnabled(hasMdiChild and active.hasSelectedItems())
 
             self.actUndo.setEnabled(hasMdiChild and active.canUndo())

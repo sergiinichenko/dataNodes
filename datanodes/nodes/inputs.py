@@ -3,8 +3,10 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.core.node_settings import *
 from datanodes.nodes.datanode import *
-from PyQt5.QtWidgets import QLineEdit
+from PyQt5.QtWidgets import QLineEdit, QApplication
 from PyQt5.QtCore import QTimer
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPlainTextEdit, QSizePolicy
+import json
 
 class ValueInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -182,6 +184,10 @@ class MultiValueInputNode(AdjustableOutputNode):
         self.eval()
         self.timer = None
 
+    def initSettings(self):
+        super().initSettings()
+        self.socket_spacing = 25.0
+        
     def onEdgeConnectionChanged(self, new_edge=None):
         self.recalculateNode()
 
@@ -195,7 +201,7 @@ class MultiValueInputNode(AdjustableOutputNode):
     def resize(self):
         try:
             size = len(self.content.labels)
-            current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin + 30.0
+            current_size  = (size-1) * self.socket_spacing + self.socket_bottom_margin + self.socket_top_margin + 38.0
             padding_title = self.grNode.title_height + 2.0 * self.grNode.padding
             if current_size > self.grNode.min_height:
                 self.grNode.height = current_size
@@ -231,3 +237,239 @@ class MultiValueInputNode(AdjustableOutputNode):
             self.e = e
             self.setInvalid()
             return False
+
+
+
+
+
+
+
+
+class TableInputGraphicsNode(ResizebleDataNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 340
+        self.height = 300
+
+class TableInputContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QVBoxLayout()
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+
+        self.table = QTableWidget(self)
+        self.table.setRowCount(10)
+        self.table.setColumnCount(3)
+        self.layout.addWidget(self.table)
+
+        for row in range(10):
+            for col in range(3):
+                item = QTableWidgetItem("")
+                self.table.setItem(row, col, item)
+                
+        self.table.keyPressEvent   = self.tableOnKeyPressEvent
+        self.table.mousePressEvent = self.tableOnMousePressEvent
+        
+    def tableOnMousePressEvent(self, event):
+        print("EVENT ", event)
+        # custom return press event listener
+        self.node.grNode.select(False)
+        # pass on the keyPressEvent to the table
+        QTableWidget.mousePressEvent(self.table, event) 
+    
+    def tableOnKeyPressEvent(self, event):
+        current = self.table.currentIndex()
+
+        # custom return press event listener
+        if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
+            # pass on the keyPressEvent to the table
+            QTableWidget.keyPressEvent(self.table, event) 
+            nextIndex = current.sibling(current.row() + 1, current.column())
+            if nextIndex.isValid():
+                self.table.setCurrentIndex(nextIndex)
+                self.table.edit(nextIndex)
+            self.node.recalculateNode()
+            # do what needs to be done here
+            # you can return here if you do not want to pass on the return to the table
+            return
+
+        if event.key() == Qt.Key_Delete:
+            # pass on the keyPressEvent to the table
+            QTableWidget.keyPressEvent(self.table, event) 
+            for item in self.table.selectedItems():
+                if item is not None : item.setText("")
+            self.node.recalculateNode()
+            # do what needs to be done here
+            # you can return here if you do not want to pass on the return to the table
+            return
+
+        if event.key() == Qt.Key_Down:
+            nextRow = current.sibling(current.row() + 1, current.column())
+            row = current.row() + 1
+            if not nextRow.isValid():
+                self.table.insertRow(self.table.rowCount())
+                nextRow = current.sibling(row, current.column())
+            self.table.setCurrentIndex(nextRow)
+            return
+
+        if event.key() == Qt.Key_Right:
+            nextCol = current.sibling(current.row(), current.column() + 1)
+            col = current.column() + 1
+            if not nextCol.isValid():
+                self.table.insertColumn(self.table.columnCount())
+                nextCol = current.sibling(current.row(), col)
+            self.table.setCurrentIndex(nextCol)
+            return
+
+        # pass on the keyPressEvent to the table
+        QTableWidget.keyPressEvent(self.table, event) 
+            
+        """
+        elif event.modifiers() == Qt.ControlModifier:
+            if event.key() == Qt.Key_C:
+                self.copyToBuffer()
+            if event.key() == Qt.Key_V:
+                self.pasteFromBuffer()
+
+        """         
+            
+    def onCopy(self):
+        print("copy content")
+        if len(self.table.selectedIndexes()) == 0 : return False
+        
+        if self.node.scene.window.getCurrentNodeEditorWidget():
+            
+            data  = ""
+            cr    = self.table.selectedIndexes()[0].row()
+            first = True
+            for item in self.table.selectedIndexes():
+                if not first:                
+                    if cr == item.row(): 
+                        data = data + "\t"
+                    else:
+                        data = data + "\n"
+                        cr   = item.row()
+                data = data + self.table.item(item.row(), item.column()).text()
+                first = False
+            QApplication.instance().clipboard().setText(data)
+
+
+    def onPaste(self):
+        print("Paste values")
+        if self.node.scene.window.getCurrentNodeEditorWidget():
+            data = QApplication.instance().clipboard().text()
+            current = self.table.currentIndex()
+
+            row = current.row()
+            for line in iter(data.splitlines()):
+                col = current.column()
+                for val in iter(line.split("\t")):
+                    if self.table.item(row, col) is not None:
+                        self.table.item(row, col).setText(val)
+                    else:
+                        item = QTableWidgetItem(val)
+                        self.table.setItem(row, col, item)
+                    col+=1
+                row+=1
+        self.node.recalculateNode()
+    
+    def serialize(self):
+        res = super().serialize()
+        res['width']  = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        res['cols'] = self.table.columnCount()
+        res['rows'] = self.table.rowCount()
+        
+        rows = self.table.rowCount()
+        cols = self.table.columnCount()
+        values = []
+        for c in range(cols):
+            for r in range(0, rows):
+                if self.table.item(r, c) is not None:
+                    if self.table.item(r, c).text() != "":
+                        record = {"c" : c, "r" : r, "d" : self.table.item(r, c).text()}
+                        values.append(record)
+        res['values'] = values
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                values = data['values']
+                for val in values:
+                    self.table.item(val["r"], val["c"]).setText(val["d"])
+
+                self.updateSize()
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+@register_node(OP_MODE_TABLEINPUT)
+class TableInputNode(DataNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_MODE_TABLEINPUT
+    op_title = "Table"
+
+    def __init__(self, scene, inputs=[], outputs=[SOCKET_TYPE_DATA]):
+        super().__init__(scene, inputs, outputs)
+
+    def initSettings(self):
+        super().initSettings()
+        self.output_socket_position  = RIGHT_TOP
+
+
+    def initInnerClasses(self):
+        self.content    = TableInputContent(self)
+        self.grNode     = TableInputGraphicsNode(self)
+        self.properties = NodeProperties(self)
+        self.content.table.openPersistentEditor
+
+    def updateNames(self, dict):
+        for c, key in enumerate(self.value):
+            print(c, key)
+            item = QTableWidgetItem(key)
+            self.content.table.setItem(0, c, item)
+
+
+    def readTable(self):
+        print("READ TABLE")
+        rows = self.content.table.rowCount()
+        cols = self.content.table.columnCount()
+        self.value.clear()
+        
+        for c in range(cols):
+            if self.content.table.item(0, c) is None : continue
+            
+            name = self.content.table.item(0, c).text()
+            if name != "":
+                vals = []
+                for r in range(1, rows):
+                    if self.content.table.item(r, c) is not None:
+                        if not self.isString(self.content.table.item(r, c).text()):
+                            val = float(self.content.table.item(r, c).text())
+                            vals.extend([val])
+                self.value[name] = vals
+
+
+    def evalImplementation(self, silent=False):
+        try:
+            if self.getOutputs():
+                self.value = {}
+                self.readTable()
+                self.getOutput(0).value = self.value
+                self.getOutput(0).type  = "df"
+            return True
+
+        except Exception as e: 
+            dumpException (e)
+            self.e = e
+            self.setInvalid()
+            return False
+

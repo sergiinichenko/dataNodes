@@ -8,7 +8,7 @@ import numpy as np
 class FitGraphicsNode(DataGraphicsNode):
     def initSizes(self):
         super().initSizes()
-        self.width  = 220
+        self.width  = 160
         self.height = 120
         self.setZValue(5)
 
@@ -29,12 +29,6 @@ class FitContent(DataContent):
         self.cb.addItem("Power")
         self.cb.addItem("Exponent")
         self.cb.addItem("Logarithm")
-        self.cb.insertSeparator(5)
-        self.cb.addItem("Poly-2")
-        self.cb.addItem("Poly-3")
-        self.cb.addItem("Poly-4")
-        self.cb.addItem("Poly-5")
-        self.cb.addItem("Poly-6")
 
         self.cb.setStyleSheet("margin-bottom: 10px;")
         self.layout.addWidget(self.cb, 1, 0, 1, 2)
@@ -50,11 +44,6 @@ class FitContent(DataContent):
         if self.fit_switch == "Power"     : self.formula.setText("a + x^b")
         if self.fit_switch == "Exponent"  : self.formula.setText("a + b*exp(x)")
         if self.fit_switch == "Logarithm" : self.formula.setText("a + b*log(x)")
-        if self.fit_switch == "Poly-2"    : self.formula.setText("a + b*x + cx^2")
-        if self.fit_switch == "Poly-3"    : self.formula.setText("a + b*x + .. + dx^3")
-        if self.fit_switch == "Poly-4"    : self.formula.setText("a + b*x + .. + ex^4")
-        if self.fit_switch == "Poly-5"    : self.formula.setText("a + b*x + .. + fx^5")
-        if self.fit_switch == "Poly-6"    : self.formula.setText("a + b*x + .. + gx^6")
         self.changed.emit()
 
     def serialize(self):
@@ -104,32 +93,35 @@ class FitNode(DataNode):
             self.setInvalid(False)
             self.e = ""
 
-            value = self.getInput(0).value
-            if not value : 
+            self.value = self.getInput(0).value
+            if not self.value : 
                 self.setInvalid()
                 self.e = "No input data"
                 return
             
-            namex = list(value.keys())[0]
-            namey = list(value.keys())[1]
-            if len(value[namex]) != len(value[namey]):
+            if len(list(self.value.keys())) < 2:
                 self.setInvalid()
-                self.e = "Input data of different size"
+                self.e = "No enough input data"
                 return
+
+            namey = list(self.value.keys())[0]
+            namex = list(self.value.keys())[1:]
+
+            x = np.ones(len(self.value[namex[0]]))
+            for name in namex:
+                x = np.vstack((x, self.value[name]))
+            x = x.T
+            y = np.array(self.value[namey])
             
-            res = {}
-            if self.content.fit_switch == "Linear"    : res = self.linear(value[namex], value[namey])
-            if self.content.fit_switch == "Power"     : res = self.power(value[namex], value[namey])
-            if self.content.fit_switch == "Exponent"  : res = self.exponent(value[namex], value[namey])
-            if self.content.fit_switch == "Logarithm" : res = self.logarithm(value[namex], value[namey])
-            if self.content.fit_switch == "Poly-2"    : res = self.poly_2(value[namex], value[namey])
-            if self.content.fit_switch == "Poly-3"    : res = self.poly_3(value[namex], value[namey])
-            if self.content.fit_switch == "Poly-4"    : res = self.poly_4(value[namex], value[namey])
-            if self.content.fit_switch == "Poly-5"    : res = self.poly_5(value[namex], value[namey])
-            if self.content.fit_switch == "Poly-6"    : res = self.poly_6(value[namex], value[namey])
+            data = {}
+            data.update(self.value)
+            if self.content.fit_switch == "Linear"    : res, coefs = self.linear(x, y)
+            if self.content.fit_switch == "Power"     : res, coefs = self.power(x, y)
+            if self.content.fit_switch == "Exponent"  : res, coefs = self.exponent(x, y)
+            if self.content.fit_switch == "Logarithm" : res, coefs = self.logarithm(x, y)
             
-            data = value
-            data.update({'fit': res})
+            data.update({'fit'  : res})
+            data.update({'coefs': coefs})
             
             self.getOutput(0).value = data
             self.getOutput(0).type  = "df"
@@ -143,10 +135,9 @@ class FitNode(DataNode):
 
 
     def linear(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
+        z = np.linalg.lstsq(x, y, rcond=None)
+        p = z[0] * x
+        return np.sum(p, axis=1), z[0]
 
     def power(self, x, y):
         z = np.polyfit(x, y, 1)
@@ -165,38 +156,3 @@ class FitNode(DataNode):
         self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * log(x)")
         p = np.poly1d(z)
         return p(np.log(x))
-
-    def poly_2(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
-
-    def poly_3(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
-
-    def poly_4(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
-
-    def poly_5(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
-
-    def poly_6(self, x, y):
-        z = np.polyfit(x, y, 1)
-        self.content.formula.setText(self.getFormatedValue(z[0]) + " + " + self.getFormatedValue(z[1]) + " * x")
-        p = np.poly1d(z)
-        return p(x)
-
-
-
-
-

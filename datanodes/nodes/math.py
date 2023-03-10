@@ -142,18 +142,18 @@ class MathNode(DataNode):
             self.e = ""
 
             if self.getInput(1): valuex = self.getInput(1).value
-            else:                valuex = {"x" : float(self.content.valuex.text())}
+            else:                valuex = {"x" : [float(self.content.valuex.text())]}
 
             if self.getInput(0): valuey = self.getInput(0).value
-            else:                valuey = {"y" : float(self.content.valuey.text())}
+            else:                valuey = {"y" : [float(self.content.valuey.text())]}
 
             res = {}
-            if self.content.operation == "Add"           : res = self.add(valuex, valuey)
-            if self.content.operation == "Substract"     : res = self.substract(valuex, valuey)
-            if self.content.operation == "Multiply"      : res = self.multiply(valuex, valuey)
-            if self.content.operation == "Divide"        : res = self.devide(valuex, valuey)
-            if self.content.operation == "Power"         : res = self.power(valuex, valuey)
-            if self.content.operation == "Distance"      : res = self.distance(valuex, valuey)
+            if self.content.operation == "Add"           : res = self.perform(valuex, valuey, self.add)
+            if self.content.operation == "Substract"     : res = self.perform(valuex, valuey, self.substract)
+            if self.content.operation == "Multiply"      : res = self.perform(valuex, valuey, self.multiply)
+            if self.content.operation == "Divide"        : res = self.perform(valuex, valuey, self.devide)
+            if self.content.operation == "Power"         : res = self.perform(valuex, valuey, self.power)
+            if self.content.operation == "Distance"      : res = self.perform(valuex, valuey, self.distance)
 
             if self.content.operation == "log"           : res = self.log(valuex, valuey)
             if self.content.operation == "log10"         : res = self.log10(valuex, valuey)
@@ -204,164 +204,66 @@ class MathNode(DataNode):
         if isinstance(input_value, float) or isinstance(input_value, int):
             return input_value
 
-    def singleValue(self, value):
-        if isinstance(value, float) or isinstance(value, int):
-            return True, value
-
-        if isinstance(value, (np.ndarray, np.generic)):
-            value.size() == 1
-            return True, value[0]
-
-        if isinstance(value, dict):
-            if len(value) == 1:
-                if len(list(value.values())) == 1:
-                    return True, list(value.values())[0]
-        return False, value
-
-    def add(self, valuex, valuey):
+    def perform(self, valuex, valuey, operation):
         res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
+        
+        namex_key   = list(valuex.keys())
+        namey_key   = list(valuey.keys())
+        namesx_size = len(namex_key)
+        namesy_size = len(namey_key)
+        name_size   = max(namesx_size, namesy_size) 
+        namex_i = 0
+        namey_i = 0
 
-        if valx_s and valy_s:
-            return {"x": valx + valy}
+        names_out = namey_key
+        if namesx_size > namesy_size:
+            names_out = namex_key
+            
+        for name_i in range(name_size):
+            namex = namex_key[namex_i]
+            namey = namey_key[namey_i]
+            name  = names_out[name_i]
 
-        elif valx_s:
-            for name in valuey:
-                res[name] = valx + self.drop_nan(valuey[name])
+            sizex = len(valuex[namex])
+            sizey = len(valuey[namey])
+            size  = max(sizex, sizey)
+            i = 0
+            j = 0
+            res[name] = []
+            for count in range(size):
+                res[name].extend([operation(valuex[namex][i], valuey[namey][j])])
+                i+=1
+                j+=1
+                if i >= sizex : i = 0
+                if j >= sizey : j = 0
+            namex_i+=1
+            namey_i+=1
+            if namex_i >= namesx_size : namex_i = 0
+            if namey_i >= namesy_size : namey_i = 0
 
-        elif valy_s:
-            for name in valuex:
-                res[name] = valy + self.drop_nan(valuex[name])
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = self.drop_nan(valuex[i]) + self.drop_nan(valuey[j])
         return res
 
-    def substract(self, valuex, valuey):
-        res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
+    def add(self, x, y):
+        return x + y
 
-        if valx_s and valy_s:
-            return {"x": valx - valy}
+    def substract(self, x, y):
+        return x - y
 
-        elif valx_s:
-            for name in valuey:
-                res[name] = valx - self.drop_nan(valuey[name])
+    def multiply(self, x, y):
+        return x * y
 
-        elif valy_s:
-            for name in valuex:
-                res[name] = (-1.0)*valy + self.drop_nan(valuex[name])
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = self.drop_nan(valuex[i]) - self.drop_nan(valuey[j])
-        return res
+    def devide(self, x, y):
+        return x / y
 
 
-    def multiply(self, valuex, valuey):
-        res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
+    def power(self, x, y):
+        return x ** y
 
-        if valx_s and valy_s:
-            return {"x": valx * valy}
+    def distance(self, x, y):
+        return abs(x - y)
 
-        elif valx_s:
-            for name in valuey:
-                res[name] = valx * self.drop_nan(valuey[name])
-
-        elif valy_s:
-            for name in valuex:
-                res[name] = valy * self.drop_nan(valuex[name])
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = self.drop_nan(valuex[i]) * self.drop_nan(valuey[j])
-        return res
-
-
-    def devide(self, valuex, valuey):
-        res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
-
-        if valx_s and valy_s:
-            return {"x": valx / valy}
-
-        elif valx_s:
-            for name in valuey:
-                res[name] = valx / self.drop_nan(valuey[name])
-
-        elif valy_s:
-            for name in valuex:
-                res[name] = self.drop_nan(valuex[name]) / valy
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = self.drop_nan(valuex[i]) / self.drop_nan(valuey[j])
-        return res
-
-
-    def power(self, valuex, valuey):
-        res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
-
-        if valx_s and valy_s:
-            return {"x": valx ** valy}
-
-        elif valx_s:
-            for name in valuey:
-                res[name] = valx ** self.drop_nan(valuey[name])
-
-        elif valy_s:
-            for name in valuex:
-                res[name] = self.drop_nan(valuex[name]) ** valy
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = self.drop_nan(valuex[i]) ** self.drop_nan(valuey[j])
-        return res
-
-
-    def distance(self, valuex, valuey):
-        res = {}
-        valx_s, valx = self.singleValue(valuex)
-        valy_s, valy = self.singleValue(valuey)
-
-        if valx_s and valy_s:
-            return {"x": np.abs(valx - valy)}
-
-        elif valx_s:
-            for name in valuey:
-                res[name] = np.abs(valx - self.drop_nan(valuey[name]))
-
-        elif valy_s:
-            for name in valuex:
-                res[name] = np.abs(self.drop_nan(valuex[name]) - valy)
-
-        else:
-            for i, j in zip(valuex, valuey):
-                res[j] = np.abs(self.drop_nan(valuex[i]) - self.drop_nan(valuey[j]))
-        return res
-
-
-    def sum(self, input_values):
-        res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            res[i] = np.sum(self.drop_nan(input_values[0][i])) + np.sum(self.drop_nan(input_values[1][j]))
-        return res
-
-    def absolute(self, input_values):
-        res = {}
-        for i in input_values[0]:
-            res[i] = np.abs(self.drop_nan(input_values[0][i]))
-        for j in input_values[1]:
-            res[j] = np.abs(self.drop_nan(input_values[1][j]))
-        return res
+    def absolute(self, x, y):
+        return abs(x - y)
 
     def normilize(self, input_values):
         res = {}
@@ -676,9 +578,9 @@ class CodeNode(ResizableInputNode):
         else:
             try:
                 expression = self.content.edit.toPlainText()
-                localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 'log10':np.log10,  
-                           'cos' : np.cos, 'sin': np.sin, 'abs':np.abs,
-                           'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
+                localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 'log10':np.log10,   
+                             'cos' : np.cos, 'sin': np.sin, 'abs':np.abs, 'sqrt':np.sqrt,
+                             'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
 
                 code = compile(expression, "<string>", "exec")
                 if len(inputs) > 0:      

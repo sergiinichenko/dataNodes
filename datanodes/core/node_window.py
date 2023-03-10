@@ -233,10 +233,27 @@ class NodeWindow(QMainWindow):
         if self.getCurrentNodeEditorWidget():
             self.getCurrentNodeEditorWidget().scene.getView().centerContent()
 
-
+    def nodeAtMousePos(self):
+        if self.getCurrentNodeEditorWidget():
+            view      = self.getCurrentNodeEditorWidget().scene.getView()
+            mouse_pos = view._mouse_position
+            item = self.getCurrentNodeEditorWidget().scene.getItemAtPos(mouse_pos)
+            if item is not None:
+                if type(item) == QGraphicsProxyWidget : item = item.widget()
+                if hasattr(item, 'node')     : node   = item.node
+                if hasattr(item, 'socket')   : node   = item.socket.node
+                if hasattr(item, 'content')  : node   = item.content.node
+                return node
+        return None
+    
     def onEditCopy(self):
         if self.getCurrentNodeEditorWidget():
-            data = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
+            node = self.nodeAtMousePos()
+            if node is not None: 
+                if not node.content.onCopy() : return
+            
+            print("Copy nodes")
+            data     = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
             str_data = json.dumps(data, indent=4)
             QApplication.instance().clipboard().setText(str_data)
 
@@ -248,6 +265,10 @@ class NodeWindow(QMainWindow):
 
     def onEditPaste(self, setSelected=False):
         if self.getCurrentNodeEditorWidget():
+            node = self.nodeAtMousePos()
+            if node is not None: 
+                if not node.content.onPaste() : return
+
             raw_data = QApplication.instance().clipboard().text()
             try:
                 data = json.loads(raw_data)

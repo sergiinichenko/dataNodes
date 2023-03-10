@@ -81,6 +81,13 @@ class DataContent(NodeContentWidget):
         x, y = (self.node.grNode.width - 2.0 * self.node.grNode.padding, 
                 self.node.grNode.height - (self.node.grNode.title_height + 2.0 * self.node.grNode.padding + 1))
         self.resize(int(x), int(y))
+        
+    def onCopy(self):
+        return False
+    
+    def onPaste(self):
+        return False
+    
 
 class DataNode(Node):
     op_code  = 0
@@ -102,6 +109,7 @@ class DataNode(Node):
         self.grNode     = DataGraphicsNode(self)
         self.properties = NodeProperties(self)
         self.content.changed.connect(self.eval)
+        self.content.removed.connect(self.eval)
 
     def onSelected(self):
         self.scene.window.propertiesDock.setPropertyWidget(self.properties)
@@ -119,6 +127,13 @@ class DataNode(Node):
         self.input_socket_position  = LEFT_CENTER
         self.output_socket_position = RIGHT_CENTER
 
+
+    def isString(self, x):
+        try:
+            float(x)
+            return False
+        except:
+            return True
 
     def getFormatedValue(self, value):
         # check if value is string
@@ -295,6 +310,10 @@ class DataNode(Node):
 
     def onInputRemoved(self, socket=None):
         if DEBUG : print("DATANODE : oninputRemoved")
+        self.setDirty()
+        if DEBUG : print("DATANODE : to run the eval")
+        self.eval()
+        if DEBUG : print("DATANODE : the eval is done")
         self.content.removed.emit(socket)
 
     def onOutputChanged(self, new_edge=None):

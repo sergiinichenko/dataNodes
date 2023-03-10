@@ -93,6 +93,10 @@ class FileInputNode(DataNode):
     icon = "icons/valinput.png"
     op_code = OP_MODE_FILEINPUT
     op_title = "File"
+    file     = ""
+    path     = ""
+    separator= ","
+    whitespace= False
 
     def __init__(self, scene, inputs=[], outputs=[SOCKET_TYPE_DATA]):
         super().__init__(scene, inputs, outputs)
@@ -106,8 +110,12 @@ class FileInputNode(DataNode):
 
     def checkFilePath(self, file):
         #if self.scene._saved_to_new_file:
-        self.file = os.path.relpath(self.path + file, self.scene.path)
-        self.path = self.scene.path
+        try:
+            self.file = os.path.relpath(self.path + file, self.scene.path)
+            self.path = self.scene.path
+        except:
+            self.file = ""
+            self.path = ""
         #else:
         #    self.file = file
 
