@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QLineEdit
+from PyQt5.QtWidgets import QWidget, QLabel, QGridLayout, QLineEdit, QScrollArea
 from PyQt5.QtCore import pyqtSignal, Qt
 #from PyQt5 import Qt
 #from PyQt5.QtGui import *
@@ -16,7 +16,7 @@ class DataLineEdit(QLineEdit):
 
         
 
-class NodeProperties(QWidget, Serializer):
+class NodeProperties(QScrollArea, Serializer):
     changed    = pyqtSignal()
     outchanged = pyqtSignal()
 
@@ -63,7 +63,15 @@ class NodeProperties(QWidget, Serializer):
         self.layout.setAlignment(Qt.AlignHCenter | Qt.AlignTop)
         self.layout.setColumnStretch(0, 1)
         self.layout.setColumnStretch(1, 1)
-        self.setLayout(self.layout)
+        
+
+        self.setVerticalScrollBarPolicy(Qt.ScrollBarAlwaysOn)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
+        self.setWidgetResizable(True)
+
+        self.scroll_widget = QWidget(self)
+        self.scroll_widget.setLayout(self.layout)
+        self.setWidget(self.scroll_widget)
         
         self.setTitle()
 

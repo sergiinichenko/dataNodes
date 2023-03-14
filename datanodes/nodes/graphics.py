@@ -117,6 +117,7 @@ class ColorPicker(QWidget):
 class PlotProperties(NodeProperties):
     def __init__(self, node, parent=None):
         super().__init__(node)
+
         self.marginTop  = 10
         self.marginRight= 10
         self.marginBottom= 10
@@ -383,8 +384,8 @@ class GraphicsProperties(PlotProperties):
 
     def updateContent(self):
         super().updateContent()
-        self.xtitle       = self.xlabelW.text()
-        self.ytitle       = self.ylabelW.text()
+        self.xtitle         = self.xlabelW.text()
+        self.ytitle         = self.ylabelW.text()
         self.x_limit_min    = float(self.x_limit_minW.text())
         self.x_limit_max    = float(self.x_limit_maxW.text())
         self.y_limit_min    = float(self.y_limit_minW.text())
@@ -1280,6 +1281,283 @@ class HeatMapNode(ResizableInputNode):
                 self.addMap(input.value)
         self.content.canvas.draw()
 
+
+    def evalImplementation(self, silent=False):
+        self.insockets = self.getInputs()
+        try:
+            if not self.insockets:
+                if DEBUG : print("OUTNODE_TXT: no input edge")
+                self.setInvalid()
+                if DEBUG : print("OUTNODE_TXT: set invalid")
+                self.e = "Does not have and intry Node"
+                if DEBUG : print("OUTNODE_TXT: clear the content")
+                return False
+            else:            
+                if DEBUG : print("OUTNODE_TXT: process the input edge data")
+                self.setDirty(False)
+                self.setInvalid(False)
+                if DEBUG : print("OUTNODE_TXT: reset Dirty and Invalid")
+                self.e = ""
+                self.drawPlot()
+
+            return True
+        except Exception as e:
+            self.setDirty(False)
+            self.setInvalid(False)
+            self.e = e
+            return False
+
+
+
+
+
+
+
+
+
+
+
+class ContourCanvas(FigureCanvas):
+    def __init__(self, parent=None, width=5, height=4, dpi=100):
+        self.fig  = Figure(figsize=(width, height), dpi=dpi, tight_layout=True)
+        self.axes = self.fig.add_axes([0.1,  0.1, 0.75, 0.85])
+
+        super(ContourCanvas, self).__init__(self.fig)
+
+class ContourGraphicsNode(ResizebleDataNode):
+    def initSizes(self):
+        super().initSizes()
+        self.width  = 300
+        self.height = 300
+
+class ContourContent(DataContent):
+    def initUI(self):
+        super().initUI()
+        self.layout = QVBoxLayout(self)
+        self.layout.setContentsMargins(0,0,0,0)
+        self.setLayout(self.layout)
+
+        self.canvas = ContourCanvas()
+        self.layout.addWidget(self.canvas)
+
+
+    def serialize(self):
+        res = super().serialize()
+        res['width']  = self.node.grNode.width
+        res['height'] = self.node.grNode.height
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                self.node.grNode.height = data['height']
+                self.node.grNode.width  = data['width']
+                self.updateSize()
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+class ContourProperties(PlotProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+
+        self.levels     = 10
+        self.xtitle     = ""
+        self.ytitle     = ""
+
+        label = QLabel("levels ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.levelsW  = QLineEdit(str(self.levels), self)
+        self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 9, 0)
+        self.layout.addWidget(self.levelsW, 9, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.levelsW.setStyleSheet("margin-bottom: 15px;")
+
+        label = QLabel("Axis names ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 10, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+
+        label = QLabel("x name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.xlabelW  = QLineEdit(self.xtitle, self)
+        self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 11, 0)
+        self.layout.addWidget(self.xlabelW, 11, 1)
+
+        label = QLabel("y name ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ylabelW  = QLineEdit(self.ytitle, self)
+        self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, 12, 0)
+        self.layout.addWidget(self.ylabelW, 12, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.ylabelW.setStyleSheet("margin-bottom: 15px;")
+
+        self.levelsW.returnPressed.connect(self.updateData)
+        self.xlabelW.returnPressed.connect(self.updateData)
+        self.ylabelW.returnPressed.connect(self.updateData)
+
+
+    def updateContent(self):
+        super().updateContent()
+        self.levels       = int(self.levelsW.text())
+        self.xtitle       = self.xlabelW.text()
+        self.ytitle       = self.ylabelW.text()
+
+    def fillWidgets(self):
+        super().fillWidgets()
+        self.levelsW.setText(str(self.levels))
+        self.xlabelW.setText(self.xtitle)
+        self.ylabelW.setText(self.ytitle)
+
+    def serialize(self):
+        res = super().serialize()
+
+        res['levels']     = self.levels
+        res['xtitle']     = self.xtitle
+        res['ytitle']     = self.ytitle
+
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'levels'      in data : self.levels = data['levels']
+                if 'xtitle'      in data : self.xtitle = data['xtitle']
+                if 'ytitle'      in data : self.ytitle = data['ytitle']
+
+                self.fillWidgets()
+
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+
+@register_node(OP_MODE_PLOT_CONTOUR)
+class ContourNode(ResizableInputNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_MODE_PLOT_CONTOUR
+    op_title = "Contour"
+
+    def __init__(self, scene, inputs=[1], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+        self.vmax = 1.0
+        self.vmin = 0.0
+        self.cmap = plt.cm.viridis
+        self.insockets = []
+
+    def initInnerClasses(self):
+        self.content    = ContourContent(self)
+        self.grNode     = ContourGraphicsNode(self)
+        self.properties = ContourProperties(self)
+        self.content.changed.connect(self.recalculateNode)
+
+    def prepareSettings(self):
+        return True
+
+    def prepareSettings(self):
+        return True
+
+    def resize(self):
+        pass
+    
+    def interpolate(self, x, y, z, xi, yi):
+        return z
+
+    def addMap(self, value, name, val):
+        ngridx = 50
+        ngridy = 50
+        self.content.canvas.axes.clear()
+        if not value : return
+        names = list(value.keys())
+
+        # barycentric coords: (a,b,c)
+        self.x = value[names[0]] # np.unique( )
+        self.y = value[name] # np.unique( )
+    
+        # values is stored in the last column
+        self.z = np.ones(len(value[name])) * val
+        self.vmin = 0.0
+        self.vmax = val
+
+        # plot the contour
+        """
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.z, 
+                                                  cmap=self.cmap, vmin=self.vmin, vmax=self.vmax,
+                                                  levels=self.properties.levels)
+        """
+
+        # Create grid values first.
+        xi = np.linspace(np.min(self.x), np.max(self.x), ngridx)
+        yi = np.linspace(np.min(self.y), np.max(self.y), ngridy)
+
+        # Linearly interpolate the data (x, y) on a grid defined by (xi, yi).
+        #zi = griddata((self.x, self.y), self.z, (xi[None,:], yi[:,None]), method='linear')
+
+        #im = self.content.canvas.axes.contourf(self.x, self.y, self.z, levels=self.properties.levels, 
+        #                                       cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.z, levels=self.properties.levels, 
+                                       cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
+
+    def prepareCanvas(self):
+        if not self.hasValue(0) : return
+
+        value = self.getInput(0).value
+        self.content.canvas.axes.clear()
+        x_name = list(value.keys())[0]
+        self.x_val  = value[x_name]
+
+        if self.properties.xtitle == "":
+            self.content.canvas.axes.set_xlabel(x_name)
+        else:
+            self.content.canvas.axes.set_xlabel(self.properties.xtitle)
+
+        #if self.properties.grid_main:
+        #    self.content.canvas.axes.grid(visible=True, which="major")
+        #else:
+        #    self.content.canvas.axes.grid(visible=False, which="major")
+
+        #if self.properties.grid_minor:
+        #    self.content.canvas.axes.grid(visible=True, which="minor")
+        #else:
+        #    self.content.canvas.axes.grid(visible=False, which="minor")
+
+        #self.content.canvas.axes.set_ylabel(self.properties.ytitle)
+        #self.content.canvas.axes.xaxis.label.set_size( self.properties.labelsize )
+        #self.content.canvas.axes.yaxis.label.set_size( self.properties.labelsize )
+
+        self.content.canvas.axes.tick_params(labelsize= self.properties.ticksize)
+        self.content.canvas.axes.tick_params(labelsize= self.properties.ticksize)
+
+        #self.content.canvas.axes.set_xlim(self.properties.x_limit_min, self.properties.x_limit_max)
+        #self.content.canvas.axes.set_ylim(self.properties.y_limit_min, self.properties.y_limit_max)
+        
+
+    def drawPlot(self):
+        self.insockets = self.getInputs()
+
+        self.content.canvas.axes.clear()
+        self.prepareCanvas()
+
+        for input in self.insockets:
+            if input.value:
+                self.value = input.value
+                count = 1.0
+                for name in list(self.value.keys())[1:]:
+                    self.addMap(self.value, name, count)
+                    count += 1.0
+                    
+        self.content.canvas.axes.legend(loc = 1, fontsize=self.properties.legendsize)
+        self.content.canvas.draw()
 
     def evalImplementation(self, silent=False):
         self.insockets = self.getInputs()

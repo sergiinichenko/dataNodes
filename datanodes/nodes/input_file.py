@@ -154,8 +154,9 @@ class FileInputNode(DataNode):
             else:
                 df = pd.read_csv(file, delim_whitespace=self.whitespace, keep_default_na=False).to_dict('list')
             res = {}
-            for name in df:
+            for name in df: 
                 res[name] = np.array(df[name])
+                
             self.getOutput(0).value = res
             self.getOutput(0).type  = 'df'
             self.can_read = True
