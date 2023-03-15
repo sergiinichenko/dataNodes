@@ -6,6 +6,7 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox, QCheckBox
+from datanodes.math.convex import ConvexHull2D
 
 LINE_STYLES = ['solid',   'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'dotted', 'dashed','dashdot']
 COLORS      = ['#D98880', '#AF7AC5', '#85C1E9', '#6C3483', '#196F3D', '#CB4335', '#58D68D', '#2874A6', '#A2D9CE', '#935116', '#DC7633', '#E59866', '#154360', '#16A085', '#7D6608', '#313131']
@@ -49,6 +50,7 @@ class LineStylePicker(QComboBox):
         self.addItem("dashed")
         self.addItem("dashdot")
         self.addItem("dotted")
+        self.addItem("convex")
         self.addItem(" ")
         self.addItem("o")
         self.addItem("x")
@@ -65,10 +67,16 @@ class LineStylePicker(QComboBox):
             self.node.properties.graphtype[self.name] = 'line'
             self.node.properties.linestyle[self.name] = item
             self.node.drawPlot()    
-        else:
-            self.node.properties.graphtype[self.name] = 'scatter'
+            return
+        if item == "convex":
+            self.node.properties.graphtype[self.name] = 'convex'
             self.node.properties.linestyle[self.name] = item
             self.node.drawPlot()    
+            return
+        
+        self.node.properties.graphtype[self.name] = 'scatter'
+        self.node.properties.linestyle[self.name] = item
+        self.node.drawPlot()    
 
 class LineSizePicker(QLineEdit):
     def __init__(self, node, name, text):
@@ -104,14 +112,15 @@ class ColorPicker(QWidget):
         self.color = QColorDialog.getColor()
 
         if self.color.isValid():
-            print(self.color.name())
             self.setStyleSheet("background-color:" + self.color.name() + " ;")
 
             try:
-                self.node.properties.linecolor[self.name] = self.color.name()
+                self.node.properties.maincolor[self.name] = self.color.name()
                 self.node.drawPlot()    
             except Exception as e:
                 self.node.e = e
+
+
 
 
 class PlotProperties(NodeProperties):
@@ -125,183 +134,105 @@ class PlotProperties(NodeProperties):
         self.labelsize  = 12.0
         self.ticksize   = 10.0
         self.legendsize = 12.0
-
-        label = QLabel("margins ", self)        
-        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 1, 0, 1, 2)
-        label.setStyleSheet("margin-bottom: 5px;")
-
-        self.marginTopW  = QLineEdit(str(self.marginTop), self)
-        self.marginTopW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginTopW, 2, 0, 1, 2)
-
-        self.marginRightW  = QLineEdit(str(self.marginRight), self)
-        self.marginRightW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginRightW, 3, 1)
-
-        self.marginLeftW  = QLineEdit(str(self.marginLeft), self)
-        self.marginLeftW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginLeftW, 3, 0)
-
-        self.marginBottomW  = QLineEdit(str(self.marginBottom), self)
-        self.marginBottomW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(self.marginBottomW, 4, 0, 1, 2)
-        self.marginBottomW.setStyleSheet("margin-bottom: 15px;")
-
-
-        label = QLabel("Font sizes ", self)        
-        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 5, 0, 1, 2)
-        label.setStyleSheet("margin-bottom: 5px;")
-
-        label = QLabel("lebels  ", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.labelsizeW  = QLineEdit(str(self.labelsize), self)
-        self.labelsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 6, 0)
-        self.layout.addWidget(self.labelsizeW, 6, 1)
-
-        label = QLabel("ticks   ", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
-        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 7, 0)
-        self.layout.addWidget(self.ticksizeW, 7, 1)
-
-        label = QLabel("legends ", self)        
-        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
-        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 8, 0)
-        self.layout.addWidget(self.legendsizeW, 8, 1)
-        label.setStyleSheet("margin-bottom: 15px;")
-        self.legendsizeW.setStyleSheet("margin-bottom: 15px;")
-
-        # Return Pressed event listeners
-        self.marginTopW.returnPressed.connect(self.updateData)
-        self.marginRightW.returnPressed.connect(self.updateData)
-        self.marginLeftW.returnPressed.connect(self.updateData)
-        self.marginBottomW.returnPressed.connect(self.updateData)
-        self.labelsizeW.returnPressed.connect(self.updateData)
-        self.ticksizeW.returnPressed.connect(self.updateData)
-        self.legendsizeW.returnPressed.connect(self.updateData)
-
-    def updateContent(self):
-        self.labelsize    = float(self.labelsizeW.text())
-        self.ticksize     = float(self.ticksizeW.text())
-        self.legendsize   = float(self.legendsizeW.text())
-        self.marginTop    = float(self.marginTopW.text())
-        self.marginRight  = float(self.marginRightW.text())
-        self.marginLeft   = float(self.marginLeftW.text())
-        self.marginBottom = float(self.marginBottomW.text())
-
-    def updateData(self):
-        self.updateContent()
-        self.node.drawPlot()
-
-    def fillWidgets(self):
-        self.marginTopW.setText(str(self.marginTop))
-        self.marginRightW.setText(str(self.marginRight))
-        self.marginLeftW.setText(str(self.marginLeft))
-        self.marginBottomW.setText(str(self.marginBottom))
-        self.labelsizeW.setText(str(self.labelsize))
-        self.ticksizeW.setText(str(self.ticksize))
-        self.legendsizeW.setText(str(self.legendsize))
-
-    def serialize(self):
-        res = super().serialize()
-        res['margintop']   = self.marginTop
-        res['marginright'] = self.marginRight
-        res['marginleft']  = self.marginLeft
-        res['marginbottom']= self.marginBottom
-        res['labelsize']   = self.labelsize
-        res['ticksize']    = self.ticksize
-        res['legendsize']  = self.legendsize
-
-        return res
-
-    def deserialize(self, data, hashmap=[]):
-        res = super().deserialize(data, hashmap)
-        try:
-            try:
-                if 'margintop'    in data : self.marginTop    = data['margintop']  
-                if 'marginright'  in data : self.marginRight  = data['marginright'] 
-                if 'marginleft'   in data : self.marginLeft   = data['marginleft'] 
-                if 'marginbottom' in data : self.marginBottom = data['marginbottom'] 
-                if 'labelsize'   in data : self.labelsize = data['labelsize']
-                if 'ticksize'    in data : self.ticksize  = data['ticksize']
-                if 'legendsize'  in data : self.legendsize  = data['legendsize']
-
-                self.fillWidgets()
-
-            except Exception as e: 
-                dumpException(e)
-            return True & res
-        except Exception as e : dumpException(e)
-        return res
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-class GraphicsProperties(PlotProperties):
-    def __init__(self, node, parent=None):
-        super().__init__(node)
         self.xtitle    = ""
         self.ytitle    = ""
         self.x_limit_min = 0.0
         self.x_limit_max = 1.0
         self.y_limit_min = 0.0
         self.y_limit_max = 1.0
-        self.names     = {}
-        self.linesize  = {}
-        self.linecolor = {}
-        self.linestyle = {}
-        self.graphtype = {}
-        self.c = 0
         self.grid_main = False
         self.grid_minor = False
+        self.pos        = 1
 
-        self.labels    = {}
-        self.styles    = {}
-        self.sizes     = {}
-        self.colors    = {}
+
+        label = QLabel("margins ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
+        
+        self.marginTopW  = QLineEdit(str(self.marginTop), self)
+        self.marginTopW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginTopW, 2, 0, 1, 2)
+        self.pos+=1
+
+        self.marginRightW  = QLineEdit(str(self.marginRight), self)
+        self.marginRightW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginRightW, self.pos, 1)
+
+        self.marginLeftW  = QLineEdit(str(self.marginLeft), self)
+        self.marginLeftW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginLeftW, self.pos, 0)
+        self.pos+=1
+
+        self.marginBottomW  = QLineEdit(str(self.marginBottom), self)
+        self.marginBottomW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(self.marginBottomW, self.pos, 0, 1, 2)
+        self.marginBottomW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
+
+
+        label = QLabel("Font sizes ", self)        
+        label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
+        label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
+
+        label = QLabel("lebels  ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labelsizeW  = QLineEdit(str(self.labelsize), self)
+        self.labelsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.labelsizeW, self.pos, 1)
+        self.pos+=1
+
+        label = QLabel("ticks   ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.ticksizeW  = QLineEdit(str(self.ticksize), self)
+        self.ticksizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.ticksizeW, self.pos, 1)
+        self.pos+=1
+
+        label = QLabel("legends ", self)        
+        label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.legendsizeW  = QLineEdit(str(self.legendsize), self)
+        self.legendsizeW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.legendsizeW, self.pos, 1)
+        label.setStyleSheet("margin-bottom: 15px;")
+        self.legendsizeW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
 
         label = QLabel("Axis names ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 9, 0, 1, 2)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
         label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
 
         label = QLabel("x name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.xlabelW  = QLineEdit(self.xtitle, self)
         self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 10, 0)
-        self.layout.addWidget(self.xlabelW, 10, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.xlabelW, self.pos, 1)
+        self.pos+=1
 
         label = QLabel("y name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ylabelW  = QLineEdit(self.ytitle, self)
         self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 11, 0)
-        self.layout.addWidget(self.ylabelW, 11, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.ylabelW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
 
         self.limits_grid = QGridLayout()
         self.limits      = QGroupBox()
         self.limits.setLayout(self.limits_grid)
-        self.layout.addWidget(self.limits, 12, 0, 3, 2)
+        self.layout.addWidget(self.limits, self.pos, 0, 3, 2)
+        self.pos+=1
         
 
         label = QLabel("Axis limits ", self)        
@@ -346,24 +277,33 @@ class GraphicsProperties(PlotProperties):
         label = QLabel("Main grid", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         label.setStyleSheet("margin-right: 10px;")
-        self.layout.addWidget(label, 16, 0)
+        self.layout.addWidget(label, self.pos, 0)
 
         self.main_grid_swith = QCheckBox("Grid main")
         self.main_grid_swith.setChecked(False)
-        self.layout.addWidget(self.main_grid_swith, 16, 1)
+        self.layout.addWidget(self.main_grid_swith, self.pos, 1)
+        self.pos+=1
 
 
         label = QLabel("Minor grid", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         label.setStyleSheet("margin-right: 10px;")
-        self.layout.addWidget(label, 17, 0)
+        self.layout.addWidget(label, self.pos, 0)
 
         self.minor_grid_swith = QCheckBox("Grid minor")
         self.minor_grid_swith.setChecked(False)
-        self.layout.addWidget(self.minor_grid_swith, 17, 1)
+        self.layout.addWidget(self.minor_grid_swith, self.pos, 1)
+        self.pos+=1
 
 
-
+        # Return Pressed event listeners
+        self.marginTopW.returnPressed.connect(self.updateData)
+        self.marginRightW.returnPressed.connect(self.updateData)
+        self.marginLeftW.returnPressed.connect(self.updateData)
+        self.marginBottomW.returnPressed.connect(self.updateData)
+        self.labelsizeW.returnPressed.connect(self.updateData)
+        self.ticksizeW.returnPressed.connect(self.updateData)
+        self.legendsizeW.returnPressed.connect(self.updateData)
         self.xlabelW.returnPressed.connect(self.updateData)
         self.ylabelW.returnPressed.connect(self.updateData)
         self.x_limit_minW.returnPressed.connect(self.updateData)
@@ -374,16 +314,14 @@ class GraphicsProperties(PlotProperties):
         self.minor_grid_swith.stateChanged.connect(self.updateData)
 
 
-    def resetLimits(self):
-        xmin, xmax, ymin, ymax = self.node.getDataLimits()
-        self.x_limit_minW.setText(str(xmin))
-        self.x_limit_maxW.setText(str(xmax))
-        self.y_limit_minW.setText(str(ymin))
-        self.y_limit_maxW.setText(str(ymax))
-        self.updateData()
-
     def updateContent(self):
-        super().updateContent()
+        self.labelsize      = float(self.labelsizeW.text())
+        self.ticksize       = float(self.ticksizeW.text())
+        self.legendsize     = float(self.legendsizeW.text())
+        self.marginTop      = float(self.marginTopW.text())
+        self.marginRight    = float(self.marginRightW.text())
+        self.marginLeft     = float(self.marginLeftW.text())
+        self.marginBottom   = float(self.marginBottomW.text())
         self.xtitle         = self.xlabelW.text()
         self.ytitle         = self.ylabelW.text()
         self.x_limit_min    = float(self.x_limit_minW.text())
@@ -393,8 +331,27 @@ class GraphicsProperties(PlotProperties):
         self.grid_main      = self.main_grid_swith.isChecked()
         self.grid_minor     = self.minor_grid_swith.isChecked()
 
+    def updateData(self):
+        self.updateContent()
+        self.node.drawPlot()
+
+    def resetLimits(self):
+        xmin, xmax, ymin, ymax = self.node.getDataLimits()
+        self.x_limit_minW.setText(str(xmin))
+        self.x_limit_maxW.setText(str(xmax))
+        self.y_limit_minW.setText(str(ymin))
+        self.y_limit_maxW.setText(str(ymax))
+        self.updateData()
+
+
     def fillWidgets(self):
-        super().fillWidgets()
+        self.marginTopW.setText(str(self.marginTop))
+        self.marginRightW.setText(str(self.marginRight))
+        self.marginLeftW.setText(str(self.marginLeft))
+        self.marginBottomW.setText(str(self.marginBottom))
+        self.labelsizeW.setText(str(self.labelsize))
+        self.ticksizeW.setText(str(self.ticksize))
+        self.legendsizeW.setText(str(self.legendsize))
         self.xlabelW.setText(self.xtitle)
         self.ylabelW.setText(self.ytitle)
         self.x_limit_minW.setText(str(self.x_limit_min))
@@ -402,9 +359,91 @@ class GraphicsProperties(PlotProperties):
         self.y_limit_minW.setText(str(self.y_limit_min))
         self.y_limit_maxW.setText(str(self.y_limit_max))
         self.appendDataWidgets()
+        
+    def appendDataWidgets(self):
+        pass
+        
+    def serialize(self):
+        res = super().serialize()
+        res['margintop']    = self.marginTop
+        res['marginright']  = self.marginRight
+        res['marginleft']   = self.marginLeft
+        res['marginbottom'] = self.marginBottom
+        res['labelsize']    = self.labelsize
+        res['ticksize']     = self.ticksize
+        res['legendsize']   = self.legendsize
+        res['xtitle']       = self.xtitle
+        res['ytitle']       = self.ytitle
+        res['x_limit_min']  = self.x_limit_min
+        res['x_limit_max']  = self.x_limit_max
+        res['y_limit_min']  = self.y_limit_min
+        res['y_limit_max']  = self.y_limit_max
+        res['grid_main']    = self.grid_main
+        res['grid_minor']   = self.grid_minor
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'margintop'    in data : self.marginTop    = data['margintop']  
+                if 'marginright'  in data : self.marginRight  = data['marginright'] 
+                if 'marginleft'   in data : self.marginLeft   = data['marginleft'] 
+                if 'marginbottom' in data : self.marginBottom = data['marginbottom'] 
+                if 'labelsize'    in data : self.labelsize    = data['labelsize']
+                if 'ticksize'     in data : self.ticksize     = data['ticksize']
+                if 'legendsize'   in data : self.legendsize   = data['legendsize']
+                if 'xtitle'       in data : self.xtitle       = data['xtitle']
+                if 'ytitle'       in data : self.ytitle       = data['ytitle']
+                if 'x_limit_min'  in data : self.x_limit_min  = data['x_limit_min']
+                if 'x_limit_max'  in data : self.x_limit_max  = data['x_limit_max']
+                if 'y_limit_min'  in data : self.y_limit_min  = data['y_limit_min']
+                if 'y_limit_max'  in data : self.y_limit_max  = data['y_limit_max']
+                if 'grid_main'    in data : self.grid_main    = data['grid_main'] 
+                if 'grid_minor'   in data : self.grid_minor   = data['grid_minor']
+
+                self.main_grid_swith.setChecked(self.grid_main)
+                self.minor_grid_swith.setChecked(self.grid_minor)
+
+                self.fillWidgets()
+
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class GraphicsProperties(PlotProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+        self.names     = {}
+        self.linesize  = {}
+        self.maincolor = {}
+        self.linestyle = {}
+        self.graphtype = {}
+        self.c = 0
+
+        self.labels    = {}
+        self.styles    = {}
+        self.sizes     = {}
+        self.colors    = {}
 
     def appendDataWidgets(self):
-        self.i = 18
+        self.i = self.pos
         for name in self.names : 
 
             self.labels[name] = QLabel(name + " ", self)        
@@ -423,18 +462,30 @@ class GraphicsProperties(PlotProperties):
             self.sizes[name]  = LineSizePicker(self.node, name, self.linesize[name])
             self.sizes[name].setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-            self.colors[name] = ColorPicker(self.node, name, color=self.linecolor[name])
+            self.colors[name] = ColorPicker(self.node, name, color=self.maincolor[name])
 
 
             self.layout.addWidget(self.sizes[name],  self.i, 0)
             self.layout.addWidget(self.colors[name], self.i, 1)
             self.i += 1
 
+    def setupWidgets(self):
+        for name in self.names : 
+            index = self.styles[name].findText(self.linestyle[name], Qt.MatchFixedString)
+            self.styles[name].setCurrentIndex(index)
+            self.styles[name].chageStyle()
+
+            self.sizes[name].setText(str(self.linesize[name]))
+            self.sizes[name].chageSize()
+
+            self.colors[name].setStyleSheet("background-color:" + self.maincolor[name] + " ;")
+            self.node.drawPlot()    
+
     def resetWidgets(self):
         self.resetProperties()
         self.names     = {}
         self.linesize  = {}
-        self.linecolor = {}
+        self.maincolor = {}
         self.linestyle = {}
         self.graphtype  = {}
         self.c = 0
@@ -450,7 +501,7 @@ class GraphicsProperties(PlotProperties):
                 if name != x_name:
                     if name not in self.names : 
                         self.names[name]     = name
-                        self.linecolor[name] = COLORS[self.c]
+                        self.maincolor[name] = COLORS[self.c]
                         self.linestyle[name] = "solid"
                         self.graphtype[name] = "line"
                         self.linesize[name]  = 2.0
@@ -485,7 +536,7 @@ class GraphicsProperties(PlotProperties):
 
         for name in remove:
             del self.names[name]
-            del self.linecolor[name]
+            del self.maincolor[name]
             del self.linestyle[name]
             del self.graphtype[name]
             del self.linesize[name]
@@ -493,36 +544,32 @@ class GraphicsProperties(PlotProperties):
 
     def serialize(self):
         res = super().serialize()
-        res['xtitle']     = self.xtitle
-        res['ytitle']     = self.ytitle
-        res['x_limit_min']  = self.x_limit_min
-        res['x_limit_max']  = self.x_limit_max
-        res['y_limit_min']  = self.y_limit_min
-        res['y_limit_max']  = self.y_limit_max
-        res['grid_main']   = self.grid_main
-        res['grid_minor']  = self.grid_minor
-
+        res["colors"] = {}
+        res["styles"] = {}
+        res["widths"] = {}
+        res["grapth"] = {}
+        for name in self.names:
+            res["colors"][name] = self.maincolor[name]
+            res["styles"][name] = self.linestyle[name]
+            res["widths"][name] = self.linesize[name]
+            res["grapth"][name] = self.graphtype[name]
         return res
 
     def deserialize(self, data, hashmap=[]):
         res = super().deserialize(data, hashmap)
         try:
             try:
-                #self.resetWidgets()
-                if 'xtitle'      in data : self.xtitle = data['xtitle']
-                if 'ytitle'      in data : self.ytitle = data['ytitle']
-
-                if 'x_limit_min'   in data : self.x_limit_min = data['x_limit_min']
-                if 'x_limit_max'   in data : self.x_limit_max = data['x_limit_max']
-                if 'y_limit_min'   in data : self.y_limit_min = data['y_limit_min']
-                if 'y_limit_max'   in data : self.y_limit_max = data['y_limit_max']
-
-                if 'grid_main'     in data : self.grid_main  = data['grid_main'] 
-                if 'grid_minor'    in data : self.grid_minor = data['grid_minor']
-
-                self.main_grid_swith.setChecked(self.grid_main)
-                self.minor_grid_swith.setChecked(self.grid_minor)
-                self.fillWidgets()
+                for name in self.names:
+                    if 'colors' in data: 
+                        if name in data["colors"] : self.maincolor[name] = data['colors'][name]
+                    if 'styles' in data: 
+                        if name in data["styles"] : self.linestyle[name] = data['styles'][name]
+                    if 'widths' in data: 
+                        if name in data["widths"] : self.linesize[name]  = data['widths'][name]
+                    if 'grapth' in data: 
+                        if name in data["grapth"] : self.graphtype[name] = data['grapth'][name]
+                self.setupWidgets()
+                return True                
             except Exception as e: 
                 dumpException(e)
             return True & res
@@ -540,12 +587,13 @@ class GraphicsOutputNode(ResizableInputNode):
     def __init__(self, scene, inputs=[1], outputs=[]):
         super().__init__(scene, inputs, outputs)
         self.insockets    = []
-        self.linecolor = {}
+        self.maincolor = {}
         self.linestyle = {}
         self.graphtype = {}
         self.linesize  = {}
         self.c = 0
         self.input_socket_position  = LEFT_TOP
+        self.model = ConvexHull2D()
 
     def onInputChange(self, new_edge=None):
         self.content.changed.emit()
@@ -599,44 +647,6 @@ class GraphicsOutputNode(ResizableInputNode):
         self.content.axes.set_xlim(self.properties.x_limit_min, self.properties.x_limit_max)
         self.content.axes.set_ylim(self.properties.y_limit_min, self.properties.y_limit_max)
 
-    def getDataLimits(self):
-        xmin  = 1.0e20
-        xmax  =-1.0e20
-        ymin  = 1.0e20
-        ymax  =-1.0e20
-        sxmin = 0.0
-        sxmax = 0.0
-        symin = 0.0
-        symax = 0.0
-        
-        for input in self.insockets:
-            if not input.value : return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
-
-            x_name = list(input.value.keys())[0]
-            x_val  = input.value[x_name]
-
-            if np.any(x_val):
-                if min(x_val) < xmin : 
-                    xmin  = min(x_val)
-                    sxmin = 1.0
-                if max(x_val) > xmax : 
-                    xmax  = max(x_val)
-                    sxmax = 1.0
-
-            for name in list(input.value)[1:]:
-                y_val  = input.value[name]
-                
-                if not np.any(y_val): continue
-            
-                if min(y_val) < ymin : 
-                    ymin  = min(y_val)
-                    symin = 1.0
-                
-                if max(y_val) > ymax : 
-                    ymax  = max(y_val)
-                    symax = 1.0
-        
-        return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
 
     def addData(self, value):
         if not value : return 
@@ -652,13 +662,27 @@ class GraphicsOutputNode(ResizableInputNode):
 
                 if self.properties.graphtype[name] == 'line':
                     self.content.axes.plot(x_val[0:ln], value[name][0:ln], label=name, 
-                                            color=self.properties.linecolor[name], linestyle=self.properties.linestyle[name],
+                                            color=self.properties.maincolor[name], linestyle=self.properties.linestyle[name],
                                             linewidth=self.properties.linesize[name])
 
                 if self.properties.graphtype[name] == 'scatter':
                     self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
-                                            color=self.properties.linecolor[name], marker=self.properties.linestyle[name],
+                                            color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
                                             s=self.properties.linesize[name]*10)
+
+                if self.properties.graphtype[name] == 'convex':
+                    # barycentric coords: (a,b,c)
+                    data   = np.column_stack([x_val[0:ln], value[name][0:ln]])
+                    data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
+                    points = self.model(data)
+                    #By adding the head to the tail, we close the polygon during plotting
+                    points = np.vstack([points, points[0]])
+
+                    xi = points[:,0]
+                    yi = points[:,1]
+
+                    self.content.axes.fill(xi, yi, c=self.properties.maincolor[name], label=name)
+
 
     def drawPlot(self):
         self.content.axes.clear()
@@ -761,46 +785,52 @@ class TernaryPlotProperties(PlotProperties):
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.levelsW  = QLineEdit(str(self.levels), self)
         self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 9, 0)
-        self.layout.addWidget(self.levelsW, 9, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.levelsW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 5px;")
         self.levelsW.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
 
         label = QLabel("bar font size ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.barfontW  = QLineEdit(str(self.barfont), self)
         self.barfontW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 10, 0)
-        self.layout.addWidget(self.barfontW, 10, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.barfontW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.barfontW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
 
 
         label = QLabel("Axis names ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 11, 0, 1, 2)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
         label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
 
         label = QLabel("x name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.xlabelW  = QLineEdit(self.xtitle, self)
         self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 12, 0)
-        self.layout.addWidget(self.xlabelW, 12, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.xlabelW, self.pos, 1)
+        self.pos+=1
 
         label = QLabel("y name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ylabelW  = QLineEdit(self.ytitle, self)
         self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 13, 0)
-        self.layout.addWidget(self.ylabelW, 13, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.ylabelW, self.pos, 1)
+        self.pos+=1
 
         label = QLabel("z name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.zlabelW  = QLineEdit(self.ztitle, self)
         self.zlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 14, 0)
-        self.layout.addWidget(self.zlabelW, 14, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.zlabelW, self.pos, 1)
+        self.pos+=1
 
         label.setStyleSheet("margin-bottom: 15px;")
         self.zlabelW.setStyleSheet("margin-bottom: 15px;")
@@ -1101,29 +1131,32 @@ class HeatMapProperties(PlotProperties):
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.levelsW  = QLineEdit(str(self.levels), self)
         self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 9, 0)
-        self.layout.addWidget(self.levelsW, 9, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.levelsW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.levelsW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
 
         label = QLabel("Axis names ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 10, 0, 1, 2)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
         label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
 
         label = QLabel("x name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.xlabelW  = QLineEdit(self.xtitle, self)
         self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 11, 0)
-        self.layout.addWidget(self.xlabelW, 11, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.xlabelW, self.pos, 1)
+        self.pos+=1
 
         label = QLabel("y name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ylabelW  = QLineEdit(self.ytitle, self)
         self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 12, 0)
-        self.layout.addWidget(self.ylabelW, 12, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.ylabelW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
 
@@ -1372,29 +1405,32 @@ class ContourProperties(PlotProperties):
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.levelsW  = QLineEdit(str(self.levels), self)
         self.levelsW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 9, 0)
-        self.layout.addWidget(self.levelsW, 9, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.levelsW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.levelsW.setStyleSheet("margin-bottom: 15px;")
+        self.pos+=1
 
         label = QLabel("Axis names ", self)        
         label.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 10, 0, 1, 2)
+        self.layout.addWidget(label, self.pos, 0, 1, 2)
         label.setStyleSheet("margin-bottom: 5px;")
+        self.pos+=1
 
         label = QLabel("x name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.xlabelW  = QLineEdit(self.xtitle, self)
         self.xlabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 11, 0)
-        self.layout.addWidget(self.xlabelW, 11, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.xlabelW, self.pos, 1)
+        self.pos+=1
 
         label = QLabel("y name ", self)        
         label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
         self.ylabelW  = QLineEdit(self.ytitle, self)
         self.ylabelW.setAlignment(Qt.AlignCenter | Qt.AlignVCenter)
-        self.layout.addWidget(label, 12, 0)
-        self.layout.addWidget(self.ylabelW, 12, 1)
+        self.layout.addWidget(label, self.pos, 0)
+        self.layout.addWidget(self.ylabelW, self.pos, 1)
         label.setStyleSheet("margin-bottom: 15px;")
         self.ylabelW.setStyleSheet("margin-bottom: 15px;")
 
@@ -1583,3 +1619,5 @@ class ContourNode(ResizableInputNode):
             self.setInvalid(False)
             self.e = e
             return False
+
+

@@ -597,6 +597,45 @@ class ResizableInputNode(DataNode):
         super().update(silent)
         self.recalculateNode()
 
+    def getDataLimits(self):
+        xmin  = 1.0e20
+        xmax  =-1.0e20
+        ymin  = 1.0e20
+        ymax  =-1.0e20
+        sxmin = 0.0
+        sxmax = 0.0
+        symin = 0.0
+        symax = 0.0
+        
+        for input in self.insockets:
+            if not input.value : return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
+
+            x_name = list(input.value.keys())[0]
+            x_val  = input.value[x_name]
+
+            if np.any(x_val):
+                if min(x_val) < xmin : 
+                    xmin  = min(x_val)
+                    sxmin = 1.0
+                if max(x_val) > xmax : 
+                    xmax  = max(x_val)
+                    sxmax = 1.0
+
+            for name in list(input.value)[1:]:
+                y_val  = input.value[name]
+                
+                if not np.any(y_val): continue
+            
+                if min(y_val) < ymin : 
+                    ymin  = min(y_val)
+                    symin = 1.0
+                
+                if max(y_val) > ymax : 
+                    ymax  = max(y_val)
+                    symax = 1.0
+        
+        return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
+
 
 
 
