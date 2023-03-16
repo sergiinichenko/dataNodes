@@ -74,9 +74,11 @@ class DataContent(NodeContentWidget):
     removed      = pyqtSignal(Socket)
     outchanged   = pyqtSignal()
     renamed      = pyqtSignal(Pair)
+    mainWidget   = None
+
     def initUI(self):
         pass
-
+            
     def updateSize(self):
         x, y = (self.node.grNode.width - 2.0 * self.node.grNode.padding, 
                 self.node.grNode.height - (self.node.grNode.title_height + 2.0 * self.node.grNode.padding + 1))
@@ -87,6 +89,13 @@ class DataContent(NodeContentWidget):
     
     def onPaste(self):
         return False
+    
+    def onSelected(self):
+        pass
+
+    def onDeselected(self):
+        pass
+    
     
 
 class DataNode(Node):

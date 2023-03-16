@@ -7,6 +7,9 @@ from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 from PyQt5.QtWidgets import QComboBox, QWidget, QLineEdit, QColorDialog, QLabel, QGroupBox, QCheckBox
 from datanodes.math.convex import ConvexHull2D
+from matplotlib.lines import Line2D
+from matplotlib.patches import Polygon
+from matplotlib.collections import PathCollection
 
 LINE_STYLES = ['solid',   'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'solid', 'dotted', 'dashed','dashdot', 'dotted', 'dashed','dashdot']
 COLORS      = ['#D98880', '#AF7AC5', '#85C1E9', '#6C3483', '#196F3D', '#CB4335', '#58D68D', '#2874A6', '#A2D9CE', '#935116', '#DC7633', '#E59866', '#154360', '#16A085', '#7D6608', '#313131']
@@ -38,6 +41,7 @@ class GraphicsOutputContent(DataContent):
         self.graph.autofmt_xdate()
         self.axes   = self.graph.add_subplot(111)
         self.canvas = FigureCanvas(self.graph)
+        self.items  = {}
         self.layout.addWidget(self.canvas)
 
 
@@ -66,17 +70,17 @@ class LineStylePicker(QComboBox):
         if item == "solid" or item == "dashed" or item == "dashdot" or item == "dotted":
             self.node.properties.graphtype[self.name] = 'line'
             self.node.properties.linestyle[self.name] = item
-            self.node.drawPlot()    
+            self.node.changeStyle(self.name)
             return
         if item == "convex":
             self.node.properties.graphtype[self.name] = 'convex'
             self.node.properties.linestyle[self.name] = item
-            self.node.drawPlot()    
+            self.node.changeStyle(self.name)
             return
         
         self.node.properties.graphtype[self.name] = 'scatter'
         self.node.properties.linestyle[self.name] = item
-        self.node.drawPlot()    
+        self.node.changeStyle(self.name)
 
 class LineSizePicker(QLineEdit):
     def __init__(self, node, name, text):
@@ -443,103 +447,78 @@ class GraphicsProperties(PlotProperties):
         self.colors    = {}
 
     def appendDataWidgets(self):
-        self.i = self.pos
         for name in self.names : 
+            self.appendDataWidget(name)
+            
+    def appendDataWidget(self, name):
+        if name in self.names : return
+        self.names[name]      = name
+        self.maincolor[name]  = COLORS[np.random.randint(0, len(COLORS))]
+        self.linestyle[name]  = "solid"
+        self.graphtype[name]  = "line"
+        self.linesize[name]   = 2.0
 
-            self.labels[name] = QLabel(name + " ", self)        
-            self.labels[name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labels[name] = QLabel(name + " ", self)        
+        self.labels[name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
 
-            self.styles[name] = LineStylePicker(self.node, name, self.linestyle[name])
+        self.styles[name] = LineStylePicker(self.node, name, self.linestyle[name])
 
-            self.labels[name].setStyleSheet("margin-top: 15px;")
-            self.styles[name].setStyleSheet("margin-top: 15px;")
+        self.labels[name].setStyleSheet("margin-top: 15px;")
+        self.styles[name].setStyleSheet("margin-top: 15px;")
 
-            self.layout.addWidget(self.labels[name], self.i, 0)
-            self.layout.addWidget(self.styles[name], self.i, 1)
-            self.i += 1
-
-
-            self.sizes[name]  = LineSizePicker(self.node, name, self.linesize[name])
-            self.sizes[name].setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
-
-            self.colors[name] = ColorPicker(self.node, name, color=self.maincolor[name])
-
-
-            self.layout.addWidget(self.sizes[name],  self.i, 0)
-            self.layout.addWidget(self.colors[name], self.i, 1)
-            self.i += 1
-
-    def setupWidgets(self):
-        for name in self.names : 
-            index = self.styles[name].findText(self.linestyle[name], Qt.MatchFixedString)
-            self.styles[name].setCurrentIndex(index)
-            self.styles[name].chageStyle()
-
-            self.sizes[name].setText(str(self.linesize[name]))
-            self.sizes[name].chageSize()
-
-            self.colors[name].setStyleSheet("background-color:" + self.maincolor[name] + " ;")
-            self.node.drawPlot()    
-
-    def resetWidgets(self):
-        self.resetProperties()
-        self.names     = {}
-        self.linesize  = {}
-        self.maincolor = {}
-        self.linestyle = {}
-        self.graphtype  = {}
-        self.c = 0
-
-    def cleanProperties(self):
-        for input in self.node.inputs:
-            if not input.value : continue
-
-            value  = input.value
-            x_name = list(value.keys())[0]
-
-            for name in value:
-                if name != x_name:
-                    if name not in self.names : 
-                        self.names[name]     = name
-                        self.maincolor[name] = COLORS[self.c]
-                        self.linestyle[name] = "solid"
-                        self.graphtype[name] = "line"
-                        self.linesize[name]  = 2.0
-                        self.c += 1
-
-        for name in self.names:
-            if name != x_name:
-                if name in self.labels:
-                    self.layout.removeWidget(self.labels[name])
-                    self.layout.removeWidget(self.styles[name])
-                    self.layout.removeWidget(self.sizes[name])
-                    self.layout.removeWidget(self.colors[name])
-
-                    self.labels[name].setParent(None)
-                    self.styles[name].setParent(None)
-                    self.sizes[name].setParent(None)
-                    self.colors[name].setParent(None)
-                    
-                    del self.labels[name]
-                    del self.styles[name]
-                    del self.sizes[name]
-                    del self.colors[name]
+        self.layout.addWidget(self.labels[name], self.pos, 0)
+        self.layout.addWidget(self.styles[name], self.pos, 1)
+        self.pos += 1
 
 
-        remove = []
-        for name in reversed(self.names):
-            to_remove = True
-            for input in self.node.inputs:
-                if name in input.value: 
-                    to_remove = False
-            if to_remove: remove.append(name)
+        self.sizes[name]  = LineSizePicker(self.node, name, self.linesize[name])
+        self.sizes[name].setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
 
-        for name in remove:
+        self.colors[name] = ColorPicker(self.node, name, color=self.maincolor[name])
+
+
+        self.layout.addWidget(self.sizes[name],  self.pos, 0)
+        self.layout.addWidget(self.colors[name], self.pos, 1)
+        self.pos += 1
+        
+        
+    def removeWidget(self, name):
+        if name in self.labels:
+            self.layout.removeWidget(self.labels[name])
+            self.layout.removeWidget(self.styles[name])
+            self.layout.removeWidget(self.sizes[name])
+            self.layout.removeWidget(self.colors[name])
+
+            self.labels[name].setParent(None)
+            self.styles[name].setParent(None)
+            self.sizes[name].setParent(None)
+            self.colors[name].setParent(None)
+            
+            del self.labels[name]
+            del self.styles[name]
+            del self.sizes[name]
+            del self.colors[name]
+
             del self.names[name]
             del self.maincolor[name]
             del self.linestyle[name]
             del self.graphtype[name]
             del self.linesize[name]
+
+            self.pos -= 1
+
+    def setupWidget(self, name):
+        index = self.styles[name].findText(self.linestyle[name], Qt.MatchFixedString)
+        self.styles[name].currentIndexChanged.disconnect()
+        self.styles[name].setCurrentIndex(index)
+        self.styles[name].currentIndexChanged.connect(self.styles[name].chageStyle)
+        #self.styles[name].chageStyle()
+
+        self.sizes[name].setText(str(self.linesize[name]))
+        #self.sizes[name].chageSize()
+
+        self.colors[name].setStyleSheet("background-color:" + self.maincolor[name] + " ;")
+        #self.node.drawPlot()    
 
 
     def serialize(self):
@@ -549,6 +528,11 @@ class GraphicsProperties(PlotProperties):
         res["widths"] = {}
         res["grapth"] = {}
         for name in self.names:
+            if name not in self.maincolor : self.maincolor[name] = COLORS[np.random.randint(0, 10)]
+            if name not in self.linestyle : self.linestyle[name] = "solid"
+            if name not in self.linesize  : self.linesize [name] = 2
+            if name not in self.graphtype : self.graphtype[name] = "line"
+            res["names"] = self.names
             res["colors"][name] = self.maincolor[name]
             res["styles"][name] = self.linestyle[name]
             res["widths"][name] = self.linesize[name]
@@ -559,7 +543,8 @@ class GraphicsProperties(PlotProperties):
         res = super().deserialize(data, hashmap)
         try:
             try:
-                for name in self.names:
+                for name in data["names"]:
+                    self.appendDataWidget(name)
                     if 'colors' in data: 
                         if name in data["colors"] : self.maincolor[name] = data['colors'][name]
                     if 'styles' in data: 
@@ -568,7 +553,7 @@ class GraphicsProperties(PlotProperties):
                         if name in data["widths"] : self.linesize[name]  = data['widths'][name]
                     if 'grapth' in data: 
                         if name in data["grapth"] : self.graphtype[name] = data['grapth'][name]
-                self.setupWidgets()
+                    self.setupWidget(name)
                 return True                
             except Exception as e: 
                 dumpException(e)
@@ -591,6 +576,7 @@ class GraphicsOutputNode(ResizableInputNode):
         self.linestyle = {}
         self.graphtype = {}
         self.linesize  = {}
+        self.all_names = []
         self.c = 0
         self.input_socket_position  = LEFT_TOP
         self.model = ConvexHull2D()
@@ -610,15 +596,16 @@ class GraphicsOutputNode(ResizableInputNode):
 
     def prepareSettings(self):
         #self.properties.resetProperties()
-        self.properties.cleanProperties()
-        self.properties.fillWidgets()
+        #self.properties.cleanProperties()
+        #self.properties.fillWidgets()
         return True
 
     def prepareCanvas(self):
+        self.all_names = []
         if not self.hasValue(0) : return
 
         value = self.getInput(0).value
-        self.content.axes.clear()
+
         x_name = list(value.keys())[0]
         self.x_val  = value[x_name]
 
@@ -649,26 +636,35 @@ class GraphicsOutputNode(ResizableInputNode):
 
 
     def addData(self, value):
+        # if no input then return
         if not value : return 
 
         x_name = list(value.keys())[0]
         x_val  = value[x_name]
-        type = 'line'
 
-        for i, name in enumerate(value):
+        # update the input
+        for name in value:
             if name != x_name:
+                # name is not in the properties 
+                if name not in self.content.items : continue
+                if name not in self.all_names : self.all_names.extend([name])
                 #define the min length of the data to avoin error caused by size difference
                 ln = min(len(x_val), len(value[name]))
 
+                
                 if self.properties.graphtype[name] == 'line':
-                    self.content.axes.plot(x_val[0:ln], value[name][0:ln], label=name, 
-                                            color=self.properties.maincolor[name], linestyle=self.properties.linestyle[name],
-                                            linewidth=self.properties.linesize[name])
+                    self.content.items[name].set_xdata(x_val[0:ln])
+                    self.content.items[name].set_ydata(value[name][0:ln])
+                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
+                    self.content.items[name].set(linestyle=self.properties.linestyle[name],
+                                                 linewidth=self.properties.linesize[name])
 
                 if self.properties.graphtype[name] == 'scatter':
-                    self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
-                                            color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
-                                            s=self.properties.linesize[name]*10)
+                    self.content.items[name].set_xdata(x_val[0:ln])
+                    self.content.items[name].set_ydata(value[name][0:ln])
+                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
+                    self.content.items[name].set(marker=self.properties.linestyle[name],
+                                                 s=self.properties.linesize[name]*10)
 
                 if self.properties.graphtype[name] == 'convex':
                     # barycentric coords: (a,b,c)
@@ -678,14 +674,95 @@ class GraphicsOutputNode(ResizableInputNode):
                     #By adding the head to the tail, we close the polygon during plotting
                     points = np.vstack([points, points[0]])
 
+                    self.content.items[name].set_xy(points)
+                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
+
+        
+        # add what is missing
+        for name in value:
+            if name != x_name:
+                # name is in the properties and has been already updated
+                if name in self.content.items : continue
+                if name not in self.all_names : self.all_names.extend([name])
+
+                self.properties.appendDataWidget(name)
+                #define the min length of the data to avoin error caused by size difference
+                ln = min(len(x_val), len(value[name]))
+
+                if self.properties.graphtype[name] == 'line':
+                    self.content.items[name], = self.content.axes.plot(x_val[0:ln], value[name][0:ln], label=name, 
+                                            color=self.properties.maincolor[name], linestyle=self.properties.linestyle[name],
+                                            linewidth=self.properties.linesize[name])
+
+                if self.properties.graphtype[name] == 'scatter':
+                    self.content.items[name], = self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
+                                            color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
+                                            s=self.properties.linesize[name]*10)
+
+                if self.properties.graphtype[name] == 'convex':
+                    # barycentric coords: (a,b,c)
+                    data   = np.column_stack([x_val[0:ln], value[name][0:ln]])
+                    data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
+                    try:
+                        points = self.model(data)
+                    except Exception as e:
+                        points = data
+                    #By adding the head to the tail, we close the polygon during plotting
+                    points = np.vstack([points, points[0]])
+
                     xi = points[:,0]
                     yi = points[:,1]
 
-                    self.content.axes.fill(xi, yi, c=self.properties.maincolor[name], label=name)
+                    self.content.items[name], = self.content.axes.fill(xi, yi, color=self.properties.maincolor[name], label=name)
 
+        # remove what is not in the values
+        for name in list(self.content.items.keys()):
+            # name is in the plot input and does not have to be removed
+            if name in self.all_names : continue
+            
+            self.content.axes.lines.remove(self.content.items[name])
+            del self.content.items[name]
+            self.properties.removeWidget(name)
+            self.content.canvas.draw()
+            
+            
+    def changeStyle(self, name):
+        x, y = [], []
+        if isinstance(self.content.items[name], Line2D):
+            x = self.content.items[name].get_xdata()
+            y = self.content.items[name].get_ydata()
+            self.content.axes.lines.remove(self.content.items[name])
+        if isinstance(self.content.items[name], Polygon):
+            xy = self.content.items[name].get_xy()
+            x = xy[:,0]
+            y = xy[:,1]
+            self.content.axes.patches.remove(self.content.items[name])
+        if isinstance(self.content.items[name], PathCollection):
+            xy = self.content.items[name].get_offsets()
+            x = xy[:,0]
+            y = xy[:,1]
+            self.content.axes.collections.remove(self.content.items[name])
+        
+        del self.content.items[name]
+                
+        if self.properties.graphtype[name] == 'line':
+            self.content.items[name], = self.content.axes.plot(x, y, label=name, 
+                                    color=self.properties.maincolor[name], linestyle=self.properties.linestyle[name],
+                                    linewidth=self.properties.linesize[name])
 
+        if self.properties.graphtype[name] == 'scatter':
+            self.content.items[name] = self.content.axes.scatter(x, y, label=name, 
+                                    color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
+                                    s=self.properties.linesize[name]*10)
+
+        if self.properties.graphtype[name] == 'convex':
+            self.content.items[name], = self.content.axes.fill(x, y, c=self.properties.maincolor[name], label=name)
+
+        self.content.canvas.draw()
+            
+            
     def drawPlot(self):
-        self.content.axes.clear()
+        #self.content.axes.clear()
         self.prepareCanvas()
         for input in self.insockets:
             self.addData(input.value)

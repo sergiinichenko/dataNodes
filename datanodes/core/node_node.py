@@ -311,15 +311,15 @@ class Node(Serializer):
             if self.inputs[index].hasEdges():
                 return self.inputs[index].hasValue()
             else:
-                return None
+                return False
 
         except IndexError:
             print("EXC: Trying to get input but nothing is attached")
-            return None
+            return False
 
         except Exception as e: 
             dumpException(e)
-            return None
+            return False
 
 
     def getInputs(self):
@@ -454,6 +454,9 @@ class Node(Serializer):
     def updateDescendents(self):
         for other_node in self.getChildNodes():
             other_node.update()
+
+
+
 
     def setPos(self, x, y):
         self.grNode.setPos(x, y)

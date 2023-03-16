@@ -248,11 +248,7 @@ class NodeWindow(QMainWindow):
     
     def onEditCopy(self):
         if self.getCurrentNodeEditorWidget():
-            node = self.nodeAtMousePos()
-            if node is not None: 
-                if not node.content.onCopy() : return
-            
-            print("Copy nodes")
+            print("Copy selected")
             data     = self.getCurrentNodeEditorWidget().scene.clipboard.serializeSelected(delete=False)
             str_data = json.dumps(data, indent=4)
             QApplication.instance().clipboard().setText(str_data)
@@ -265,20 +261,11 @@ class NodeWindow(QMainWindow):
 
     def onEditPaste(self, setSelected=False):
         if self.getCurrentNodeEditorWidget():
-            node = self.nodeAtMousePos()
-            if node is not None: 
-                if not node.content.onPaste() : return
-
             raw_data = QApplication.instance().clipboard().text()
             try:
                 data = json.loads(raw_data)
             except ValueError as e:
                 print("Paste not valid json data: ", e)
-                return
-
-            # Check if the data is correct
-            if 'nodes' not in data:
-                print('JSON does not contain any nodes')
                 return
 
             self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data, setSelected)

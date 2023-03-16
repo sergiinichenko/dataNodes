@@ -20,6 +20,30 @@ class TableOutputContent(DataContent):
         self.table.setRowCount(3)
         self.table.setColumnCount(3)
         self.layout.addWidget(self.table)
+        
+        self.table.mouseReleaseEvent = self.onMouseReleaseEvent
+
+    def onMouseReleaseEvent(self, event):
+        QTableWidget.mouseReleaseEvent(self.table, event) 
+        self.node.scene._selected_contents = self
+        self.node.scene.grScene.itemSelected.emit()            
+            
+    def onCopy(self):
+        if len(self.table.selectedIndexes()) == 0 : return False
+        data  = ""
+        cr    = self.table.selectedIndexes()[0].row()
+        first = True
+        for item in self.table.selectedIndexes():
+            if not first:                
+                if cr == item.row(): 
+                    data = data + "\t"
+                else:
+                    data = data + "\n"
+                    cr   = item.row()
+            data = data + self.table.item(item.row(), item.column()).text()
+            first = False
+        return data
+
 
     def serialize(self):
         res = super().serialize()

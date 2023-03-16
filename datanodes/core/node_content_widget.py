@@ -15,6 +15,7 @@ class NodeContentWidget(QWidget, Serializer):
         self.node = node
         
         super().__init__(parent)
+
         self.initUI()
 
 
@@ -24,6 +25,7 @@ class NodeContentWidget(QWidget, Serializer):
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
         self.layout.addWidget(QTextEdit("foo"))
+
 
 
     def serialize(self) -> OrderedDict:

@@ -110,7 +110,7 @@ class ConvexHull2D:
     def forward(self, point_set):
         if point_set is None or len(point_set) < 3:
             print("No valid convex hull is found! Please provide more than 3 unique points")
-            return None
+            return point_set
         self.reset()          
         self.points = np.unique(point_set, axis=0) #get rid of duplicate elements
         return self._quickhull()
@@ -140,14 +140,14 @@ class ConvexHull2D:
 
         self.convext_hull = np.stack(self.convext_hull)
         self.convext_hull = self.clock_sort(self.convext_hull)
-        if self.convext_hull.shape[0] < 3:
-            try:
-                raise Exception("Not enough points are found for convex hull. Please check your input and other information")
-            except Exception as inst:
-                print(type(inst))
-                print(inst.args) 
-        else:                   
-            return self.convext_hull
+        #if self.convext_hull.shape[0] < 3:
+        #    try:
+        #        raise Exception("Not enough points are found for convex hull. Please check your input and other information")
+        #    except Exception as inst:
+        #        print(type(inst))
+        #        print(inst.args) 
+        #else:                   
+        return self.convext_hull
 
     def _findhull(self, points, P, Q):
         if points is None:

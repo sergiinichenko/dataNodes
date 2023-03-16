@@ -2,8 +2,10 @@
 
 from typing import OrderedDict
 from datanodes.graphics.graphics_edge import GraphicsEdge
+from datanodes.graphics.graphics_node import GraphicsNode
 from datanodes.core.node_node import  Node
 from datanodes.core.node_edge import  Edge
+from datanodes.core.node_content_widget import NodeContentWidget
 
 DEBUG = False
 
@@ -14,13 +16,22 @@ class SceneClipboard():
     def serializeSelected(self, delete=False):
         if DEBUG : print("-- Copy to clipboard -- ")
 
-        sel_nodes, sel_edges, sel_sockets = [], [], {}
+        sel_nodes, sel_edges, sel_sockets, sel_data = [], [], {}, []
 
-        for item in self.scene.grScene.selectedItems():
+        for item in self.scene.selectedItems():
+            """
             if hasattr(item, 'node'):
                 sel_nodes.append(item.node.serialize())
                 for socket in (item.node.inputs + item.node.outputs):
                     sel_sockets[socket.id] = socket
+            """
+            if isinstance(item, GraphicsNode):
+                sel_nodes.append(item.node.serialize())
+                for socket in (item.node.inputs + item.node.outputs):
+                    sel_sockets[socket.id] = socket
+
+            elif isinstance(item, NodeContentWidget):
+                sel_data.append(item.onCopy())
             
             elif isinstance(item, GraphicsEdge):
                 sel_edges.append(item.edge)
@@ -46,7 +57,8 @@ class SceneClipboard():
 
         data = OrderedDict({
             'nodes' : sel_nodes, 
-            'edges' : edges_final
+            'edges' : edges_final,
+            'data'  : sel_data,
         })
 
         # If cut the items then delete them from the main scene
@@ -91,17 +103,18 @@ class SceneClipboard():
         offset_y = mouse_pos.y() - y
 
         # Create each node
-        for node_data in data['nodes']:
-            new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
-            new_node.deserialize(node_data, hashmap, restore_id=False)
-            # shift the new nodes position
-            pos = new_node.pos
-            posx, posy = new_node.pos.x(), new_node.pos.y()
-            newx, newy = mousex + posx - minx, mousey + posy - miny
+        if 'nodes' in data:
+            for node_data in data['nodes']:
+                new_node = self.scene.getNodeClassFromData(node_data)(self.scene)
+                new_node.deserialize(node_data, hashmap, restore_id=False)
+                # shift the new nodes position
+                pos = new_node.pos
+                posx, posy = new_node.pos.x(), new_node.pos.y()
+                newx, newy = mousex + posx - minx, mousey + posy - miny
 
-            new_node.setPos(newx, newy)
-            new_node.grNode.setSelected(setSelected)
-            new_node.update()
+                new_node.setPos(newx, newy)
+                new_node.grNode.setSelected(setSelected)
+                new_node.update()
 
         # Create each edge
         if 'edges' in data:
@@ -110,5 +123,11 @@ class SceneClipboard():
                 new_edge.deserialize(edge_data, hashmap, restore_id=False)
                 new_edge.grEdge.setSelected(setSelected)
 
+        # Paste the data
+        if 'data' in data:
+            for data_data in data['data']:
+                for item in self.scene.selectedItems():
+                    if isinstance(item, NodeContentWidget):
+                        item.onPaste(data_data)
         
         # Store History

@@ -258,37 +258,30 @@ class TableInputContent(DataContent):
         self.layout.setContentsMargins(0,0,0,0)
         self.setLayout(self.layout)
 
-        self.table = QTableWidget(self)
-        self.table.setRowCount(10)
-        self.table.setColumnCount(3)
-        self.layout.addWidget(self.table)
+        self.mainWidget = QTableWidget(self)
+        self.mainWidget.setRowCount(10)
+        self.mainWidget.setColumnCount(3)
+        self.layout.addWidget(self.mainWidget)
 
         for row in range(10):
             for col in range(3):
                 item = QTableWidgetItem("")
-                self.table.setItem(row, col, item)
+                self.mainWidget.setItem(row, col, item)
                 
-        self.table.keyPressEvent   = self.tableOnKeyPressEvent
-        self.table.mousePressEvent = self.tableOnMousePressEvent
-        
-    def tableOnMousePressEvent(self, event):
-        print("EVENT ", event)
-        # custom return press event listener
-        self.node.grNode.select(False)
-        # pass on the keyPressEvent to the table
-        QTableWidget.mousePressEvent(self.table, event) 
+        self.mainWidget.keyPressEvent     = self.tableOnKeyPressEvent
+        self.mainWidget.mouseReleaseEvent = self.onMouseReleaseEvent
     
     def tableOnKeyPressEvent(self, event):
-        current = self.table.currentIndex()
+        current = self.mainWidget.currentIndex()
 
         # custom return press event listener
         if event.key() == Qt.Key_Return or event.key() == Qt.Key_Enter:
             # pass on the keyPressEvent to the table
-            QTableWidget.keyPressEvent(self.table, event) 
+            QTableWidget.keyPressEvent(self.mainWidget, event) 
             nextIndex = current.sibling(current.row() + 1, current.column())
             if nextIndex.isValid():
-                self.table.setCurrentIndex(nextIndex)
-                self.table.edit(nextIndex)
+                self.mainWidget.setCurrentIndex(nextIndex)
+                self.mainWidget.edit(nextIndex)
             self.node.recalculateNode()
             # do what needs to be done here
             # you can return here if you do not want to pass on the return to the table
@@ -296,8 +289,8 @@ class TableInputContent(DataContent):
 
         if event.key() == Qt.Key_Delete:
             # pass on the keyPressEvent to the table
-            QTableWidget.keyPressEvent(self.table, event) 
-            for item in self.table.selectedItems():
+            QTableWidget.keyPressEvent(self.mainWidget, event) 
+            for item in self.mainWidget.selectedItems():
                 if item is not None : item.setText("")
             self.node.recalculateNode()
             # do what needs to be done here
@@ -308,87 +301,79 @@ class TableInputContent(DataContent):
             nextRow = current.sibling(current.row() + 1, current.column())
             row = current.row() + 1
             if not nextRow.isValid():
-                self.table.insertRow(self.table.rowCount())
+                self.mainWidget.insertRow(self.mainWidget.rowCount())
                 nextRow = current.sibling(row, current.column())
-            self.table.setCurrentIndex(nextRow)
+            self.mainWidget.setCurrentIndex(nextRow)
             return
 
         if event.key() == Qt.Key_Right:
             nextCol = current.sibling(current.row(), current.column() + 1)
             col = current.column() + 1
             if not nextCol.isValid():
-                self.table.insertColumn(self.table.columnCount())
+                self.mainWidget.insertColumn(self.mainWidget.columnCount())
                 nextCol = current.sibling(current.row(), col)
-            self.table.setCurrentIndex(nextCol)
+            self.mainWidget.setCurrentIndex(nextCol)
             return
 
         # pass on the keyPressEvent to the table
-        QTableWidget.keyPressEvent(self.table, event) 
-            
-        """
-        elif event.modifiers() == Qt.ControlModifier:
-            if event.key() == Qt.Key_C:
-                self.copyToBuffer()
-            if event.key() == Qt.Key_V:
-                self.pasteFromBuffer()
+        QTableWidget.keyPressEvent(self.mainWidget, event) 
 
-        """         
+
+    def onMouseReleaseEvent(self, event):
+        QTableWidget.mouseReleaseEvent(self.mainWidget, event) 
+        self.node.scene._selected_contents = self
+        self.node.scene.grScene.itemSelected.emit()            
+            
             
     def onCopy(self):
-        print("copy content")
-        if len(self.table.selectedIndexes()) == 0 : return False
-        
-        if self.node.scene.window.getCurrentNodeEditorWidget():
-            
-            data  = ""
-            cr    = self.table.selectedIndexes()[0].row()
-            first = True
-            for item in self.table.selectedIndexes():
-                if not first:                
-                    if cr == item.row(): 
-                        data = data + "\t"
-                    else:
-                        data = data + "\n"
-                        cr   = item.row()
-                data = data + self.table.item(item.row(), item.column()).text()
-                first = False
-            QApplication.instance().clipboard().setText(data)
+        if len(self.mainWidget.selectedIndexes()) == 0 : return False
+        data  = ""
+        cr    = self.mainWidget.selectedIndexes()[0].row()
+        first = True
+        for item in self.mainWidget.selectedIndexes():
+            if not first:                
+                if cr == item.row(): 
+                    data = data + "\t"
+                else:
+                    data = data + "\n"
+                    cr   = item.row()
+            data = data + self.mainWidget.item(item.row(), item.column()).text()
+            first = False
+            #QApplication.instance().clipboard().setText(data)
+        return data
 
 
-    def onPaste(self):
-        print("Paste values")
-        if self.node.scene.window.getCurrentNodeEditorWidget():
-            data = QApplication.instance().clipboard().text()
-            current = self.table.currentIndex()
+    def onPaste(self, data):
+        current = self.mainWidget.currentIndex()
 
-            row = current.row()
-            for line in iter(data.splitlines()):
-                col = current.column()
-                for val in iter(line.split("\t")):
-                    if self.table.item(row, col) is not None:
-                        self.table.item(row, col).setText(val)
-                    else:
-                        item = QTableWidgetItem(val)
-                        self.table.setItem(row, col, item)
-                    col+=1
-                row+=1
+        row = current.row()
+        for line in iter(data.splitlines()):
+            col = current.column()
+            for val in iter(line.split("\t")):
+                if self.mainWidget.item(row, col) is not None:
+                    self.mainWidget.item(row, col).setText(val)
+                else:
+                    item = QTableWidgetItem(val)
+                    self.mainWidget.setItem(row, col, item)
+                col+=1
+            row+=1
         self.node.recalculateNode()
     
     def serialize(self):
         res = super().serialize()
         res['width']  = self.node.grNode.width
         res['height'] = self.node.grNode.height
-        res['cols'] = self.table.columnCount()
-        res['rows'] = self.table.rowCount()
+        res['cols'] = self.mainWidget.columnCount()
+        res['rows'] = self.mainWidget.rowCount()
         
-        rows = self.table.rowCount()
-        cols = self.table.columnCount()
+        rows = self.mainWidget.rowCount()
+        cols = self.mainWidget.columnCount()
         values = []
         for c in range(cols):
             for r in range(0, rows):
-                if self.table.item(r, c) is not None:
-                    if self.table.item(r, c).text() != "":
-                        record = {"c" : c, "r" : r, "d" : self.table.item(r, c).text()}
+                if self.mainWidget.item(r, c) is not None:
+                    if self.mainWidget.item(r, c).text() != "":
+                        record = {"c" : c, "r" : r, "d" : self.mainWidget.item(r, c).text()}
                         values.append(record)
         res['values'] = values
         return res
@@ -401,7 +386,7 @@ class TableInputContent(DataContent):
                 self.node.grNode.width  = data['width']
                 values = data['values']
                 for val in values:
-                    self.table.item(val["r"], val["c"]).setText(val["d"])
+                    self.mainWidget.item(val["r"], val["c"]).setText(val["d"])
 
                 self.updateSize()
             except Exception as e: 
@@ -429,31 +414,31 @@ class TableInputNode(DataNode):
         self.content    = TableInputContent(self)
         self.grNode     = TableInputGraphicsNode(self)
         self.properties = NodeProperties(self)
-        self.content.table.openPersistentEditor
+        self.content.mainWidget.openPersistentEditor
 
     def updateNames(self, dict):
         for c, key in enumerate(self.value):
             print(c, key)
             item = QTableWidgetItem(key)
-            self.content.table.setItem(0, c, item)
+            self.content.mainWidget.setItem(0, c, item)
 
 
     def readTable(self):
         print("READ TABLE")
-        rows = self.content.table.rowCount()
-        cols = self.content.table.columnCount()
+        rows = self.content.mainWidget.rowCount()
+        cols = self.content.mainWidget.columnCount()
         self.value.clear()
         
         for c in range(cols):
-            if self.content.table.item(0, c) is None : continue
+            if self.content.mainWidget.item(0, c) is None : continue
             
-            name = self.content.table.item(0, c).text()
+            name = self.content.mainWidget.item(0, c).text()
             if name != "":
                 vals = []
                 for r in range(1, rows):
-                    if self.content.table.item(r, c) is not None:
-                        if not self.isString(self.content.table.item(r, c).text()):
-                            val = float(self.content.table.item(r, c).text())
+                    if self.content.mainWidget.item(r, c) is not None:
+                        if not self.isString(self.content.mainWidget.item(r, c).text()):
+                            val = float(self.content.mainWidget.item(r, c).text())
                             vals.extend([val])
                 self.value[name] = vals
 

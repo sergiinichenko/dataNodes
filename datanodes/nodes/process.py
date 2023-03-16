@@ -789,7 +789,7 @@ class SelectContent(ResizableContent):
         return False
         
 
-    def appendPair(self, id, name, value=True):
+    def appendPair(self, id, name, value=False):
         i = self.getSize(self.labels_map)
         
         if str(id) not in self.labels_map   : self.labels_map[str(id)]   = {}
@@ -968,7 +968,7 @@ class SelectNode(ResizableInputNode):
                         for name in input.value:
                             # if name not in self.content.select_map[str(input.id)]:
                             if not self.content.if_contains(name):
-                                self.content.appendPair(input.id, name, True)
+                                self.content.appendPair(input.id, name)
                                 self.value[name] = input.value[name]
 
                         # Remove the pair if it is not in the input or renamed

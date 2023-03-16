@@ -28,6 +28,7 @@ class Scene(Serializer):
         self._saved_to_new_file = False
         
         # initialize all listeners
+        self._selected_contents   = None
         self._last_selected_items = None
         self._has_been_modified_listeners = []
         self._selected_listeners = []
@@ -56,7 +57,8 @@ class Scene(Serializer):
             self._last_selected_items = current_selected_items
             self.history.storeHistory("Selection changed")
             for callback in self._selected_listeners: callback()
-            for item in current_selected_items: item.onSelected()
+            for item in current_selected_items: 
+                item.onSelected()
 
 
     def onItemsDeselected(self):
@@ -113,7 +115,10 @@ class Scene(Serializer):
         return self.has_been_modified
 
     def selectedItems(self):
-        return self.grScene.selectedItems()
+        res = self.grScene.selectedItems()
+        if self._selected_contents is not None:
+            res.extend([self._selected_contents])
+        return res
 
     def setSelectionAll(self, selected = True):
         for node in self.nodes:
@@ -143,6 +148,7 @@ class Scene(Serializer):
             node.grNode._lastSelectedState = False
         for edge in self.edges:
             edge.grEdge._lastSelectedState = False
+        self._selected_contents = None
 
 
     def addNode(self, node):
@@ -252,11 +258,12 @@ class Scene(Serializer):
 
         # create adges from data
 
-        #for node in self.nodes:
-        #    if not node.getInputs():
-        #        node.update(silent=True)
-
+        # only the input nodes will receive the eval signal
         for node in self.nodes:
-            node.update(silent=True)
+            if not node.hasValue():
+                node.update(silent=True)
+
+        #for node in self.nodes:
+        #    node.update(silent=True)
 
         return True
