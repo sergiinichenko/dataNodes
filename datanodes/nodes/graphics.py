@@ -93,10 +93,11 @@ class LineSizePicker(QLineEdit):
     def chageSize(self):
         try:
             self.node.properties.linesize[self.name] = float(self.text())
-            self.node.drawPlot()    
+            self.node.updateStyle(self.name)
         except Exception as e:
             self.node.e = e
             self.node.properties.linesize[self.name] = float(1.0)
+            self.node.updateStyle(self.name)
     @property
     def value(self):
         return float(self.text())
@@ -120,7 +121,7 @@ class ColorPicker(QWidget):
 
             try:
                 self.node.properties.maincolor[self.name] = self.color.name()
-                self.node.drawPlot()    
+                self.node.updateStyle(self.name)
             except Exception as e:
                 self.node.e = e
 
@@ -579,7 +580,7 @@ class GraphicsOutputNode(ResizableInputNode):
         self.all_names = []
         self.c = 0
         self.input_socket_position  = LEFT_TOP
-        self.model = ConvexHull2D()
+        self.convex  = ConvexHull2D()
 
     def onInputChange(self, new_edge=None):
         self.content.changed.emit()
@@ -651,32 +652,8 @@ class GraphicsOutputNode(ResizableInputNode):
                 #define the min length of the data to avoin error caused by size difference
                 ln = min(len(x_val), len(value[name]))
 
-                
-                if self.properties.graphtype[name] == 'line':
-                    self.content.items[name].set_xdata(x_val[0:ln])
-                    self.content.items[name].set_ydata(value[name][0:ln])
-                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
-                    self.content.items[name].set(linestyle=self.properties.linestyle[name],
-                                                 linewidth=self.properties.linesize[name])
-
-                if self.properties.graphtype[name] == 'scatter':
-                    self.content.items[name].set_xdata(x_val[0:ln])
-                    self.content.items[name].set_ydata(value[name][0:ln])
-                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
-                    self.content.items[name].set(marker=self.properties.linestyle[name],
-                                                 s=self.properties.linesize[name]*10)
-
-                if self.properties.graphtype[name] == 'convex':
-                    # barycentric coords: (a,b,c)
-                    data   = np.column_stack([x_val[0:ln], value[name][0:ln]])
-                    data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
-                    points = self.model(data)
-                    #By adding the head to the tail, we close the polygon during plotting
-                    points = np.vstack([points, points[0]])
-
-                    self.content.items[name].set_xy(points)
-                    self.content.items[name].set(label=name, color=self.properties.maincolor[name])
-
+                self.updateData(name, x_val[0:ln], value[name][0:ln])
+                self.updateStyle(name)
         
         # add what is missing
         for name in value:
@@ -695,7 +672,7 @@ class GraphicsOutputNode(ResizableInputNode):
                                             linewidth=self.properties.linesize[name])
 
                 if self.properties.graphtype[name] == 'scatter':
-                    self.content.items[name], = self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
+                    self.content.items[name] = self.content.axes.scatter(x_val[0:ln], value[name][0:ln], label=name, 
                                             color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
                                             s=self.properties.linesize[name]*10)
 
@@ -704,7 +681,7 @@ class GraphicsOutputNode(ResizableInputNode):
                     data   = np.column_stack([x_val[0:ln], value[name][0:ln]])
                     data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
                     try:
-                        points = self.model(data)
+                        points = self.convex(data)
                     except Exception as e:
                         points = data
                     #By adding the head to the tail, we close the polygon during plotting
@@ -720,13 +697,62 @@ class GraphicsOutputNode(ResizableInputNode):
             # name is in the plot input and does not have to be removed
             if name in self.all_names : continue
             
-            self.content.axes.lines.remove(self.content.items[name])
+            if isinstance(self.content.items[name], Line2D):
+                self.content.axes.lines.remove(self.content.items[name])
+            if isinstance(self.content.items[name], Polygon):
+                self.content.axes.patches.remove(self.content.items[name])
+            if isinstance(self.content.items[name], PathCollection):
+                self.content.axes.collections.remove(self.content.items[name])            
+
             del self.content.items[name]
             self.properties.removeWidget(name)
             self.content.canvas.draw()
             
-            
+    def updateData(self, name, x, y):
+        if isinstance(self.content.items[name], Line2D):
+            self.content.items[name].set_xdata(x)
+            self.content.items[name].set_ydata(y)
+
+        if isinstance(self.content.items[name], PathCollection):
+            data   = np.column_stack([x, y])
+            self.content.items[name].set_offsets(data)
+
+        if isinstance(self.content.items[name], Polygon):
+            # barycentric coords: (a,b,c)
+            data   = np.column_stack([x, y])
+            data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
+            points = self.convex(data)
+            #By adding the head to the tail, we close the polygon during plotting
+            points = np.vstack([points, points[0]])
+            self.content.items[name].set_xy(points)
+        
+
+    def updateStyle(self, name):
+        if name not in self.content.items : return
+
+        if isinstance(self.content.items[name], Line2D):
+            self.content.items[name].set(label=name, color=self.properties.maincolor[name])
+            self.content.items[name].set(linestyle=self.properties.linestyle[name],
+                                            linewidth=self.properties.linesize[name])
+        if isinstance(self.content.items[name], PathCollection):
+            xy = self.content.items[name].get_offsets()
+            x = xy[:,0]
+            y = xy[:,1]
+            self.content.axes.collections.remove(self.content.items[name])
+            del self.content.items[name]
+            self.content.items[name] = self.content.axes.scatter(x, y, label=name, 
+                                    color=self.properties.maincolor[name], marker=self.properties.linestyle[name],
+                                    s=self.properties.linesize[name]*10)
+
+        if isinstance(self.content.items[name], Polygon):
+            self.content.items[name].set(label=name, color=self.properties.maincolor[name])
+
+        self.content.canvas.draw()
+
+        
     def changeStyle(self, name):
+        if name not in self.content.items : return
+
         x, y = [], []
         if isinstance(self.content.items[name], Line2D):
             x = self.content.items[name].get_xdata()
@@ -756,7 +782,15 @@ class GraphicsOutputNode(ResizableInputNode):
                                     s=self.properties.linesize[name]*10)
 
         if self.properties.graphtype[name] == 'convex':
-            self.content.items[name], = self.content.axes.fill(x, y, c=self.properties.maincolor[name], label=name)
+            data   = np.column_stack([x, y])
+            data   = data[np.logical_not(np.isnan(data).any(axis=1)),:]
+            points = self.convex(data)
+            #By adding the head to the tail, we close the polygon during plotting
+            points = np.vstack([points, points[0]])
+
+            xi = points[:,0]
+            yi = points[:,1]
+            self.content.items[name], = self.content.axes.fill(xi, yi, c=self.properties.maincolor[name], label=name)
 
         self.content.canvas.draw()
             
