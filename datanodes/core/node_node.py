@@ -286,8 +286,15 @@ class Node(Serializer):
         child_nodes = []
         for ix in range(len(self.outputs)):
             for edge in self.outputs[ix].edges:
-                child_nodes.append( edge.getOtherSocket(self.outputs[ix]).node )
-
+                try:
+                    if self.outputs[ix]:
+                        soket = edge.getOtherSocket(self.outputs[ix])
+                        if soket:
+                            child_nodes.append( soket.node )
+                        else:
+                            pass
+                except Exception as e:
+                    pass
         return child_nodes
 
 

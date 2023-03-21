@@ -596,7 +596,9 @@ class CodeNode(ResizableInputNode):
                     variables = []
                     for l in iter(expression.splitlines()):
                         if "=" in l:
-                            variables.append(l.split("=")[0].replace(" ",""))
+                            tmp = l.split("=")[0].replace(" ","")
+                            if tmp.isalnum():
+                                variables.append(tmp)
 
                     exec(code, self.filtered, localVars)
 
@@ -604,8 +606,8 @@ class CodeNode(ResizableInputNode):
                         for name in input.value: 
                             self.value[name] = self.filtered[name]
 
-                    for sdfsdf in variables:
-                        self.value[sdfsdf] = localVars[sdfsdf]
+                    for var in variables:
+                        self.value[var] = localVars[var]
 
                     self.getOutput(0).value = self.value
                     self.getOutput(0).type  = "df"
