@@ -262,13 +262,8 @@ class NodeWindow(QMainWindow):
     def onEditPaste(self, setSelected=False):
         if self.getCurrentNodeEditorWidget():
             raw_data = QApplication.instance().clipboard().text()
-            try:
-                data = json.loads(raw_data)
-            except ValueError as e:
-                print("Paste not valid json data: ", e)
-                return
+            self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(raw_data, setSelected)
 
-            self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(data, setSelected)
 
     def onEditDublicate(self):
         self.onEditCopy()

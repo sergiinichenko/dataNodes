@@ -345,8 +345,7 @@ class TableInputContent(DataContent):
 
     def onPaste(self, data):
         current = self.mainWidget.currentIndex()
-
-        row = current.row()
+        row     = current.row()
         for line in iter(data.splitlines()):
             col = current.column()
             for val in iter(line.split("\t")):
