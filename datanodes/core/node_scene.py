@@ -254,6 +254,8 @@ class Scene(Serializer):
             self.getNodeClassFromData(node_data)(self).deserialize(node_data, hashmap, restore_id)
 
         for edge_data in data["edges"]:
+            if edge_data['start'] not in hashmap : return
+            if edge_data['end'] not in hashmap : return
             Edge(self).deserialize(edge_data, hashmap, restore_id)
 
         # create adges from data

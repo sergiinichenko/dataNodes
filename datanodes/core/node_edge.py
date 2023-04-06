@@ -27,7 +27,6 @@ class Edge(Serializer):
         self.start_socket = start_socket
         self.end_socket   = end_socket
         self.edge_type    = edge_type
-
         self.scene.addEdge(self)
 
     def notifyOnConnection(self):

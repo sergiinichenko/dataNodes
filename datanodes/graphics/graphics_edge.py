@@ -142,8 +142,14 @@ class GraphicsEdgeDirect(GraphicsEdge):
 class GraphicsEdgeBezier(GraphicsEdge):
     def calcPath(self):
         try:
+            print("int")
+            if self.edge.start_socket is None : return None
+
             fr = self.getSourcePos()
             to = self.getDestinationPos()
+            print(fr)
+            print(to)
+            print(self.edge.start_socket)
             
             dist = ((to[0] - fr[0])**2.0 + (to[1] - fr[1])**2)**0.5
 
@@ -159,12 +165,12 @@ class GraphicsEdgeBezier(GraphicsEdge):
                 if spos in(LEFT_BOTTOM, LEFT_TOP, LEFT_CENTER):
                     cpx_fr *= -1
                     cpx_to *= -1
-
             path = QPainterPath(QPoint(int(fr[0]), int(fr[1])))
             path.cubicTo(fr[0] + cpx_fr, fr[1] + cpy_fr, 
                          to[0] + cpx_to, to[1] + cpy_to, 
                          to[0], to[1])
 
+            print("out")
             return path
         except Exception as e:
             return None

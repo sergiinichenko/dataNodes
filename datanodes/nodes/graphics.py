@@ -1381,7 +1381,7 @@ class HeatMapNode(ResizableInputNode):
         # Linearly interpolate the data (x, y) on a grid defined by (xi, yi).
         #zi = griddata((self.x, self.y), self.z, (xi[None,:], yi[:,None]), method='linear')
 
-        im = self.content.canvas.axes.contourf(self.x, self.y, self.z, levels=self.properties.levels, 
+        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.z, levels=self.properties.levels, 
                                                cmap=self.cmap, vmin=self.vmin, vmax=self.vmax)
 
         self.content.canvas.bar.set_title(names[-1])
