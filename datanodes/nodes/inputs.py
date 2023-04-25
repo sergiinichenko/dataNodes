@@ -348,6 +348,9 @@ class TableInputContent(DataContent):
         row     = current.row()
         for line in iter(data.splitlines()):
             col = current.column()
+            if row >= self.mainWidget.rowCount():
+                self.mainWidget.insertRow(row)
+
             for val in iter(line.split("\t")):
                 if self.mainWidget.item(row, col) is not None:
                     self.mainWidget.item(row, col).setText(val)
