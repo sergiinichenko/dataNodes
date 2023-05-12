@@ -116,17 +116,15 @@ class SceneClipboard():
                     pos = new_node.pos
                     posx, posy = new_node.pos.x(), new_node.pos.y()
                     newx, newy = mousex + posx - minx, mousey + posy - miny
-
                     new_node.setPos(newx, newy)
                     new_node.grNode.setSelected(setSelected)
-                    new_node.update()
 
             # Create each edge
             if 'edges' in data:
                 for edge_data in data['edges']:
-                    new_edge = Edge(self.scene)
-                    new_edge.deserialize(edge_data, hashmap, restore_id=False)
-                    new_edge.grEdge.setSelected(setSelected)
+                    Edge(self.scene).deserialize(edge_data, hashmap, restore_id=False)
+                    #new_edge.deserialize(edge_data, hashmap, restore_id=False)
+                    #new_edge.grEdge.setSelected(setSelected)
 
             # Paste the data
             if 'data' in data:
@@ -134,6 +132,12 @@ class SceneClipboard():
                     for item in self.scene.selectedItems():
                         if isinstance(item, NodeContentWidget):
                             item.onPaste(data_data)
+
+            # only the input nodes will receive the eval signal
+            #for node in self.scene.nodes:
+            #    if node.id in hashmap:
+            #        if not node.hasValue():
+            #            node.update(silent=True)
                             
         except ValueError as e:
 

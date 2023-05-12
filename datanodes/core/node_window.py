@@ -263,6 +263,9 @@ class NodeWindow(QMainWindow):
         if self.getCurrentNodeEditorWidget():
             raw_data = QApplication.instance().clipboard().text()
             self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(raw_data, setSelected)
+            # send the update signal to input nodes
+            if self.getCurrentNodeEditorWidget() is not None:
+                self.getCurrentNodeEditorWidget().scene.updateInputNodes()
 
 
     def onEditDublicate(self):

@@ -984,7 +984,7 @@ class SelectNode(ResizableInputNode):
                                     self.value[name] = input.value[name]
 
                         self.resize()
-                                
+
                     self.getOutput(0).value = self.value
                     self.getOutput(0).type = "df"
                     return True

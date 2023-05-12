@@ -118,7 +118,7 @@ class FilterNode(DataNode):
         if not input:
             self.setDirty()
             self.setInvalid(False)
-            self.e = "Does not have and intry Edge"
+            self.e = "Does not have an entry Edge"
             return True
 
         else:

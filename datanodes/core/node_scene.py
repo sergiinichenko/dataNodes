@@ -234,6 +234,13 @@ class Scene(Serializer):
             ("edges"        , edges),
         ])
 
+
+    def updateInputNodes(self):
+        # only the input nodes will receive the eval signal
+        for node in self.nodes:
+            if not node.hasValue():
+                node.update(silent=True)
+
     def deserialize(self, data, hashmap=[], restore_id=True):
         self.clear()
         hashmap = {}
@@ -258,13 +265,9 @@ class Scene(Serializer):
             if edge_data['end'] not in hashmap : return
             Edge(self).deserialize(edge_data, hashmap, restore_id)
 
-        # create adges from data
-
-        # only the input nodes will receive the eval signal
-        for node in self.nodes:
-            if not node.hasValue():
-                node.update(silent=True)
-
+        # send the update signal to input nodes
+        self.updateInputNodes()
+        
         #for node in self.nodes:
         #    node.update(silent=True)
 

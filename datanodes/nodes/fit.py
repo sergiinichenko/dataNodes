@@ -17,7 +17,7 @@ class FitContent(DataContent):
         super().initUI()
         self.setWindowTitle("Fit node")
 
-        self.fit_switch = "Linear"
+        self.fit_switch = "Least sqr"
 
         self.layout = QGridLayout()
         self.layout.setContentsMargins(5,5,5,5)
@@ -25,6 +25,7 @@ class FitContent(DataContent):
         self.setLayout(self.layout)
 
         self.cb = QComboBox()
+        self.cb.addItem("Least sqr")
         self.cb.addItem("Linear")
         self.cb.addItem("Power")
         self.cb.addItem("Exponent")
@@ -34,12 +35,13 @@ class FitContent(DataContent):
         self.layout.addWidget(self.cb, 1, 0, 1, 2)
         self.cb.currentIndexChanged.connect(self.selectionchange)
 
-        self.formula = QLineEdit("a + b*x", self)
+        self.formula = QLineEdit("y = a*x", self)
         self.formula.setAlignment(Qt.AlignCenter)
         self.layout.addWidget(self.formula, 2, 0, 1, 2)
 
     def selectionchange(self,i):
         self.fit_switch = self.cb.currentText()
+        if self.fit_switch == "Least sqr" : self.formula.setText("a*x")
         if self.fit_switch == "Linear"    : self.formula.setText("a + b*x")
         if self.fit_switch == "Power"     : self.formula.setText("a + x^b")
         if self.fit_switch == "Exponent"  : self.formula.setText("a + b*exp(x)")
@@ -115,6 +117,7 @@ class FitNode(DataNode):
             
             data = {}
             data.update(self.value)
+            if self.content.fit_switch == "Least sqr" : res, coefs = self.lstsq(x[:, 1:], y)
             if self.content.fit_switch == "Linear"    : res, coefs = self.linear(x, y)
             if self.content.fit_switch == "Power"     : res, coefs = self.power(x, y)
             if self.content.fit_switch == "Exponent"  : res, coefs = self.exponent(x, y)
@@ -132,6 +135,11 @@ class FitNode(DataNode):
             self.getOutput(0).value = {"x" : 0.0}
             self.getOutput(0).type = "df"
             return False
+
+    def lstsq(self, x, y):
+        z = np.linalg.lstsq(x, y, rcond=None)
+        p = z[0] * x
+        return np.sum(p, axis=1), z[0]
 
 
     def linear(self, x, y):
