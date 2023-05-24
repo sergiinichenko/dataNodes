@@ -154,10 +154,9 @@ class MathNode(DataNode):
             if self.content.operation == "Divide"        : res = self.perform(valuex, valuey, self.devide)
             if self.content.operation == "Power"         : res = self.perform(valuex, valuey, self.power)
             if self.content.operation == "Distance"      : res = self.perform(valuex, valuey, self.distance)
-
-            if self.content.operation == "log"           : res = self.log(valuex, valuey)
-            if self.content.operation == "log10"         : res = self.log10(valuex, valuey)
-            if self.content.operation == "exp"           : res = self.exp(valuex, valuey)
+            if self.content.operation == "log"           : res = self.perform(valuex, valuey, self.log)
+            if self.content.operation == "log10"         : res = self.perform(valuex, valuey, self.log10)
+            if self.content.operation == "exp"           : res = self.perform(valuex, valuey, self.exp)
 
             """
             if self.content.operation == "Sum"           : res = self.sum(values)
@@ -259,6 +258,18 @@ class MathNode(DataNode):
     def power(self, x, y):
         return x ** y
 
+    def log(self, x, y):
+        return np.log(x)
+
+    def log10(self, x, y):
+        return np.log10(x)
+
+    def exp(self, x, y):
+        return np.exp(x)
+
+
+
+
     def distance(self, x, y):
         return abs(x - y)
 
@@ -299,40 +310,6 @@ class MathNode(DataNode):
         res = {}
         for i, j in zip(input_values[0], input_values[1]):
             res[i] = np.trapz(y=self.drop_nan(input_values[1][j]), x=self.drop_nan(input_values[0][i]))
-        return res
-
-    def log(self, valuex, valuey):
-        res = {}
-
-        for name in valuex:
-            res[name] = np.log(self.drop_nan(valuex[name]))
-
-        for name in valuey:
-            res[name] = np.log(self.drop_nan(valuey[name]))
-
-        return res
-
-
-    def log10(self, valuex, valuey):
-        res = {}
-
-        for name in valuex:
-            res[name] = np.log10(self.drop_nan(valuex[name]))
-
-        for name in valuey:
-            res[name] = np.log10(self.drop_nan(valuey[name]))
-
-        return res
-
-    def exp(self, valuex, valuey):
-        res = {}
-
-        for name in valuex:
-            res[name] = np.exp(self.drop_nan(valuex[name]))
-
-        for name in valuey:
-            res[name] = np.exp(self.drop_nan(valuey[name]))
-
         return res
 
 

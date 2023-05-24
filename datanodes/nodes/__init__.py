@@ -10,6 +10,7 @@ from datanodes.nodes.array import *
 from datanodes.nodes.comment import *
 from datanodes.nodes.datanode import *
 from datanodes.nodes.filter import *
+from datanodes.nodes.convert import *
 from datanodes.nodes.graphics import *
 from datanodes.nodes.input_file import *
 from datanodes.nodes.inputs import *

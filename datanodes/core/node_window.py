@@ -327,16 +327,19 @@ class NodeSubWindow(NodeWidget):
         self.populateSubMenu(self.math_menu, [300, 400])
 
         self.data_menu = context_menu.addMenu("Data process")
-        self.populateSubMenu(self.data_menu, [400, 500])
+        self.populateSubMenu(self.data_menu, [400, 449])
+
+        self.conv_menu = context_menu.addMenu("Convert")
+        self.populateSubMenu(self.conv_menu, [450, 500])
 
         self.output_menu = context_menu.addMenu("Plot")
         self.populateSubMenu(self.output_menu, [250, 300])
 
-        self.data_menu = context_menu.addMenu("Additional")
-        self.populateSubMenu(self.data_menu, [500, 600])
+        self.add_menu = context_menu.addMenu("Additional")
+        self.populateSubMenu(self.add_menu, [500, 600])
 
-        self.data_menu = context_menu.addMenu("Statistics")
-        self.populateSubMenu(self.data_menu, [600, 700])
+        self.stat_menu = context_menu.addMenu("Statistics")
+        self.populateSubMenu(self.stat_menu, [600, 700])
 
         return context_menu
 
