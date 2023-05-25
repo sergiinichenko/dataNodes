@@ -30,7 +30,7 @@ exe = EXE(
     pyz,
     a.scripts,
     [],
-    name='main',
+    name='DataNodes',
     debug=True,
     bootloader_ignore_signals=False,
     strip=False,
