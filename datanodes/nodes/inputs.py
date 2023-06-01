@@ -388,8 +388,23 @@ class TableInputContent(DataContent):
                 self.node.grNode.width  = data['width']
                 values = data['values']
                 for val in values:
-                    self.mainWidget.item(val["r"], val["c"]).setText(val["d"])
+                    row = val["r"]
+                    col = val["c"]
+                    vtx = val["d"]
+                    if col >= self.mainWidget.columnCount():
+                        self.mainWidget.insertColumn(col)
+                    if row >= self.mainWidget.rowCount():
+                        self.mainWidget.insertRow(row)
 
+                    if self.mainWidget.item(row, col) is not None:
+                        self.mainWidget.item(row, col).setText(vtx)
+                    else:
+                        item = QTableWidgetItem(vtx)
+                        self.mainWidget.setItem(row, col, item)
+                """
+                for val in values:
+                    self.mainWidget.item(val["r"], val["c"]).setText(val["d"])
+                """
                 self.updateSize()
             except Exception as e: 
                 dumpException(e)

@@ -139,7 +139,8 @@ class MathNode(DataNode):
             self.checkTheInputs()
             self.setDirty(False)
             self.setInvalid(False)
-            self.e = ""
+            self.e      = ""
+            self.label  = self.content.label.text()
 
             if self.getInput(1): valuex = self.getInput(1).value
             else:                valuex = {"x" : [float(self.content.valuex.text())]}
@@ -147,7 +148,8 @@ class MathNode(DataNode):
             if self.getInput(0): valuey = self.getInput(0).value
             else:                valuey = {"y" : [float(self.content.valuey.text())]}
 
-            res = {}
+            self.value = {}
+            res        = {}
             if self.content.operation == "Add"           : res = self.perform(valuex, valuey, self.add)
             if self.content.operation == "Substract"     : res = self.perform(valuex, valuey, self.substract)
             if self.content.operation == "Multiply"      : res = self.perform(valuex, valuey, self.multiply)
@@ -165,13 +167,21 @@ class MathNode(DataNode):
             if self.content.operation == "Randomize"     : res = self.randomize(values)
             if self.content.operation == "Differentiate" : res = self.differentiate(values)
             if self.content.operation == "Integrate"     : res = self.integrate(values)
+            """
             if len(res) > 1:
                 self.getOutput(0).value = res
             else:
-                self.getOutput(0).value = {label : res[list(res.keys())[0]]}
-            """
+                if self.getInput(1) and not self.getInput(0): 
+                    self.value = self.getInput(1).value.copy()
+                if not self.getInput(1) and self.getInput(0): 
+                    self.value = self.getInput(0).value.copy()
+                if self.getInput(1) and self.getInput(0): 
+                    self.value = self.getInput(0).value.copy()
+                    self.value.extend(self.getInput(0).value.copy())
+                self.value[self.label]  = res[list(res.keys())[0]]
+                self.getOutput(0).value = self.value
             
-            self.getOutput(0).value = res
+            #self.getOutput(0).value = res
             self.getOutput(0).type  = "df"
             return True
         except Exception as e:
