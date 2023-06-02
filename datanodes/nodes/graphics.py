@@ -1732,3 +1732,321 @@ class ContourNode(ResizableInputNode):
             return False
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+class HistogramProperties(PlotProperties):
+    def __init__(self, node, parent=None):
+        super().__init__(node)
+        self.names     = {}
+        self.maincolor = {}
+        self.alphas    = {}
+        self.bins      = QLineEdit("20", self)
+        self.c = 0
+
+        self.labels    = {}
+        self.colors    = {}
+
+    def appendDataWidgets(self):
+        self.bins  = QLineEdit(20, self)
+        self.bins_label = QLabel("bins ", self)
+        self.bins_label.setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+        self.layout.addWidget(self.bins_label, self.pos, 0)
+        self.layout.addWidget(self.bins, self.pos, 1)
+        self.pos += 1
+
+        for name in self.names : 
+            self.appendDataWidget(name)
+            
+    def appendDataWidget(self, name):
+        if name in self.names : return
+        self.names[name]      = name
+        self.maincolor[name]  = COLORS[np.random.randint(0, len(COLORS))]
+
+        self.labels[name] = QLabel(name + " ", self)
+        self.labels[name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+
+        self.labels[name].setStyleSheet("margin-top: 15px;")
+
+        self.layout.addWidget(self.labels[name], self.pos, 0)
+        self.pos += 1
+
+
+        self.alphas[name]  = QLineEdit("0.5", self)
+        self.alphas[name].setAlignment(Qt.AlignLeft | Qt.AlignVCenter)
+
+        self.colors[name] = ColorPicker(self.node, name, color=self.maincolor[name])
+
+        self.layout.addWidget(self.alphas[name], self.pos, 0)
+        self.layout.addWidget(self.colors[name], self.pos, 1)
+        self.pos += 1
+        
+        
+    def removeWidget(self, name):
+        if name in self.labels:
+            self.layout.removeWidget(self.labels[name])
+            self.layout.removeWidget(self.sizes[name])
+            self.layout.removeWidget(self.colors[name])
+
+            self.labels[name].setParent(None)
+            self.colors[name].setParent(None)
+            
+            del self.labels[name]
+            del self.colors[name]
+
+            del self.names[name]
+            del self.maincolor[name]
+            del self.alphas[name]
+
+            self.pos -= 1
+
+    def setupWidget(self, name):
+        index = self.colors[name].findText(self.linestyle[name], Qt.MatchFixedString)
+
+        self.alphas[name].setText(str(self.alphas[name]))
+
+        self.colors[name].setStyleSheet("background-color:" + self.maincolor[name] + " ;")
+
+
+    def serialize(self):
+        res = super().serialize()
+        res["colors"] = {}
+        res["alphas"] = {}
+        res["bins"] = self.bins.text()
+        for name in self.names:
+            if name not in self.maincolor : self.maincolor[name] = COLORS[np.random.randint(0, 10)]
+            if name not in self.alphas    : self.alphas[name]   = 0.5
+            res["names"] = self.names
+            res["colors"][name] = self.maincolor[name]
+            res["alphas"][name] = self.alphas[name]
+        return res
+
+    def deserialize(self, data, hashmap=[]):
+        res = super().deserialize(data, hashmap)
+        try:
+            try:
+                if 'bins' in data : self.bins = data['bins']
+                for name in data["names"]:
+                    self.appendDataWidget(name)
+                    if 'colors' in data: 
+                        if name in data["colors"] : self.maincolor[name] = data['colors'][name]
+                    if 'alpha' in data: 
+                        if name in data["alpha"] : self.alpha[name]      = data['alpha'][name]
+                    self.setupWidget(name)
+                return True                
+            except Exception as e: 
+                dumpException(e)
+            return True & res
+        except Exception as e : dumpException(e)
+        return res
+
+
+
+@register_node(OP_MODE_PLOT_HISTOGRAM)
+class HistogramOutputNode(ResizableInputNode):
+    icon = "icons/valoutput.png"
+    op_code = OP_MODE_PLOT_HISTOGRAM
+    op_title = "Histogram"
+
+    def __init__(self, scene, inputs=[1], outputs=[]):
+        super().__init__(scene, inputs, outputs)
+        self.insockets    = []
+        self.all_names = []
+        self.c = 0
+        self.input_socket_position  = LEFT_TOP
+        self.convex  = ConvexHull2D()
+
+    def onInputChange(self, new_edge=None):
+        self.content.changed.emit()
+
+    def resize(self):
+        pass
+
+    def initInnerClasses(self):
+        self.content    = GraphicsOutputContent(self)
+        self.grNode     = GraphicsOutputGraphicsNode(self)
+        self.properties = HistogramProperties(self)
+        self.content.changed.connect(self.recalculateNode)
+
+
+    def prepareSettings(self):
+        return True
+
+    def prepareCanvas(self):
+        self.all_names = []
+        if not self.hasValue(0) : return
+
+        value = self.getInput(0).value
+
+        x_name = list(value.keys())[0]
+        self.x_val  = value[x_name]
+
+        if self.properties.xtitle == "":
+            self.content.axes.set_xlabel(x_name)
+        else:
+            self.content.axes.set_xlabel(self.properties.xtitle)
+
+        if self.properties.grid_main:
+            self.content.axes.grid(visible=True, which="major")
+        else:
+            self.content.axes.grid(visible=False, which="major")
+
+        if self.properties.grid_minor:
+            self.content.axes.grid(visible=True, which="minor")
+        else:
+            self.content.axes.grid(visible=False, which="minor")
+
+        self.content.axes.set_ylabel(self.properties.ytitle)
+        self.content.axes.xaxis.label.set_size( self.properties.labelsize )
+        self.content.axes.yaxis.label.set_size( self.properties.labelsize )
+
+        self.content.axes.tick_params(labelsize= self.properties.ticksize)
+        self.content.axes.tick_params(labelsize= self.properties.ticksize)
+
+        self.content.axes.set_xlim(self.properties.x_limit_min, self.properties.x_limit_max)
+        self.content.axes.set_ylim(self.properties.y_limit_min, self.properties.y_limit_max)
+
+
+    def addData(self, value):
+        # if no input then return
+        if not value : return 
+
+        # update the input
+        for name in value:
+            # name is not in the properties 
+            if name not in self.content.items : continue
+            if name not in self.all_names : self.all_names.extend([name])
+
+            # update the styles
+            dat = np.histogram(value[name], int(self.properties.bins.text()))
+            y   = np.repeat(dat[0], 2)
+            x   = np.repeat(dat[1], 2)[1:-1]
+            self.updateData(name, x, y)
+            self.updateStyle(name)
+        
+        # add what is missing
+        for name in value:
+            # name is in the properties and has been already updated
+            if name in self.content.items : continue
+            if name not in self.all_names : self.all_names.extend([name])
+
+            self.properties.appendDataWidget(name)
+            dat = np.histogram(value[name], int(self.properties.bins.text()))
+            y   = np.repeat(dat[0], 2)
+            x   = np.repeat(dat[1], 2)[1:-1]
+            self.content.items[name], = self.content.axes.plot(x, y, label=name, 
+                                    color=self.properties.maincolor[name])#, bins=int(self.properties.bins.text()))
+                                    #alpha=float(self.properties.alphas[name].text())
+
+        # remove what is not in the values
+        for name in list(self.content.items.keys()):
+            # name is in the plot input and does not have to be removed
+            if name in self.all_names : continue
+            
+            self.content.axes.hist.remove(self.content.items[name])
+
+            del self.content.items[name]
+            self.properties.removeWidget(name)
+            self.content.canvas.draw()
+
+            
+    def updateData(self, name, x, y):
+        self.content.items[name].set_xdata(x)
+        self.content.items[name].set_ydata(y)
+
+    def updateStyle(self, name):
+        if name not in self.content.items : return
+
+        self.content.items[name].set(label=name)
+        self.content.items[name].set(color=self.properties.maincolor[name],
+                                    alpha=float(self.properties.alphas[name].text()))
+        self.content.canvas.draw()
+
+    def getDataLimits(self):
+        xmin  = 1.0e20
+        xmax  =-1.0e20
+        ymin  = 1.0e20
+        ymax  =-1.0e20
+        sxmin = 0.0
+        sxmax = 0.0
+        symin = 0.0
+        symax = 0.0
+        
+        for input in self.insockets:
+            if not input.value : return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
+
+            for name in input.value:
+                dat = np.histogram(input.value[name], int(self.properties.bins.text()))
+                y   = np.repeat(dat[0], 2)
+                x   = np.repeat(dat[1], 2)[1:-1]
+
+                if np.any(x):
+                    if min(x) < xmin : 
+                        xmin  = min(x)
+                        sxmin = 1.0
+                    if max(x) > xmax : 
+                        xmax  = max(x)
+                        sxmax = 1.0
+
+                    if not np.any(y): continue
+                
+                    if min(y) < ymin : 
+                        ymin  = min(y)
+                        symin = 1.0
+                    
+                    if max(y) > ymax : 
+                        ymax  = max(y)
+                        symax = 1.0
+        
+        return 0.0 * (1.0 - sxmin) + sxmin * xmin, 1.0 * (1.0 - sxmax) + sxmax * xmax, 0.0 * (1.0 - symin) + symin * ymin, 1.0 * (1.0 - symax) + symax * ymax
+
+
+        
+    def drawPlot(self):
+        #self.content.axes.clear()
+        self.prepareCanvas()
+        for input in self.insockets:
+            self.addData(input.value)
+        self.content.axes.legend(loc = 1, fontsize=self.properties.legendsize)
+        self.content.canvas.draw()
+
+
+    def evalImplementation(self, silent=False):
+        self.insockets = self.getInputs()
+        if not self.insockets:
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
+        else:
+            self.sortSockets()
+            if len(self.insockets) > 0:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = {}
+
+                self.drawPlot()
+
+                return True
+            else:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = "Not enough input data"
+                self.getOutput(0).value = 0
+                self.getOutput(0).type = "float"
+                return False
+
+

@@ -48,12 +48,13 @@ class MathContent(DataContent):
         self.cb.addItem("Absolute")
         self.cb.addItem("Normalize")
         self.cb.insertSeparator(10)
-        self.cb.addItem("Randomize")
-        self.cb.insertSeparator(12)
+        self.cb.addItem("Rand.uniform")
+        self.cb.addItem("Rand.normal")
+        self.cb.insertSeparator(13)
         self.cb.addItem("Differentiate")
         self.cb.addItem("Integrate")
 
-        self.cb.insertSeparator(10)
+        self.cb.insertSeparator(16)
         self.cb.addItem("log")
         self.cb.addItem("log10")
         self.cb.addItem("exp")
@@ -159,12 +160,13 @@ class MathNode(DataNode):
             if self.content.operation == "log"           : res = self.perform(valuex, valuey, self.log)
             if self.content.operation == "log10"         : res = self.perform(valuex, valuey, self.log10)
             if self.content.operation == "exp"           : res = self.perform(valuex, valuey, self.exp)
+            if self.content.operation == "Rand.uniform"  : res = self.perform(valuex, valuey, self.randomize_unif)
+            if self.content.operation == "Rand.normal"   : res = self.perform(valuex, valuey, self.randomize_norm)
 
             """
             if self.content.operation == "Sum"           : res = self.sum(values)
             if self.content.operation == "Absolute"      : res = self.absolute(values)
             if self.content.operation == "Normalize"     : res = self.normilize(values)
-            if self.content.operation == "Randomize"     : res = self.randomize(values)
             if self.content.operation == "Differentiate" : res = self.differentiate(values)
             if self.content.operation == "Integrate"     : res = self.integrate(values)
             """
@@ -277,8 +279,11 @@ class MathNode(DataNode):
     def exp(self, x, y):
         return np.exp(x)
 
+    def randomize_unif(self, x, y):
+        return x + np.random.rand() * y
 
-
+    def randomize_norm(self, x, y):
+        return np.random.normal(loc = x) * y
 
     def distance(self, x, y):
         return abs(x - y)
@@ -294,14 +299,6 @@ class MathNode(DataNode):
             res[j] = self.drop_nan(input_values[1][j]) / np.sum(self.drop_nan(input_values[1][j]))
         return res
 
-    def randomize(self, input_values):
-        res = {}
-        for i, j in zip(input_values[0], input_values[1]):
-            rands  = np.random.rand(len(self.drop_nan(input_values[0][i])))
-            corrs  = self.drop_nan(input_values[1][j])
-
-            res[i] = self.drop_nan(input_values[0][i]) * (1.0 + corrs * ( rands * 2.0 - 1.0))
-        return res
 
     def cutUp(self, input_values):
         pass
