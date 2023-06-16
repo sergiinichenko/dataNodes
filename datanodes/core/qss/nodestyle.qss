@@ -1,2 +1,7 @@
 QTextEdit { color : red; background : transparent}
 QGraphicsView { selection-background-color: rgb(55,55,55)}
+QLabel{font-size: 10pt}
+QTextEdit{font-size: 10pt}
+QComboBox{font-size: 10pt}
+QPushButton{font-size: 10pt}
+QLineEdit{font-size: 10pt}

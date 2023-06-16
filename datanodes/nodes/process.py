@@ -906,7 +906,7 @@ class SelectNode(ResizableInputNode):
         self.input_socket_position  = LEFT_TOP
         self.output_socket_position = RIGHT_TOP
         self.socket_top_margin      = 44
-        self.socket_spacing         = 25
+        self.socket_spacing         = 28
 
     def initInnerClasses(self):
         self.content    = SelectContent(self)
