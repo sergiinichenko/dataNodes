@@ -235,7 +235,8 @@ class TextOutputNode(DataNode):
             if DEBUG : print("OUTNODE_TXT: get the value and type and clear the content")
             if isinstance(self.value, dict):
                 if DEBUG : print("OUTNODE_TXT: DF input datatype")
-                self.content.textOut.insertPlainText(str(self.value))
+                for key in self.value:
+                    self.content.textOut.insertPlainText(key + " = " + str(self.value[key]) + "\n")
                 if DEBUG : print("OUTNODE_TXT: DF content was set")
             elif isinstance(self.value, pd.DataFrame):
                 if DEBUG : print("OUTNODE_TXT: DF input datatype")
