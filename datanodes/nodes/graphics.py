@@ -796,12 +796,15 @@ class GraphicsOutputNode(ResizableInputNode):
             
             
     def drawPlot(self):
-        #self.content.axes.clear()
-        self.prepareCanvas()
-        for input in self.insockets:
-            self.addData(input.value)
-        self.content.axes.legend(loc = 1, fontsize=self.properties.legendsize)
-        self.content.canvas.draw()
+        try:
+            #self.content.axes.clear()
+            self.prepareCanvas()
+            for input in self.insockets:
+                self.addData(input.value)
+            self.content.axes.legend(loc = 1, fontsize=self.properties.legendsize)
+            self.content.canvas.draw()
+        except Exception as e:
+            print(e)
 
 
     def evalImplementation(self, silent=False):

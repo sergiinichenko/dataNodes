@@ -561,6 +561,7 @@ class CodeNode(ResizableInputNode):
             return False
         else:
             try:
+                os.chdir(self.scene.path)
                 expression = self.content.edit.toPlainText()
                 localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 'log10':np.log10,   
                              'cos' : np.cos, 'sin': np.sin, 'abs':np.abs, 'sqrt':np.sqrt,
