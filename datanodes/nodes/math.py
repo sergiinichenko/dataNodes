@@ -4,6 +4,7 @@ from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from PyQt5.QtWidgets import QPlainTextEdit, QLineEdit, QLabel, QComboBox, QHBoxLayout
 import numpy as np
+import sys
 import re
 #from math import *
 import copy
@@ -562,6 +563,9 @@ class CodeNode(ResizableInputNode):
         else:
             try:
                 os.chdir(self.scene.path)
+                if self.scene.path not in sys.path:
+                    sys.path.insert(0, self.scene.path)
+
                 expression = self.content.edit.toPlainText()
                 localVars = {'exp' : np.exp, 'pow': np.power, 'log':np.log, 'log10':np.log10,   
                              'cos' : np.cos, 'sin': np.sin, 'abs':np.abs, 'sqrt':np.sqrt,
