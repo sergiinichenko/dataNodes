@@ -265,7 +265,7 @@ class NodeWindow(QMainWindow):
             self.getCurrentNodeEditorWidget().scene.clipboard.deserializeFromClipboard(raw_data, setSelected)
             # send the update signal to input nodes
             if self.getCurrentNodeEditorWidget() is not None:
-                self.getCurrentNodeEditorWidget().scene.updateInputNodes()
+                self.getCurrentNodeEditorWidget().scene.updateNewNodes()
 
 
     def onEditDublicate(self):

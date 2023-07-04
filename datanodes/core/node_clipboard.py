@@ -72,9 +72,7 @@ class SceneClipboard():
         return data
 
     def deserializeFromClipboard(self, raw_data, setSelected=False):
-
         try:
-
             data = json.loads(raw_data)
             hashmap = {}
 
@@ -106,7 +104,7 @@ class SceneClipboard():
             # calculate the offset of the newly created nodes
             offset_x = mouse_pos.x() - x
             offset_y = mouse_pos.y() - y
-
+            self.scene.new_nodes    = []
             # Create each node
             if 'nodes' in data:
                 for node_data in data['nodes']:
@@ -118,6 +116,7 @@ class SceneClipboard():
                     newx, newy = mousex + posx - minx, mousey + posy - miny
                     new_node.setPos(newx, newy)
                     new_node.grNode.setSelected(setSelected)
+                    self.scene.new_nodes.append(new_node)
 
             # Create each edge
             if 'edges' in data:
@@ -134,10 +133,11 @@ class SceneClipboard():
                             item.onPaste(data_data)
 
             # only the input nodes will receive the eval signal
-            #for node in self.scene.nodes:
-            #    if node.id in hashmap:
-            #        if not node.hasValue():
-            #            node.update(silent=True)
+            #if nodes is not None:
+            #    for node in nodes:
+            #        if node.id in hashmap:
+            #            if not node.hasValue():
+            #                node.update(silent=True)
                             
         except ValueError as e:
 

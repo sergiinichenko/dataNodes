@@ -18,6 +18,7 @@ class Scene(Serializer):
         super().__init__()
         self.id    = 0
         self.nodes = []
+        self.new_nodes = []
         self.edges = []
         self.window = window
 
@@ -234,6 +235,11 @@ class Scene(Serializer):
             ("edges"        , edges),
         ])
 
+    def updateNewNodes(self):
+        # only the input nodes will receive the eval signal
+        for node in self.new_nodes:
+            if not node.hasValue():
+                node.update(silent=True)
 
     def updateInputNodes(self):
         # only the input nodes will receive the eval signal
