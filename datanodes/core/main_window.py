@@ -227,7 +227,8 @@ class MainWindow(NodeWindow):
 
 
     def onFileOpen(self):
-        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open Node trees form file(s)')
+        fileFormats = "*.json *.dns"
+        fnames, filter = QFileDialog.getOpenFileNames(self, 'Open Node trees form file(s)', filter=fileFormats)
 
         try:
             for fname in fnames:

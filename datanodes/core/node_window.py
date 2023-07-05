@@ -204,7 +204,8 @@ class NodeWindow(QMainWindow):
         current_editor = self.getCurrentNodeEditorWidget()
         if current_editor is None : return
 
-        file, filter = QFileDialog.getSaveFileName(self, 'Save Node-Tree to File')
+        fileFormats = "*.dns"
+        file, filter = QFileDialog.getSaveFileName(self, 'Save Node-Tree to File', filter=fileFormats)
         if file == '' : return False
 
         current_editor.fileSave(file)
