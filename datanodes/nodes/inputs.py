@@ -3,10 +3,10 @@ from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.core.node_settings import *
 from datanodes.nodes.datanode import *
-from PyQt5.QtWidgets import QLineEdit, QApplication
+from PyQt5.QtCore import QEvent, QObject
+from PyQt5.QtWidgets import QLineEdit, QAction, QMenu
 from PyQt5.QtCore import QTimer
-from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPlainTextEdit, QSizePolicy
-import json
+from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QApplication
 
 class ValueInputGraphicsNode(DataGraphicsNode):
     def initSizes(self):
@@ -261,6 +261,7 @@ class TableInputContent(DataContent):
         self.mainWidget = QTableWidget(self)
         self.mainWidget.setRowCount(10)
         self.mainWidget.setColumnCount(3)
+        self.mainWidget.installEventFilter(self)
         self.layout.addWidget(self.mainWidget)
 
         for row in range(10):
@@ -271,6 +272,106 @@ class TableInputContent(DataContent):
         self.mainWidget.keyPressEvent     = self.tableOnKeyPressEvent
         self.mainWidget.mouseReleaseEvent = self.onMouseReleaseEvent
     
+    
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        if event.type() == QEvent.ContextMenu and source is self.mainWidget:
+            menu = QMenu()
+            pasteData = QAction(self)
+            pasteData.setText("Paste data")
+            pasteDataAct = menu.addAction(pasteData)
+
+            copySelected = QAction(self)
+            copySelected.setText("Copy selected")
+            copySelectedAct = menu.addAction(copySelected)
+
+            copyAll = QAction(self)
+            copyAll.setText("Copy all")
+            copyAllAct = menu.addAction(copyAll)
+
+            clearTable = QAction(self)
+            clearTable.setText("Clear table")
+            clearTableAct = menu.addAction(clearTable)
+
+            action    = menu.exec_(self.mapToGlobal(event.pos()))
+            if action == pasteData    : self.pasteDataFromClipboard()
+            if action == copySelected : self.copyDataToClipboard(all = False)
+            if action == copyAll      : self.copyDataToClipboard(all = True)
+            if action == clearTable   : self.clearTable()
+
+            #if menu.exec_(event.globalPos()):
+            #    item = source.itemAt(event.pos())
+            #    print(item.text())
+            return True
+        return super().eventFilter(source, event)
+        
+    def clearTable(self):
+        while self.mainWidget.rowCount() > 0:
+            self.mainWidget.removeRow(0)
+        
+        self.mainWidget.setRowCount(10)
+        self.mainWidget.setColumnCount(3)
+        for row in range(10):
+            for col in range(3):
+                item = QTableWidgetItem("")
+                self.mainWidget.setItem(row, col, item)
+        self.node.recalculateNode()        
+
+    
+    def copyDataToClipboard(self, all=False):
+        if all:
+            data = ""
+            for row in range(self.mainWidget.rowCount()):
+                for col in range(self.mainWidget.columnCount()):
+                    if self.mainWidget.item(row, col) is not None:
+                        data  = data + self.mainWidget.item(row, col).text() + ("\t" if col < (self.mainWidget.columnCount()-1) else "")
+                    else : 
+                        data  = data + ","
+                data = data + "\n"
+        else:
+            if len(self.mainWidget.selectedIndexes()) == 0 : return False
+            data  = ""
+            cr    = self.mainWidget.selectedIndexes()[0].row()
+            first = True
+            for item in self.mainWidget.selectedIndexes():
+                if not first:                
+                    if cr == item.row(): 
+                        data = data + "\t"
+                    else:
+                        data = data + "\n"
+                        cr   = item.row()
+                data = data + self.mainWidget.item(item.row(), item.column()).text()
+                first = False
+
+        QApplication.instance().clipboard().setText(data)
+        return         
+        
+        
+    def pasteDataFromClipboard(self):
+        try:
+            data = QApplication.instance().clipboard().text()
+            current = self.mainWidget.currentIndex()
+            row     = current.row()
+            for line in iter(data.splitlines()):
+                col = current.column()
+                if row >= self.mainWidget.rowCount():
+                    self.mainWidget.insertRow(row)
+
+                for val in iter(line.split("\t")):
+                    if self.mainWidget.item(row, col) is not None:
+                        self.mainWidget.item(row, col).setText(val)
+                    else:
+                        item = QTableWidgetItem(val)
+                        self.mainWidget.setItem(row, col, item)
+                    col+=1
+                row+=1
+            self.node.recalculateNode()        
+        
+        except Exception as e: 
+            dumpException (e)
+            self.node.e = e
+            self.node.setInvalid()
+       
+                            
     def tableOnKeyPressEvent(self, event):
         current = self.mainWidget.currentIndex()
 

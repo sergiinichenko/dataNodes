@@ -230,7 +230,7 @@ class Scene(Serializer):
             ('scene_height' , self.scene_height),
             ('view_x'       , center.x()),
             ('view_y'       , center.y()),
-            ('view_scale'   , self.getView().zoom),
+            ('view_scale'   , self.getView().zoom if self.getView().zoom > 0.0 else 1.0),
             ('nodes'        , nodes),
             ("edges"        , edges),
         ])

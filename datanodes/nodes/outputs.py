@@ -1,7 +1,10 @@
+from PyQt5.QtCore import QEvent, QObject
 from datanodes.core.utils import dumpException
 from datanodes.core.main_conf import *
 from datanodes.nodes.datanode import *
 from PyQt5.QtWidgets import QTableWidget, QTableWidgetItem, QPlainTextEdit, QSizePolicy
+from PyQt5.QtWidgets import QAction, QMenu, QGraphicsProxyWidget
+from PyQt5.QtWidgets import QApplication
 
 class TableOutputGraphicsNode(ResizebleDataNode):
     def initSizes(self):
@@ -19,30 +22,65 @@ class TableOutputContent(DataContent):
         self.table = QTableWidget(self)
         self.table.setRowCount(3)
         self.table.setColumnCount(3)
+        self.table.installEventFilter(self)
         self.layout.addWidget(self.table)
         
         self.table.mouseReleaseEvent = self.onMouseReleaseEvent
 
+    def eventFilter(self, source: QObject, event: QEvent) -> bool:
+        if event.type() == QEvent.ContextMenu and source is self.table:
+            menu = QMenu()
+            copySelected = QAction(self)
+            copySelected.setText("Copy selected")
+            copyDataAct = menu.addAction(copySelected)
+
+            copyAll = QAction(self)
+            copyAll.setText("Copy all")
+            copyAllAct = menu.addAction(copyAll)
+
+            action    = menu.exec_(self.mapToGlobal(event.pos()))
+            if action == copySelected : self.copyDataToClipboard(all = False)
+            if action == copyAll      : self.copyDataToClipboard(all = True)
+
+            #if menu.exec_(event.globalPos()):
+            #    item = source.itemAt(event.pos())
+            #    print(item.text())
+            return True
+        return super().eventFilter(source, event)
+    
+    def copyDataToClipboard(self, all=False):
+        if all:
+            data = ""
+            for row in range(self.table.rowCount()):
+                for col in range(self.table.columnCount()):
+                    if self.table.item(row, col) is not None:
+                        data  = data + self.table.item(row, col).text() + ("\t" if col < (self.table.columnCount()-1) else "")
+                    else : 
+                        data  = data + ","
+                data = data + "\n"
+        else:
+            if len(self.table.selectedIndexes()) == 0 : return False
+            data  = ""
+            cr    = self.table.selectedIndexes()[0].row()
+            first = True
+            for item in self.table.selectedIndexes():
+                if not first:                
+                    if cr == item.row(): 
+                        data = data + "\t"
+                    else:
+                        data = data + "\n"
+                        cr   = item.row()
+                data = data + self.table.item(item.row(), item.column()).text()
+                first = False
+
+        QApplication.instance().clipboard().setText(data)
+            
+        return 
+    
     def onMouseReleaseEvent(self, event):
         QTableWidget.mouseReleaseEvent(self.table, event) 
         self.node.scene._selected_contents = self
         self.node.scene.grScene.itemSelected.emit()            
-            
-    def onCopy(self):
-        if len(self.table.selectedIndexes()) == 0 : return False
-        data  = ""
-        cr    = self.table.selectedIndexes()[0].row()
-        first = True
-        for item in self.table.selectedIndexes():
-            if not first:                
-                if cr == item.row(): 
-                    data = data + "\t"
-                else:
-                    data = data + "\n"
-                    cr   = item.row()
-            data = data + self.table.item(item.row(), item.column()).text()
-            first = False
-        return data
 
 
     def serialize(self):
@@ -100,6 +138,8 @@ class TableOutputNode(DataNode):
         self.content.table.clear()
         self.content.table.setRowCount(0)
         self.content.table.setColumnCount(0)
+        
+        if self.value is None : return
 
         nofrows = 1
         for key in self.value:

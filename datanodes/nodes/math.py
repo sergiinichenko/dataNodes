@@ -52,13 +52,13 @@ class MathContent(DataContent):
         self.cb.addItem("Rand.uniform")
         self.cb.addItem("Rand.normal")
         self.cb.insertSeparator(13)
-        self.cb.addItem("Differentiate")
-        self.cb.addItem("Integrate")
-
-        self.cb.insertSeparator(16)
         self.cb.addItem("log")
         self.cb.addItem("log10")
         self.cb.addItem("exp")
+
+        #self.cb.insertSeparator(17)
+        #self.cb.addItem("Differentiate")
+        #self.cb.addItem("Integrate")
 
         self.cb.setStyleSheet("margin-bottom: 10px;")
         self.layout.addWidget(self.cb, 1, 0, 1, 2)
@@ -163,6 +163,20 @@ class MathNode(DataNode):
             if self.content.operation == "exp"           : res = self.perform(valuex, valuey, self.exp)
             if self.content.operation == "Rand.uniform"  : res = self.perform(valuex, valuey, self.randomize_unif)
             if self.content.operation == "Rand.normal"   : res = self.perform(valuex, valuey, self.randomize_norm)
+            if self.content.operation == "Sum"        : 
+                for name in valuex : res[name] = valuex[name]
+                for name in valuey : res[name] = valuey[name]
+                for key in res.keys() : res[key] = sum(res[key])
+
+            if self.content.operation == "Absolute"   : 
+                for name in valuex : res[name] = valuex[name]
+                for name in valuey : res[name] = valuey[name]
+                for key in res.keys() : res[key] = [abs(ele) for ele in res[key]]
+
+            if self.content.operation == "Normalize"   : 
+                for name in valuex : res[name] = valuex[name]
+                for name in valuey : res[name] = valuey[name]
+                for key in res.keys() : res[key] = [v/sum(res[key]) for v in res[key]]
 
             """
             if self.content.operation == "Sum"           : res = self.sum(values)
@@ -174,13 +188,6 @@ class MathNode(DataNode):
             if len(res) > 1:
                 self.getOutput(0).value = res
             else:
-                if self.getInput(1) and not self.getInput(0): 
-                    self.value = self.getInput(1).value.copy()
-                if not self.getInput(1) and self.getInput(0): 
-                    self.value = self.getInput(0).value.copy()
-                if self.getInput(1) and self.getInput(0): 
-                    self.value = self.getInput(0).value.copy()
-                    self.value.extend(self.getInput(0).value.copy())
                 self.value[self.label]  = res[list(res.keys())[0]]
                 self.getOutput(0).value = self.value
             
@@ -284,7 +291,7 @@ class MathNode(DataNode):
         return x + np.random.rand() * y
 
     def randomize_norm(self, x, y):
-        return np.random.normal(loc = x) * y
+        return np.random.normal(loc = x, scale = y)
 
     def distance(self, x, y):
         return abs(x - y)
