@@ -355,6 +355,8 @@ class TableInputContent(DataContent):
                 col = current.column()
                 if row >= self.mainWidget.rowCount():
                     self.mainWidget.insertRow(row)
+                if col >= self.mainWidget.columnCount():
+                    self.mainWidget.insertColumn(col)
 
                 for val in iter(line.split("\t")):
                     if self.mainWidget.item(row, col) is not None:
