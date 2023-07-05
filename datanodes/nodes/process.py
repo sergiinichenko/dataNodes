@@ -774,92 +774,83 @@ class SelectContent(ResizableContent):
         self.select_map    = {}
         self.checkbox_map  = {}
         self.labels_map    = {}
+        self.state_init    = {}
+        self.state_curr    = {}
         self.position      = 0
 
     def getSize(self, dic):
-        size = 0
-        for name in dic:
-            size += len(dic[name])
-        return size
+        return len(dic)
 
     def if_contains(self, name):
-        for id in self.select_map:
-            if name in self.select_map[id]:
-                return True
+        if name in self.name_counter:
+            return True
         return False
         
 
-    def appendPair(self, id, name, value=False):
+    def appendPair(self, name, value=False):
         i = self.getSize(self.labels_map)
-        
-        if str(id) not in self.labels_map   : self.labels_map[str(id)]   = {}
-        if str(id) not in self.checkbox_map : self.checkbox_map[str(id)] = {}
-        if str(id) not in self.select_map   : self.select_map[str(id)]   = {}
 
-        self.labels_map[str(id)][name]   = QLabel(name, self)
-        self.labels_map[str(id)][name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.labels_map[str(id)][name].setStyleSheet("margin-right: 10px;")
-        self.mainlayout.addWidget(self.labels_map[str(id)][name], i, 0, 1, 4)
+        self.labels_map[name]   = QLabel(name, self)
+        self.labels_map[name].setAlignment(Qt.AlignRight | Qt.AlignVCenter)
+        self.labels_map[name].setStyleSheet("margin-right: 10px;")
+        self.mainlayout.addWidget(self.labels_map[name], i, 0, 1, 4)
 
-        self.checkbox_map[str(id)][name] = QCheckBox("")
-        self.checkbox_map[str(id)][name].setChecked(value)
-        self.mainlayout.addWidget(self.checkbox_map[str(id)][name], i, 5, 1, 1)
+        self.checkbox_map[name] = QCheckBox("")
+        self.checkbox_map[name].setChecked(value)
+        self.mainlayout.addWidget(self.checkbox_map[name], i, 5, 1, 1)
 
-        self.checkbox_map[str(id)][name].stateChanged.connect(self.updateMaps)
-        self.select_map[str(id)][name] = value
-
+        self.checkbox_map[name].stateChanged.connect(self.updateMaps)
+        self.select_map[name] = value
 
     def updateMaps(self):
-        for id in self.select_map:
-            for name in self.select_map[id]:
-                self.select_map[id][name] = self.checkbox_map[id][name].isChecked()
+        for name in self.select_map:
+            self.select_map[name] = self.checkbox_map[name].isChecked()
         self.node.recalculateNode()
 
-    def removePair(self, id, name):
-        if id == None : return
-        if str(id) in self.select_map:
-            self.mainlayout.removeWidget(self.labels_map[ str(id)][name])
-            self.mainlayout.removeWidget(self.checkbox_map[str(id)][name])
-            self.labels_map[ str(id)][name].setParent(None)
-            self.checkbox_map[str(id)][name].setParent(None)
-            del self.labels_map[ str(id)][name]
-            del self.checkbox_map[str(id)][name]
-            del self.select_map[str(id)][name]
+    def removePair(self, name):
+        if name == None : return
 
-            if self.labels_map[str(id)]   == {} : del self.labels_map[str(id)]
-            if self.checkbox_map[str(id)] == {} : del self.checkbox_map[str(id)]
-            if self.select_map[str(id)]   == {} : del self.select_map[str(id)]
+        self.mainlayout.removeWidget(self.labels_map[name])
+        self.mainlayout.removeWidget(self.checkbox_map[name])
+        self.labels_map[name].setParent(None)
+        self.checkbox_map[name].setParent(None)
+        del self.labels_map[name]
+        del self.checkbox_map[name]
+        del self.select_map[name]
 
         self.sortWidgets()
 
     def sortWidgets(self):
-        for key in self.labels_map:
-            for i, name in enumerate(self.labels_map[key]):
-                self.labels_map[key][name].setParent(None)
-                self.checkbox_map[key][name].setParent(None)
+        for i, name in enumerate(self.labels_map):
+            self.labels_map[name].setParent(None)
+            self.checkbox_map[name].setParent(None)
 
         i = 0
-        for key in self.labels_map:
-            for name in self.labels_map[key]:
-                self.mainlayout.addWidget(self.labels_map[key][name],   i, 0, 1, 4)
-                self.mainlayout.addWidget(self.checkbox_map[key][name], i, 5, 1, 1)
-                i = i + 1
+        for name in self.labels_map:
+            self.mainlayout.addWidget(self.labels_map[name],   i, 0, 1, 4)
+            self.mainlayout.addWidget(self.checkbox_map[name], i, 5, 1, 1)
+            i = i + 1
         self.node.resize()
 
-
     def clearContent(self):
-        while self.mainlayout.count():
-            child = self.mainlayout.takeAt(0)
-            if child.widget():
-                child.widget().deleteLater()
-        self.labels_map   = {}
-        self.checkbox_map = {}
+        #while self.mainlayout.count():
+        #    child = self.mainlayout.takeAt(0)
+        #    if child.widget() : child.widget().deleteLater()
+        #self.labels_map   = {}
+        #self.checkbox_map = {}
+        self.state_curr = {}
+        self.state_init = {}
+        for name in list(self.select_map):
+            self.removePair(name)
+        #self.node.recalculateNode()
 
     def serialize(self):
         res = super().serialize()
         res['map']            = self.select_map
         res['width']          = self.node.grNode.width
         res['height']         = self.node.grNode.height
+        res['state_init']     = self.state_init
+        res['state_curr']     = self.state_curr
         return res
 
     def deserialize(self, data, hashmap=[]):
@@ -868,15 +859,17 @@ class SelectContent(ResizableContent):
             self.select_map         = data['map']
             self.node.grNode.height = data['height']
             self.node.grNode.width  = data['width']
+            if 'state_init' in data : self.state_init = data['state_init']
+            if 'state_curr' in data : self.state_curr = data['state_curr']
             self.updateSize()
-            for id in self.select_map:
-                for name in self.select_map[id]:
-                    self.appendPair(id, name, self.select_map[id][name])
-                    
+            for name in self.select_map:
+                self.appendPair(name, self.select_map[name])
+            
             return True & res
         except Exception as e: 
             dumpException(e)
         return True & res
+
 
 
 @register_node(OP_MODE_DATA_SELECT)
@@ -893,14 +886,6 @@ class SelectNode(ResizableInputNode):
     def getValueSize(self):
         return len(self.input_names)
 
-    def updateNames(self, dict):
-        for id in self.content.select_map:
-            if dict.old in self.content.select_map[id]:
-                self.content.labels_map[id]   = {dict.new if k == dict.old else k : v for k, v in self.content.labels_map[id].items()}
-                self.content.checkbox_map[id] = {dict.new if k == dict.old else k : v for k, v in self.content.checkbox_map[id].items()}
-                self.content.select_map[id]   = {dict.new if k == dict.old else k : v for k, v in self.content.select_map[id].items()}
-                self.content.labels_map[id][dict.new].setText(dict.new)
-
     def initSettings(self):
         super().initSettings()
         self.input_socket_position  = LEFT_TOP
@@ -916,9 +901,8 @@ class SelectNode(ResizableInputNode):
         self.content.changed.connect(self.recalculateNode)
 
     def removeInnput(self, socket=None):
-        if str(socket.id) in self.content.select_map:
-            for name in list(self.content.select_map[str(socket.id)]):
-                self.content.removePair(socket.id, name)
+        #for name in list(socket.value):
+        #    self.content.removePair(name)
         self.recalculateNode()
 
     def onInputChange(self, new_edge=None):
@@ -941,6 +925,12 @@ class SelectNode(ResizableInputNode):
 
         
     def evalImplementation(self, silent=False):
+        if not self.hasValue():
+            #self.content.clearContent()
+            self.setInvalid()
+            self.e = "Does not have and intry Node"
+            return False
+            
         input_edges = self.getInputs()
         if not input_edges:
             self.setInvalid()
@@ -953,13 +943,14 @@ class SelectNode(ResizableInputNode):
                 self.setInvalid(False)
                 self.e     = ""
                 self.value = {}
-                self.input_names = []
+                self.content.state_curr = {}
                 
                 try:
                     for input in input_edges:
                         if input.value == None : continue
-                        self.input_names.extend(list(input.value))
-                        
+                        for name in list(input.value):
+                            if name in self.content.state_curr : self.content.state_curr[name] += 1
+                            else : self.content.state_curr[name] = 1
 
                     for input in input_edges:
                         if input.value == None : continue
@@ -967,21 +958,24 @@ class SelectNode(ResizableInputNode):
                         # Append pair if not there yet                        
                         for name in input.value:
                             # if name not in self.content.select_map[str(input.id)]:
-                            if not self.content.if_contains(name):
-                                self.content.appendPair(input.id, name)
+                            if name not in self.content.state_init:
+                                self.content.appendPair(name)
                                 self.value[name] = input.value[name]
-
+                                self.content.state_init[name] = self.content.state_curr[name]
+                            
+                    for input in input_edges:
+                        if input.value == None : continue
                         # Remove the pair if it is not in the input or renamed
-                        if str(input.id) in self.content.select_map:
-                            for name in list(self.content.select_map[str(input.id)]):
-                                # if name not in self.content.select_map[str(input.id)]:
-                                if name not in self.input_names:
-                                    self.content.removePair(input.id, name)
+                        for name in list(self.content.state_init):
+                            if name not in self.content.state_curr:
+                                self.content.removePair(name)
+                                del self.content.state_init[name]
                         
+                    for input in input_edges:
+                        if input.value == None : continue
                         for name in input.value:
-                            if str(input.id) in self.content.select_map:
-                                if self.content.select_map[str(input.id)][name]:
-                                    self.value[name] = input.value[name]
+                            if self.content.select_map[name]:
+                                self.value[name] = input.value[name]
 
                         self.resize()
 

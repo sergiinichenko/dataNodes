@@ -210,7 +210,6 @@ class Edge(Serializer):
         :type silent: ``bool``
         """
         old_sockets = [self.start_socket, self.end_socket]
-
         # ugly hack, since I noticed that even when you remove grEdge from scene,
         # sometimes it stays there! How dare you Qt!
         if DEBUG: print(" - hide grEdge")

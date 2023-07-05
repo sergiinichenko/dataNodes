@@ -456,7 +456,7 @@ class Node(Serializer):
         self.setDirty()
         self.setDescendentsDirty()
         self.eval(silent)
-        self.evalChildren(silent)
+        #self.evalChildren(silent)
 
     def updateDescendents(self):
         for other_node in self.getChildNodes():

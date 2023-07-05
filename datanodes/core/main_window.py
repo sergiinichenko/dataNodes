@@ -288,7 +288,10 @@ class MainWindow(NodeWindow):
             sys.exit(0)
 
     def getCurrentNodeEditorWidget(self):
-        activeSubWindow = self.mdiArea.activeSubWindow()
+        activeSubWindow = self.mdiArea.currentSubWindow()
         if activeSubWindow:
             return activeSubWindow.widget()
+        else:
+            if self.centralWidget():
+                return self.centralWidget()
         return None
