@@ -45,6 +45,7 @@ class Group(Serializer):
         self._is_dirty   = False
         self._is_invalid = False
         self._is_mute    = False
+        self._is_busy    = False
 
         self.initSockets(inputs, outputs, innames=innames, outnames=outnames)
         self.onCreate()
@@ -158,6 +159,12 @@ class Group(Serializer):
 
     def isInvalid(self):
         return self._is_invalid
+    
+    def isBusy(self):
+        return self._is_busy
+
+    def onSetBusy(self):
+        self.grNode.update()
 
     def setInvalid(self, value=True):
         self._is_invalid = value
@@ -166,7 +173,7 @@ class Group(Serializer):
 
     def onSetInvalid(self):
         self.grNode.update()
-
+        
     def setChildrenInvalid(self, value=True):
         for child in self.getChildNodes():
             child.setInvalid(value)

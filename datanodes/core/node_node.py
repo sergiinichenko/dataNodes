@@ -46,6 +46,7 @@ class Node(Serializer):
         self._is_dirty   = False
         self._is_invalid = False
         self._is_mute    = False
+        self._is_busy    = False
 
         self.initSockets(inputs, outputs, innames=innames, outnames=outnames)
         self.onCreate()
@@ -222,6 +223,10 @@ class Node(Serializer):
     def setDirty(self, value=True):
         self._is_dirty = value
         self.onSetDirty()
+        
+    def setBusy(self, value=True):
+        self._is_busy = value
+        self.onSetBusy()
 
     def setChildrenDirty(self, value=True):
         for child in self.getChildNodes():
@@ -233,6 +238,9 @@ class Node(Serializer):
             other_node.setChildrenDirty(value)
 
     def onSetDirty(self):
+        self.grNode.update()
+        
+    def onSetBusy(self):
         self.grNode.update()
 
     def isInvalid(self):
@@ -257,6 +265,9 @@ class Node(Serializer):
 
     def isMute(self):
         return self._is_mute
+    
+    def isBusy(self):
+        return self._is_busy
     
     def setMute(self, value=True):
         self._is_mute = value

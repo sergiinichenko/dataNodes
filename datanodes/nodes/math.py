@@ -6,6 +6,7 @@ from PyQt5.QtWidgets import QPlainTextEdit, QLineEdit, QLabel, QComboBox, QHBoxL
 import numpy as np
 import sys
 import re
+import threading
 #from math import *
 import copy
 
@@ -547,6 +548,7 @@ class CodeNode(ResizableInputNode):
         self.setDescendentsDirty(False)
         self.getOutput(0).value = 4
         self.getOutput(0).type  = "float"
+        self.event = threading.Event()
         #self.eval()
 
     def initSettings(self):
@@ -560,6 +562,27 @@ class CodeNode(ResizableInputNode):
         #self.content.edit.returnPressed.connect(self.recalculateNode)
         self.content.changed.connect(self.recalculateNode)
 
+    def run(self, code, filtered, locals):
+        exec(code, filtered, locals)
+        self.event.set()
+    
+    def retreiveResults(self, inputs, variables, locals):
+        self.event.wait()
+
+        for input in inputs[:-1]:
+            for name in input.value: 
+                self.value[name] = self.filtered[name]
+
+        for var in variables:
+            self.value[var] = locals[var]
+
+        self.getOutput(0).value = self.value
+        self.getOutput(0).type  = "df"        
+        self.setBusy(False)
+        self.setInvalid(False)
+        self.setDescendentsDirty()
+        self.evalChildren()
+        
     def evalImplementation(self, silent=False):
         inputs = self.getInputs()
         self.value = {}
@@ -596,7 +619,14 @@ class CodeNode(ResizableInputNode):
                             if tmp.isalnum():
                                 variables.append(tmp)
 
-                    exec(code, self.filtered, localVars)
+                    #exec(code, self.filtered, localVars)
+                    self.event.clear()
+                    thread = threading.Thread(name='Calculations', target=self.run, args=(code, self.filtered, localVars), daemon=True)
+                    thread.start()
+                    #thread.join()
+                    threadres = threading.Thread(name='Results', target=self.retreiveResults, args=(inputs, variables, localVars), daemon=True)
+                    threadres.start()
+                    self.setBusy(True)
 
                     for input in inputs[:-1]:
                         for name in input.value: 
@@ -606,7 +636,8 @@ class CodeNode(ResizableInputNode):
                         self.value[var] = localVars[var]
 
                     self.getOutput(0).value = self.value
-                    self.getOutput(0).type  = "df"
+                    self.getOutput(0).type  = "df"        
+                                        
                     return True
 
                 else:

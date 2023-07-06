@@ -52,6 +52,10 @@ class DataGraphicsNode(GraphicsNode):
         if self.node.isMute() : 
             offset = 24.0
             brush  = self._brush_mute
+        
+        if self.node.isBusy() : 
+            offset = 72.0
+            brush  = self._brush_busy
 
         self.paintTitle(painter, brush)
 
