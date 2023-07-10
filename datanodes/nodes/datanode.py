@@ -241,6 +241,8 @@ class DataNode(Node):
         
 
     def eval(self, silent=False):
+        #if self.isBusy() : return True
+        
         if not self.isDirty() and not self.isInvalid() and not self.recalculate:
             #return self.value
             return True

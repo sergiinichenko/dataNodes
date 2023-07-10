@@ -122,14 +122,14 @@ class MathNode(DataNode):
         pass
 
     def checkTheInputs(self):
-        if self.getInput(0) is not None:
+        if self.hasInput(0):
             self.content.valuey.setReadOnly(True)
             self.content.valuey.setStyleSheet("color: rgba(255, 255, 255, 0.2);")
         else:
             self.content.valuey.setReadOnly(False)
             self.content.valuey.setStyleSheet("color: rgba(255, 255, 255, 1.0);")
 
-        if self.getInput(1) is not None:
+        if self.hasInput(1):
             self.content.valuex.setReadOnly(True)
             self.content.valuex.setStyleSheet("color: rgba(255, 255, 255, 0.2);")
         else:
@@ -144,7 +144,9 @@ class MathNode(DataNode):
             self.setInvalid(False)
             self.e      = ""
             self.label  = self.content.label.text()
-
+            if_inpx = self.hasInput(1)
+            if_inpy = self.hasInput(0)
+            
             if self.getInput(1): valuex = self.getInput(1).value
             else:                valuex = {"x" : [float(self.content.valuex.text())]}
 
@@ -153,17 +155,17 @@ class MathNode(DataNode):
 
             self.value = {}
             res        = {}
-            if self.content.operation == "Add"           : res = self.perform(valuex, valuey, self.add)
-            if self.content.operation == "Substract"     : res = self.perform(valuex, valuey, self.substract)
-            if self.content.operation == "Multiply"      : res = self.perform(valuex, valuey, self.multiply)
-            if self.content.operation == "Divide"        : res = self.perform(valuex, valuey, self.devide)
-            if self.content.operation == "Power"         : res = self.perform(valuex, valuey, self.power)
-            if self.content.operation == "Distance"      : res = self.perform(valuex, valuey, self.distance)
-            if self.content.operation == "log"           : res = self.perform(valuex, valuey, self.log)
-            if self.content.operation == "log10"         : res = self.perform(valuex, valuey, self.log10)
-            if self.content.operation == "exp"           : res = self.perform(valuex, valuey, self.exp)
-            if self.content.operation == "Rand.uniform"  : res = self.perform(valuex, valuey, self.randomize_unif)
-            if self.content.operation == "Rand.normal"   : res = self.perform(valuex, valuey, self.randomize_norm)
+            if self.content.operation == "Add"           : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.add)
+            if self.content.operation == "Substract"     : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.substract)
+            if self.content.operation == "Multiply"      : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.multiply)
+            if self.content.operation == "Divide"        : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.devide)
+            if self.content.operation == "Power"         : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.power)
+            if self.content.operation == "Distance"      : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.distance)
+            if self.content.operation == "log"           : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.log)
+            if self.content.operation == "log10"         : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.log10)
+            if self.content.operation == "exp"           : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.exp)
+            if self.content.operation == "Rand.uniform"  : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.randomize_unif)
+            if self.content.operation == "Rand.normal"   : res = self.perform(valuex, valuey, if_inpx, if_inpy, self.randomize_norm)
             if self.content.operation == "Sum"        : 
                 for name in valuex : res[name] = valuex[name]
                 for name in valuey : res[name] = valuey[name]
@@ -224,7 +226,7 @@ class MathNode(DataNode):
         if isinstance(input_value, float) or isinstance(input_value, int):
             return input_value
 
-    def perform(self, valuex, valuey, operation):
+    def perform(self, valuex, valuey, if_inpx, if_inpy, operation):
         res = {}
         
         namex_key   = list(valuex.keys())
@@ -280,13 +282,13 @@ class MathNode(DataNode):
         return x ** y
 
     def log(self, x, y):
-        return np.log(x)
+        return np.log(y)
 
     def log10(self, x, y):
-        return np.log10(x)
+        return np.log10(y)
 
     def exp(self, x, y):
-        return np.exp(x)
+        return np.exp(y)
 
     def randomize_unif(self, x, y):
         return x + np.random.rand() * y
@@ -627,7 +629,7 @@ class CodeNode(ResizableInputNode):
                     threadres = threading.Thread(name='Results', target=self.retreiveResults, args=(inputs, variables, localVars), daemon=True)
                     threadres.start()
                     self.setBusy(True)
-
+                    
                     for input in inputs[:-1]:
                         for name in input.value: 
                             self.value[name] = self.filtered[name]

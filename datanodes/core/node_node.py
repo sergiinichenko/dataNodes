@@ -227,6 +227,8 @@ class Node(Serializer):
     def setBusy(self, value=True):
         self._is_busy = value
         self.onSetBusy()
+        for other_node in self.getChildNodes():
+            other_node.setBusy(value)
 
     def setChildrenDirty(self, value=True):
         for child in self.getChildNodes():
@@ -328,6 +330,21 @@ class Node(Serializer):
         try:
             if self.inputs[index].hasEdges():
                 return self.inputs[index].hasValue()
+            else:
+                return False
+
+        except IndexError:
+            print("EXC: Trying to get input but nothing is attached")
+            return False
+
+        except Exception as e: 
+            dumpException(e)
+            return False
+
+    def hasInput(self, index=0):
+        try:
+            if self.inputs[index].hasEdges():
+                return True
             else:
                 return False
 
