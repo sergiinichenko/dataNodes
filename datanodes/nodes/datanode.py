@@ -6,12 +6,13 @@ from datanodes.core.node_node import Node
 from datanodes.core.node_content_widget import NodeContentWidget
 from datanodes.graphics.graphics_node import GraphicsNode
 from PyQt5.QtWidgets import QGridLayout, QToolButton, QVBoxLayout, QPushButton
-from PyQt5.QtCore import pyqtSignal, QRectF, QRect, QSize, Qt
+from PyQt5.QtCore import pyqtSignal, QRectF, QRect, QSize, Qt, QThread
 from PyQt5.QtGui import QIcon, QImage
 from datanodes.core.node_socket import *
 import os
 import pandas as pd
 import numpy as np
+
 
 class Pair():
     old = ""
@@ -272,13 +273,13 @@ class DataNode(Node):
                 self.setInvalid(True)
                 self.setDescendentsInvalid(True)
                 self.setDescendentsDirty(False)
-                self.grNode.setToolTip(str(self.e))
+                if self.grNode is not None : self.grNode.setToolTip(str(self.e))
                 return False
 
         except Exception as e : 
             self.setInvalid()
             dumpException(e)
-            self.grNode.setToolTip(str(e))
+            if self.grNode is not None : self.grNode.setToolTip(str(e))
 
 
     def evaluateNode(self, silent=False):

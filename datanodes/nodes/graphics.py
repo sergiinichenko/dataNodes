@@ -1071,43 +1071,46 @@ class TernaryPlotNode(ResizableInputNode):
     def drawTernary(self, value):
         self.content.canvas.axes.clear()
         if not value : return
-        names = list(value.keys())
 
-        # barycentric coords: (a,b,c)
-        self.a = np.array( value[names[0]] )
-        self.b = np.array( value[names[1]] )
-        self.c = np.array( value[names[2]] )
-    
-        # values is stored in the last column
-        self.v = np.array( value[names[-1]] )
-        self.vmin = self.v.min()
-        self.vmax = self.v.max()
+        try : 
+            names = list(value.keys())
 
-        # translate the data to cartesian corrds
-        self.x = 0.5 * ( 2. * self.b + self.c ) / ( self.a + self.b + self.c )
-        self.y = 0.5 * np.sqrt(3) * self.c / (self.a + self.b + self.c)
-        ylim   = 0.5 * np.sqrt(3) * 1.0
+            # barycentric coords: (a,b,c)
+            self.a = np.array( value[names[0]] )
+            self.b = np.array( value[names[1]] )
+            self.c = np.array( value[names[2]] )
+        
+            # values is stored in the last column
+            self.v = np.array( value[names[-1]] )
+            self.vmin = self.v.min()
+            self.vmax = self.v.max()
+
+            # translate the data to cartesian corrds
+            self.x = 0.5 * ( 2. * self.b + self.c ) / ( self.a + self.b + self.c )
+            self.y = 0.5 * np.sqrt(3) * self.c / (self.a + self.b + self.c)
+            ylim   = 0.5 * np.sqrt(3) * 1.0
+                
+            #add frame
+            self.cAxes(self.content.canvas.axes, [0, 0.5], [0, ylim])
+            self.cAxes(self.content.canvas.axes, [1, 0],   [0, 0])
+            self.cAxes(self.content.canvas.axes, [0.5, 1.0], [ylim, 0])
             
-        #add frame
-        self.cAxes(self.content.canvas.axes, [0, 0.5], [0, ylim])
-        self.cAxes(self.content.canvas.axes, [1, 0],   [0, 0])
-        self.cAxes(self.content.canvas.axes, [0.5, 1.0], [ylim, 0])
-        
-        # plot the contour
-        im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, 
-                                                  cmap=self.cmap, 
-                                                  vmin=self.vmin, vmax=self.vmax,
-                                                  levels=self.properties.levels)
-        self.content.canvas.bar.set
-        self.content.canvas.bar.set_title(names[-1], fontsize = self.properties.barfont)
-        self.content.canvas.bar.tick_params(labelsize = self.properties.barfont)
-        plt.colorbar(im, cax=self.content.canvas.bar)
-        
-        
-        #position the axis labels
-        self.content.canvas.axes.text(1.05, -0.05,  self.properties.ytitle, fontsize=self.properties.labelsize, ha="left")
-        self.content.canvas.axes.text(0.50,  0.92,  self.properties.ztitle, fontsize=self.properties.labelsize, ha="center")
-        self.content.canvas.axes.text(-0.05,-0.05,  self.properties.xtitle, fontsize=self.properties.labelsize, ha="right")
+            # plot the contour
+            im = self.content.canvas.axes.tricontourf(self.x, self.y, self.v, 
+                                                    cmap=self.cmap, 
+                                                    vmin=self.vmin, vmax=self.vmax,
+                                                    levels=self.properties.levels)
+            self.content.canvas.bar.set
+            self.content.canvas.bar.set_title(names[-1], fontsize = self.properties.barfont)
+            self.content.canvas.bar.tick_params(labelsize = self.properties.barfont)
+            plt.colorbar(im, cax=self.content.canvas.bar)
+            
+            
+            #position the axis labels
+            self.content.canvas.axes.text(1.05, -0.05,  self.properties.ytitle, fontsize=self.properties.labelsize, ha="left")
+            self.content.canvas.axes.text(0.50,  0.92,  self.properties.ztitle, fontsize=self.properties.labelsize, ha="center")
+            self.content.canvas.axes.text(-0.05,-0.05,  self.properties.xtitle, fontsize=self.properties.labelsize, ha="right")
+        except Exception as e : dumpException(e)
 
     def addScatter(self, value):
         names = list(value.keys())

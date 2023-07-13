@@ -240,10 +240,10 @@ class Node(Serializer):
             other_node.setChildrenDirty(value)
 
     def onSetDirty(self):
-        self.grNode.update()
+        if self.grNode is not None : self.grNode.update()
         
     def onSetBusy(self):
-        self.grNode.update()
+        if self.grNode is not None : self.grNode.update()
 
     def isInvalid(self):
         return self._is_invalid
@@ -253,7 +253,7 @@ class Node(Serializer):
         self.onSetInvalid()
 
     def onSetInvalid(self):
-        self.grNode.update()
+        if self.grNode is not None :self.grNode.update()
 
     def setChildrenInvalid(self, value=True):
         for child in self.getChildNodes():

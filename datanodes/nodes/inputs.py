@@ -562,6 +562,9 @@ class TableInputNode(DataNode):
                         if not self.isString(self.content.mainWidget.item(r, c).text()):
                             val = float(self.content.mainWidget.item(r, c).text())
                             vals.extend([val])
+                        else:
+                            val = self.content.mainWidget.item(r, c).text()
+                            vals.extend([val])
                 self.value[name] = vals
 
 

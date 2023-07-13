@@ -252,6 +252,9 @@ class MathNode(DataNode):
             i = 0
             j = 0
             res[name] = []
+            #if np.any(np.isreal(valuex[namex])==False) or np.any(np.isreal(valuey[namey])==False):
+            #    res[name].extend([operation(valuex[namex][i], valuey[namey][j])])
+            #    continue
             for count in range(size):
                 res[name].extend([operation(valuex[namex][i], valuey[namey][j])])
                 i+=1
@@ -473,9 +476,22 @@ class ExpressionNode(ResizableInputNode):
 
 
 
+class WorkingThread(QThread):
+    work_done = pyqtSignal(object)
 
-
-
+    def __init__(self, name, inputs, codes, variables, filtered, locals):
+        self.name     = name
+        self.inputs   = inputs
+        self.code     = codes
+        self.variables = variables
+        self.filtered = filtered
+        self.locals   = locals
+        
+        QThread.__init__(self)
+    
+    def run(self):
+        exec(self.code, self.filtered, self.locals)
+        self.work_done.emit((self.inputs, self.variables, self.locals))
 
 
 class TextField(QPlainTextEdit):
@@ -565,26 +581,33 @@ class CodeNode(ResizableInputNode):
         self.content.changed.connect(self.recalculateNode)
 
     def run(self, code, filtered, locals):
-        exec(code, filtered, locals)
+        try:
+            exec(code, filtered, locals)
+        except Exception as e:
+            self.setDirty(False)
+            self.setInvalid(False)
+            self.e = e
+            self.getOutput(0).value = {"res" : 0.0}
+            self.getOutput(0).type = "float"
         self.event.set()
     
-    def retreiveResults(self, inputs, variables, locals):
-        self.event.wait()
-
+    def retreiveResults(self, data):
+        inputs, variables, locals = data[0], data[1], data[2]        
         for input in inputs[:-1]:
             for name in input.value: 
                 self.value[name] = self.filtered[name]
 
         for var in variables:
-            self.value[var] = locals[var]
+            if var in locals:
+                self.value[var] = locals[var]
 
         self.getOutput(0).value = self.value
-        self.getOutput(0).type  = "df"        
+        self.getOutput(0).type  = "df"   
         self.setBusy(False)
         self.setInvalid(False)
         self.setDescendentsDirty()
         self.evalChildren()
-        
+
     def evalImplementation(self, silent=False):
         inputs = self.getInputs()
         self.value = {}
@@ -622,13 +645,11 @@ class CodeNode(ResizableInputNode):
                                 variables.append(tmp)
 
                     #exec(code, self.filtered, localVars)
-                    self.event.clear()
-                    thread = threading.Thread(name='Calculations', target=self.run, args=(code, self.filtered, localVars), daemon=True)
-                    thread.start()
-                    #thread.join()
-                    threadres = threading.Thread(name='Results', target=self.retreiveResults, args=(inputs, variables, localVars), daemon=True)
-                    threadres.start()
                     self.setBusy(True)
+                    #thread    = threading.Thread(name='Calculations', target=self.run, args=(code, self.filtered, localVars), daemon=True)
+                    thread    = WorkingThread(name='Calculations', inputs=inputs, codes=code, variables=variables, filtered=self.filtered, locals=localVars)
+                    thread.work_done.connect(self.retreiveResults)
+                    thread.start()
                     
                     for input in inputs[:-1]:
                         for name in input.value: 
