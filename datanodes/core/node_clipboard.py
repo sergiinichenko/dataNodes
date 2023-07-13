@@ -140,9 +140,6 @@ class SceneClipboard():
             #                node.update(silent=True)
                             
         except ValueError as e:
-
-            print("test")
-            print(raw_data)
             # try to paste data into the node
             for item in self.scene.selectedItems():
                 if isinstance(item, NodeContentWidget):

@@ -476,23 +476,43 @@ class ExpressionNode(ResizableInputNode):
 
 
 
+
+
+
+import traceback
+
+class InterpreterError(Exception): pass
+
 class WorkingThread(QThread):
     work_done = pyqtSignal(object)
-
-    def __init__(self, name, inputs, codes, variables, filtered, locals):
-        self.name     = name
-        self.inputs   = inputs
-        self.code     = codes
-        self.variables = variables
-        self.filtered = filtered
-        self.locals   = locals
-        
+    error     = pyqtSignal(str)
+    name      = "name"
+    code      = "codes"
+    inputs    = "inputs"
+    variables = "variables"
+    filtered  = "filtered"
+    locals    = "locals"
+    
+    def __init__(self):
         QThread.__init__(self)
     
+    def setData(self, name, codes, inputs, variables, filtered, locals):
+        self.name      = name
+        self.code      = codes
+        self.inputs    = inputs
+        self.variables = variables
+        self.filtered  = filtered
+        self.locals    = locals
+    
     def run(self):
-        exec(self.code, self.filtered, self.locals)
-        self.work_done.emit((self.inputs, self.variables, self.locals))
-
+        try:
+            print("21")
+            exec(self.code, self.filtered, self.locals)
+            self.work_done.emit((True, self.inputs, self.filtered, self.variables, self.locals))
+            print("22")
+        except:
+            self.work_done.emit((False, self.inputs, self.filtered, self.variables, self.locals))
+            print("23")
 
 class TextField(QPlainTextEdit):
     def __init__(self, content = None):
@@ -567,7 +587,7 @@ class CodeNode(ResizableInputNode):
         self.getOutput(0).value = 4
         self.getOutput(0).type  = "float"
         self.event = threading.Event()
-        #self.eval()
+        self.thread = WorkingThread()
 
     def initSettings(self):
         super().initSettings()
@@ -592,21 +612,36 @@ class CodeNode(ResizableInputNode):
         self.event.set()
     
     def retreiveResults(self, data):
-        inputs, variables, locals = data[0], data[1], data[2]        
-        for input in inputs[:-1]:
-            for name in input.value: 
-                self.value[name] = self.filtered[name]
+        res, inputs, filtered, variables, locals = data[0], data[1], data[2], data[3], data[4]
+        if not res :
+            self.setBusy(False)
+            self.setDirty(False)
+            self.setInvalid(True)
+            self.e = "Some problem wiht the data"
+            self.setDescendentsInvalid()
+            return
 
         for var in variables:
             if var in locals:
                 self.value[var] = locals[var]
 
+        for input in inputs[:-1]:
+            for name in input.value: 
+                self.value[name] = filtered[name]
+
         self.getOutput(0).value = self.value
         self.getOutput(0).type  = "df"   
         self.setBusy(False)
+        self.setDirty(False)
         self.setInvalid(False)
+        self.e = ""
+        self.setDescendentsInvalid(False)
         self.setDescendentsDirty()
         self.evalChildren()
+
+    def print_error(self, message):
+        print("77")
+        print(message)
 
     def evalImplementation(self, silent=False):
         inputs = self.getInputs()
@@ -617,6 +652,12 @@ class CodeNode(ResizableInputNode):
             return False
         else:
             try:
+                self.setDirty(False)
+                self.setInvalid(False)
+                self.e = ""
+                self.value = {}
+                self.filtered = {}   
+                
                 os.chdir(self.scene.path)
                 if self.scene.path not in sys.path:
                     sys.path.insert(0, self.scene.path)
@@ -627,51 +668,42 @@ class CodeNode(ResizableInputNode):
                              'max' : np.max, 'min': np.min, 'sum':np.sum, 'PI':np.pi, 'pi':np.pi}
 
                 code = compile(expression, "<string>", "exec")
+                
+                
                 if len(inputs) > 0:      
-                    self.setDirty(False)
-                    self.setInvalid(False)
-                    self.e = ""
-                    self.value = {}
-                    self.filtered = {}
                     for input in inputs[:-1]:
                         for name in input.value:
                             self.filtered[name] = np.nan_to_num(input.value[name])
 
-                    variables = []
-                    for l in iter(expression.splitlines()):
-                        if "=" in l:
-                            tmp = l.split("=")[0].replace(" ","")
-                            if tmp.isalnum():
-                                variables.append(tmp)
+                variables = []
+                for l in iter(expression.splitlines()):
+                    if "=" in l:
+                        tmp = l.split("=")[0].replace(" ","")
+                        if tmp.isalnum():
+                            variables.append(tmp)
 
-                    #exec(code, self.filtered, localVars)
-                    self.setBusy(True)
-                    #thread    = threading.Thread(name='Calculations', target=self.run, args=(code, self.filtered, localVars), daemon=True)
-                    thread    = WorkingThread(name='Calculations', inputs=inputs, codes=code, variables=variables, filtered=self.filtered, locals=localVars)
-                    thread.work_done.connect(self.retreiveResults)
-                    thread.start()
-                    
-                    for input in inputs[:-1]:
-                        for name in input.value: 
-                            self.value[name] = self.filtered[name]
+                #exec(code, self.filtered, localVars)
+                self.setBusy(True)
+                #thread    = threading.Thread(name='Calculations', target=self.run, args=(code, self.filtered, localVars), daemon=True)
+                self.thread.setData(name='Calculations', codes=code, inputs=self.inputs,variables=variables, filtered=self.filtered, locals=localVars)
+                self.thread.work_done.connect(self.retreiveResults)
+                self.thread.error.connect(self.print_error)
+                self.thread.start()
+                """
+                for input in inputs[:-1]:
+                    for name in input.value: 
+                        self.value[name] = self.filtered[name]
 
-                    for var in variables:
-                        self.value[var] = localVars[var]
-
-                    self.getOutput(0).value = self.value
-                    self.getOutput(0).type  = "df"        
-                                        
-                    return True
-
-                else:
-                    self.getOutput(0).value = {"error" : "something is wrong with your code"}
-                    self.getOutput(0).type  = "float"
-                    return True
+                for var in variables:
+                    if var in localVars : self.value[var] = localVars[var]
+                """                 
+                return True
             
             except Exception as e:
                 self.setDirty(False)
                 self.setInvalid(False)
+                print(e)
                 self.e = e
-                self.getOutput(0).value = {"res" : 0.0}
-                self.getOutput(0).type = "float"
+                #self.getOutput(0).value = {"res" : 0.0}
+                #self.getOutput(0).type = "float"
                 return False
